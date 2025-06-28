@@ -1,6 +1,12 @@
 package com.example.Screens;
 
+import com.example.MouseMovement;
 import com.example.mixins.ChatHudMixin;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener;
 import com.google.gson.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
@@ -19,8 +25,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static com.example.Configs.CheatConfig.*;
 import static com.example.Configs.Config.*;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
@@ -371,4 +379,176 @@ public class Constants {
                         .build());
         }
     };
+
+    // Cheats start
+    public static final Screen CHEAT_CONFIG = new Screen(Text.literal("cheat config")) {
+        @Override
+        protected void init() {
+            int y = 20;
+            int x = 20;
+
+            {
+                int xModifier = 0;
+                addDrawableChild(getConfigButtonWidget("record autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_MACRO_RECORDER), x + xModifier, y, "opens blank recording screen"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), x + xModifier, y, "lists all current recorded autoclickers"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("change autoclick starting multipler. current: " + autoclickerStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_STARTING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + autoclickerStartingMultiplier));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("change autoclick ending multiplier. current: " + autoclickerEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENDING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + autoclickerEndingMultiplier));
+            }
+            y += 20;
+            {
+                int xModifier = 0;
+                addDrawableChild(getConfigButtonWidget("change autoclick toggle keybind. current: " + glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+            }
+            y += 20;
+            {
+                int xModifier = 0;
+                addDrawableChild(getConfigButtonWidget("change player xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+            }
+        }
+    };
+    static {
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final Object AUTOCLICK_MACRO_RECORDER_LOCK = new Object();
+    private static final Text AUTOCLICK_MACRO_RECORDER_TITLE = Text.literal("doBatch");
+    private static final Screen AUTOCLICK_MACRO_RECORDER = getAbstractInputScreen(AUTOCLICK_MACRO_RECORDER_TITLE, (threadClientInstance) -> {
+        try {
+            ArrayList<Integer> mutableMacroClicks = new ArrayList<>();
+            long[] lastClickEventNanoseconds = new long[]{System.nanoTime()};
+            BiConsumer<long[], ArrayList<Integer>> handleAutoclickMacroRecorderIteration = (nanoseconds, macroList) -> {
+                long currentNanoseconds = System.nanoTime();
+                long delay = currentNanoseconds - lastClickEventNanoseconds[0];
+                if (delay > Integer.MAX_VALUE ||
+                        (!(threadClientInstance.currentScreen instanceof Screen screen) || !screen.getTitle().equals(AUTOCLICK_MACRO_RECORDER_TITLE)))
+                    synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
+                        AUTOCLICK_MACRO_RECORDER_LOCK.notify();
+                    }
+                else {
+                    mutableMacroClicks.add((int) delay);
+                    lastClickEventNanoseconds[0] = currentNanoseconds;
+                }
+            };
+            NativeMouseListener nativeMouseListener = new NativeMouseListener() {
+                @Override
+                public void nativeMousePressed(NativeMouseEvent e) { // TODO -> queue these? APPARENTLY jnativehook processes these synchronously (?)
+                    if (e.getButton() == NativeMouseEvent.BUTTON1)
+                        handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
+                }
+
+                @Override
+                public void nativeMouseReleased(NativeMouseEvent e) {
+                    if (e.getButton() == NativeMouseEvent.BUTTON1 && !mutableMacroClicks.isEmpty())
+                        handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
+                }
+            };
+
+            ArrayList<MouseMovement> mutableMacroMovements = new ArrayList<>();
+            NativeMouseMotionListener nativeMouseMotionListener = new NativeMouseMotionListener() {
+                int lastX = 0;
+                int lastY = 0;
+                long lastMoveEventNanoseconds = System.nanoTime();
+                @Override
+                public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
+                    int x = nativeEvent.getX();
+                    int y = nativeEvent.getY();
+//                    NativeMouseMotionListener.super.nativeMouseMoved(nativeEvent); TODO remove?
+                    long currentNanoseconds = System.nanoTime();
+                    if (mutableMacroClicks.size() > 2) // TODO -> this will track for longer than the duration of the recorded clicks, this is annoying since it gets reversed, but I guess I'm remedying this by messaging the reversal to the fake mouse movement hook
+                        mutableMacroMovements.add(new MouseMovement((int) (currentNanoseconds - lastMoveEventNanoseconds), x - lastX, y - lastY));
+                    lastX = x;
+                    lastY = y;
+                    lastMoveEventNanoseconds = currentNanoseconds;
+                }
+            };
+            GlobalScreen.addNativeMouseListener(nativeMouseListener);
+            GlobalScreen.addNativeMouseMotionListener(nativeMouseMotionListener);
+            synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
+                AUTOCLICK_MACRO_RECORDER_LOCK.wait();
+            }
+            Thread.sleep(10); // TODO just queue them and wait for them all to be absolutely finished
+            GlobalScreen.removeNativeMouseListener(nativeMouseListener);
+            GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
+            int[] newRecordedAutoclickerClicks;
+            if (!mutableMacroClicks.isEmpty()) {
+                int oldLength = immutableRecordedAutoclickerClicks.length;
+                {
+                    int newLength = oldLength + 1;
+                    {
+                        int[][] newMatrix = new int[newLength][];
+                        System.arraycopy(immutableRecordedAutoclickerClicks, 0, newMatrix, 0, oldLength);
+                        immutableRecordedAutoclickerClicks = newMatrix;
+                    }
+                    {
+                        MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
+                        System.arraycopy(immutableRecordedAutoclickerMovements, 0, newMatrix1, 0, oldLength);
+                        immutableRecordedAutoclickerMovements = newMatrix1;
+                    }
+                }
+                newRecordedAutoclickerClicks = mutableMacroClicks.stream()
+                        .skip(2)
+                        .mapToInt(Integer::intValue)
+                        .toArray();
+                immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
+
+                MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
+                immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
+            } else
+                newRecordedAutoclickerClicks = null;
+            threadClientInstance.execute(() -> {
+                if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                    player.sendMessage(newRecordedAutoclickerClicks != null
+                            ? getAutoclickerText(newRecordedAutoclickerClicks)
+                            : Text.literal("invalid macro"), true); // TODO -> console
+            });
+        } catch (Exception e) {
+            threadClientInstance.execute(() -> {
+                if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                    player.sendMessage(Text.literal(e.getMessage()), false);
+            });
+        }
+    }, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwToggleAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwEnableAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwDisableAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_STARTING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker starting multiplier (" + autoclickerStartingMultiplier + ")"), number -> autoclickerStartingMultiplier = number, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_ENDING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker ending multiplier (" + autoclickerEndingMultiplier + ")"), number -> autoclickerEndingMultiplier = number, CHEAT_CONFIG);
+    private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
+        @Override
+        protected void init() {
+            int y = 20;
+            int originalLength = immutableRecordedAutoclickerClicks.length;
+            for (int[] macro : immutableRecordedAutoclickerClicks) {
+                addDrawableChild(ButtonWidget.builder(getAutoclickerText(macro), (button) -> {
+                            int[][] newMatrix = new int[originalLength - 1][];
+                            int i = 0;
+                            for (int[] macro1 : immutableRecordedAutoclickerClicks)
+                                if (macro != macro1)
+                                    newMatrix[i++] = macro1;
+                            immutableRecordedAutoclickerClicks = newMatrix;
+                            MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
+                        })
+                        .position(20, y += 20)
+                        .tooltip(Tooltip.of(Text.literal("click to delete")))
+                        .build());
+            }
+        }
+    };
+
+    private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
+    private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
+    // Cheats end
 }

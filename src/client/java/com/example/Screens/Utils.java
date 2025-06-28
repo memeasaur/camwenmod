@@ -172,4 +172,14 @@ public class Utils {
                 player.sendMessage(Text.literal(e.getMessage()), false);
         }
     }
+
+    // Cheats start
+    static Text getAutoclickerText(int[] macro) {
+        double durationSeconds = Arrays.stream(macro)
+                .mapToLong(i -> i)
+                .sum() / 1_000_000_000.0;
+        int totalClicks = macro.length / 2;
+        return Text.of(totalClicks + " clicks recorded over ~" + durationSeconds + "s. cps: " + (totalClicks / durationSeconds));
+    }
+    // Cheats end
 }

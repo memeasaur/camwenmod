@@ -1,0 +1,167 @@
+>features can be enabled with server api, or by being hard-coded, or from the server
+>this mod should be in neoForge eventually, but that's losing most of the recommended other mods -> Animatium, ?...
+>optiFabric support -> pretty sure it's closed source but this mod should be fully compatible
+
+>map for allowing multiple buttons for one cooldown
+
+>holding e lets you just let go of it to close inv
+>pretty sure it's currently spawning double particles on server hit
+>hard cheats -> autoclicker refills inv
+>tells you when your splashes heal the person you're fucking fighting
+>safe w tap release button/block etc.
+>sound indicator for crossbow and bow fully charged
+>something along the lines of a.) only playing player hit sounds that you get on other players b.) a different hit sound etc.
+>toggle chat keybind
+>show texture pack widget
+>some kind of cps difference maker: i click 11, it brings me up to 14 etc.
+>the range for the nameplate keybind should be super long
+>cheat keybinds not working until the config screen is opened?
+>make block breaking progress continue while using item
+>cycle through packs button
+>option for stopping auto-jump when running and eating
+>sprinting removes toggle sneak option + double tap w removes toggle sneak option
+>hold to disable autoclicker button
+>use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
+>ability to block hit without letting go of right click? type meme
+>player name/skin etc. spoofer
+>xray turns blocks into glass instead of cancelling their render (?) toggle
+>don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
+>require multiple macros if it still flags vulcan
+>freeCam if creative meme
+>notify when player is in range (?) maybe this isn't soft cheating (?)
+>move all cheats to destruct-able state + add self-destruct
+>need to be able to find the natural peak of the cps and apply the modifiers around that
+>need the ending multiplier to apply at the end of the first macro (?)
+>only make a button for changing the cheat config keybind -> and only show it if there isn't a keybind set?
+>entityRenderer -> don't cull players ever
+>don't cull spawners ever (? or, make all whitelisted xray blocks never cull)
+>make ores show up in xray
+>cave mode xray
+>hard cheats aim assist -> store actual mouse movements, iterate over them and apply them if the mouse would end up on the target
+
+>enable -> chat collects all strings -> disable -> see all the valid names
+>repeated chat message nameplate changer uses don't work, it needs another message (?)
+>add option for hitting ground in adventure mode for mineZ
+>integration with pack updater app. this requires auth?
+>make search any player functionality in nameplate changer gui
+>make search bar in nameplate changer gui
+>impl loading screen
+>supabase realtime w/ minecraft's netty websocket
+>rally chat listener, this being abstract enough to catch everything would be sick
+
+>account switcher (?)
+>(?), revert potion particles just being the last potion you consumed
+>potion effect utilizing the vanilla indicator
+>(?), sound effects for potion effects expiring
+
+>list labyMod/lunar etc. incompatibilities on site
+>figure out the message matching thing. or just make it a click like it probably always should've been
+
+    >ability to communicate with other mod user
+        >need to auth with mojang somehow
+                    >connect to an owned minecraft server (auth.potpissers.com). or:
+                    >use their creds + mojang api + open source
+        >users/webapp just request information directly from user's directly
+        >agree to not use 1.7 sprint
+        >share nameplate colors
+        >create parties that share nameplate colors
+        >test each other for cheats
+        >agree to use raw input for clicks instead of higher level methods
+        >client-side anticheat
+        >these messages are only seen on camwenmod clients unless the server allows otherwise
+
+>Public+ version
+    >xray/freeCam/any public cheaty stuff that I don't want to contribute to updating publicly
+    >private git-hub that I don't mind being public
+
+>Public version
+    >list missing recommended mods in mod
+    >gui option for showing when you have a sprint hit queued up
+    >these custom particles and sounds should apply for other players on your screen too -> it should be configurable whether the sound plays for just you or for just enemies or both (soft cheating ?), + if server allows it
+    >make miss and weak attack sounds configurable
+    >ability to toggle all nameplate on this page, rather than just the entire collection
+    >option for showing all key-presses in toggleSneak gui
+    >make left-handed mode bypass
+    >disable seeing other players using left-handed mode
+    >cps (attack) tracker -> listens to the actual in-game swings
+    >off-hand automatically becomes main hand meme. if allowed (?). -> tools without right-click can be used in off-hand by right-clicking, and weapons can be used in off-hand if enabled
+        >do this for swords too, since it isn't cheating the cooldown
+        >serialize nameplate changes/state locally + in-server + save sodium settings etc. in server
+        >recommended mods
+    >console screen for all system messages/logs
+    >option/requirement for toggleSneak/autorun to not work in inventory/chat etc. unless server explicitly allows it, like vanilla
+    >disable miss sounds etc. meme
+    >ability to have different nameplate configs that you can swap between + have them for certain servers
+    >add night vision slider
+    >option for adjusting/disabling weather when fullBright is on
+    >rally macros like potpissers if absorbing macro mod
+    >fall damage calculator (?)
+    >lunar waypoints + whatever api shit
+    >can see other mod users' nameplate changes; probably only their allies/enemies
+    >mod user messaging system/friends list etc.
+    >would like to maybe integrate more closely with vanilla toggle-sprint/sneak (?)
+    >jnativehook for all clicks (?)
+    >jnativehook for all important inputs (?)
+    >show badLion client cosmetics/lunar/LabyMod etc.
+    >allow raw 1.7 packs to be used in current version
+    >"programmer art+" + option for replacing fallback fires to low fire
+    >abstract item counter (?)
+    >1.7 enchantment glint
+    >1.7 potion enchantment glint option
+
+
+>Private version
+    >class unloader meme
+    >external window in something that compiles to machine code; whatever's easiest, go?
+    >as much in-server as possible + as much c/c++ as possible
+    >obfuscated AF!
+    >whitelisted accounts
+    >can’t cheat on me if I'm legit
+    >store the servers you cheat on (?) and stats
+    >xray creative or op meme
+>Base version
+    >clear lava, toggleable + if allowed meme
+    >cheat console in external window
+    >esp/tracers in external window
+    >radar in external window, + if allowed meme
+>soft cheat version
+    >the autoclicker could just be in the external gui, and communicate with the client for minecraft-related integration (?, this would probably not let me integrate so closely with the client though)
+    >on clicking over the active held autoclicker -> clicks should only go through if it jives with the current state ie only go down if its currently up, they should integrate together properly
+
+    >make 1.9 hits cancel when you're hitting someone with immunity
+    >make a fake immutable inventory that you can open while running and look at it
+    >allow sneaking and swimming upwards in water
+    >allow toggleSprint to stop your sprint without letting go of W
+    >togglable ability to spam click and have it not go through unless attack cooldown high enough
+	>hit tracker/potion tracker in external gui
+	>health indicator/armor in external gui
+	>friendly fire hack -> swings don’t happen if they would hit a friend/ally
+>hard cheat version
+    >option for chase hits to never be kb hits, only if it's undetectable though
+    >elytra helper -> perfect angles etc.
+    >nausea/darkness/blindness removal -> this isn't as hard of a cheat if packs/sodium etc. can do it
+    >swing while eating etc. + if allowed meme
+    >dropping food eats faster revert + if allowed meme
+    >skin spammer etc. + if allowed meme
+    >swimming hitbox revert + if allowed meme
+    >hitbox size revert + if allowed meme
+    >follow + if allowed meme
+    >crawl button (?)
+    >autorun inventory check removal
+    >ability to have misses be ignored if attack cooldown
+    >faster tick-rate
+    >remove client-side cooldown thing
+	>splash simulation warning
+	>blink
+	>snowshoe
+	>bhop-ing (?)
+	>v-clipping
+	>swings go through friends
+>lame blatant version (?, don't make or use this; blatant version but without skill)
+    >auto headRun macro
+    >headRun cam
+    >sneaking is always sprint-sneaking
+    >cobweb
+    >splash potions on interactable items automatic crouch
+    >automatic w tapping
+    >trajectories/enderPearl aimbot bow aimbot etc

@@ -1,10 +1,14 @@
 package com.example.mixins;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.Keyboard;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,10 +20,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.example.Configs.CheatConfig.*;
 import static com.example.Configs.Config.*;
-import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
+import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
-import static com.example.Screens.Constants.CONFIG;
+import static com.example.Screens.Constants.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
@@ -27,6 +32,13 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean
+            // Cheats start
+            isBlockToggleKeyPressed = false,
+            isPlayerToggleKeyPressed = false,
+            isAutoclickerToggleKeyPressed = false,
+            isAutoclickerEnableKeyPressed = false,
+            isAutoclickerDisableKeyPressed = false,
+            // Cheats end
             isSneakToggleButtonPressed = false,
             isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
@@ -144,6 +156,19 @@ public class KeyboardMixin {
 
         while (KEYBIND_CONFIG.wasPressed()) {
             MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
+
+            // Cheats start
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e); // TODO
+                }
+                if (getIsKeyBindingPressed(KEYBIND_CONFIG))
+                    MinecraftClient.getInstance().execute(() ->
+                            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG));
+            }).start();
+            // Cheats end
         }
 
         for (Map.Entry<Integer, KeyBinding> entry : duplicateKeybinds.entrySet()) {
@@ -160,6 +185,84 @@ public class KeyboardMixin {
                 keyBinding.setPressed(getIsKeyBindingPressed(keyBinding));
             }
         }
+
+        // Cheats start
+        if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null) { // TODO config this (?)
+            if (getIsKeyPressed(glfwToggleBlockXrayKeybind)) {
+                if (!isBlockToggleKeyPressed) {
+                    isBlockToggleKeyPressed = true;
+                    currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
+                    MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
+                }
+            }
+            else
+                isBlockToggleKeyPressed = false;
+
+            if (getIsKeyPressed(glfwTogglePlayerXrayKeybind)) {
+                if (!isPlayerToggleKeyPressed) {
+                    isPlayerToggleKeyPressed = true;
+                    currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
+                    MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
+                }
+            }
+            else
+                isPlayerToggleKeyPressed = false;
+            if (getIsKeyPressed(glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
+                if (!isAutoclickerToggleKeyPressed) {
+                    isAutoclickerToggleKeyPressed = true;
+                    if (immutableRecordedAutoclickerClicks.length == 0) {
+                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+                    }
+                    else {
+                        if (isAutoclickerEnabled) {
+                            GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+                            nullableCurrentHeldAutoclickerTask = null;
+                        }
+                        else {// TODO -> external gui for this
+                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
+                                handleAutoclickerMouseHeldDown();
+                        }
+                        isAutoclickerEnabled = !isAutoclickerEnabled;
+                    }
+                }
+            }
+            else
+                isAutoclickerToggleKeyPressed = false;
+            if (getIsKeyPressed(glfwEnableAutoclickerKeybind)) {
+                if (!isAutoclickerEnableKeyPressed) {
+                    isAutoclickerEnableKeyPressed = true;
+                    if (immutableRecordedAutoclickerClicks.length == 0) {
+                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+                    }
+                    else {
+                        if (!isAutoclickerEnabled) {
+                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+                            isAutoclickerEnabled = true;
+                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
+                                handleAutoclickerMouseHeldDown(); // TODO method-ize this
+                        }
+                    }
+                }
+            }
+            else
+                isAutoclickerEnableKeyPressed = false;
+            if (getIsKeyPressed(glfwDisableAutoclickerKeybind)) {
+                if (!isAutoclickerDisableKeyPressed) {
+                    isAutoclickerDisableKeyPressed = true;
+                    GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+                    isAutoclickerEnabled = false;
+                    nullableCurrentHeldAutoclickerTask = null;
+                }
+            }
+            else
+                isAutoclickerDisableKeyPressed = false;
+        }
+        // Cheats end
     }
 
     @Unique

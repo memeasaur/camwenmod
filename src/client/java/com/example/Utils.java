@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.example.Configs.CheatConfig.isGuiCheatsPvpDisabling;
 import static com.example.Configs.Config.*;
 import static com.example.Constants.GSON;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -60,6 +61,11 @@ public class Utils {
     public static void handlePvpDamage() {
         if (isMovementTogglePvpDisabling)
             doMovementToggleDisable();
+
+        // Cheats start
+        if (isGuiCheatsPvpDisabling)
+            currentXrayType = "";
+        // Cheats end
     }
     public static <T> void serializeJsonBlocking(String fileNamePrefix, T jsonCompliantObject) {
         try (FileWriter writer = new FileWriter("pvputils-" + fileNamePrefix + ".json")) {

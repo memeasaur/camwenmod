@@ -9,8 +9,12 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
@@ -18,6 +22,7 @@ import net.minecraft.client.util.Window;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
@@ -25,8 +30,10 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import static com.example.Configs.CheatConfig.*;
 import static com.example.Configs.Config.*;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
@@ -114,7 +121,7 @@ public class UntitledClient implements ClientModInitializer {
                 if (getDeserializedJsonBlocking("duplicateKeybinds") instanceof Map map)
                     duplicateKeybinds = null; //((Map<Integer, Integer>)map);
                 else
-                    duplicateKeybinds = Map.of();
+                    duplicateKeybinds = Map.of(GLFW.GLFW_KEY_G, USE_VANILLA);
             } catch (Exception e) {
                 var client = MinecraftClient.getInstance();
                 if (client.player instanceof ClientPlayerEntity player)
@@ -137,6 +144,75 @@ public class UntitledClient implements ClientModInitializer {
     public static Text lastHitStrength = EMPTY_TEXT;
     public static int lastHitDisplayTimer = 0;
     public static boolean isYLower;
+
+    // Cheats start
+    static {
+        new Thread(() -> {
+            try {
+                if (getDeserializedJsonBlocking("cheat-config") instanceof Map config) { // TODO -> this shit was a bad idea
+                    isGuiCheatsPvpDisabling = (boolean) config.get("isGuiCheatsPvpDisabling");
+                    if (config.get("immutableRecordedAutoclickerClicks") instanceof List foo && config.get("immutableRecordedAutoclickerMovements") instanceof List bar && foo.size() == bar.size()) {
+                        {
+                            var lists1 = (List<List<Number>>) foo;
+                            int[][] tempClicks = new int[lists1.size()][];
+                            for (int i = 0; i < lists1.size(); i++) {
+                                List<Number> inner = lists1.get(i);
+                                tempClicks[i] = new int[inner.size()]; // TODO ? chatgpt did this
+                                for (int j = 0; j < inner.size(); j++) {
+                                    tempClicks[i][j] = inner.get(j).intValue();
+                                }
+                            }
+                            immutableRecordedAutoclickerClicks = tempClicks;
+                        }
+                        {
+                            var lists2 = (List<List<Map<String, Number>>>) bar;
+                            MouseMovement[][] movements = new MouseMovement[lists2.size()][];
+                            for (int i = 0; i < lists2.size(); i++) {
+                                List<Map<String, Number>> inner = lists2.get(i);
+                                movements[i] = new MouseMovement[inner.size()];
+                                for (int j = 0; j < inner.size(); j++) {
+                                    Map<String, Number> map = inner.get(j);
+                                    movements[i][j] = new MouseMovement(map.get("delayNanos").intValue(), map.get("deltaX").intValue(), map.get("deltaY").intValue());
+                                }
+                            }
+                            immutableRecordedAutoclickerMovements = movements;
+                        }
+                    }
+                    autoclickerStartingMultiplier = ((Number) config.get("autoclickerStartingMultiplier")).floatValue();
+                    autoclickerEndingMultiplier = ((Number) config.get("autoclickerEndingMultiplier")).floatValue();
+                    glfwToggleAutoclickerKeybind = ((Number) config.get("glfwToggleAutoclickerKeybind")).intValue();
+                    glfwEnableAutoclickerKeybind = ((Number) config.get("glfwEnableAutoclickerKeybind")).intValue();
+                    glfwDisableAutoclickerKeybind = ((Number) config.get("glfwDisableAutoclickerKeybind")).intValue();
+                    glfwToggleBlockXrayKeybind = ((Number) config.get("glfwToggleBlockXrayKeybind")).intValue();
+                    glfwTogglePlayerXrayKeybind = ((Number) config.get("glfwTogglePlayerXrayKeybind")).intValue();
+                }
+            } catch (Exception e) {
+                MinecraftClient.getInstance().execute(() -> MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(e.getMessage()), false));
+            }
+        }).start();
+    }
+    public static boolean isAutoclickerEnabled = false;
+    public static boolean isHeldAutoclickerPressed;
+
+    public static String currentXrayType = "";
+    public static Set<Block> immutableXrayBlocks = Set.of(Blocks.STONE, Blocks.DEEPSLATE, Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.RED_SAND, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.GRANITE); // TODO -> move all destruct-able state to map // Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.FURNACE, Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.ANCIENT_DEBRIS, Blocks.NETHER_GOLD_ORE, Blocks.GOLD_BLOCK, Blocks.RAW_GOLD_BLOCK, Blocks.RAW_IRON_BLOCK, Blocks.RAW_COPPER_BLOCK, Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE, Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.BOOKSHELF, Blocks.COBWEB)); // TODO -> move all destruct-able state to map
+    // TODO -> make immutableXrayBlocks serializable
+    @Nullable // TODO -> don't use string literals for this
+    public static Map<String, Object> nullableImmutableState = Map.of(
+            "SHOULD_DRAW_SIDE_MIXIN", (BiFunction<BlockState, Boolean, Boolean>) (state, original) -> {
+                switch (currentXrayType) {
+                    case "block" -> {
+                        if (immutableXrayBlocks.contains(state.getBlock()))
+                            return false;
+                    }
+                    case "player" -> {
+                        return false;
+                    }
+                }
+                return original;
+                // TODO -> put outline around the block edges (?)
+            });
+    // Cheats end
 
     public static boolean isAttackCooldown = false;
     public static float lastAttackCooldownProgress = 0;
@@ -183,6 +259,15 @@ public class UntitledClient implements ClientModInitializer {
                 lastEndTickHeight = currentHeight;
             }
         });
+
+        // Cheats start TODO ?
+        if (isAutoclickerEnabled)
+            ATTACK_VANILLA.setPressed(isHeldAutoclickerPressed);
+
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            saveCheatConfig();
+        });
+        // Cheats end
 
         {
             final Identifier EXAMPLE_LAYER = Identifier.of("pvputils", "hud-example-layer");

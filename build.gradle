@@ -48,6 +48,11 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation("maven.modrinth:sodium:${project.sodium_version}")
+
+	// Cheats start
+	implementation("com.github.kwhat:jnativehook:2.2.2")
+	include "com.github.kwhat:jnativehook:2.2.2"
+	// Cheats end
 }
 
 processResources {

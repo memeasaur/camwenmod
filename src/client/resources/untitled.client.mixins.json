@@ -11,12 +11,14 @@
     "KeyBindingMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
-    "PlayerEntityRendererMixin"
+    "PlayerEntityRendererMixin",
+    "MouseMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
+    "SodiumBlockOcclusionCacheMixin",
     "LivingEntityMixin",
     "LivingEntityMixinInterface",
     "PlayerEntityMixin",
