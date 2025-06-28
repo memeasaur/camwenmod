@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "com.example.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ChatHudMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "GameRendererMixin",
+    "HeldItemRendererMixin",
+    "KeyBindingMixin",
+    "KeyboardMixin",
+    "MinecraftClientMixin",
+    "PlayerEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "LivingEntityMixin",
+    "LivingEntityMixinInterface",
+    "PlayerEntityMixin",
+    "PotionItemMixin"
+  ]
+}

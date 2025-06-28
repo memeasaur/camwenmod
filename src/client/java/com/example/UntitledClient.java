@@ -1,0 +1,313 @@
+package com.example;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.Window;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.example.Configs.Config.*;
+import static com.example.Constants.*;
+import static com.example.DelayedClientState.*;
+import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
+import static com.example.Utils.getDeserializedJsonBlocking;
+
+public class UntitledClient implements ClientModInitializer {
+    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
+    private static JsonArray newUpdates;
+    static {
+        new Thread(() -> {
+            try {
+                String response = HTTP_CLIENT.send(HttpRequest.newBuilder()
+                        .uri(URI.create("https://xapkbnegosbyhmondqti.supabase.co/rest/v1/fabricpvputils_updates?version=gt." + METADATA.getVersion() + "&order=version.desc"))
+                        .header("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhcGtibmVnb3NieWhtb25kcXRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTgxNTMsImV4cCI6MjA2NDM3NDE1M30.qevIYqIPh3BhiGHj_gppbggv-42RQedaF8Zd-aI5fZA")
+                        .build(), HttpResponse.BodyHandlers.ofString()).body();
+                newUpdates = JsonParser.parseString(response).getAsJsonArray();
+                for (JsonElement element : newUpdates)
+                    if (element.getAsJsonObject().get("is_critical").getAsBoolean())
+                        MinecraftClient.getInstance().execute(() -> {
+                            MINECRAFT_CLIENT_INSTANCE.scheduleStop();
+                            throw new RuntimeException("pvputils missing critical update. force stopping");
+                        });
+            } catch (IOException | InterruptedException e) {
+                if (MinecraftClient.getInstance().player instanceof ClientPlayerEntity player)
+                    MinecraftClient.getInstance().execute(() -> player.sendMessage(Text.literal("updates request failed"), false));
+            }
+        }).start();
+    }
+    public static final KeyBinding // TODO -> idk why it crashes when I move these
+            SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
+            SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
+            SNEAK_DISABLE = getAbstractPvpUtilsKeybind("Sneak (Disable)");
+    public static final KeyBinding
+            SPRINT_TOGGLE = getAbstractPvpUtilsKeybind("Sprint (Toggle)"),
+            SPRINT_ENABLE = getAbstractPvpUtilsKeybind("Sprint (Enable)"),
+            SPRINT_DISABLE = getAbstractPvpUtilsKeybind("Sprint (Disable)");
+    public static final KeyBinding
+            MOVEMENT_TOGGLE = getAbstractPvpUtilsKeybind("Movement (Toggle)"),
+            MOVEMENT_ENABLE = getAbstractPvpUtilsKeybind("Movement (Enable)"),
+            MOVEMENT_DISABLE = getAbstractPvpUtilsKeybind("Movement (Disable)");
+    public static final KeyBinding
+            FULLBRIGHT_TOGGLE = getAbstractPvpUtilsKeybind("Fullbright (Toggle)"),
+            FULLBRIGHT_ENABLE = getAbstractPvpUtilsKeybind("Fullbright (Enable)"),
+            FULLBRIGHT_DISABLE = getAbstractPvpUtilsKeybind("Fullbright (Disable)");
+    public static final KeyBinding
+            FULLBRIGHT_HOLD = getAbstractPvpUtilsKeybind("Fullbright (Hold)");
+    public static final KeyBinding
+            ALLY_TOGGLE = getAbstractPvpUtilsKeybind("Ally (Toggle)"),
+            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
+            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
+            NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
+    public static final KeyBinding
+            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
+    private static KeyBinding getAbstractPvpUtilsKeybind(String name) {
+        return KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                name,
+                GLFW.GLFW_KEY_UNKNOWN,
+                "PvpUtils"
+        ));
+    }
+
+    public static Map<UUID, String> nameplateUuids; // TODO move to config
+    static {
+        new Thread(() -> {
+            try {
+                if (getDeserializedJsonBlocking("nameplates") instanceof Map map)
+                    nameplateUuids = ((Map<String, String>)map).entrySet().stream()
+                            .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
+                else
+                    nameplateUuids = Map.of();
+            } catch (Exception e) {
+                var client = MinecraftClient.getInstance();
+                if (client.player instanceof ClientPlayerEntity player)
+                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
+                // TODO -> console this
+            }
+        }).start();
+    }
+    public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
+    static {
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                if (getDeserializedJsonBlocking("duplicateKeybinds") instanceof Map map)
+                    duplicateKeybinds = null; //((Map<Integer, Integer>)map);
+                else
+                    duplicateKeybinds = Map.of();
+            } catch (Exception e) {
+                var client = MinecraftClient.getInstance();
+                if (client.player instanceof ClientPlayerEntity player)
+                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
+                // TODO -> console this
+            }
+        }).start();
+    }
+
+    //    public static final KeyBinding KEYBIND_CONSOLE = getAbstractPvpUtilsKeybind("Console"); TODO
+    public static boolean isDebugModeEnabled = false;
+    public static boolean isSprintReset = true;
+    public static boolean
+            isJumpEnabled,
+            isForwardEnabled,
+            isLeftEnabled,
+            isRightEnabled,
+            isBackwardEnabled = false;
+    public static String lastHitDistance = "";
+    public static Text lastHitStrength = EMPTY_TEXT;
+    public static int lastHitDisplayTimer = 0;
+    public static boolean isYLower;
+
+    public static boolean isAttackCooldown = false;
+    public static float lastAttackCooldownProgress = 0;
+    private static double lastEndTickHeight;
+    private static boolean isUpdateNotified = false;
+    @Override
+    public void onInitializeClient() {
+        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
+            if (!isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+                for (JsonElement jsonElement : newUpdates)
+                    player.sendMessage(Text.literal("pvputils missed update: " + jsonElement.getAsJsonObject().get("summary").getAsString()), false);
+                isUpdateNotified = true;
+            }
+        });
+        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
+            lastHitDisplayTimer++;
+        });
+//        ClientPlayConnectionEvents.INIT.register((handler, client) -> {
+//            // TODO ?
+//        });
+
+        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+//            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+//                if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof BlockHitResult blockHitResult) {
+//                    if (MINECRAFT_CLIENT_INSTANCE.world.getBlockState(blockHitResult.getBlockPos()).onUseWithItem())
+//                }
+//                player.sendMessage(Text.of(String.valueOf(player.isUsingItem())), false);
+//            } TODO finish (?)
+            if (client.player instanceof ClientPlayerEntity player) {
+                if (isAttackCooldownNotificationEnabled) {
+                    float f = player.getAttackCooldownProgress(.5f);
+                    if (f >= 1.0f && isAttackCooldown && lastAttackCooldownProgress != 1.0f) {
+                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), 1, 1);
+                        isAttackCooldown = false;
+                    } else if (f >= KNOCKBACK_ATTACK_STRENGTH && isAttackCooldown && lastAttackCooldownProgress < KNOCKBACK_ATTACK_STRENGTH)
+                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), .5f, .5f);
+                    lastAttackCooldownProgress = f;
+                }
+                if (!player.isSprinting())
+                    isSprintReset = true;
+
+                double currentHeight = player.getY();
+                isYLower = currentHeight < lastEndTickHeight;
+                lastEndTickHeight = currentHeight;
+            }
+        });
+
+        {
+            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils", "hud-example-layer");
+            HudLayerRegistrationCallback.EVENT.register((wrapper) ->
+                    wrapper.attachLayerBefore(IdentifiedLayer.CHAT, EXAMPLE_LAYER, (context, v) -> {
+                        StringBuilder stringBuilder = new StringBuilder("[");
+                        boolean flag = false;
+                        if (isToggleSneakGuiEnabled) {
+                            if (isForwardEnabled) {
+                                stringBuilder.append("Forward");
+                                flag = true;
+                            }
+                            flag =
+                                    handleGetIsEnabled(isJumpEnabled,
+                                            handleGetIsEnabled(isBackwardEnabled,
+                                                    handleGetIsEnabled(isRightEnabled,
+                                                            handleGetIsEnabled(isLeftEnabled, flag, stringBuilder, "Left"), stringBuilder, "Right"), stringBuilder, "Backwards"), stringBuilder, "Jump");
+                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+                                boolean isFlying = player.getAbilities().flying;
+                                boolean isSneaking = player.isSneaking();
+                                boolean isSprintingElseDone = player.isSprinting() && !isFlying; // TODO probably can't do both of these anyway
+                                boolean isSneakingElseDone = isSneaking && !isFlying;
+                                if (isSprintingElseDone &&
+                                        (isSprintEnabled || OPTIONS.getSprintToggled().getValue())) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sprinting");
+                                    flag = true;
+                                    isSprintingElseDone = false;
+                                }
+                                if (isSneakingElseDone &&
+                                        (isSneakEnabled || OPTIONS.getSneakToggled().getValue())) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sneaking");
+                                    flag = true;
+                                    isSneakingElseDone = false;
+                                }
+                                if (flag)
+                                    stringBuilder.append(" (Toggled)");
+                                boolean keyHeldFlag = false;
+                                if (isSprintingElseDone && SPRINT_VANILLA.isPressed()) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sprinting");
+                                    flag = true;
+                                    keyHeldFlag = true;
+
+                                    isSprintingElseDone = false;
+                                }
+                                if (isSneakingElseDone && SNEAK_VANILLA.isPressed()) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sneaking");
+                                    flag = true;
+                                    keyHeldFlag = true;
+
+                                    // TODO -> Sneaking (Vanilla) or (Crouching) from height
+                                }
+                                if (keyHeldFlag)
+                                    stringBuilder.append(" (Key Held)");
+
+                                flag = handleGetIsEnabled(isSprintingElseDone, flag, stringBuilder, "Sprinting (Vanilla)");
+
+                                if (isFlying) {
+                                    StringBuilder flyingBuilder = new StringBuilder();
+                                    boolean flyingFlag = false;
+                                    if (JUMP_VANILLA.isPressed()) {
+                                        flyingBuilder.append("Ascending");
+                                        flyingFlag = true;
+                                    }
+                                    if (isSneaking) {
+                                        if (flyingFlag)
+                                            flyingBuilder.append(", ");
+                                        flyingBuilder.append("Descending");
+                                        flyingFlag = true;
+                                    }
+                                    if (!flyingFlag)
+                                        flyingBuilder.append("Flying");
+                                    if (player.getAbilities().getFlySpeed() != BASE_FLY_SPEED)
+                                        flyingBuilder.append(" (")
+                                                .append(player.getAbilities().getFlySpeed() / BASE_FLY_SPEED)
+                                                .append("x boost)");
+                                    stringBuilder.append(flyingBuilder);
+
+                                    flag = true;
+                                }
+                                stringBuilder.append("]  "); // double space from original mod
+                            }
+                        }
+                        Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
+                        int width = window.getScaledWidth();
+                        if (flag) {
+                            String finalText = stringBuilder.toString();
+                            context.drawTextWithShadow(TEXT_RENDERER,
+                                    Text.literal(finalText),
+                                    width - TEXT_RENDERER.getWidth(finalText) - 1,
+                                    1,
+                                    0xffffff);
+                        }
+
+                        if (isAttackIndicatorDataEnabled &&
+                                (!lastHitDistance.isEmpty() || lastHitStrength != EMPTY_TEXT)) {
+                            Text text = Text.literal(lastHitDistance + " ").append(lastHitStrength);
+                            context.drawTextWithShadow(TEXT_RENDERER,
+                                    text,
+                                    (width - TEXT_RENDERER.getWidth(text)) / 2,
+                                    (window.getScaledHeight() - TEXT_RENDERER.fontHeight) / 2 + 20,
+                                    0xffffff);
+                            if (lastHitDisplayTimer > 40) {
+                                lastHitDistance = "";
+                                lastHitStrength = EMPTY_TEXT;
+                            }
+                        }
+                    }));
+        }
+    }
+
+    private static boolean handleGetIsEnabled(boolean isEnabled, boolean flag, StringBuilder stringBuilder, String string) {
+        if (isEnabled) {
+            if (flag)
+                stringBuilder.append(", ");
+            stringBuilder.append(string);
+            return true;
+        }
+        return flag;
+    }
+}

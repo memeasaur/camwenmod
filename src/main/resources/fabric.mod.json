@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "untitled",
+	"version": "${version}",
+	"name": "fabric-pvputils",
+	"description": "pvputils.com",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/untitled/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"com.example.UntitledClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "untitled.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*",
+
+		"sodium": "*"
+	},
+	"suggests": {}
+}
