@@ -18,6 +18,7 @@
 >cheat keybinds not working until the config screen is opened?
 >make block breaking progress continue while using item
 >cycle through packs button
+>open texture pack screen button
 >option for stopping auto-jump when running and eating
 >sprinting removes toggle sneak option + double tap w removes toggle sneak option
 >hold to disable autoclicker button
