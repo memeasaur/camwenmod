@@ -5,6 +5,7 @@
 >map for allowing multiple buttons for one cooldown
 >keybind for disabling players blocking your view
 
+>different keybind for opening and closing door
 >holding e lets you just let go of it to close inv
 >pretty sure it's currently spawning double particles on server hit
 >hard cheats -> autoclicker refills inv
