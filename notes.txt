@@ -3,6 +3,7 @@
 >optiFabric support -> pretty sure it's closed source but this mod should be fully compatible
 
 >map for allowing multiple buttons for one cooldown
+>keybind for disabling players blocking your view
 
 >holding e lets you just let go of it to close inv
 >pretty sure it's currently spawning double particles on server hit
