@@ -1,6 +1,7 @@
 >ignore clicks and autoclicker start clicks that would hit teammates
     >+ option for blatant?
 >automatic w tap
+    >should just disable and enable sprint
 >automatic head run
 >friend everyone in a radius around me
 
