@@ -1,6 +1,6 @@
 >ignore clicks and autoclicker start clicks that would hit teammates
     >+ option for blatant?
->automatic w tap
+>automatic w tap (NVM. shotbow literally doesn't have w-tapping lol)
     >should just disable and enable sprint
 >automatic head run
 >friend everyone in a radius around me

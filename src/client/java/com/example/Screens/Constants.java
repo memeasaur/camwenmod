@@ -253,6 +253,7 @@ public class Constants {
                 .tooltip(Tooltip.of(Text.literal(tooltip)))
                 .build();
     }
+
     private static ButtonWidget getConfigButtonWidget(String title, Runnable onPress, int x, int y, String tooltip) {
         return ButtonWidget.builder(Text.literal(title), v -> {
                     onPress.run();
@@ -263,7 +264,8 @@ public class Constants {
                 .build();
     }
 
-    record nameplateUpdaterEntry(String name, UUID uuid){}
+    record nameplateUpdaterEntry(String name, UUID uuid) {
+    }
 
     static nameplateUpdaterEntry[] currentNameplateUpdatePlayers;
     private static final Text
@@ -317,7 +319,7 @@ public class Constants {
             }
             y += 20;
 
-            final int perPage = 12;
+            final int perPage = 10;
             for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + perPage); i++) {
                 nameplateUpdaterEntry playerListEntry = currentNameplateUpdatePlayers[i];
                 UUID uuid = playerListEntry.uuid;
@@ -414,8 +416,28 @@ public class Constants {
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
             }
+            y += 20;
+            {
+                int xModifier = 0;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "ethylene",
+                        x + xModifier,
+                        y,
+                        isEthylene,
+                        is -> isEthylene = is,
+                        "shotbow lol"));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "automatic w tap",
+                        x + xModifier,
+                        y,
+                        isAutomaticWTapping,
+                        is -> isAutomaticWTapping = is,
+                        "shotbow lol"));
+            }
         }
     };
+
     static {
         try {
             GlobalScreen.registerNativeHook();
@@ -462,6 +484,7 @@ public class Constants {
                 int lastX = 0;
                 int lastY = 0;
                 long lastMoveEventNanoseconds = System.nanoTime();
+
                 @Override
                 public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
                     int x = nativeEvent.getX();

@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.example.Configs.CheatConfig.isEthylene;
 import static com.example.Utils.handlePvpDamage;
 
 @Mixin(PlayerEntity.class)
@@ -28,7 +29,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(at = @At(value = "RETURN"), method = "attack")
     private void onAttack(Entity target, CallbackInfo ci) {
+        // cheats start
         // TODO -> check if I was sprinting originally
-        this.setSprinting(true);
+        if (isEthylene) {
+            this.setSprinting(true);
+        }
+        // cheats end
     }
 }
