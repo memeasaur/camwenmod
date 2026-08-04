@@ -1,3 +1,9 @@
+>ignore clicks and autoclicker start clicks that would hit teammates
+    >+ option for blatant?
+>automatic w tap
+>automatic head run
+>friend everyone in a radius around me
+
 >features can be enabled with server api, or by being hard-coded, or from the server
 >this mod should be in neoForge eventually, but that's losing most of the recommended other mods -> Animatium, ?...
 >optiFabric support -> pretty sure it's closed source but this mod should be fully compatible
