@@ -317,7 +317,8 @@ public class Constants {
             }
             y += 20;
 
-            for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + 15); i++) {
+            final int perPage = 12;
+            for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + perPage); i++) {
                 nameplateUpdaterEntry playerListEntry = currentNameplateUpdatePlayers[i];
                 UUID uuid = playerListEntry.uuid;
                 String team = nameplateUuids.getOrDefault(uuid, "neutral");
