@@ -19,7 +19,7 @@ public class CheatConfig {
     public static int glfwToggleBlockXrayKeybind = GLFW.GLFW_KEY_UNKNOWN; // TODO -> hold/active/disable
     public static int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
-    TODO; // it doesn't save
+    TODO; // it doesn't save + I need to save the autoclickers
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }
