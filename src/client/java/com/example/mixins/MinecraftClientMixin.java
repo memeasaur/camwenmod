@@ -38,7 +38,9 @@ public class MinecraftClientMixin {
         MINECRAFT_CLIENT_INSTANCE.attackCooldown = 0;
         if (player != null) {
             if (isDebugModeEnabled)
-                player.sendMessage(Text.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.attackCooldown), false);
+                player.sendMessage(
+                        Text.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.attackCooldown),
+                        false);
 
             float attackCooldown = player.getAttackCooldownProgress(0f);
             boolean isWeakAttack = player.getAttackCooldownProgress(.5f) < KNOCKBACK_ATTACK_STRENGTH;
