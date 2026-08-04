@@ -4,6 +4,7 @@
     >should just disable and enable sprint
 >automatic head run
 >friend everyone in a radius around me
+>enable autoclicker in inventory
 
 >features can be enabled with server api, or by being hard-coded, or from the server
 >this mod should be in neoForge eventually, but that's losing most of the recommended other mods -> Animatium, ?...
