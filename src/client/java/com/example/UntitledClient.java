@@ -121,7 +121,7 @@ public class UntitledClient implements ClientModInitializer {
                 if (getDeserializedJsonBlocking("duplicateKeybinds") instanceof Map map)
                     duplicateKeybinds = null; //((Map<Integer, Integer>)map);
                 else
-                    duplicateKeybinds = Map.of(GLFW.GLFW_KEY_G, USE_VANILLA);
+                    duplicateKeybinds = Map.of(); // GLFW.GLFW_KEY_G, USE_VANILLA
             } catch (Exception e) {
                 var client = MinecraftClient.getInstance();
                 if (client.player instanceof ClientPlayerEntity player)
@@ -193,9 +193,10 @@ public class UntitledClient implements ClientModInitializer {
     }
     public static boolean isAutoclickerEnabled = false;
     public static boolean isHeldAutoclickerPressed;
+    public static boolean isAutoclickerShakeEnabled = false; // TODO -> finish impl
 
     public static String currentXrayType = "";
-    public static Set<Block> immutableXrayBlocks = Set.of(Blocks.STONE, Blocks.DEEPSLATE, Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.RED_SAND, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.GRANITE); // TODO -> move all destruct-able state to map // Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.FURNACE, Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.ANCIENT_DEBRIS, Blocks.NETHER_GOLD_ORE, Blocks.GOLD_BLOCK, Blocks.RAW_GOLD_BLOCK, Blocks.RAW_IRON_BLOCK, Blocks.RAW_COPPER_BLOCK, Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE, Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.BOOKSHELF, Blocks.COBWEB)); // TODO -> move all destruct-able state to map
+    public static Set<Block> immutableXrayBlocks = Set.of(Blocks.STONE, Blocks.DEEPSLATE, Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.RED_SAND, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.GRANITE, Blocks.GRAVEL); // TODO -> move all destruct-able state to map // Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.FURNACE, Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.ANCIENT_DEBRIS, Blocks.NETHER_GOLD_ORE, Blocks.GOLD_BLOCK, Blocks.RAW_GOLD_BLOCK, Blocks.RAW_IRON_BLOCK, Blocks.RAW_COPPER_BLOCK, Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE, Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.BOOKSHELF, Blocks.COBWEB)); // TODO -> move all destruct-able state to map
     // TODO -> make immutableXrayBlocks serializable
     @Nullable // TODO -> don't use string literals for this
     public static Map<String, Object> nullableImmutableState = Map.of(
@@ -221,7 +222,7 @@ public class UntitledClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
-            if (!isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                 for (JsonElement jsonElement : newUpdates)
                     player.sendMessage(Text.literal("pvputils missed update: " + jsonElement.getAsJsonObject().get("summary").getAsString()), false);
                 isUpdateNotified = true;

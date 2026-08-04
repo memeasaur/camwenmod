@@ -22,8 +22,7 @@ import java.util.concurrent.locks.LockSupport;
 
 import static com.example.Configs.CheatConfig.*;
 import static com.example.DelayedClientState.ATTACK_VANILLA;
-import static com.example.UntitledClient.isDebugModeEnabled;
-import static com.example.UntitledClient.isHeldAutoclickerPressed;
+import static com.example.UntitledClient.*;
 import static org.joml.Math.lerp;
 
 public class Constants {
@@ -51,12 +50,14 @@ public class Constants {
             if (e.getButton() == NativeMouseEvent.BUTTON1)
                 handleAutoclickerMouseHeldDown();
         }
+
         @Override
         public void nativeMouseReleased(NativeMouseEvent e) {
             if (e.getButton() == NativeMouseEvent.BUTTON1)
                 nullableCurrentHeldAutoclickerTask = null;
         }
     };
+
     public static void handleAutoclickerMouseHeldDown() {
         MinecraftClient clientDontUseThis = MinecraftClient.getInstance();
         if (nullableCurrentHeldAutoclickerTask == null && clientDontUseThis.currentScreen == null && clientDontUseThis.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
@@ -77,6 +78,7 @@ public class Constants {
                     if (seenIndexes.size() >= immutableRecordedAutoclickerClicks.length)
                         seenIndexes.clear();
                 };
+
                 @Override
                 public void run() {
                     int currentAutoclickerIndex = 1; // this is accounting for the initial mouse press, which is used
@@ -103,14 +105,12 @@ public class Constants {
                                 } // TODO -> external gui should give warnings for if you're wrapping around and suggest recording longer macros
                                 else
                                     currentAutoclickerIndex++;
-                            }
-                            else {
+                            } else {
                                 if (currentAutoclickerIndex <= 0) {
                                     isCurrentlyReversed[0] = false;
                                     getNextRecordedAutoclicker.run();
                                     currentAutoclickerIndex = 1; // this one ends on pressed, so start on not pressed
-                                }
-                                else
+                                } else
                                     currentAutoclickerIndex--;
                             }
                             isHeldAutoclickerPressed = ((currentAutoclickerIndex - 1) & 1) == 0;
@@ -135,26 +135,33 @@ public class Constants {
                 int currentMacroIndexLengthMinus1 = currentRecordedAutoclicker.length - 1;
                 int lastRecordedAutoclickerIndex = currentAutoclickerMacroIndex[0];
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
+
                 @Override
                 public void run() {
                     try {
-                        {
+                        if (isAutoclickerShakeEnabled) {
                             MouseMovement mouseMovement = currentRecordedAutoclicker[0];
                             threadClient.execute(() -> { // TODO method-ize
                                 long handle = MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle();
                                 Mouse mouse = MINECRAFT_CLIENT_INSTANCE.mouse;
-                                ((MouseMixin) mouse).invokeOnCursorPos(handle, mouse.getX() + mouseMovement.deltaX(), mouse.getY() + mouseMovement.deltaY());
+                                ((MouseMixin) mouse).invokeOnCursorPos(
+                                        handle,
+                                        mouse.getX() + mouseMovement.deltaX(),
+                                        mouse.getY() + mouseMovement.deltaY());
                             });
                         }
 
                         while (nullableCurrentHeldAutoclickerTask == task) {
                             MouseMovement mouseMovement = currentRecordedAutoclicker[currentAutoclickerIndex];
                             LockSupport.parkNanos((long) (mouseMovement.delayNanos() / lerp[0]));
-                            if (threadClient.currentScreen == null && threadClient.player instanceof ClientPlayerEntity player && !player.isUsingItem())
+                            if (isAutoclickerShakeEnabled && threadClient.currentScreen == null && threadClient.player instanceof ClientPlayerEntity player && !player.isUsingItem())
                                 threadClient.execute(() -> {
                                     long handle = MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle();
                                     Mouse mouse = MINECRAFT_CLIENT_INSTANCE.mouse;
-                                    ((MouseMixin) mouse).invokeOnCursorPos(handle, mouse.getX() + mouseMovement.deltaX(), mouse.getY() + mouseMovement.deltaY());
+                                    ((MouseMixin) mouse).invokeOnCursorPos(
+                                            handle,
+                                            mouse.getX() + mouseMovement.deltaX(),
+                                            mouse.getY() + mouseMovement.deltaY());
                                 });
 //                            if (threadClient.currentScreen != null) {
 //                                getNextRecordedAutoclicker.run();
@@ -167,8 +174,7 @@ public class Constants {
                                 currentRecordedAutoclicker = immutableRecordedAutoclickerMovements[lastRecordedAutoclickerIndex];
                                 currentAutoclickerIndex = 0;
                                 currentMacroIndexLengthMinus1 = currentRecordedAutoclicker.length - 1;
-                            }
-                            else if (!isCurrentlyReversed[0]) {
+                            } else if (!isCurrentlyReversed[0]) {
 //                                if (currentAutoclickerIndex >= currentRecordedAutoclicker.length - 1) {
 //                                    firstMacroLengthMinus1 = -1;
 //                                    isCurrentlyReversed = true;
@@ -177,8 +183,7 @@ public class Constants {
 //                                } // TODO -> external gui should give warnings for if you're wrapping around and suggest recording longer macros
 //                                else
                                 currentAutoclickerIndex++;
-                            }
-                            else {
+                            } else {
 //                                if (currentAutoclickerIndex <= 0) {
 //                                    isCurrentlyReversed = false;
 //                                    getNextRecordedAutoclicker.run();
