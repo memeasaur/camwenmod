@@ -11,7 +11,7 @@ public class CheatConfig {
     public static int[][] immutableRecordedAutoclickerClicks = new int[0][];
     public static MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
     public static float autoclickerStartingMultiplier = 1.25f;
-    public static float autoclickerEndingMultiplier = .95f;
+    public static float autoclickerEndingMultiplier = 1.25f;
     public static int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
@@ -22,7 +22,7 @@ public class CheatConfig {
     public static boolean isAutomaticWTapping = true;
     public static boolean isEthylene = true;
 
-//    TODO; // it doesn't save + I need to save the autoclickers
+    TODO; // it doesn't save + I need to save the autoclickers
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }
