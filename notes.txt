@@ -12,6 +12,7 @@
     >hold a button and it head runs for you while it's held, this seems like it would be blatant
     >NO. hold a button and it shifts your view the correct head run angle
         >blatant? (if lunar's freelook doesn't work like this) let go of it and it automatically puts your view forward
+>follow mod, copies inputs from other player
 
 >friend everyone in a radius around me
 >reach?
