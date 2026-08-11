@@ -249,6 +249,10 @@ public class Constants {
                 .callback((v, is) -> {
                     consumer.accept(is);
                     saveConfig();
+
+                    // Cheats start
+                    saveCheatConfig();
+                    // Cheats end
                 })
                 .tooltip(Tooltip.of(Text.literal(tooltip)))
                 .build();
@@ -258,6 +262,9 @@ public class Constants {
         return ButtonWidget.builder(Text.literal(title), v -> {
                     onPress.run();
                     saveConfig();
+                    // Cheats start
+                    saveCheatConfig();
+                    // Cheats end
                 })
                 .position(x, y)
                 .tooltip(Tooltip.of(Text.literal(tooltip)))

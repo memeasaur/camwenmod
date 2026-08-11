@@ -22,7 +22,6 @@ public class CheatConfig {
     public static boolean isAutomaticWTapping = true;
     public static boolean isEthylene = true;
 
-    TODO; // it doesn't save + I need to save the autoclickers
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }

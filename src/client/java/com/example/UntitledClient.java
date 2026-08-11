@@ -264,10 +264,6 @@ public class UntitledClient implements ClientModInitializer {
         // Cheats start TODO ?
         if (isAutoclickerEnabled)
             ATTACK_VANILLA.setPressed(isHeldAutoclickerPressed);
-
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            saveCheatConfig();
-        });
         // Cheats end
 
         {
