@@ -9,6 +9,12 @@
 >enable autoclicker in inventory
 >always move at head-run speed?
 >find out how to stop the slowdown from taking damage
+>teammate api that lets you see their health and current location (in the world? in minecraft?)
+	>/focus etc.
+	>league style pings
+	>fight tracker
+	>can see teammates inventories, can see their remaining consumables above head
+	>tracks enemy consumables, and coalesces with the api
 
 >automatic head run (blatant)
     >hold a button and it head runs for you while it's held
