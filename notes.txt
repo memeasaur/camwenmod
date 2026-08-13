@@ -16,11 +16,15 @@
 	>fight tracker
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
+>follow mod, copies inputs from other player
+>autoclick waits to start until it's a valid hit? this is pretty blatant
+>swings go through friends
+>hitbox size revert
+>trajectories/enderPearl aimbot bow aimbot etc
 
+>faster tick-rate
 >automatic head run (blatant)
     >hold a button and it head runs for you while it's held
->follow mod, copies inputs from other player
->autoclick waits to start until it's a valid hit? (triggerbot-esque)
 >the range for the nameplate keybind should be super long
 >friend everyone in a radius around me
 >reach?
@@ -28,9 +32,6 @@
 
 >automatic w tap (NVM. shotbow literally doesn't have w-tapping lol)
     >should just disable and enable sprint
->features can be enabled with server api, or by being hard-coded, or from the server
->this mod should be in neoForge eventually, but that's losing most of the recommended other mods -> Animatium, ?...
->optiFabric support -> pretty sure it's closed source but this mod should be fully compatible
 
 >map for allowing multiple buttons for one cooldown
 >keybind for disabling players blocking your view
@@ -85,7 +86,6 @@
 >potion effect utilizing the vanilla indicator
 >(?), sound effects for potion effects expiring
 
->list labyMod/lunar etc. incompatibilities on site
 >figure out the message matching thing. or just make it a click like it probably always should've been
 
     >ability to communicate with other mod user
@@ -101,12 +101,6 @@
         >client-side anticheat
         >these messages are only seen on camwenmod clients unless the server allows otherwise
 
->Public+ version
-    >xray/freeCam/any public cheaty stuff that I don't want to contribute to updating publicly
-    >private git-hub that I don't mind being public
-
->Public version
-    >list missing recommended mods in mod
     >gui option for showing when you have a sprint hit queued up
     >these custom particles and sounds should apply for other players on your screen too -> it should be configurable whether the sound plays for just you or for just enemies or both (soft cheating ?), + if server allows it
     >make miss and weak attack sounds configurable
@@ -131,12 +125,8 @@
     >can see other mod users' nameplate changes; probably only their allies/enemies
     >mod user messaging system/friends list etc.
     >would like to maybe integrate more closely with vanilla toggle-sprint/sneak (?)
-    >jnativehook for all clicks (?)
-    >jnativehook for all important inputs (?)
-    >show badLion client cosmetics/lunar/LabyMod etc.
     >allow raw 1.7 packs to be used in current version
     >"programmer art+" + option for replacing fallback fires to low fire
-    >abstract item counter (?)
     >1.7 enchantment glint
     >1.7 potion enchantment glint option
 
@@ -172,27 +162,20 @@
     >elytra helper -> perfect angles etc.
     >nausea/darkness/blindness removal -> this isn't as hard of a cheat if packs/sodium etc. can do it
     >swing while eating etc. + if allowed meme
-    >dropping food eats faster revert + if allowed meme
-    >skin spammer etc. + if allowed meme
+    >dropping food eats faster revert
     >swimming hitbox revert + if allowed meme
-    >hitbox size revert + if allowed meme
     >follow + if allowed meme
     >crawl button (?)
     >autorun inventory check removal
     >ability to have misses be ignored if attack cooldown
-    >faster tick-rate
     >remove client-side cooldown thing
 	>splash simulation warning
 	>blink
 	>snowshoe
 	>bhop-ing (?)
 	>v-clipping
-	>swings go through friends
->lame blatant version (?, don't make or use this; blatant version but without skill)
+
     >auto headRun macro
     >headRun cam
     >sneaking is always sprint-sneaking
-    >cobweb
     >splash potions on interactable items automatic crouch
-    >automatic w tapping
-    >trajectories/enderPearl aimbot bow aimbot etc
