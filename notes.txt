@@ -3,6 +3,7 @@
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 >ignore clicks and autoclicker start clicks that would hit teammates
     >+ option for blatant where it literally cancels the hits
+>chat message when hitting teammates?
 >auto cobweb that works alongside me already trying myself
     >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
     >I might just need another autoclicker that only runs with cobwebs for this, which would be the less detectable
