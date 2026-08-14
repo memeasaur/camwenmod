@@ -22,6 +22,8 @@ public class CheatConfig {
     public static boolean isAutomaticWTapping = true;
     public static boolean isEthylene = true;
 
+    public static float targetingMarginBypass = .1f;
+
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }
