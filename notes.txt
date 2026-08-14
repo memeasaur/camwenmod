@@ -16,6 +16,7 @@
 	>fight tracker
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
+	>shows waypoints on all visible and last seen enemies
 >follow mod, copies inputs from other player
 >autoclick waits to start until it's a valid hit? this is pretty blatant
 >swings go through friends
