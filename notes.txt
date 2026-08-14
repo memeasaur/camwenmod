@@ -12,13 +12,14 @@
 	>message when hitting teammate?
 	>option for blatant where it cancels the swings that hit teammates
 	>option for ignoring autoclicker starts that would hit teammates
+>set better defaults
+>test different resolutions
 
 >auto cobweb that works alongside me already trying myself
+    >I could have it only right-click during the autoclicker sequence if the place is valid?
     >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
-    >I might just need another autoclicker that only runs with cobwebs for this, which would be the less detectable
 >enable autoclicker in inventory
 >follow mod, copies inputs from other player
->the range for the nameplate keybind should be super long
 
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running

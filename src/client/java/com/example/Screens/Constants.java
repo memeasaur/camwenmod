@@ -441,6 +441,21 @@ public class Constants {
                         isAutomaticWTapping,
                         is -> isAutomaticWTapping = is,
                         "shotbow lol"));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "cobweb autoclicker",
+                        x + xModifier,
+                        y,
+                        isCobwebAutoclicker,
+                        is -> isCobwebAutoclicker = is,
+                        "shotbow lol"));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget(
+                        "change autoclick starting multipler. current: " + targetingMarginBypass,
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
+                        x + xModifier,
+                        y,
+                        "opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"));
             }
         }
     };
@@ -581,5 +596,6 @@ public class Constants {
 
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> targetingMarginBypass = number, CHEAT_CONFIG);
     // Cheats end
 }
