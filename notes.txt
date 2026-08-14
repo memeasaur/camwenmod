@@ -18,7 +18,6 @@
 >auto cobweb that works alongside me already trying myself
     >I could have it only right-click during the autoclicker sequence if the place is valid?
     >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
->enable autoclicker in inventory
 >follow mod, copies inputs from other player
 >implement cobweb
 

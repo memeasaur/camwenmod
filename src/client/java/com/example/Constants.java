@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.mixins.KeyBindingMixin;
 import com.example.mixins.MouseMixin;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
