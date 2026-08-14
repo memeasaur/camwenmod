@@ -12,8 +12,12 @@ import static com.example.UntitledClient.FULLBRIGHT_HOLD;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Inject(at = @At(value = "HEAD"), method = "getNightVisionStrength", cancellable = true)
-    private static void onGetNightVisionStrength(LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
+    @Inject(
+            at = @At(value = "HEAD"),
+            method = "getNightVisionStrength",
+            cancellable = true)
+    private static void onGetNightVisionStrength(
+            LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
         if (isFullbrightEnabled || FULLBRIGHT_HOLD.isPressed()) {
             cir.setReturnValue(1.0f);
             cir.cancel();
