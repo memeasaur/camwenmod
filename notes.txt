@@ -12,6 +12,8 @@
 	>tracks enemy consumables, and coalesces with the api
 	>shows waypoints on all visible and last seen enemies
 	>chat message when hitting teammates?
+	>render free tier. But only if it's setup isn't proprietary, which it seems to not be
+	>just store the data in backend-local files
 >follow mod, copies inputs from other player
 >hitbox size revert
 @Mixin(Entity.class)
