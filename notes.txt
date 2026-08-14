@@ -20,7 +20,9 @@
     >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
 >enable autoclicker in inventory
 >follow mod, copies inputs from other player
+>implement cobweb
 
+>apparently my recorder's up and down press order is off by 1
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't

@@ -7,11 +7,13 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.google.gson.Gson;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
+import org.lwjgl.glfw.GLFW;
 
 import java.net.http.HttpClient;
 import java.util.HashSet;
@@ -60,7 +62,8 @@ public class Constants {
 
     public static void handleAutoclickerMouseHeldDown() {
         MinecraftClient clientDontUseThis = MinecraftClient.getInstance();
-        if (nullableCurrentHeldAutoclickerTask == null && clientDontUseThis.currentScreen == null && clientDontUseThis.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
+        // TODO -> method-ize that check
+        if (nullableCurrentHeldAutoclickerTask == null && (clientDontUseThis.currentScreen == null || clientDontUseThis.currentScreen instanceof InventoryScreen) && clientDontUseThis.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
             isHeldAutoclickerPressed = true; // this is accounting for the initial mouse press, which is used
             final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(immutableRecordedAutoclickerClicks.length)};
             final boolean[] isCurrentlyReversed = new boolean[]{false};
@@ -89,7 +92,7 @@ public class Constants {
                                 : autoclickerEndingMultiplier;
                         LockSupport.parkNanos((long) (currentRecordedAutoclicker[currentAutoclickerIndex] /
                                 lerp[0]));
-                        if (threadClient.currentScreen != null) {
+                        if (threadClient.currentScreen != null && !(threadClient.currentScreen instanceof InventoryScreen)) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
                             firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
@@ -114,13 +117,21 @@ public class Constants {
                                     currentAutoclickerIndex--;
                             }
                             isHeldAutoclickerPressed = ((currentAutoclickerIndex - 1) & 1) == 0;
-                            if (isHeldAutoclickerPressed)
-                                threadClient.execute(() -> {
-                                    if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
-                                        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) ATTACK_VANILLA;
-                                        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
-                                    }
-                                });
+//                            if (isHeldAutoclickerPressed)
+                            threadClient.execute(() -> {
+//                                    if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
+//                                        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) ATTACK_VANILLA;
+//                                        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
+//                                    }
+//                                    else if (MINECRAFT_CLIENT_INSTANCE.currentScreen instanceof InventoryScreen inventoryScreen) {
+//                                        // TODO -> I should record the unclick timings for this
+//                                    }
+                                ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
+                                        MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
+                                        GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                                        isHeldAutoclickerPressed ? GLFW.GLFW_PRESS : GLFW.GLFW_RELEASE,
+                                        0);
+                            });
                         }
                     }
                     isHeldAutoclickerPressed = false;

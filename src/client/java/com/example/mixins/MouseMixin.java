@@ -8,4 +8,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface MouseMixin {
     @Invoker("onCursorPos")
     void invokeOnCursorPos(long window, double x, double y);
+    @Invoker("onMouseButton")
+    void invokeOnMouseButton(long window, int button, int action, int mods);
 }

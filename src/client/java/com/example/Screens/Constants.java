@@ -433,14 +433,14 @@ public class Constants {
                         isEthylene,
                         is -> isEthylene = is,
                         "shotbow lol"));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "automatic w tap",
-                        x + xModifier,
-                        y,
-                        isAutomaticWTapping,
-                        is -> isAutomaticWTapping = is,
-                        "shotbow lol"));
+//                xModifier += 150;
+//                addDrawableChild(getConfigCheckboxWidget(
+//                        "automatic w tap",
+//                        x + xModifier,
+//                        y,
+//                        isAutomaticWTapping,
+//                        is -> isAutomaticWTapping = is,
+//                        "shotbow lol"));
                 xModifier += 150;
                 addDrawableChild(getConfigCheckboxWidget(
                         "cobweb autoclicker",
