@@ -1,9 +1,3 @@
->ignore clicks and autoclicker start clicks that would hit teammates
-    >+ option for blatant where it literally cancels the hits
->auto cobweb that works alongside me already trying myself
-    >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
-    >I might just need another autoclicker that only runs with cobwebs for this, which would be the less detectable
->enable autoclicker in inventory
 >teammate api that lets you see their health and current location (in the world? in minecraft?)
 	>/focus etc.
 	>league style pings
@@ -14,17 +8,15 @@
 	>chat message when hitting teammates?
 	>render free tier. But only if it's setup isn't proprietary, which it seems to not be
 	>just store the data in backend-local files
+
+>ignore clicks and autoclicker start clicks that would hit teammates
+    >+ option for blatant where it literally cancels the hits
+>auto cobweb that works alongside me already trying myself
+    >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
+    >I might just need another autoclicker that only runs with cobwebs for this, which would be the less detectable
+>enable autoclicker in inventory
 >follow mod, copies inputs from other player
->hitbox size revert
-@Mixin(Entity.class)
-public abstract class MixinEntity_PickInflation {
-    @Inject(method = "getPickRadius", at = @At("HEAD"), cancellable = true)
-    private void animatium$pickInflation(final CallbackInfoReturnable<Float> cir) {
-        if (ServerFeatureManager.isPresent(ServerFeatures.PICK_INFLATION)) {
-            cir.setReturnValue(0.1F);
-        }
-    }
-}
+>the range for the nameplate keybind should be super long
 
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running
@@ -37,7 +29,6 @@ public abstract class MixinEntity_PickInflation {
 >faster tick-rate
 >automatic head run (blatant)
     >hold a button and it head runs for you while it's held
->the range for the nameplate keybind should be super long
 >friend everyone in a radius around me
 >reach?
 >less kb when trading?

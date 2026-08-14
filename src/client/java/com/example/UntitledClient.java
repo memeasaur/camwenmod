@@ -1,17 +1,10 @@
 package com.example;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,10 +18,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -41,28 +30,28 @@ import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
-    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
-    private static JsonArray newUpdates;
-    static {
-        new Thread(() -> {
-            try {
-                String response = HTTP_CLIENT.send(HttpRequest.newBuilder()
-                        .uri(URI.create("https://xapkbnegosbyhmondqti.supabase.co/rest/v1/fabricpvputils_updates?version=gt." + METADATA.getVersion() + "&order=version.desc"))
-                        .header("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhcGtibmVnb3NieWhtb25kcXRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTgxNTMsImV4cCI6MjA2NDM3NDE1M30.qevIYqIPh3BhiGHj_gppbggv-42RQedaF8Zd-aI5fZA")
-                        .build(), HttpResponse.BodyHandlers.ofString()).body();
-                newUpdates = JsonParser.parseString(response).getAsJsonArray();
-                for (JsonElement element : newUpdates)
-                    if (element.getAsJsonObject().get("is_critical").getAsBoolean())
-                        MinecraftClient.getInstance().execute(() -> {
-                            MINECRAFT_CLIENT_INSTANCE.scheduleStop();
-                            throw new RuntimeException("pvputils missing critical update. force stopping");
-                        });
-            } catch (IOException | InterruptedException e) {
-                if (MinecraftClient.getInstance().player instanceof ClientPlayerEntity player)
-                    MinecraftClient.getInstance().execute(() -> player.sendMessage(Text.literal("updates request failed"), false));
-            }
-        }).start();
-    }
+//    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
+//    private static JsonArray newUpdates;
+//    static {
+//        new Thread(() -> {
+//            try {
+//                String response = HTTP_CLIENT.send(HttpRequest.newBuilder()
+//                        .uri(URI.create("https://xapkbnegosbyhmondqti.supabase.co/rest/v1/fabricpvputils_updates?version=gt." + METADATA.getVersion() + "&order=version.desc"))
+//                        .header("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhcGtibmVnb3NieWhtb25kcXRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTgxNTMsImV4cCI6MjA2NDM3NDE1M30.qevIYqIPh3BhiGHj_gppbggv-42RQedaF8Zd-aI5fZA")
+//                        .build(), HttpResponse.BodyHandlers.ofString()).body();
+//                newUpdates = JsonParser.parseString(response).getAsJsonArray();
+//                for (JsonElement element : newUpdates)
+//                    if (element.getAsJsonObject().get("is_critical").getAsBoolean())
+//                        MinecraftClient.getInstance().execute(() -> {
+//                            MINECRAFT_CLIENT_INSTANCE.scheduleStop();
+//                            throw new RuntimeException("pvputils missing critical update. force stopping");
+//                        });
+//            } catch (IOException | InterruptedException e) {
+//                if (MinecraftClient.getInstance().player instanceof ClientPlayerEntity player)
+//                    MinecraftClient.getInstance().execute(() -> player.sendMessage(Text.literal("updates request failed"), false));
+//            }
+//        }).start();
+//    }
     public static final KeyBinding // TODO -> idk why it crashes when I move these
             SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
             SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
@@ -218,16 +207,16 @@ public class UntitledClient implements ClientModInitializer {
     public static boolean isAttackCooldown = false;
     public static float lastAttackCooldownProgress = 0;
     private static double lastEndTickHeight;
-    private static boolean isUpdateNotified = false;
+//    private static boolean isUpdateNotified = false;
     @Override
     public void onInitializeClient() {
-        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
-            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-                for (JsonElement jsonElement : newUpdates)
-                    player.sendMessage(Text.literal("pvputils missed update: " + jsonElement.getAsJsonObject().get("summary").getAsString()), false);
-                isUpdateNotified = true;
-            }
-        });
+//        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
+//            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+//                for (JsonElement jsonElement : newUpdates)
+//                    player.sendMessage(Text.literal("pvputils missed update: " + jsonElement.getAsJsonObject().get("summary").getAsString()), false);
+//                isUpdateNotified = true;
+//            }
+//        });
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             lastHitDisplayTimer++;
         });
