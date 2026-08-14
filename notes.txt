@@ -7,10 +7,12 @@
 	>shows waypoints on all visible and last seen enemies
 	>chat message when hitting teammates?
 	>render free tier. But only if it's setup isn't proprietary, which it seems to not be
-	>just store the data in backend-local files
+	>just store the data in backend-local files, unless I end up doing everything with supabase realtime
+	>also works for different name colors for different teams
+	>message when hitting teammate?
+	>option for blatant where it cancels the swings that hit teammates
+	>option for ignoring autoclicker starts that would hit teammates
 
->ignore clicks and autoclicker start clicks that would hit teammates
-    >+ option for blatant where it literally cancels the hits
 >auto cobweb that works alongside me already trying myself
     >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
     >I might just need another autoclicker that only runs with cobwebs for this, which would be the less detectable

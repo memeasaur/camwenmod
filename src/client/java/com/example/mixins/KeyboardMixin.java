@@ -6,8 +6,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,7 +49,8 @@ public class KeyboardMixin {
     private static final HashSet<Integer> pressedDuplicateKeybindKeys = new HashSet<>();
 
     @Inject(at = @At(value = "RETURN"), method = "onKey")
-    private void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
+    private void onKey(
+            long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
         if (isMovementToggleMirrorPressDisabling) {
             if (getIsKeyBindingPressed(SNEAK_VANILLA) == isSneakEnabled
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == isSprintEnabled
@@ -120,7 +124,7 @@ public class KeyboardMixin {
         }
 
         while (ALLY_TOGGLE.wasPressed())
-            if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity playerEntity) {
+            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
                 if (Objects.equals(nameplateUuids.get(playerUuid), "ally"))
                     removeNameplateUuidEntry(playerUuid);
@@ -128,7 +132,7 @@ public class KeyboardMixin {
                     putNameplateUuidEntry(Map.entry(playerUuid, "ally"));
             }
         while (ENEMY_TOGGLE.wasPressed())
-            if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity playerEntity) {
+            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
                 if (Objects.equals(nameplateUuids.get(playerUuid), "enemy"))
                     removeNameplateUuidEntry(playerUuid);
@@ -136,7 +140,7 @@ public class KeyboardMixin {
                     putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
             }
         while (FOCUS_TOGGLE.wasPressed())
-            if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity playerEntity) {
+            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
                 if (Objects.equals(nameplateUuids.get(playerUuid), "focus"))
                     removeNameplateUuidEntry(playerUuid);
@@ -144,7 +148,7 @@ public class KeyboardMixin {
                     putNameplateUuidEntry(Map.entry(playerUuid, "focus"));
             }
         while (NAMEPLATE_CYCLE.wasPressed())
-            if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity playerEntity) {
+            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
                 switch (nameplateUuids.getOrDefault(playerUuid, "")) {
                     case "ally" -> putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
@@ -277,5 +281,36 @@ public class KeyboardMixin {
         isBackwardEnabled = getIsKeyBindingPressed(BACKWARD_VANILLA);
 
         isMovementToggleMirrorSequencePressed = true;
+    }
+
+    private PlayerEntity ComputePlayerRaytrace() {
+        final double REACH = 50.f;
+        float tickDelta = MINECRAFT_CLIENT_INSTANCE.getRenderTickCounter().getTickDelta(true);
+
+        ClientPlayerEntity player = MINECRAFT_CLIENT_INSTANCE.player;
+        Vec3d cameraPos = player.getCameraPosVec(tickDelta);
+        Vec3d rotationVec = player.getRotationVec(tickDelta);
+        Vec3d endPos = cameraPos.add(rotationVec.multiply(REACH));
+
+        Box searchBox = player.getBoundingBox()
+                .stretch(rotationVec.multiply(REACH))
+                .expand(.3D);
+
+        EntityHitResult hitResult = ProjectileUtil.raycast(
+                player,
+                cameraPos,
+                endPos,
+                searchBox,
+                entity -> !entity.isSpectator()
+                        && entity.canHit()
+                        && entity instanceof PlayerEntity,
+                REACH * REACH
+        );
+
+        if (hitResult != null && hitResult.getEntity() instanceof PlayerEntity targetPlayer) {
+            return targetPlayer;
+        }
+
+        return null;
     }
 }
