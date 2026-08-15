@@ -3,7 +3,6 @@ package com.example.mixins;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +24,7 @@ import static com.example.Utils.getIsKeyBindingPressed;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
-//    @Inject(method="addEnchantedHitParticles", at = @At("HEAD"), cancellable = true)
+    //    @Inject(method="addEnchantedHitParticles", at = @At("HEAD"), cancellable = true)
 //    private void onAddEnchantedHitParticles(Entity target, CallbackInfo ci) {
 //        ci.cancel();
 //    }TODO remove
@@ -43,10 +42,8 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setPressed((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
             BACKWARD_VANILLA.setPressed((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
         }
-        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
-        {
-            if (isFlyBoostEnabled && player.isCreative())
-            {
+        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+            if (isFlyBoostEnabled && player.isCreative()) {
                 PlayerAbilities abilities = player.getAbilities();
                 if (abilities.flying &&
                         (SPRINT_VANILLA.isPressed() || SPRINT_TOGGLE.isPressed() || SPRINT_ENABLE.isPressed())) {
