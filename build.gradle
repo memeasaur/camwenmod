@@ -105,3 +105,27 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+
+jooq {
+	configuration {
+		TODO;
+		jdbc {
+			driver = 'org.postgresql.Driver'
+			url = System.getenv('SUPABASE_DB_URL')
+			user = System.getenv('SUPABASE_DB_USER')
+			password = System.getenv('SUPABASE_DB_PASSWORD')
+		}
+
+		generator {
+			database {
+				name = 'org.jooq.meta.postgres.PostgresDatabase'
+				inputSchema = 'public'
+			}
+
+			target {
+				packageName = 'com.example.database.generated'
+				directory = 'build/generated-src/jooq'
+			}
+		}
+	}
+}
