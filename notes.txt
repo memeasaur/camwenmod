@@ -16,6 +16,7 @@
 >set better defaults
 >test different resolutions
 
+>speech to text chat typer?
 >league style pings
 >fight tracker
 >follow mod, copies inputs from other player
