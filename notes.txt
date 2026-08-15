@@ -3,6 +3,7 @@
 >add brackets everywhere that I decided not to use them
 
 >teammate api that lets you see their health and current location in the world
+    >TODO -> screen-space icon that is projected from a real-world location. but have it rendered at the edge of the render if necessary, like minimap waypoints do
 	>/focus
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
