@@ -2,15 +2,12 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
->teammate api that lets you see their health and current location (in the world? in minecraft?)
-	>/focus etc.
-	>league style pings
-	>fight tracker
+>teammate api that lets you see their health and current location in the world
+	>/focus
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
-	>shows waypoints on all visible and last seen enemies
+	>shows waypoints on all visible, turn out of render ones into local-only last-seen waypoints
 	>chat message when hitting teammates?
-	>gonna need auth for this, which makes Supabase seem ideal
 	>also works for different name colors for different teams
 	>message when hitting teammate?
 	>option for blatant where it cancels the swings that hit teammates
@@ -18,6 +15,8 @@
 >set better defaults
 >test different resolutions
 
+>league style pings
+>fight tracker
 >follow mod, copies inputs from other player
 >auto cobweb that works alongside me already trying myself
     >(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
