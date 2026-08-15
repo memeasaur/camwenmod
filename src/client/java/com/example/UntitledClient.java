@@ -12,9 +12,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.Window;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -30,7 +32,7 @@ import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
-//    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
+    //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
 //    static {
 //        new Thread(() -> {
@@ -77,6 +79,7 @@ public class UntitledClient implements ClientModInitializer {
             NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
     public static final KeyBinding
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
+
     private static KeyBinding getAbstractPvpUtilsKeybind(String name) {
         return KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 name,
@@ -86,11 +89,12 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     public static Map<UUID, String> nameplateUuids; // TODO move to config
+
     static {
         new Thread(() -> {
             try {
                 if (getDeserializedJsonBlocking("nameplates") instanceof Map map)
-                    nameplateUuids = ((Map<String, String>)map).entrySet().stream()
+                    nameplateUuids = ((Map<String, String>) map).entrySet().stream()
                             .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
                 else
                     nameplateUuids = Map.of();
@@ -102,7 +106,9 @@ public class UntitledClient implements ClientModInitializer {
             }
         }).start();
     }
+
     public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
+
     static {
         new Thread(() -> {
             try {
@@ -180,6 +186,7 @@ public class UntitledClient implements ClientModInitializer {
             }
         }).start();
     }
+
     public static boolean isAutoclickerEnabled = false;
     public static boolean isHeldAutoclickerPressed;
     public static boolean isAutoclickerShakeEnabled = false; // TODO -> finish impl
@@ -208,6 +215,41 @@ public class UntitledClient implements ClientModInitializer {
     public static float lastAttackCooldownProgress = 0;
     private static double lastEndTickHeight;
 //    private static boolean isUpdateNotified = false;
+
+    private class Player {
+        final String name;
+        ItemStack helmet;
+        Vec3d position;
+
+        private Player(String name) {
+            this.name = name;
+        }
+    }
+
+    private class ModTeammate extends Player {
+        Vec3d position;
+        double health;
+        //        double hunger;
+        ItemStack[] inventory = new ItemStack[36];
+
+        private Teammate(String name) {
+            super(name);
+        }
+//        ItemStack chestplate;
+//        ItemStack leggings;
+//        ItemStack boots;
+    }
+
+    private class ForeignPlayer extends Player {
+        private Enemy(String name) {
+            super(name);
+        }
+        // TODO -> potions used, health restored? etc.
+    }
+
+    private static final HashSet<Teammate> currentTeammates = new HashSet<>();
+    private static final HashSet<Enemy> currentEnemies = new HashSet<>();
+
     @Override
     public void onInitializeClient() {
 //        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
