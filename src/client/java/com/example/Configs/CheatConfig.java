@@ -1,6 +1,8 @@
 package com.example.Configs;
 
 import com.example.MouseMovement;
+import net.minecraft.entity.player.PlayerEntity;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import static com.example.Configs.Utils.handleSave;
@@ -24,6 +26,11 @@ public class CheatConfig {
     public static boolean isAutoCobweb = false; // TODO -> figure out and implement, gl
 
     public static float targetingMarginBypass = .1f;
+
+    // TODO -> impl? might not be possible with how simulated clients get replicated
+    public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
+    @Nullable
+    public static PlayerEntity nullableMirrorMovementPlayer = null;
 
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);

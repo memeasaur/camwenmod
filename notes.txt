@@ -10,8 +10,7 @@
 	>tracks enemy consumables, and coalesces with the api
 	>shows waypoints on all visible and last seen enemies
 	>chat message when hitting teammates?
-	>render free tier. But only if it's setup isn't proprietary, which it seems to not be
-	>just store the data in backend-local files, unless I end up doing everything with supabase realtime
+	>gonna need auth for this, which makes Supabase seem ideal
 	>also works for different name colors for different teams
 	>message when hitting teammate?
 	>option for blatant where it cancels the swings that hit teammates
@@ -20,7 +19,6 @@
 >test different resolutions
 
 >follow mod, copies inputs from other player
-
 >auto cobweb that works alongside me already trying myself
     >(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
 >apparently my recorder's up and down press order is off by 1

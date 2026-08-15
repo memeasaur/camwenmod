@@ -264,6 +264,13 @@ public class KeyboardMixin {
                 }
             } else
                 isAutoclickerDisableKeyPressed = false;
+            if (getIsKeyPressed(glfwToggleMirrorMovementKeybind)) {
+                if (nullableMirrorMovementPlayer != null) {
+                    nullableMirrorMovementPlayer = null;
+                } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
+                    nullableMirrorMovementPlayer = player;
+                }
+            }
         }
         // Cheats end
     }
