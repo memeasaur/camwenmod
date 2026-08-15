@@ -1,15 +1,19 @@
 package com.example.mixins;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -67,15 +71,41 @@ public abstract class ClientPlayerEntityMixin {
             } else
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
 
-            if (isAutoCobweb &&
-                    USE_VANILLA.isPressed() &&
-                    player.getMainHandStack().isOf(Items.COBWEB) &&
-                    MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof BlockHitResult blockHitResult &&
-                    Blocks.COBWEB.getPlacementState(new ItemPlacementContext(player, player.getActiveHand(), player.getMainHandStack(), blockHitResult)) != null) {
-                player.sendMessage(Text.literal("place"), false);
-                KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
-                keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
+
+            if (isAutoCobweb) {
+                onAutoCobwebTick(player);
             }
         }
+    }
+
+    @Unique
+    boolean hasCurrentUseActionPlacedCobweb = false; // TODO ?
+    @Unique
+    void onAutoCobwebTick(ClientPlayerEntity player) {
+        if (!getIsKeyBindingPressed(USE_VANILLA)) {
+            hasCurrentUseActionPlacedCobweb = false;
+            return;
+        } else {
+            player.sendMessage(Text.literal("yes"), false);
+        }
+        if (hasCurrentUseActionPlacedCobweb) {
+            return;
+        }
+        var mainHandStack = player.getMainHandStack();
+        if (!mainHandStack.isOf(Items.COBWEB)) {
+            return;
+        }
+        BlockHitResult blockHitResult = (BlockHitResult) MINECRAFT_CLIENT_INSTANCE.crosshairTarget;
+        if (blockHitResult == null) {
+            return;
+        }
+        if (blockHitResult.getType() == HitResult.Type.MISS) {
+            return;
+        }
+
+        hasCurrentUseActionPlacedCobweb = true;
+        player.sendMessage(Text.literal("place"), false);
+        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
+        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
     }
 }
