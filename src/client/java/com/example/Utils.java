@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -31,8 +32,15 @@ public class Utils {
         return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), glfwKeybind) == GLFW.GLFW_PRESS;
     }
     public static boolean getIsKeyBindingPressed(KeyBinding keyBinding) {
-        TODO; // handle both mouse and keyboard here apparently
-        return getIsKeyPressed(InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode());
+        InputUtil.Key key = InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey());
+        if (key.getCategory() == InputUtil.Type.KEYSYM) {
+            return getIsKeyPressed(InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode());
+        } else if (key.getCategory() == InputUtil.Type.MOUSE) {
+            return getIsKeyPressed(GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), key.getCode()));
+        } else {
+            Objects.requireNonNull(null);
+            return false;
+        }
     }
 
     public static void putNameplateUuidEntry(Map.Entry<UUID, String> entry) {
