@@ -41,8 +41,8 @@ public class KeyboardMixin {
             isAutoclickerToggleKeyPressed = false,
             isAutoclickerEnableKeyPressed = false,
             isAutoclickerDisableKeyPressed = false,
-            // Cheats end
-            isSneakToggleButtonPressed = false,
+    // Cheats end
+    isSneakToggleButtonPressed = false,
             isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
     @Unique
@@ -50,7 +50,12 @@ public class KeyboardMixin {
 
     @Inject(at = @At(value = "RETURN"), method = "onKey")
     private void onKey(
-            long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
+            long window,
+            int key,
+            int scancode,
+            int action,
+            int modifiers,
+            CallbackInfo ci) {
         if (isMovementToggleMirrorPressDisabling) {
             if (getIsKeyBindingPressed(SNEAK_VANILLA) == isSneakEnabled
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == isSprintEnabled
@@ -61,8 +66,7 @@ public class KeyboardMixin {
                     && getIsKeyBindingPressed(BACKWARD_VANILLA) == isBackwardEnabled) {
                 if (!isMovementToggleMirrorSequencePressed)
                     doMovementToggleDisable();
-            }
-            else
+            } else
                 isMovementToggleMirrorSequencePressed = false;
 
         }
@@ -87,17 +91,19 @@ public class KeyboardMixin {
         if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
             if (!isSneakToggleButtonPressed)
                 isSneakEnabled = !isSneakEnabled;
-            while (SNEAK_TOGGLE.wasPressed()) {}
-        }
-        else
+            while (SNEAK_TOGGLE.wasPressed()) {
+            }
+        } else
             isSneakToggleButtonPressed = false;
         if (getIsKeyBindingPressed(SNEAK_ENABLE)) { // TODO these could benefit from the handling above too, but they aren't toggled so w/e
             isSneakEnabled = true;
-            while (SNEAK_ENABLE.wasPressed()) {}
+            while (SNEAK_ENABLE.wasPressed()) {
+            }
         }
         if (getIsKeyBindingPressed(SNEAK_DISABLE)) {
             isSneakEnabled = false;
-            while (SNEAK_DISABLE.wasPressed()) {}
+            while (SNEAK_DISABLE.wasPressed()) {
+            }
         }
 
         while (SPRINT_TOGGLE.wasPressed())
@@ -110,17 +116,19 @@ public class KeyboardMixin {
         if (getIsKeyBindingPressed(FULLBRIGHT_TOGGLE)) {
             if (!isFullbrightToggleButtonPressed)
                 isFullbrightEnabled = !isFullbrightEnabled;
-            while (FULLBRIGHT_TOGGLE.wasPressed()) {}
-        }
-        else
+            while (FULLBRIGHT_TOGGLE.wasPressed()) {
+            }
+        } else
             isFullbrightToggleButtonPressed = false;
         if (getIsKeyBindingPressed(FULLBRIGHT_ENABLE)) { // TODO: see -> sneak handling meme
             isFullbrightEnabled = true;
-            while (FULLBRIGHT_ENABLE.wasPressed()) {}
+            while (FULLBRIGHT_ENABLE.wasPressed()) {
+            }
         }
         if (getIsKeyBindingPressed(FULLBRIGHT_DISABLE)) {
             isFullbrightEnabled = false;
-            while (FULLBRIGHT_DISABLE.wasPressed()) {}
+            while (FULLBRIGHT_DISABLE.wasPressed()) {
+            }
         }
 
         while (ALLY_TOGGLE.wasPressed())
@@ -182,8 +190,7 @@ public class KeyboardMixin {
                     entry.getValue().setPressed(true);
                     pressedDuplicateKeybindKeys.add(entryKey);
                 }
-            }
-            else if (pressedDuplicateKeybindKeys.contains(entryKey)) {
+            } else if (pressedDuplicateKeybindKeys.contains(entryKey)) {
                 pressedDuplicateKeybindKeys.remove(entryKey);
                 KeyBinding keyBinding = entry.getValue();
                 keyBinding.setPressed(getIsKeyBindingPressed(keyBinding));
@@ -198,8 +205,7 @@ public class KeyboardMixin {
                     currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
                     MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
                 }
-            }
-            else
+            } else
                 isBlockToggleKeyPressed = false;
 
             if (getIsKeyPressed(glfwTogglePlayerXrayKeybind)) {
@@ -208,8 +214,7 @@ public class KeyboardMixin {
                     currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
                     MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
                 }
-            }
-            else
+            } else
                 isPlayerToggleKeyPressed = false;
             if (getIsKeyPressed(glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
                 if (!isAutoclickerToggleKeyPressed) {
@@ -218,13 +223,11 @@ public class KeyboardMixin {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-                    }
-                    else {
+                    } else {
                         if (isAutoclickerEnabled) {
                             GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
                             nullableCurrentHeldAutoclickerTask = null;
-                        }
-                        else {// TODO -> external gui for this
+                        } else {// TODO -> external gui for this
                             GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
                             if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
                                 handleAutoclickerMouseHeldDown();
@@ -232,8 +235,7 @@ public class KeyboardMixin {
                         isAutoclickerEnabled = !isAutoclickerEnabled;
                     }
                 }
-            }
-            else
+            } else
                 isAutoclickerToggleKeyPressed = false;
             if (getIsKeyPressed(glfwEnableAutoclickerKeybind)) {
                 if (!isAutoclickerEnableKeyPressed) {
@@ -242,8 +244,7 @@ public class KeyboardMixin {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-                    }
-                    else {
+                    } else {
                         if (!isAutoclickerEnabled) {
                             GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
                             isAutoclickerEnabled = true;
@@ -252,8 +253,7 @@ public class KeyboardMixin {
                         }
                     }
                 }
-            }
-            else
+            } else
                 isAutoclickerEnableKeyPressed = false;
             if (getIsKeyPressed(glfwDisableAutoclickerKeybind)) {
                 if (!isAutoclickerDisableKeyPressed) {
@@ -262,8 +262,7 @@ public class KeyboardMixin {
                     isAutoclickerEnabled = false;
                     nullableCurrentHeldAutoclickerTask = null;
                 }
-            }
-            else
+            } else
                 isAutoclickerDisableKeyPressed = false;
         }
         // Cheats end

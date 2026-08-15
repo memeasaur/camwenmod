@@ -48,14 +48,20 @@ public class Constants {
     public static final NativeMouseListener AUTOCLICKER_MOUSE_LISTENER = new NativeMouseListener() {
         @Override
         public void nativeMousePressed(NativeMouseEvent e) {
-            if (e.getButton() == NativeMouseEvent.BUTTON1)
-                handleAutoclickerMouseHeldDown();
+            switch (e.getButton()) {
+                case NativeMouseEvent.BUTTON1 -> {
+                    handleAutoclickerMouseHeldDown();
+                }
+            }
         }
 
         @Override
         public void nativeMouseReleased(NativeMouseEvent e) {
-            if (e.getButton() == NativeMouseEvent.BUTTON1)
-                nullableCurrentHeldAutoclickerTask = null;
+            switch (e.getButton()) {
+                case NativeMouseEvent.BUTTON1 -> {
+                    nullableCurrentHeldAutoclickerTask = null;
+                }
+            }
         }
     };
 
