@@ -21,7 +21,7 @@ public class CheatConfig {
 
     public static boolean isAutomaticWTapping = true; // TODO -> impl?
     public static boolean isEthylene = true;
-    public static boolean isAutoCobweb = true;
+    public static boolean isAutoCobweb = false; // TODO -> figure out and implement, gl
 
     public static float targetingMarginBypass = .1f;
 

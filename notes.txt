@@ -19,11 +19,10 @@
 >set better defaults
 >test different resolutions
 
->auto cobweb that works alongside me already trying myself
-    >if I'm looking at the ground w/ a web and I'm past a certain threshold of fall damage it will alongside me try to place it
 >follow mod, copies inputs from other player
 
->(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
+>auto cobweb that works alongside me already trying myself
+    >(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
 >apparently my recorder's up and down press order is off by 1
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running

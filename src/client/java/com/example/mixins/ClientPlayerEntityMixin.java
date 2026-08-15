@@ -98,7 +98,6 @@ public abstract class ClientPlayerEntityMixin {
         }
 
 //        hasCurrentUseActionPlacedCobweb = true;
-        TODO; // this don't even work no more, gl
         player.sendMessage(Text.literal("place"), false);
         KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
         keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
