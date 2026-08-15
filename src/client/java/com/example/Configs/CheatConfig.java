@@ -19,9 +19,9 @@ public class CheatConfig {
     public static int glfwToggleBlockXrayKeybind = GLFW.GLFW_KEY_UNKNOWN; // TODO -> hold/active/disable
     public static int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
-    public static boolean isAutomaticWTapping = true;
+    public static boolean isAutomaticWTapping = true; // TODO -> impl?
     public static boolean isEthylene = true;
-    public static boolean isCobwebAutoclicker = false;
+    public static boolean isAutoCobweb = false;
 
     public static float targetingMarginBypass = .1f;
 

@@ -446,8 +446,8 @@ public class Constants {
                         "cobweb autoclicker",
                         x + xModifier,
                         y,
-                        isCobwebAutoclicker,
-                        is -> isCobwebAutoclicker = is,
+                        isAutoCobweb,
+                        is -> isAutoCobweb = is,
                         "shotbow lol"));
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget(
