@@ -36,7 +36,7 @@ public class Utils {
         if (key.getCategory() == InputUtil.Type.KEYSYM) {
             return getIsKeyPressed(InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode());
         } else if (key.getCategory() == InputUtil.Type.MOUSE) {
-            return getIsKeyPressed(GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), key.getCode()));
+            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), key.getCode()) == GLFW.GLFW_PRESS;
         } else {
             Objects.requireNonNull(null);
             return false;
