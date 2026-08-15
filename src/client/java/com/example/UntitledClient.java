@@ -216,39 +216,7 @@ public class UntitledClient implements ClientModInitializer {
     private static double lastEndTickHeight;
 //    private static boolean isUpdateNotified = false;
 
-    private class Player {
-        final String name;
-        ItemStack helmet;
-        Vec3d position;
-
-        private Player(String name) {
-            this.name = name;
-        }
-    }
-
-    private class ModTeammate extends Player {
-        Vec3d position;
-        double health;
-        //        double hunger;
-        ItemStack[] inventory = new ItemStack[36];
-
-        private Teammate(String name) {
-            super(name);
-        }
-//        ItemStack chestplate;
-//        ItemStack leggings;
-//        ItemStack boots;
-    }
-
-    private class ForeignPlayer extends Player {
-        private Enemy(String name) {
-            super(name);
-        }
-        // TODO -> potions used, health restored? etc.
-    }
-
-    private static final HashSet<Teammate> currentTeammates = new HashSet<>();
-    private static final HashSet<Enemy> currentEnemies = new HashSet<>();
+    private static final HashSet<Teammate> currentVisiblePlayers = new HashSet<>();
 
     @Override
     public void onInitializeClient() {

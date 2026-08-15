@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
+	id 'org.jooq.jooq-codegen-gradle' version '3.21.6'
 }
 
 version = project.mod_version
@@ -53,6 +54,8 @@ dependencies {
 	implementation("com.github.kwhat:jnativehook:2.2.2")
 	include "com.github.kwhat:jnativehook:2.2.2"
 	// Cheats end
+
+	jooqCodegen 'org.postgresql:postgresql:42.7.7'
 }
 
 processResources {
