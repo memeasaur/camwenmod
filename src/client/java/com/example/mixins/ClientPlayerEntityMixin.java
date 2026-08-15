@@ -1,14 +1,20 @@
 package com.example.mixins;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.example.Configs.CheatConfig.isAutoCobweb;
 import static com.example.Configs.Config.*;
 import static com.example.Constants.FLY_BOOST_MULTIPLIER;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -28,6 +34,8 @@ public abstract class ClientPlayerEntityMixin {
 //    private void onAddEnchantedHitParticles(Entity target, CallbackInfo ci) {
 //        ci.cancel();
 //    }TODO remove
+    boolean bLastTickBlockHitResult = false;
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.currentScreen;
@@ -58,6 +66,16 @@ public abstract class ClientPlayerEntityMixin {
                     abilities.setFlySpeed(BASE_FLY_SPEED);
             } else
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
+
+            if (isAutoCobweb &&
+                    USE_VANILLA.isPressed() &&
+                    player.getMainHandStack().isOf(Items.COBWEB) &&
+                    MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof BlockHitResult blockHitResult &&
+                    Blocks.COBWEB.getPlacementState(new ItemPlacementContext(player, player.getActiveHand(), player.getMainHandStack(), blockHitResult)) != null) {
+                player.sendMessage(Text.literal("place"), false);
+                KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
+                keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
+            }
         }
     }
 }

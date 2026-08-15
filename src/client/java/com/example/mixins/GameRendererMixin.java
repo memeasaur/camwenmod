@@ -31,20 +31,4 @@ public class GameRendererMixin {
             cir.cancel();
         }
     }
-
-    @Inject(at = @At(value = "RETURN"), method = "updateCrosshairTarget")
-    private static void onUpdateCrosshairTarget(float tickDelta, CallbackInfo ci) {
-         TODO // -> this just polls btw, nice job mc, which would make this obviously an autoclicker
-        // it also doesn't have access to fall distance apparently
-        // I think I might as well have it just hold right click, since an organic click would never actually beat this
-        if (MINECRAFT_CLIENT_INSTANCE.player != null)
-            MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.of(String.valueOf(Constants.MINECRAFT_CLIENT_INSTANCE.player.fallDistance)), false);
-        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
-                player.getMainHandStack().isOf(Items.COBWEB) &&
-                player.fallDistance > 10.f &&
-                MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof BlockHitResult) {
-            KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
-            keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
-        }
-    }
 }
