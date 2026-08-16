@@ -15,6 +15,7 @@
 	>option for ignoring autoclicker starts that would hit teammates
 >set better defaults
 >test different resolutions
+>could include kotlin and supabase-kt if I want the rest api wrapped, apparently it doesn't generate types
 
 >speech to text chat typer?
 >league style pings

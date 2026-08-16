@@ -55,7 +55,7 @@ dependencies {
 	include "com.github.kwhat:jnativehook:2.2.2"
 	// Cheats end
 
-	jooqCodegen 'org.postgresql:postgresql:42.7.7'
+//	jooqCodegen 'org.postgresql:postgresql:42.7.7'
 }
 
 processResources {
@@ -106,26 +106,25 @@ publishing {
 	}
 }
 
-jooq {
-	configuration {
-		TODO;
-		jdbc {
-			driver = 'org.postgresql.Driver'
-			url = System.getenv('SUPABASE_DB_URL')
-			user = System.getenv('SUPABASE_DB_USER')
-			password = System.getenv('SUPABASE_DB_PASSWORD')
-		}
-
-		generator {
-			database {
-				name = 'org.jooq.meta.postgres.PostgresDatabase'
-				inputSchema = 'public'
-			}
-
-			target {
-				packageName = 'com.example.database.generated'
-				directory = 'build/generated-src/jooq'
-			}
-		}
-	}
-}
+//jooq {
+//	configuration {
+//		jdbc {
+//			driver = 'org.postgresql.Driver'
+//			url = System.getenv('SUPABASE_DB_URL')
+//			user = 'postgres'
+//			password = System.getenv('SUPABASE_DB_PASSWORD')
+//		}
+//
+//		generator {
+//			database {
+//				name = 'org.jooq.meta.postgres.PostgresDatabase'
+//				inputSchema = 'public'
+//			}
+//
+//			target {
+//				packageName = 'com.example.database.generated'
+//				directory = 'build/generated-src/jooq'
+//			}
+//		}
+//	}
+//}
