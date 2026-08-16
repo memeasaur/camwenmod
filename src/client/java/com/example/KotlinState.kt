@@ -56,15 +56,41 @@ data class AccountInventorySlotsEntry(
 )
 
 val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
-val players: List<VisiblePlayer> = runBlocking { // TODO -> async
-    TODO; // -> subscribe -> select * -> apply all buffered events -> synchronized
-    supabaseClient.from("party_visible_accounts")
-        .select()
-        .decodeList<VisiblePlayerTableEntry>()
-    channel.postgresChangeFlow<PostgresAction>("public") {
-        table = "party_visible_accounts"
-    }.collect { new ->
-        TODO; // apply
+val accountInventorySlotsChannel = supabaseClient.realtime.channel("account_inventory_slots")
+val players: ArrayList<VisiblePlayer> = runBlocking { // TODO -> async
+    val buffer = ArrayList<VisiblePlayerTableEntry>()
+    val result = ArrayList<VisiblePlayer>()
+    var flag = false
+    run {
+        partyVisibleAccountsChannel.postgresChangeFlow<PostgresAction>("public") {
+            table = "party_visible_accounts"
+        }.collect { new ->
+            if (!flag) {
+                buffer.add(new)
+            } else {
+                TODO;
+            }
+        }
+        partyVisibleAccountsChannel.subscribe(true)
+        result.addAll(
+            supabaseClient.from("party_visible_accounts")
+                .select()
+                .decodeList<VisiblePlayerTableEntry>()
+        )
     }
-    partyVisibleAccountsChannel.subscribe()
+    run {
+        accountInventorySlotsChannel.postgresChangeFlow<PostgresAction>("public") {
+            table = "account_inventory_slots"
+        }.collect { new ->
+            TODO;
+        }
+        accountInventorySlotsChannel.subscribe(true)
+        TODO // -> merge
+        supabaseClient.from("account_inventory_slots")
+            .select()
+            .decodeList<AccountInventorySlotsEntry>()
+    }
+    TODO; // apply buffers
+    flag = true // TODO ? this seems like it would still have a race condition
+    return@runBlocking result
 }
