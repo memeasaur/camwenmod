@@ -20,6 +20,8 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
+import java.net.http.HttpClient;
+import java.net.http.WebSocket;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -217,6 +219,7 @@ public class UntitledClient implements ClientModInitializer {
 //    private static boolean isUpdateNotified = false;
 
     private static final HashSet<Teammate> currentVisiblePlayers = new HashSet<>();
+    WebSocket SupabaseRealtime = HttpClient.newHttpClient().newWebSocketBuilder().buildAsync().join();
 
     @Override
     public void onInitializeClient() {
