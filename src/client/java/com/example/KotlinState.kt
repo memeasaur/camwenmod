@@ -8,10 +8,10 @@ import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
 import io.github.jan.supabase.realtime.realtime
-import kotlinx.coroutines.flow.subscribe
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -55,21 +55,16 @@ data class AccountInventorySlotsEntry(
     val index: Int,
 )
 
-TODO; // -> subscribe -> select * -> apply all buffered events -> synchronized
-val channel = runBlocking {
-    TODO; // block these from mutating until the collection is ready
-    val channel = supabaseClient.realtime.channel("party_visible_accounts")
+val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
+val players: List<VisiblePlayer> = runBlocking { // TODO -> async
+    TODO; // -> subscribe -> select * -> apply all buffered events -> synchronized
+    supabaseClient.from("party_visible_accounts")
+        .select()
+        .decodeList<VisiblePlayerTableEntry>()
     channel.postgresChangeFlow<PostgresAction>("public") {
         table = "party_visible_accounts"
     }.collect { new ->
         TODO; // apply
     }
-    channel.subscribe()
-
-}
-val players = runBlocking { // TODO -> async
-    supabaseClient
-        .from("party_visible_accounts")
-        .select()
-        .decodeList<VisiblePlayerTableEntry>()
+    partyVisibleAccountsChannel.subscribe()
 }
