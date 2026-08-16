@@ -31,7 +31,8 @@
 		"java": ">=21",
 		"fabric-api": "*",
 
-		"sodium": "*"
+		"sodium": "*",
+		"fabric-language-kotlin": ">=1.13.13+kotlin.2.4.10"
 	},
 	"suggests": {}
 }

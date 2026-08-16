@@ -24,6 +24,7 @@ import java.util.concurrent.locks.LockSupport;
 import static com.example.Configs.CheatConfig.*;
 import static com.example.DelayedClientState.ATTACK_VANILLA;
 import static com.example.UntitledClient.*;
+import static com.example.Utils.getIsKeyPressed;
 import static org.joml.Math.lerp;
 
 public class Constants {
@@ -97,7 +98,8 @@ public class Constants {
                                 : autoclickerEndingMultiplier;
                         LockSupport.parkNanos((long) (currentRecordedAutoclicker[currentAutoclickerIndex] /
                                 lerp[0]));
-                        if (threadClient.currentScreen != null && !(threadClient.currentScreen instanceof InventoryScreen)) {
+                        // TODO -> shift + right click could also be an autoclicker here
+                        if (threadClient.currentScreen != null && !(threadClient.currentScreen instanceof InventoryScreen && getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
                             firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
