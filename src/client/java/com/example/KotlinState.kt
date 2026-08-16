@@ -4,7 +4,10 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.realtime
 
 val supabaseClient: SupabaseClient = createSupabaseClient(
     supabaseUrl = "https://kshvmmimjsffefrfnuxl.supabase.co",
@@ -14,3 +17,9 @@ val supabaseClient: SupabaseClient = createSupabaseClient(
     install(Postgrest)
     install(Realtime)
 }
+TODO; // -> subscribe -> select * -> apply all buffered events -> synchronized
+val players = supabaseClient
+    .from("players")
+    .select("*")
+    .decodeList<>()
+val channel = supabaseClient.realtime.channel("players")

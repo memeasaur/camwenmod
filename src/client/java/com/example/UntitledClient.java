@@ -216,9 +216,6 @@ public class UntitledClient implements ClientModInitializer {
     private static double lastEndTickHeight;
 //    private static boolean isUpdateNotified = false;
 
-    private static final HashSet<Teammate> currentVisiblePlayers = new HashSet<>();
-    WebSocket SupabaseRealtime = HttpClient.newHttpClient().newWebSocketBuilder().buildAsync().join();
-
     @Override
     public void onInitializeClient() {
 //        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {

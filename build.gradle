@@ -1,7 +1,7 @@
 plugins {
 	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
-	id 'org.jooq.jooq-codegen-gradle' version '3.21.6'
+//	id 'org.jooq.jooq-codegen-gradle' version '3.21.6'
     id 'org.jetbrains.kotlin.jvm'
 }
 
