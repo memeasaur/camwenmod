@@ -8,13 +8,15 @@ import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.Realtime
-import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
 import io.github.jan.supabase.realtime.realtime
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.item.ItemStack
 
 val supabaseClient: SupabaseClient = createSupabaseClient(
@@ -26,11 +28,12 @@ val supabaseClient: SupabaseClient = createSupabaseClient(
     install(Realtime)
 }.auth.signInWith()
 
+// TODO -> data?
 class VisiblePlayer(
-    // TODO -> data?
-    val tableEntry: VisiblePlayerTableEntry,
-    val nullableInventorySlots: Array<ItemStack>?, // TODO -> 36
-)
+    var tableEntry: VisiblePlayerTableEntry,
+) {
+    val inventorySlots: Array<ItemStack> = Array(36) { ItemStack.EMPTY }
+}
 
 @Serializable
 data class VisiblePlayerTableEntry(
@@ -55,42 +58,82 @@ data class AccountInventorySlotsEntry(
     val index: Int,
 )
 
-val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
-val accountInventorySlotsChannel = supabaseClient.realtime.channel("account_inventory_slots")
 val players: ArrayList<VisiblePlayer> = runBlocking { // TODO -> async
-    val buffer = ArrayList<VisiblePlayerTableEntry>()
     val result = ArrayList<VisiblePlayer>()
-    var flag = false
     run {
-        partyVisibleAccountsChannel.postgresChangeFlow<PostgresAction>("public") {
-            table = "party_visible_accounts"
-        }.collect { new ->
-            if (!flag) {
-                buffer.add(new)
-            } else {
-                TODO;
+        val buffer = Channel<PostgresAction>(Channel.UNLIMITED)
+        val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
+        launch {
+            partyVisibleAccountsChannel.postgresChangeFlow<PostgresAction>("public") {
+                table = "party_visible_accounts"
             }
+                .collect { action -> buffer.send(action) }
         }
         partyVisibleAccountsChannel.subscribe(true)
         result.addAll(
             supabaseClient.from("party_visible_accounts")
                 .select()
                 .decodeList<VisiblePlayerTableEntry>()
+                .map { each -> VisiblePlayer(each) }
         )
+//        {
+//            when (action) {
+//                is PostgresAction.Insert -> {
+//                    val new = VisiblePlayer(
+//                        action.decodeRecord<VisiblePlayerTableEntry>(),
+//                        null
+//                    )
+//                    players.add(new)
+//                }
+//
+//                is PostgresAction.Delete -> {
+//                    val index = players.indexOfFirst {
+//                        it.tableEntry.uuid == action.decodeOldRecord<VisiblePlayerTableEntry>().uuid
+//                    }
+//                    players.removeAt(index)
+//                }
+//
+//                is PostgresAction.Update -> {
+//                    val new = action.decodeRecord<VisiblePlayerTableEntry>()
+//                    val index = players.indexOfFirst {
+//                        it.tableEntry.uuid == new.uuid
+//                    }
+//                    players[index].tableEntry = new
+//                }
+//
+//                else -> {
+//                    // TODO -> crash?
+//                    Unit
+//                }
+//            }
+//        }
+        TODO; // -> launch task on main thread that consumes the channel
     }
     run {
-        accountInventorySlotsChannel.postgresChangeFlow<PostgresAction>("public") {
-            table = "account_inventory_slots"
-        }.collect { new ->
-            TODO;
+        val buffer = Channel<PostgresAction>(Channel.UNLIMITED)
+        val accountInventorySlotsChannel = supabaseClient.realtime.channel("account_inventory_slots")
+        launch {
+            accountInventorySlotsChannel.postgresChangeFlow<PostgresAction>("public") {
+                table = "account_inventory_slots"
+            }
+                .collect { new -> buffer.send(new) }
         }
         accountInventorySlotsChannel.subscribe(true)
-        TODO // -> merge
         supabaseClient.from("account_inventory_slots")
             .select()
             .decodeList<AccountInventorySlotsEntry>()
+            .forEach { each ->  // TODO -> supabase groupBy?
+                {
+                    val lookupTable =;
+                }
+            }
+        ClientTickEvents.START_CLIENT_TICK.register { client ->
+            {
+                while (!buffer.isEmpty) {
+                    TODO;
+                }
+            }
+        }
     }
-    TODO; // apply buffers
-    flag = true // TODO ? this seems like it would still have a race condition
     return@runBlocking result
 }
