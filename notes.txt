@@ -17,17 +17,25 @@
 	>message when hitting teammate?
 	>option for blatant where it cancels the swings that hit teammates
 	>option for ignoring autoclicker starts that would hit teammates
+	>follow mod, copies inputs from other player
 >set better defaults
 >test different resolutions
 
+>20cps:
+    >apparently my recorder's up and down press order is off by 1
+    >use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
+    >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?\
+    >require multiple macros if it still flags vulcan
+    >need to be able to find the natural peak of the cps and apply the modifiers around that
+    >need the ending multiplier to apply at the end of the first macro (?)
+
+>allow to place cobwebs through player hitbox
 >fake inventory that you can view while running
 >speech to text chat typer?
 >league style pings
 >fight tracker
->follow mod, copies inputs from other player
 >auto cobweb that works alongside me already trying myself
     >(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
->apparently my recorder's up and down press order is off by 1
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
@@ -65,18 +73,12 @@
 >open texture pack screen button
 >option for stopping auto-jump when running and eating
 >sprinting removes toggle sneak option + double tap w removes toggle sneak option
->hold to disable autoclicker button
->use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
 >ability to block hit without letting go of right click? type meme
 >player name/skin etc. spoofer
 >xray turns blocks into glass instead of cancelling their render (?) toggle
->don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
->require multiple macros if it still flags vulcan
 >freeCam if creative meme
 >notify when player is in range (?) maybe this isn't soft cheating (?)
 >move all cheats to destruct-able state + add self-destruct
->need to be able to find the natural peak of the cps and apply the modifiers around that
->need the ending multiplier to apply at the end of the first macro (?)
 >only make a button for changing the cheat config keybind -> and only show it if there isn't a keybind set?
 >entityRenderer -> don't cull players ever
 >don't cull spawners ever (? or, make all whitelisted xray blocks never cull)
