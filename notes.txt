@@ -28,6 +28,7 @@
     >require multiple macros if it still flags vulcan
     >need to be able to find the natural peak of the cps and apply the modifiers around that
     >need the ending multiplier to apply at the end of the first macro (?)
+    >autoclicker shouldn't click in inventory when the mouse is holding something and the hovered slot is that same thing
 
 >allow to place cobwebs through player hitbox
 >fake inventory that you can view while running
