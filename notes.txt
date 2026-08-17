@@ -2,6 +2,8 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>remove blindness
+>let me sprint while blind? (maybe I do this by not letting myself stop running?)
 >teammate api that lets you see their health and current location in the world
     >TODO -> screen-space icon that is projected from a real-world location. but have it rendered at the edge of the render if necessary, like minimap waypoints do
 	>/focus
