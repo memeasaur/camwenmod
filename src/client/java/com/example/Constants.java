@@ -96,8 +96,8 @@ public class Constants {
                         lerp[0] = firstMacroLengthMinus1 != -1
                                 ? lerp(autoclickerStartingMultiplier, autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
                                 : autoclickerEndingMultiplier;
-                        LockSupport.parkNanos((long) (currentRecordedAutoclicker[currentAutoclickerIndex] /
-                                lerp[0]));
+                        LockSupport.parkNanos(
+                                (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
                         if (threadClient.currentScreen != null && !(threadClient.currentScreen instanceof InventoryScreen && getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))) {
                             getNextRecordedAutoclicker.run();
