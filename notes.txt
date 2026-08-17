@@ -24,13 +24,14 @@
 
 >20cps w/ flagging vulcan:
     >need to increase kurtosis to make vulcan not flag, consider doing skewness as well
+        >possibly I should do this by separating peak and ramp-up clicks, which would also make the sustained peak clicks more natural (?)
     >apparently my recorder's up and down press order is off by 1
     >use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
     >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?\
     >require multiple macros if it still flags vulcan
     >autoclicker shouldn't click in inventory when the mouse is holding something and the hovered slot is that same thing
 
->allow to place cobwebs through player hitbox
+>allow to place cobwebs through player hitbox (blatant)
 >fake inventory that you can view while running
 >speech to text chat typer?
 >league style pings
