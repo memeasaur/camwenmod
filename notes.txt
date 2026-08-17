@@ -22,7 +22,7 @@
 >test different resolutions
 
 >20cps:
-    >need to scale kurtosis and skewness with the multiplier
+    >need to scale kurtosis and skewness with the multiplier, maybe just kurtosis for now
     >apparently my recorder's up and down press order is off by 1
     >use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
     >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?\
