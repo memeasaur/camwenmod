@@ -25,6 +25,7 @@
 >20cps w/ flagging vulcan:
     >need to increase kurtosis to make vulcan not flag, consider doing skewness as well
         >possibly I should do this by separating peak and ramp-up clicks, which would also make the sustained peak clicks more natural (?)
+        >need to generate clicks somehow
     >apparently my recorder's up and down press order is off by 1
     >use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
     >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?\
