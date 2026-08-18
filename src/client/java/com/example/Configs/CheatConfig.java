@@ -22,12 +22,14 @@ public class CheatConfig {
     public static int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
     public static boolean isAutomaticWTapping = true; // TODO -> impl?
-    public static boolean isEthylene = true;
-    public static boolean isAutoCobweb = false; // TODO -> figure out and implement, gl
+    public static boolean isEthylene = false;
+    public static boolean isAutoCobweb = false;
 
     public static float targetingMarginBypass = .1f;
 
-    public static boolean isDarknessDisabled = true;
+    public static boolean isDarknessDisabled = false;
+
+    public static boolean isAutoClickInventoryEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;

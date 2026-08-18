@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "schizoclient",
+	"id": "pissclicker",
 	"version": "${version}",
-	"name": "fabric-pvputils",
+	"name": "pissclicker",
 	"description": "",
 	"authors": [
 		"camwen?"

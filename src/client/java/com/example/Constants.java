@@ -99,7 +99,8 @@ public class Constants {
                         LockSupport.parkNanos(
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
-                        if (threadClient.currentScreen != null && !(threadClient.currentScreen instanceof InventoryScreen && getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))) {
+                        if (threadClient.currentScreen != null &&
+                                (!isAutoClickInventoryEnabled || !(threadClient.currentScreen instanceof InventoryScreen && getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)))) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
                             firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
