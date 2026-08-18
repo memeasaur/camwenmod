@@ -120,9 +120,10 @@ public abstract class ClientPlayerEntityMixin {
             return;
         }
 
-//        hasCurrentUseActionPlacedCobweb = true;
+        hasCurrentUseActionPlacedCobweb = true;
         player.sendMessage(Text.literal("place"), false);
-        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
-        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
+        MINECRAFT_CLIENT_INSTANCE.interactionManager.interactBlock(player, Hand.MAIN_HAND, blockHitResult);
+//        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
+//        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
     }
 }
