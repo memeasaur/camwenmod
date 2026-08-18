@@ -441,14 +441,14 @@ public class Constants {
 //                        isAutomaticWTapping,
 //                        is -> isAutomaticWTapping = is,
 //                        "shotbow lol"));
-//                xModifier += 150;
-//                addDrawableChild(getConfigCheckboxWidget(
-//                        "cobweb autoclicker",
-//                        x + xModifier,
-//                        y,
-//                        isAutoCobweb,
-//                        is -> isAutoCobweb = is,
-//                        "shotbow lol"));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "cobweb autoclicker",
+                        x + xModifier,
+                        y,
+                        isAutoCobweb,
+                        is -> isAutoCobweb = is,
+                        "shotbow lol"));
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget(
                         "change autoclick starting multipler. current: " + targetingMarginBypass,
