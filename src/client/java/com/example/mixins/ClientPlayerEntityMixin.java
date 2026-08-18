@@ -6,15 +6,18 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.example.Configs.CheatConfig.isAutoCobweb;
+import static com.example.Configs.CheatConfig.isDarknessDisabled;
 import static com.example.Configs.Config.*;
 import static com.example.Constants.FLY_BOOST_MULTIPLIER;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -30,6 +33,17 @@ import static com.example.Utils.getIsKeyBindingPressed;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
+    @Shadow
+    public float nauseaIntensity;
+    @Shadow
+    public float prevNauseaIntensity;
+
+    @Shadow
+    public abstract Hand getActiveHand();
+
+    @Shadow
+    public abstract boolean isUsingItem();
+
     //    @Inject(method="addEnchantedHitParticles", at = @At("HEAD"), cancellable = true)
 //    private void onAddEnchantedHitParticles(Entity target, CallbackInfo ci) {
 //        ci.cancel();
@@ -44,7 +58,7 @@ public abstract class ClientPlayerEntityMixin {
         SNEAK_VANILLA.setPressed((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || isSneakEnabled);
         if (!isCurrentHandledScreen) { // you better not fork-remove this! or you are gonna have a bad time!
             SPRINT_VANILLA.setPressed((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || isSprintEnabled);
-            JUMP_VANILLA.setPressed((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || isJumpEnabled);
+            JUMP_VANILLA.setPressed((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
             FORWARD_VANILLA.setPressed((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
             LEFT_VANILLA.setPressed((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
             RIGHT_VANILLA.setPressed((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
@@ -74,8 +88,17 @@ public abstract class ClientPlayerEntityMixin {
         }
     }
 
+    @Inject(method = "tickNausea", at = @At("RETURN"))
+    void onTickNausea(CallbackInfo ci) {
+        if (isDarknessDisabled) {
+            this.prevNauseaIntensity = 0.f;
+            this.nauseaIntensity = 0.f;
+        }
+    }
+
     @Unique
     boolean hasCurrentUseActionPlacedCobweb = false; // TODO ?
+
     @Unique
     void onAutoCobwebTick(ClientPlayerEntity player) {
         if (!getIsKeyBindingPressed(USE_VANILLA)) {
