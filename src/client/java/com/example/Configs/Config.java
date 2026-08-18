@@ -21,6 +21,7 @@ public class Config {
     public static boolean isAttackCooldownWarningEnabled = false;
     public static boolean isSweepAttackWarningEnabled = false;
     public static boolean isAttackIndicatorDataEnabled = false;
+    public static boolean isWeakAttackSoundDisabled = false;
 
     public static boolean isMovementTogglePvpDisabling = false;
     public static boolean isMovementToggleMirrorPressDisabling = false;

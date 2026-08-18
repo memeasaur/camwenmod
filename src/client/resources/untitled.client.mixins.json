@@ -7,13 +7,14 @@
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "GameRendererMixin",
-    "StatusEffectFogModifierMixin",
     "HeldItemRendererMixin",
     "KeyBindingMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
+    "MouseMixin",
     "PlayerEntityRendererMixin",
-    "MouseMixin"
+    "SoundManagerMixin",
+    "StatusEffectFogModifierMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -21,10 +22,10 @@
   "mixins": [
     "BlockItemMixin",
     "EntityMixin",
-    "SodiumBlockOcclusionCacheMixin",
     "LivingEntityMixin",
     "LivingEntityMixinInterface",
     "PlayerEntityMixin",
-    "PotionItemMixin"
+    "PotionItemMixin",
+    "SodiumBlockOcclusionCacheMixin"
   ]
 }

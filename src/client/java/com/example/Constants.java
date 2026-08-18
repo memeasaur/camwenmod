@@ -49,6 +49,8 @@ public class Constants {
     public static final NativeMouseListener AUTOCLICKER_MOUSE_LISTENER = new NativeMouseListener() {
         @Override
         public void nativeMousePressed(NativeMouseEvent e) {
+            // TODO -> check if this first click is even being propogated?
+//            NativeMouseListener.super.nativeMouseClicked(nativeEvent); TODO use this
             switch (e.getButton()) {
                 case NativeMouseEvent.BUTTON1 -> {
                     handleAutoclickerMouseHeldDown();
@@ -63,6 +65,19 @@ public class Constants {
                     nullableCurrentHeldAutoclickerTask = null;
                 }
             }
+        }
+    };
+
+    public static final NativeMouseListener RANDOM_DOUBLE_CLICK_LISTENER = new NativeMouseListener() {
+        // TODO -> vs. nativeMouseClicked?
+        @Override
+        public void nativeMousePressed(NativeMouseEvent nativeEvent) {
+            NativeMouseListener.super.nativeMouseClicked(nativeEvent);
+            if (nativeEvent.getButton() != NativeMouseEvent.BUTTON1) {
+                return;
+            }
+
+            TODO; // impl
         }
     };
 

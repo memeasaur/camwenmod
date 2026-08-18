@@ -91,6 +91,14 @@ public class Constants {
                 addDrawableChild(getConfigCheckboxWidget("sweep particles", x + xModifier, y, isSweepParticleEnabled, is -> isSweepParticleEnabled = is, ""));
                 xModifier += 150;
                 addDrawableChild(getConfigCheckboxWidget("bleed particles", x + xModifier, y, isBleedParticleEnabled, is -> isBleedParticleEnabled = is, ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "weak attack disabled",
+                        x + xModifier,
+                        y,
+                        isWeakAttackSoundDisabled,
+                        is -> isWeakAttackSoundDisabled = is,
+                        ""));
             }
             y += 20;
 
