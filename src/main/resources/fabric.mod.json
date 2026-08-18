@@ -1,11 +1,11 @@
 {
 	"schemaVersion": 1,
-	"id": "untitled",
+	"id": "schizoclient",
 	"version": "${version}",
 	"name": "fabric-pvputils",
-	"description": "pvputils.com",
+	"description": "",
 	"authors": [
-		"Me!"
+		"camwen?"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
