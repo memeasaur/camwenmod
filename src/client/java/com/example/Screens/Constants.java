@@ -415,6 +415,14 @@ public class Constants {
                 addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "autoclick shake",
+                        x + xModifier,
+                        y,
+                        isAutoclickerShakeEnabled,
+                        is -> isAutoclickerShakeEnabled = is,
+                        "recorded autoclicker mouse movement"));
             }
             y += 20;
             {

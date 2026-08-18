@@ -229,14 +229,16 @@ public class KeyboardMixin {
                             nullableCurrentHeldAutoclickerTask = null;
                         } else {// TODO -> external gui for this
                             GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
+                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS) {
                                 handleAutoclickerMouseHeldDown();
+                            }
                         }
                         isAutoclickerEnabled = !isAutoclickerEnabled;
                     }
                 }
-            } else
+            } else {
                 isAutoclickerToggleKeyPressed = false;
+            }
             if (getIsKeyPressed(glfwEnableAutoclickerKeybind)) {
                 if (!isAutoclickerEnableKeyPressed) {
                     isAutoclickerEnableKeyPressed = true;

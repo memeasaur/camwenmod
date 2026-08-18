@@ -1,8 +1,6 @@
 package com.example.Configs;
 
 import com.example.MouseMovement;
-import net.minecraft.entity.player.PlayerEntity;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import static com.example.Configs.Utils.handleSave;
@@ -17,6 +15,7 @@ public class CheatConfig {
     public static int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
+    public static boolean isAutoclickerShakeEnabled = true;
 
     public static int glfwToggleBlockXrayKeybind = GLFW.GLFW_KEY_UNKNOWN; // TODO -> hold/active/disable
     public static int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
@@ -29,7 +28,10 @@ public class CheatConfig {
 
     public static boolean isDarknessDisabled = false;
 
-    public static boolean isAutoClickInventoryEnabled = false;
+    public static boolean isAutoClickInventoryEnabled = false; // TODO -> finish
+
+    TODO;
+    public static boolean isRandomDoubleClickEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
