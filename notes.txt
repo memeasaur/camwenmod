@@ -23,11 +23,14 @@
         >need to generate clicks somehow
     >apparently my recorder's up and down press order is off by 1
     >use recorded autoclicker macros to generate a new sequence each time you use it based on the recorded ones as seeds
-    >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?\
+    >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
     >require multiple macros if it still flags vulcan
     >autoclicker shouldn't click in inventory when the mouse is holding something and the hovered slot is that same thing
 >auto cobweb that works alongside me already trying myself
     >(auto cobweb) I could have it only right-click during the autoclicker sequence if the place is valid? I'm assuming this wouldn't work since the raw autoclicker didn't work
+>automatic head run (legit):
+    >automatically free-looks your camera to the correct angle for head-running
+    >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 
 >360 degree fov keybind
 >let me sprint while blind? (blatant)
@@ -36,11 +39,7 @@
 >speech to text chat typer?
 >league style pings
 >fight tracker
->automatic head run (legit):
-    >automatically free-looks your camera to the correct angle for head-running
-    >could snap your head view if lunar client etc. freelook does that, it probably doesn't
->always move at head-run speed?
->find out how to stop the slowdown from taking damage
+>always move at head-run speed? (blatant)
 >autoclick waits to start until it's a valid hit? this is pretty blatant
 >trajectories/enderPearl aimbot bow aimbot etc
 >swings go through friends
