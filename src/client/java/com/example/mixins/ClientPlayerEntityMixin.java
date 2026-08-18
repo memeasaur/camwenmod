@@ -108,6 +108,10 @@ public abstract class ClientPlayerEntityMixin {
         if (hasCurrentUseActionPlacedCobweb) {
             return;
         }
+        player.sendMessage(Text.literal(String.valueOf(player.fallDistance)), false);
+        if (player.fallDistance <= 3.f) {
+            return;
+        }
         var mainHandStack = player.getMainHandStack();
         if (!mainHandStack.isOf(Items.COBWEB)) {
             return;
@@ -121,8 +125,8 @@ public abstract class ClientPlayerEntityMixin {
         }
 
         hasCurrentUseActionPlacedCobweb = true;
-        player.sendMessage(Text.literal("place"), false);
-        MINECRAFT_CLIENT_INSTANCE.interactionManager.interactBlock(player, Hand.MAIN_HAND, blockHitResult);
+        MINECRAFT_CLIENT_INSTANCE.interactionManager.interactBlock(
+                player, Hand.MAIN_HAND, blockHitResult);
 //        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
 //        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
     }
