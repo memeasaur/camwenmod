@@ -7,6 +7,7 @@
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "GameRendererMixin",
+    "StatusEffectFogModifierMixin",
     "HeldItemRendererMixin",
     "KeyBindingMixin",
     "KeyboardMixin",

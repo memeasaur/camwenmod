@@ -456,6 +456,15 @@ public class Constants {
                         x + xModifier,
                         y,
                         "opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"));
+
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "blindness disable",
+                        x + xModifier,
+                        y,
+                        isDarknessDisabled,
+                        is -> isDarknessDisabled = is,
+                        "darkness + blindness + nausea"));
             }
         }
     };

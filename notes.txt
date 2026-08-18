@@ -5,7 +5,7 @@
 >handleSave is crashing
 >360 degree fov keybind
 >disable jumping when eating auto-move
->remove blindness
+>remove blindness, nausea, darkness
 >let me sprint while blind? (maybe I do this by not letting myself stop running?)
 >teammate api that lets you see their health and current location in the world
     >TODO -> screen-space icon that is projected from a real-world location. but have it rendered at the edge of the render if necessary, like minimap waypoints do
@@ -22,7 +22,7 @@
 >set better defaults
 >test different resolutions
 
->20cps w/ flagging vulcan:
+>20cps w/o flagging vulcan:
     >need to increase kurtosis to make vulcan not flag, consider doing skewness as well
         >possibly I should do this by separating peak and ramp-up clicks, which would also make the sustained peak clicks more natural (?)
         >need to generate clicks somehow
@@ -178,7 +178,6 @@
 >hard cheat version
     >option for chase hits to never be kb hits, only if it's undetectable though
     >elytra helper -> perfect angles etc.
-    >nausea/darkness/blindness removal -> this isn't as hard of a cheat if packs/sodium etc. can do it
     >swing while eating etc. + if allowed meme
     >dropping food eats faster revert
     >swimming hitbox revert + if allowed meme

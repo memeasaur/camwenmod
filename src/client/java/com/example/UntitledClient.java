@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.Window;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -209,6 +210,9 @@ public class UntitledClient implements ClientModInitializer {
                 return original;
                 // TODO -> put outline around the block edges (?)
             });
+
+    @Nullable
+    public static PlayerEntity nullableMirrorMovementPlayer = null;
     // Cheats end
 
     public static boolean isAttackCooldown = false;

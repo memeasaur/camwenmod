@@ -27,10 +27,10 @@ public class CheatConfig {
 
     public static float targetingMarginBypass = .1f;
 
+    public static boolean isDarknessDisabled = true;
+
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
-    @Nullable
-    public static PlayerEntity nullableMirrorMovementPlayer = null;
 
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
