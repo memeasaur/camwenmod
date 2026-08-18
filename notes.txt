@@ -30,7 +30,8 @@
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 
->make the auto cobweb work without me holding right click
+>make ethylene change the fov still
+>make the auto cobweb work without me holding right click so i can try it on my own as well
 >let me sprint while blind? (blatant)
 >allow to place cobwebs through player hitbox (blatant)
 >fake inventory that you can view while running
