@@ -208,6 +208,8 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
+    public static boolean isRandomDoubleClickEnabled = false;
+
     @Nullable
     public static PlayerEntity nullableMirrorMovementPlayer = null;
     // Cheats end

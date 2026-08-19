@@ -41,6 +41,7 @@ public class KeyboardMixin {
             isAutoclickerToggleKeyPressed = false,
             isAutoclickerEnableKeyPressed = false,
             isAutoclickerDisableKeyPressed = false,
+            isRandomDoubleClickToggleKeyPressed = false,
     // Cheats end
     isSneakToggleButtonPressed = false,
             isFullbrightToggleButtonPressed = false,
@@ -271,6 +272,21 @@ public class KeyboardMixin {
                     nullableMirrorMovementPlayer = null;
                 } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
                     nullableMirrorMovementPlayer = player;
+                }
+            }
+            if (getIsKeyPressed(glfwToggleRandomDoubleClickKeybind)) {
+                if (!isRandomDoubleClickToggleKeyPressed) {
+                    isRandomDoubleClickToggleKeyPressed = true;
+                    if (isRandomDoubleClickEnabled) {
+                        GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                    } else {
+                        TODO:
+                        GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                    }
+
+                    isRandomDoubleClickEnabled = !isRandomDoubleClickEnabled;
+                } else {
+                    isRandomDoubleClickToggleKeyPressed = false;
                 }
             }
         }

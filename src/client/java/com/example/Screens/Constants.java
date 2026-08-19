@@ -467,7 +467,7 @@ public class Constants {
                         "shotbow lol"));
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget(
-                        "change autoclick starting multipler. current: " + targetingMarginBypass,
+                        "change targeting margin. current: " + targetingMarginBypass,
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
                         x + xModifier,
                         y,

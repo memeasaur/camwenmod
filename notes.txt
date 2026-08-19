@@ -30,6 +30,7 @@
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 
+>make the kb reduction client-side thing configurable
 >make ethylene change the fov still
 >make the auto cobweb work without me holding right click so i can try it on my own as well
 >let me sprint while blind? (blatant)
