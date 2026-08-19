@@ -12,6 +12,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.net.http.HttpClient;
@@ -45,6 +46,7 @@ public class Constants {
     public static final Style RED_TEXT_STYLE = Style.EMPTY.withColor(Formatting.RED);
 
     // Cheats start
+    @Nullable
     public static Thread nullableCurrentHeldAutoclickerTask = null;
     public static final NativeMouseListener AUTOCLICKER_MOUSE_LISTENER = new NativeMouseListener() {
         @Override
@@ -68,11 +70,13 @@ public class Constants {
         }
     };
 
+    @Nullable
+    public static Thread nullableCurrentRandomDoubleClickTask = null;
     public static final NativeMouseListener RANDOM_DOUBLE_CLICK_LISTENER = new NativeMouseListener() {
         // TODO -> vs. nativeMouseClicked?
         @Override
         public void nativeMousePressed(NativeMouseEvent nativeEvent) {
-            NativeMouseListener.super.nativeMouseClicked(nativeEvent);
+            NativeMouseListener.super.nativeMousePressed(nativeEvent);
             if (nativeEvent.getButton() != NativeMouseEvent.BUTTON1) {
                 return;
             }

@@ -32,6 +32,8 @@ public class CheatConfig {
 
     TODO; // -> put a checkBox boolean here for this
 //    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
+    // TODO -> triple-clicks possible?
+    // TODO -> min interval?
     public static int randomDoubleClickMaxInterval = 0; // TODO
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
