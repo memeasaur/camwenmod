@@ -30,7 +30,6 @@ public class CheatConfig {
 
     public static boolean isAutoClickInventoryEnabled = false; // TODO -> finish
 
-//    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
     // TODO -> triple-clicks possible?
     // TODO -> min interval?
     public static boolean isRandomDoubleClickEnabled = true;
@@ -39,6 +38,9 @@ public class CheatConfig {
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
+    static {
+        // TODO -> init and handle the autoclicker recordings manually if they're a problem
+    }
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }
