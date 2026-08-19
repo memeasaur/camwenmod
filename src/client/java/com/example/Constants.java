@@ -74,26 +74,38 @@ public class Constants {
 //    public static LinkedBlockingQueue<Double> randomDoubleClickQueue = new LinkedBlockingQueue<>();
     private static final ScheduledExecutorService randomDoubleClickExecutor = Executors.newSingleThreadScheduledExecutor();
     public static final NativeMouseListener RANDOM_DOUBLE_CLICK_LISTENER = new NativeMouseListener() {
+        private long lastClickNanos = -1;
+
         // TODO -> vs. nativeMouseClicked?
         @Override
         public void nativeMousePressed(NativeMouseEvent nativeEvent) {
             NativeMouseListener.super.nativeMousePressed(nativeEvent);
-            if (nativeEvent.getButton() != NativeMouseEvent.BUTTON1) {
+            // TODO -> only do this if hitting air or a player?
+            if (nativeEvent.getButton() != NativeMouseEvent.BUTTON1 || MinecraftClient.getInstance().currentScreen != null) { // TODO -> config
                 return;
             }
 
-            randomDoubleClickExecutor.schedule(
-                    () -> {
-                        MinecraftClient.getInstance().execute(() -> {
-                            ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
-                                    MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
-                                    GLFW.GLFW_MOUSE_BUTTON_LEFT,
-                                    GLFW.GLFW_PRESS,
-                                    0);
-                        });
-                    },
-                    ThreadLocalRandom.current().nextInt(65) + 1,
-                    TimeUnit.MILLISECONDS);
+            final long peakIntervalMillis = 90;
+            final long systemNanos = System.nanoTime();
+            final long intervalNanos = systemNanos - lastClickNanos;
+            lastClickNanos = systemNanos;
+            float intervalPeakPercentage = Math.min(
+                    1.f,
+                    (1_000_000f * peakIntervalMillis) / intervalNanos);
+            if (ThreadLocalRandom.current().nextFloat() < intervalPeakPercentage && ThreadLocalRandom.current().nextInt(100) < 54) {
+                randomDoubleClickExecutor.schedule(
+                        () -> {
+                            MinecraftClient.getInstance().execute(() -> {
+                                ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
+                                        MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
+                                        GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                                        GLFW.GLFW_PRESS,
+                                        0);
+                            });
+                        },
+                        ThreadLocalRandom.current().nextInt(25) + 50,
+                        TimeUnit.MILLISECONDS);
+            }
         }
     };
 
