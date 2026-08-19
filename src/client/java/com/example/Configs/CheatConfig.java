@@ -11,7 +11,7 @@ public class CheatConfig {
     public static int[][] immutableRecordedAutoclickerClicks = new int[0][];
     public static MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
     public static float autoclickerStartingMultiplier = 1.f;
-    public static float autoclickerEndingMultiplier = .95f;
+    public static float autoclickerEndingMultiplier = .1f;
     public static int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
@@ -24,14 +24,14 @@ public class CheatConfig {
     public static boolean isEthylene = false;
     public static boolean isAutoCobweb = false;
 
-    public static float targetingMarginBypass = .1f;
+    public static float targetingMarginBypass = .0f;
 
     public static boolean isDarknessDisabled = false;
 
     public static boolean isAutoClickInventoryEnabled = false; // TODO -> finish
 
-    TODO;
-    public static boolean isRandomDoubleClickEnabled = false;
+    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
+    public static int randomDoubleClickMaxInterval = 0; // TODO
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;

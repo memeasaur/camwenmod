@@ -4,7 +4,7 @@ import static com.example.Configs.Utils.init;
 import static com.example.Configs.Utils.handleSave;
 
 public class Config {
-    // TODO -> serialize keybinds in server (?)
+    // TODO -> serialize configs in server (?)
     public static boolean isToggleSneakGuiEnabled = false;
     public static boolean isSneakEnabled = false;
     public static boolean isSprintEnabled = false;
@@ -12,7 +12,7 @@ public class Config {
     public static boolean isFlyBoostEnabled = false;
     public static String currentPotionEnchantmentGlintType = "";
     public static boolean isAttackLoweringDisabled = false;
-    public static boolean isSharpnessParticleReverted = true;
+    public static boolean isSharpnessParticleReverted = false;
     public static boolean isCritParticleReverted = false;
     public static boolean isKnockbackParticleEnabled = false;
     public static boolean isSweepParticleEnabled = false;

@@ -482,6 +482,17 @@ public class Constants {
                         is -> isDarknessDisabled = is,
                         "darkness + blindness + nausea"));
             }
+            y += 20;
+            {
+                int xModifier = 0;
+                addDrawableChild(getConfigButtonWidget(
+                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
+                        x + xModifier,
+                        y,
+                        "opens keybind recorder screen"));
+
+            }
         }
     };
 
@@ -622,5 +633,7 @@ public class Constants {
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> targetingMarginBypass = number, CHEAT_CONFIG);
+
+    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
     // Cheats end
 }

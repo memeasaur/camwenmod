@@ -77,7 +77,13 @@ public class Constants {
                 return;
             }
 
-            TODO; // impl
+            MinecraftClient.getInstance().execute(() -> {
+                ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
+                        MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
+                        GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                        GLFW.GLFW_PRESS,
+                        0);
+            });
         }
     };
 
