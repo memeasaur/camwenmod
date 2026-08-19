@@ -16,6 +16,7 @@
 	>option for blatant where it cancels the swings that hit teammates
 	>option for ignoring autoclicker starts that would hit teammates
 	>follow mod, copies inputs from other player
+	>counts enemies
 >test different resolutions (1080p and imagine 1440p)
 
 >20cps w/o flagging vulcan:
