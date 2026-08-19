@@ -30,7 +30,7 @@ public class CheatConfig {
 
     public static boolean isAutoClickInventoryEnabled = false; // TODO -> finish
 
-    TODO; // -> put a checkBox boolean here for this
+//    TODO; // -> put a checkBox boolean here for this
 //    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
     // TODO -> triple-clicks possible?
     // TODO -> min interval?

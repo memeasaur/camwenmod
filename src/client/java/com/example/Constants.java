@@ -18,8 +18,7 @@ import org.lwjgl.glfw.GLFW;
 import java.net.http.HttpClient;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
 
 import static com.example.Configs.CheatConfig.*;
@@ -70,8 +69,10 @@ public class Constants {
         }
     };
 
-    @Nullable
-    public static Thread nullableCurrentRandomDoubleClickTask = null;
+    //    @Nullable
+//    public static Thread nullableCurrentRandomDoubleClickTask = null;
+//    public static LinkedBlockingQueue<Double> randomDoubleClickQueue = new LinkedBlockingQueue<>();
+    private static final ScheduledExecutorService randomDoubleClickExecutor = Executors.newSingleThreadScheduledExecutor();
     public static final NativeMouseListener RANDOM_DOUBLE_CLICK_LISTENER = new NativeMouseListener() {
         // TODO -> vs. nativeMouseClicked?
         @Override
@@ -81,15 +82,18 @@ public class Constants {
                 return;
             }
 
-            TODO; // random chance
-            TODO; // maybe a delay will actually flag less
-            MinecraftClient.getInstance().execute(() -> {
-                ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
-                        MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
-                        GLFW.GLFW_MOUSE_BUTTON_LEFT,
-                        GLFW.GLFW_PRESS,
-                        0);
-            });
+            randomDoubleClickExecutor.schedule(
+                    () -> {
+                        MinecraftClient.getInstance().execute(() -> {
+                            ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
+                                    MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
+                                    GLFW.GLFW_MOUSE_BUTTON_LEFT,
+                                    GLFW.GLFW_PRESS,
+                                    0);
+                        });
+                    },
+                    ThreadLocalRandom.current().nextInt(65) + 1,
+                    TimeUnit.MILLISECONDS);
         }
     };
 
@@ -183,7 +187,7 @@ public class Constants {
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
 
                 @Override
-                public void run() {
+                public void run() { // TODO -> abstract these threads
                     try {
                         if (isAutoclickerShakeEnabled) {
                             MouseMovement mouseMovement = currentRecordedAutoclicker[0];
