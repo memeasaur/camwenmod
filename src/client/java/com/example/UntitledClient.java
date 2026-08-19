@@ -385,9 +385,11 @@ public class UntitledClient implements ClientModInitializer {
                                 }
                             }));
         }
+        TODO; // task for sending the http payloads of all the shared info
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
             TODO; // draw waypoint over each player's head
         });
+        TODO; // register task for drawing waypoints of far away players
     }
 
     private static boolean handleGetIsEnabled(boolean isEnabled, boolean flag, StringBuilder stringBuilder, String string) {
