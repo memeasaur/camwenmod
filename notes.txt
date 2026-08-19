@@ -19,6 +19,7 @@
 
 >20cps random double clicker w/o flagging vulcan:
     >maybe I should do better than spacing out the double clicks randomly from 50-75, maybe it should ramp up on it's own as well
+        >I could do this by keeping a maintaining a streak count
 >20cps ac w/o flagging vulcan:
     >need to increase kurtosis to make vulcan not flag, consider doing skewness as well
         >possibly I should do this by separating peak and ramp-up clicks, which would also make the sustained peak clicks more natural (?)
