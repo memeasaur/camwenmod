@@ -1,6 +1,5 @@
 package com.example.Screens;
 
-import com.example.Configs.CheatConfig;
 import com.example.MouseMovement;
 import com.example.mixins.ChatHudMixin;
 import com.github.kwhat.jnativehook.GlobalScreen;
@@ -492,7 +491,14 @@ public class Constants {
                         x + xModifier,
                         y,
                         isRandomDoubleClickEnabled,
-                        is -> isRandomDoubleClickEnabled = is,
+                        is -> {
+                            isRandomDoubleClickEnabled = is;
+                            if (isRandomDoubleClickEnabled) {
+                                GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                            } else {
+                                GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                            }
+                        },
                         ""));
 //                addDrawableChild(getConfigButtonWidget(
 //                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
