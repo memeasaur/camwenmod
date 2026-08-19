@@ -77,6 +77,8 @@ public class Constants {
                 return;
             }
 
+            TODO; // random chance
+            TODO; // maybe a delay will actually flag less
             MinecraftClient.getInstance().execute(() -> {
                 ((MouseMixin) MINECRAFT_CLIENT_INSTANCE.mouse).invokeOnMouseButton(
                         MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(),
