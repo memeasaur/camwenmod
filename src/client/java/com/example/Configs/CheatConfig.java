@@ -30,7 +30,8 @@ public class CheatConfig {
 
     public static boolean isAutoClickInventoryEnabled = false; // TODO -> finish
 
-    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
+    TODO; // -> put a checkBox boolean here for this
+//    public static int glfwToggleRandomDoubleClickKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int randomDoubleClickMaxInterval = 0; // TODO
 
     // TODO -> impl? might not be possible with how simulated clients get replicated

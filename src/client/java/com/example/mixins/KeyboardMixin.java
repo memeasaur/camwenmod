@@ -280,7 +280,6 @@ public class KeyboardMixin {
                     if (isRandomDoubleClickEnabled) {
                         GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
                     } else {
-                        TODO:
                         GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
                     }
 
