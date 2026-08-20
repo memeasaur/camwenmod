@@ -75,6 +75,7 @@ public class Constants {
     private static final ScheduledExecutorService randomDoubleClickExecutor = Executors.newSingleThreadScheduledExecutor();
     public static final NativeMouseListener RANDOM_DOUBLE_CLICK_LISTENER = new NativeMouseListener() {
         private long lastClickNanos = -1;
+        private int streak = 0;
 
         // TODO -> vs. nativeMouseClicked?
         @Override
@@ -85,14 +86,27 @@ public class Constants {
                 return;
             }
 
-            final long peakIntervalMillis = 90;
+            final long peakIntervalNanos = 125_000_000;
             final long systemNanos = System.nanoTime();
             final long intervalNanos = systemNanos - lastClickNanos;
             lastClickNanos = systemNanos;
-            float intervalPeakPercentage = Math.min(
+//            float intervalPeakPercentage = Math.min(
+//                    1.f,
+//                    (1_000_000f * peakIntervalMillis) / intervalNanos);
+            // ThreadLocalRandom.current().nextFloat() < intervalPeakPercentage
+            if (peakIntervalNanos < intervalNanos) {
+                streak = 0;
+            } else {
+                streak++;
+            }
+            final int peakStreak = 15;
+            final float peakStreakPercentage = Math.min(
                     1.f,
-                    (1_000_000f * peakIntervalMillis) / intervalNanos);
-            if (ThreadLocalRandom.current().nextFloat() < intervalPeakPercentage && ThreadLocalRandom.current().nextInt(100) < 54) {
+                    (float) streak / peakStreak);
+
+            final int doubleClickPercentage = 54;
+            if (ThreadLocalRandom.current().nextFloat() < peakStreakPercentage &&
+                    ThreadLocalRandom.current().nextInt(100) < doubleClickPercentage) {
                 randomDoubleClickExecutor.schedule(
                         () -> {
                             MinecraftClient.getInstance().execute(() -> {
@@ -103,8 +117,8 @@ public class Constants {
                                         0);
                             });
                         },
-                        ThreadLocalRandom.current().nextInt(25) + 50,
-                        TimeUnit.MILLISECONDS);
+                        ThreadLocalRandom.current().nextLong(-5_000_000, 5_000_000) + (intervalNanos / 2),
+                        TimeUnit.NANOSECONDS);
             }
         }
     };
