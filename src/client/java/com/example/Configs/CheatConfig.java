@@ -35,6 +35,8 @@ public class CheatConfig {
     public static boolean isRandomDoubleClickEnabled = true;
     public static int randomDoubleClickMaxInterval = 0; // TODO
 
+    public static boolean isPlayerWaypointsEnabled = false;
+
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 

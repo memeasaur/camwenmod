@@ -406,6 +406,10 @@ public class UntitledClient implements ClientModInitializer {
                         .writeMaskState(RenderPhase.COLOR_MASK)
                         .build(false)); // TODO ?
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+            if (!isPlayerWaypointsEnabled) {
+                return;
+            }
+
             MatrixStack matrices = context.matrixStack();
             assert matrices != null;
 
