@@ -1,5 +1,6 @@
 package com.example;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -12,12 +13,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
@@ -385,14 +390,66 @@ public class UntitledClient implements ClientModInitializer {
                                 }
                             }));
         }
-        TODO; // task for sending the http payloads of all the shared info
+
+//        TODO; // task for sending the http payloads of all the shared info
+        RenderLayer WAYPOINT_LAYER = RenderLayer.of(
+                "waypoint",
+                VertexFormats.POSITION_COLOR,
+                VertexFormat.DrawMode.TRIANGLES,
+                256,
+                false,
+                false,
+                RenderLayer.MultiPhaseParameters.builder()
+                        .program(RenderPhase.POSITION_COLOR_PROGRAM)
+                        .depthTest(RenderLayer.ALWAYS_DEPTH_TEST)
+                        .cull(RenderPhase.DISABLE_CULLING)
+                        .writeMaskState(RenderPhase.COLOR_MASK)
+                        .build(false));
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            TODO; // draw waypoint over each player's head
+            MatrixStack matrices = context.matrixStack();
+            assert matrices != null;
+
+            Camera camera = context.camera();
+            Vec3d cameraPos = camera.getPos();
+            float tickDelta = context.tickCounter().getTickDelta(false);
+
+            for (PlayerEntity player : context.world().getPlayers()) {
+                Vec3d pos = player.getLerpedPos(tickDelta)
+                        .add(0, player.getHeight() + 0.5, 0);
+
+                matrices.push();
+                matrices.translate(
+                        pos.x - cameraPos.x,
+                        pos.y - cameraPos.y,
+                        pos.z - cameraPos.z);
+                matrices.multiply(camera.getRotation());
+                // .scale
+                {
+                    float size = 0.25f;
+                    matrices.scale(size, size, size);
+                }
+                assert context.consumers() != null;
+                VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+                Vector3f Top = new Vector3f(0, 1, 0);
+                Vector3f Bottom = new Vector3f(0, -1, 0);
+                Vector3f Left = new Vector3f(-1, 0, 0);
+                Vector3f Right = new Vector3f(1, 0, 0);
+                MatrixStack.Entry entry = matrices.peek();
+                Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                Foo.vertex(entry, Left).color(255, 0, 0, 175);
+                Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+                Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                Foo.vertex(entry, Right).color(255, 0, 0, 175);
+                Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+
+                matrices.pop();
+            }
         });
-        TODO; // register task for drawing waypoints of far away players
+//        TODO; // register task for drawing waypoints of far away players
     }
 
-    private static boolean handleGetIsEnabled(boolean isEnabled, boolean flag, StringBuilder stringBuilder, String string) {
+    private static boolean handleGetIsEnabled(
+            boolean isEnabled, boolean flag, StringBuilder stringBuilder, String string) {
         if (isEnabled) {
             if (flag)
                 stringBuilder.append(", ");
