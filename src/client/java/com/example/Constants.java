@@ -99,7 +99,7 @@ public class Constants {
             } else {
                 streak++;
             }
-            final int peakStreak = 15;
+            final int peakStreak = 30;
             final float peakStreakPercentage = Math.min(
                     1.f,
                     (float) streak / peakStreak);
