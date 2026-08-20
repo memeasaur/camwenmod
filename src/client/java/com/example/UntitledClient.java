@@ -1,6 +1,5 @@
 package com.example;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -34,8 +33,6 @@ import static com.example.Configs.Config.*;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
-import static com.example.KotlinStateKt.getPlayers;
-import static com.example.KotlinStateKt.players;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
@@ -447,13 +444,13 @@ public class UntitledClient implements ClientModInitializer {
 
                 matrices.pop();
             }
-            for (VisiblePlayer player : getPlayers()) {
-                if (context.world().getPlayers().stream().anyMatch(each -> each.getUuid().equals(player.getTableEntry().getUuid()))) {
-                    continue;
-                }
-
-                TODO; // draw waypoints of far away players + distances
-            }
+//            for (VisiblePlayer player : getPlayers()) {
+//                if (context.world().getPlayers().stream().anyMatch(each -> each.getUuid().equals(player.getTableEntry().getUuid()))) {
+//                    continue;
+//                }
+//
+//                TODO; // draw waypoints of far away players + distances
+//            }
         });
     }
 
