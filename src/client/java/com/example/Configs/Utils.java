@@ -14,7 +14,8 @@ import static com.example.Utils.*;
 
 public class Utils {
     public static void init(String fileNamePrefix, Class<?> clazz) {
-        if (getDeserializedJsonBlocking(fileNamePrefix) instanceof Map config) {
+        TODO;
+        if (getDeserializedJsonBlocking(fileNamePrefix, clazz) instanceof Map config) {
             for (Field field : clazz.getDeclaredFields()) {
 //                    if ( instanceof Object object) { // TODO -> this doesn't handle the type changing
 //                    }

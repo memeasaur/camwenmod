@@ -85,9 +85,9 @@ public class Utils {
                 minecraftClient.execute(() -> player.sendMessage(Text.literal("serialization failed"), false));
         }
     }
-    public static Map getDeserializedJsonBlocking(String fileNamePrefix) {
+    public static <T> T getDeserializedJsonBlocking(String fileNamePrefix, Class<T> clazz) {
         try (FileReader reader = new FileReader("pvputils-" + fileNamePrefix + ".json")) {
-            return GSON.fromJson(reader, Map.class); // TODO -> use typeToken to get type safety here somehow (?)
+            return GSON.fromJson(reader, clazz); // TODO -> use typeToken to get type safety here somehow (?)
         } catch (IOException e) {
             if (!(e instanceof FileNotFoundException)) {
                 MinecraftClient minecraftClient = MinecraftClient.getInstance();
@@ -108,7 +108,7 @@ public class Utils {
         }
     }
     private static final HashMap<String, saveTaskEntry> saveTaskData = new HashMap<>();
-    public static void handleUnsafeJsonSave(String fileNamePrefix, Map map) {
+    public static <T> void handleUnsafeJsonSave(String fileNamePrefix, T object) {
         try {
             saveTaskData.putIfAbsent(fileNamePrefix, new saveTaskEntry());
             if (saveTaskData.get(fileNamePrefix).atomicBoolean.compareAndSet(false, true)) {
@@ -117,7 +117,7 @@ public class Utils {
                     entry.bool = true;
                     while (entry.bool) {
                         entry.bool = false;
-                        serializeJsonBlocking(fileNamePrefix, map);
+                        serializeJsonBlocking(fileNamePrefix, object);
                     }
                     entry.atomicBoolean.set(false);
                 }).start();
