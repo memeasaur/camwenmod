@@ -28,9 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.example.Configs.CheatConfig.*;
-import static com.example.Configs.CheatConfig.isRandomDoubleClickEnabled;
-import static com.example.Configs.Config.*;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
 import static com.example.Screens.Utils.*;
@@ -49,27 +46,27 @@ public class Constants {
 
             {
                 int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget("togglesneak gui", x + xModifier, y, isToggleSneakGuiEnabled, (is) -> isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"));
+                addDrawableChild(getConfigCheckboxWidget("togglesneak gui", x + xModifier, y, config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("autorun pvp disable", x + xModifier, y, isMovementTogglePvpDisabling, (is) -> isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"));
+                addDrawableChild(getConfigCheckboxWidget("autorun pvp disable", x + xModifier, y, config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("movement toggle mirror press cancel", x + xModifier, y, isMovementToggleMirrorPressDisabling, (is) -> isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"));
+                addDrawableChild(getConfigCheckboxWidget("movement toggle mirror press cancel", x + xModifier, y, config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"));
             }
             y += 20;
 
-            addDrawableChild(getConfigCheckboxWidget("enable notification noise when attack indicator reaches threshold", x, y, isAttackCooldownNotificationEnabled, is -> isAttackCooldownNotificationEnabled = is, ""));
+            addDrawableChild(getConfigCheckboxWidget("enable notification noise when attack indicator reaches threshold", x, y, config.isAttackCooldownNotificationEnabled, is -> config.isAttackCooldownNotificationEnabled = is, ""));
             y += 20;
 
-            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't reach threshold", x, y, isAttackCooldownWarningEnabled, is -> isAttackCooldownWarningEnabled = is, "play warning sound when attack didn't reach threshold"));
+            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't reach threshold", x, y, config.isAttackCooldownWarningEnabled, is -> config.isAttackCooldownWarningEnabled = is, "play warning sound when attack didn't reach threshold"));
             y += 20;
 
-            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't knockback or crit", x, y, isSweepAttackWarningEnabled, is -> isSweepAttackWarningEnabled = is, "plays warning sound when sweep hitting"));
+            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't knockback or crit", x, y, config.isSweepAttackWarningEnabled, is -> config.isSweepAttackWarningEnabled = is, "plays warning sound when sweep hitting"));
             y += 20;
 
             {
                 int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("potion enchantment glint revert: " + (currentPotionEnchantmentGlintType.isEmpty() ? "none" : currentPotionEnchantmentGlintType), () -> {
-                    currentPotionEnchantmentGlintType = switch (currentPotionEnchantmentGlintType) {
+                addDrawableChild(getConfigButtonWidget("potion enchantment glint revert: " + (config.currentPotionEnchantmentGlintType.isEmpty() ? "none" : config.currentPotionEnchantmentGlintType), () -> {
+                    config.currentPotionEnchantmentGlintType = switch (config.currentPotionEnchantmentGlintType) {
                         case "" -> "1.8";
                         case "1.8" -> "";
                         default -> throw new RuntimeException("potion enchantment glint revert button err");
@@ -77,45 +74,45 @@ public class Constants {
                     MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
                 }, x + xModifier, y, "reverts potion enchantment glint to 1.8"));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("enable removal of attack hand lowering", x + xModifier, y, isAttackLoweringDisabled, is -> isAttackLoweringDisabled = is, ""));
+                addDrawableChild(getConfigCheckboxWidget("enable removal of attack hand lowering", x + xModifier, y, config.isAttackLoweringDisabled, is -> config.isAttackLoweringDisabled = is, ""));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("enable reverted sharpness particles", x + xModifier, y, isSharpnessParticleReverted, is -> isSharpnessParticleReverted = is, ""));
+                addDrawableChild(getConfigCheckboxWidget("enable reverted sharpness particles", x + xModifier, y, config.isSharpnessParticleReverted, is -> config.isSharpnessParticleReverted = is, ""));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("enable reverted crit particles", x + xModifier, y, isCritParticleReverted, is -> isCritParticleReverted = is, "warning: don't use this, modern minecraft handles crits differently"));
+                addDrawableChild(getConfigCheckboxWidget("enable reverted crit particles", x + xModifier, y, config.isCritParticleReverted, is -> config.isCritParticleReverted = is, "warning: don't use this, modern minecraft handles crits differently"));
             }
             y += 20;
 
             {
                 int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget("knockback particles", x + xModifier, y, isKnockbackParticleEnabled, is -> isKnockbackParticleEnabled = is, ""));
+                addDrawableChild(getConfigCheckboxWidget("knockback particles", x + xModifier, y, config.isKnockbackParticleEnabled, is -> config.isKnockbackParticleEnabled = is, ""));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("sweep particles", x + xModifier, y, isSweepParticleEnabled, is -> isSweepParticleEnabled = is, ""));
+                addDrawableChild(getConfigCheckboxWidget("sweep particles", x + xModifier, y, config.isSweepParticleEnabled, is -> config.isSweepParticleEnabled = is, ""));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("bleed particles", x + xModifier, y, isBleedParticleEnabled, is -> isBleedParticleEnabled = is, ""));
+                addDrawableChild(getConfigCheckboxWidget("bleed particles", x + xModifier, y, config.isBleedParticleEnabled, is -> config.isBleedParticleEnabled = is, ""));
                 xModifier += 150;
                 addDrawableChild(getConfigCheckboxWidget(
                         "weak attack disabled",
                         x + xModifier,
                         y,
-                        isWeakAttackSoundDisabled,
-                        is -> isWeakAttackSoundDisabled = is,
+                        config.isWeakAttackSoundDisabled,
+                        is -> config.isWeakAttackSoundDisabled = is,
                         ""));
             }
             y += 20;
 
-            addDrawableChild(getConfigCheckboxWidget("enable attack indicator information widget", x, y, isAttackIndicatorDataEnabled, is -> isAttackIndicatorDataEnabled = is, "shows range and attack cooldown percentage when attacking and swinging, respectively"));
+            addDrawableChild(getConfigCheckboxWidget("enable attack indicator information widget", x, y, config.isAttackIndicatorDataEnabled, is -> config.isAttackIndicatorDataEnabled = is, "shows range and attack cooldown percentage when attacking and swinging, respectively"));
             y += 20;
 
             {
                 int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget("sneak", x + xModifier, y, isSneakEnabled, is -> isSneakEnabled = is, "toggles sneak"));
+                addDrawableChild(getConfigCheckboxWidget("sneak", x + xModifier, y, config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("sprint", x + xModifier, y, isSprintEnabled, is -> isSprintEnabled = is, "toggles sprint"));
+                addDrawableChild(getConfigCheckboxWidget("sprint", x + xModifier, y, config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"));
                 xModifier += 150;
                 // TODO -> do the other movement toggles here, too
-                addDrawableChild(getConfigCheckboxWidget("fly boost", x + xModifier, y, isFlyBoostEnabled, is -> isFlyBoostEnabled = is, "sprint while flying to use it"));
+                addDrawableChild(getConfigCheckboxWidget("fly boost", x + xModifier, y, config.isFlyBoostEnabled, is -> config.isFlyBoostEnabled = is, "sprint while flying to use it"));
                 xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("fake night vision", x + xModifier, y, isFullbrightEnabled, is -> isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"));
+                addDrawableChild(getConfigCheckboxWidget("fake night vision", x + xModifier, y, config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"));
                 // TODO -> keybind changer
                 // TODO -> let mod keybinds be changed here, too
             }
@@ -126,7 +123,7 @@ public class Constants {
                 addDrawableChild(getConfigButtonWidget("list changed nameplates", () ->
                         handleAbstractMojangApiNameplateUpdaterScreen((nonnullNetworkHandler) -> {
                             ArrayList<CompletableFuture<nameplateUpdaterEntry>> futureEntries = new ArrayList<>();
-                            for (UUID uuid : nameplateUuids.keySet()) {
+                            for (UUID uuid : config.nameplateUuids.keySet()) {
                                 if (nonnullNetworkHandler.getPlayerListEntry(uuid) instanceof PlayerListEntry playerListEntry)
                                     futureEntries
                                             .add(CompletableFuture.completedFuture(new nameplateUpdaterEntry(playerListEntry.getProfile().getName(), uuid)));
@@ -257,10 +254,10 @@ public class Constants {
                 .checked(isChecked)
                 .callback((v, is) -> {
                     consumer.accept(is);
-                    saveConfig();
+                    config.saveConfig();
 
                     // Cheats start
-                    saveCheatConfig();
+                    config.saveConfig();
                     // Cheats end
                 })
                 .tooltip(Tooltip.of(Text.literal(tooltip)))
@@ -270,9 +267,9 @@ public class Constants {
     private static ButtonWidget getConfigButtonWidget(String title, Runnable onPress, int x, int y, String tooltip) {
         return ButtonWidget.builder(Text.literal(title), v -> {
                     onPress.run();
-                    saveConfig();
+                    config.saveConfig();
                     // Cheats start
-                    saveCheatConfig();
+                    config.saveConfig();
                     // Cheats end
                 })
                 .position(x, y)
@@ -339,7 +336,7 @@ public class Constants {
             for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + perPage); i++) {
                 nameplateUpdaterEntry playerListEntry = currentNameplateUpdatePlayers[i];
                 UUID uuid = playerListEntry.uuid;
-                String team = nameplateUuids.getOrDefault(uuid, "neutral");
+                String team = config.nameplateUuids.getOrDefault(uuid, "neutral");
                 var textWidget = new TextWidget(Text.literal(playerListEntry.name), TEXT_RENDERER);
                 textWidget.setPosition(100, y);
                 textWidget.setTextColor(switch (team) {
@@ -412,25 +409,25 @@ public class Constants {
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), x + xModifier, y, "lists all current recorded autoclickers"));
                 xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change autoclick starting multipler. current: " + autoclickerStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_STARTING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + autoclickerStartingMultiplier));
+                addDrawableChild(getConfigButtonWidget("change autoclick starting multipler. current: " + cheatConfig.autoclickerStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_STARTING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerStartingMultiplier));
                 xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change autoclick ending multiplier. current: " + autoclickerEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENDING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + autoclickerEndingMultiplier));
+                addDrawableChild(getConfigButtonWidget("change autoclick ending multiplier. current: " + cheatConfig.autoclickerEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENDING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerEndingMultiplier));
             }
             y += 20;
             {
                 int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("change autoclick toggle keybind. current: " + glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                addDrawableChild(getConfigButtonWidget("change autoclick toggle keybind. current: " + cheatConfig.glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
                 xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + cheatConfig.glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
                 xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + cheatConfig.glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
                 xModifier += 150;
                 addDrawableChild(getConfigCheckboxWidget(
                         "autoclick shake",
                         x + xModifier,
                         y,
-                        isAutoclickerShakeEnabled,
-                        is -> isAutoclickerShakeEnabled = is,
+                        cheatConfig.isAutoclickerShakeEnabled,
+                        is -> cheatConfig.isAutoclickerShakeEnabled = is,
                         "recorded autoclicker mouse movement"));
             }
             y += 20;
@@ -447,8 +444,8 @@ public class Constants {
                         "ethylene",
                         x + xModifier,
                         y,
-                        isEthylene,
-                        is -> isEthylene = is,
+                        cheatConfig.isEthylene,
+                        is -> cheatConfig.isEthylene = is,
                         "shotbow lol"));
 //                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget(
@@ -463,12 +460,12 @@ public class Constants {
                         "cobweb autoclicker",
                         x + xModifier,
                         y,
-                        isAutoCobweb,
-                        is -> isAutoCobweb = is,
+                        cheatConfig.isAutoCobweb,
+                        is -> cheatConfig.isAutoCobweb = is,
                         "shotbow lol"));
                 xModifier += 150;
                 addDrawableChild(getConfigButtonWidget(
-                        "change targeting margin. current: " + targetingMarginBypass,
+                        "change targeting margin. current: " + cheatConfig.targetingMarginBypass,
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
                         x + xModifier,
                         y,
@@ -479,8 +476,8 @@ public class Constants {
                         "blindness disable",
                         x + xModifier,
                         y,
-                        isDarknessDisabled,
-                        is -> isDarknessDisabled = is,
+                        cheatConfig.isDarknessDisabled,
+                        is -> cheatConfig.isDarknessDisabled = is,
                         "darkness + blindness + nausea"));
             }
             y += 20;
@@ -580,28 +577,28 @@ public class Constants {
             GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
             int[] newRecordedAutoclickerClicks;
             if (!mutableMacroClicks.isEmpty()) {
-                int oldLength = immutableRecordedAutoclickerClicks.length;
+                int oldLength = cheatConfig.immutableRecordedAutoclickerClicks.length;
                 {
                     int newLength = oldLength + 1;
                     {
                         int[][] newMatrix = new int[newLength][];
-                        System.arraycopy(immutableRecordedAutoclickerClicks, 0, newMatrix, 0, oldLength);
-                        immutableRecordedAutoclickerClicks = newMatrix;
+                        System.arraycopy(cheatConfig.immutableRecordedAutoclickerClicks, 0, newMatrix, 0, oldLength);
+                        cheatConfig.immutableRecordedAutoclickerClicks = newMatrix;
                     }
                     {
                         MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
-                        System.arraycopy(immutableRecordedAutoclickerMovements, 0, newMatrix1, 0, oldLength);
-                        immutableRecordedAutoclickerMovements = newMatrix1;
+                        System.arraycopy(cheatConfig.immutableRecordedAutoclickerMovements, 0, newMatrix1, 0, oldLength);
+                        cheatConfig.immutableRecordedAutoclickerMovements = newMatrix1;
                     }
                 }
                 newRecordedAutoclickerClicks = mutableMacroClicks.stream()
                         .skip(2)
                         .mapToInt(Integer::intValue)
                         .toArray();
-                immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
+                cheatConfig.immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
 
                 MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
+                cheatConfig.immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
             } else
                 newRecordedAutoclickerClicks = null;
             threadClientInstance.execute(() -> {
@@ -617,24 +614,24 @@ public class Constants {
             });
         }
     }, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwToggleAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwEnableAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> glfwDisableAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_STARTING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker starting multiplier (" + autoclickerStartingMultiplier + ")"), number -> autoclickerStartingMultiplier = number, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_ENDING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker ending multiplier (" + autoclickerEndingMultiplier + ")"), number -> autoclickerEndingMultiplier = number, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwToggleAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwEnableAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwDisableAutoclickerKeybind = key, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_STARTING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerStartingMultiplier + ")"), number -> cheatConfig.autoclickerStartingMultiplier = number, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_ENDING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerEndingMultiplier + ")"), number -> cheatConfig.autoclickerEndingMultiplier = number, CHEAT_CONFIG);
     private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
         @Override
         protected void init() {
             int y = 20;
-            int originalLength = immutableRecordedAutoclickerClicks.length;
-            for (int[] macro : immutableRecordedAutoclickerClicks) {
+            int originalLength = cheatConfig.immutableRecordedAutoclickerClicks.length;
+            for (int[] macro : cheatConfig.immutableRecordedAutoclickerClicks) {
                 addDrawableChild(ButtonWidget.builder(getAutoclickerText(macro), (button) -> {
                             int[][] newMatrix = new int[originalLength - 1][];
                             int i = 0;
-                            for (int[] macro1 : immutableRecordedAutoclickerClicks)
+                            for (int[] macro1 : cheatConfig.immutableRecordedAutoclickerClicks)
                                 if (macro != macro1)
                                     newMatrix[i++] = macro1;
-                            immutableRecordedAutoclickerClicks = newMatrix;
+                            cheatConfig.immutableRecordedAutoclickerClicks = newMatrix;
                             MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
                         })
                         .position(20, y += 20)
@@ -644,9 +641,9 @@ public class Constants {
         }
     };
 
-    private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
-    private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> targetingMarginBypass = number, CHEAT_CONFIG);
+    private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> cheatConfig.glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
+    private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> cheatConfig.glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number, CHEAT_CONFIG);
 
 //    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
     // Cheats end
