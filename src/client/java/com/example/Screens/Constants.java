@@ -491,6 +491,14 @@ public class Constants {
                             }
                         },
                         ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "player waypoints",
+                        x + xModifier,
+                        y,
+                        cheatConfig.isPlayerWaypointsEnabled,
+                        is -> cheatConfig.isPlayerWaypointsEnabled = is,
+                        ""));
 //                addDrawableChild(getConfigButtonWidget(
 //                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
