@@ -4,7 +4,6 @@ import com.example.MouseMovement;
 import org.lwjgl.glfw.GLFW;
 
 import static com.example.Configs.Utils.handleSave;
-import static com.example.Configs.Utils.init;
 
 public class CheatConfig {
     public static boolean isGuiCheatsPvpDisabling = true;

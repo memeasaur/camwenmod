@@ -1,6 +1,5 @@
 package com.example.Configs;
 
-import static com.example.Configs.Utils.init;
 import static com.example.Configs.Utils.handleSave;
 
 public class Config {
