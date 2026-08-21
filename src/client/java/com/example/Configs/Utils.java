@@ -28,16 +28,16 @@ public class Utils {
 //            }
 //        }
 //    }
-    static void handleSave(String fileNamePrefix, Class<?> clazz) {
-        handleUnsafeJsonSave(fileNamePrefix, Arrays.stream(clazz.getDeclaredFields()).map(field -> {
-                    try {
-                        return Map.entry(field.getName(), field.get(null));
-                    } catch (IllegalAccessException e) {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
-                            player.sendMessage(Text.literal("serialization reflection err"), false);
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-    }
+//    static void handleSave(String fileNamePrefix, Class<?> clazz) {
+//        handleUnsafeJsonSave(fileNamePrefix, Arrays.stream(clazz.getDeclaredFields()).map(field -> {
+//                    try {
+//                        return Map.entry(field.getName(), field.get(null));
+//                    } catch (IllegalAccessException e) {
+//                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+//                            player.sendMessage(Text.literal("serialization reflection err"), false);
+//                        throw new RuntimeException(e);
+//                    }
+//                })
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+//    }
 }

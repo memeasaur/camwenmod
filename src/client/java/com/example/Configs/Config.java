@@ -3,7 +3,7 @@ package com.example.Configs;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.example.Configs.Utils.handleSave;
+import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
     // TODO -> serialize configs in server (?)
@@ -31,6 +31,7 @@ public class Config {
     public boolean isMovementToggleIndividualPressDisabling = false; // TODO impl
 
     public void saveConfig() {
-        handleSave("config", Config.class);
+        serializeJsonBlocking("config", this);
+//        handleSave("config", Config.class);
     }
 }

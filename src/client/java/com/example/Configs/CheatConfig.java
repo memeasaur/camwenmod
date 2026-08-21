@@ -3,7 +3,7 @@ package com.example.Configs;
 import com.example.MouseMovement;
 import org.lwjgl.glfw.GLFW;
 
-import static com.example.Configs.Utils.handleSave;
+import static com.example.Utils.serializeJsonBlocking;
 
 public class CheatConfig {
     public boolean isGuiCheatsPvpDisabling = true;
@@ -40,5 +40,8 @@ public class CheatConfig {
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
-    public void saveCheatConfig() {handleSave("cheat-config", CheatConfig.class);}
+    public void saveCheatConfig() {
+        serializeJsonBlocking("cheat-config", this);
+//        handleSave("cheat-config", CheatConfig.class);
+    }
 }

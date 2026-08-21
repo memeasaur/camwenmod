@@ -11,11 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,6 +27,7 @@ public class Utils {
     public static boolean getIsKeyPressed(int glfwKeybind) {
         return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), glfwKeybind) == GLFW.GLFW_PRESS;
     }
+
     public static boolean getIsKeyBindingPressed(KeyBinding keyBinding) {
         InputUtil.Key key = InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey());
         if (key.getCategory() == InputUtil.Type.KEYSYM) {
@@ -47,6 +46,7 @@ public class Utils {
         config.saveConfig();
 //        handleNameplateSave();
     }
+
     public static void removeNameplateUuidEntry(UUID uuid) {
         config.nameplateUuids = config.nameplateUuids.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(uuid))
@@ -54,7 +54,8 @@ public class Utils {
         config.saveConfig();
 //        handleNameplateSave();
     }
-//    private static void handleNameplateSave() {
+
+    //    private static void handleNameplateSave() {
 //        handleUnsafeJsonSave("nameplates", nameplateUuids);
 //    }
     public static void doMovementToggleDisable() {
@@ -67,6 +68,7 @@ public class Utils {
         isRightEnabled = false;
         isBackwardEnabled = false;
     }
+
     public static void handlePvpDamage() {
         if (config.isMovementTogglePvpDisabling)
             doMovementToggleDisable();
@@ -76,6 +78,7 @@ public class Utils {
             currentXrayType = "";
         // Cheats end
     }
+
     public static <T> void serializeJsonBlocking(String fileNamePrefix, T jsonCompliantObject) {
         try (FileWriter writer = new FileWriter("pvputils-" + fileNamePrefix + ".json")) {
             GSON.toJson(jsonCompliantObject, writer);
@@ -85,9 +88,10 @@ public class Utils {
                 minecraftClient.execute(() -> player.sendMessage(Text.literal("serialization failed"), false));
         }
     }
+
     public static <T> T getDeserializedJsonBlocking(String fileNamePrefix, Class<T> clazz) {
         try (FileReader reader = new FileReader("pvputils-" + fileNamePrefix + ".json")) {
-            return GSON.fromJson(reader, clazz); // TODO -> use typeToken to get type safety here somehow (?)
+            return GSON.fromJson(reader, clazz);
         } catch (IOException e) {
             if (!(e instanceof FileNotFoundException)) {
                 MinecraftClient minecraftClient = MinecraftClient.getInstance();
@@ -99,35 +103,34 @@ public class Utils {
         }
     }
 
-    private static class saveTaskEntry {
-        public AtomicBoolean atomicBoolean;
-        public Boolean bool;
-        public saveTaskEntry() {
-            this.atomicBoolean = new AtomicBoolean(false);
-            this.bool = false;
-        }
-    }
-    private static final HashMap<String, saveTaskEntry> saveTaskData = new HashMap<>();
-    public static <T> void handleUnsafeJsonSave(String fileNamePrefix, T object) {
-        try {
-            saveTaskData.putIfAbsent(fileNamePrefix, new saveTaskEntry());
-            if (saveTaskData.get(fileNamePrefix).atomicBoolean.compareAndSet(false, true)) {
-                var entry = saveTaskData.get(fileNamePrefix);
-                new Thread(() -> {
-                    entry.bool = true;
-                    while (entry.bool) {
-                        entry.bool = false;
-                        serializeJsonBlocking(fileNamePrefix, object);
-                    }
-                    entry.atomicBoolean.set(false);
-                }).start();
-            }
-            else
-                saveTaskData.get(fileNamePrefix).bool = true; // TODO -> this can race condition (?)
-        }
-        catch (Exception e) {
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
-                player.sendMessage(Text.literal("unsafejsonsave err: " + e.getMessage()), false);
-        }
-    }
+//    private static class saveTaskEntry {
+//        public AtomicBoolean atomicBoolean;
+//        public Boolean bool;
+//        public saveTaskEntry() {
+//            this.atomicBoolean = new AtomicBoolean(false);
+//            this.bool = false;
+//        }
+//    }
+//    private static final HashMap<String, saveTaskEntry> saveTaskData = new HashMap<>();
+//    public static <T> void handleUnsafeJsonSave(String fileNamePrefix, T object) {
+//        try {
+//            saveTaskData.putIfAbsent(fileNamePrefix, new saveTaskEntry());
+//            if (saveTaskData.get(fileNamePrefix).atomicBoolean.compareAndSet(false, true)) {
+//                var entry = saveTaskData.get(fileNamePrefix);
+//                new Thread(() -> {
+//                    entry.bool = true;
+//                    while (entry.bool) {
+//                        entry.bool = false;
+//                        serializeJsonBlocking(fileNamePrefix, object);
+//                    }
+//                    entry.atomicBoolean.set(false);
+//                }).start();
+//            }
+//            else
+//                saveTaskData.get(fileNamePrefix).bool = true; // TODO -> this can race condition (?)
+//        }
+//        catch (Exception e) {
+//            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+//                player.sendMessage(Text.literal("unsafejsonsave err: " + e.getMessage()), false);
+//        }
 }
