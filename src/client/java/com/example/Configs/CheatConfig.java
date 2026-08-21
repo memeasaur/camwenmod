@@ -11,7 +11,7 @@ public class CheatConfig {
     public static int[][] immutableRecordedAutoclickerClicks = new int[0][];
     public static MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
     public static float autoclickerStartingMultiplier = 1.f;
-    public static float autoclickerEndingMultiplier = .1f;
+    public static float autoclickerEndingMultiplier = 1.f;
     public static int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public static int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
