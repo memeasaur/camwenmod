@@ -19,8 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.Configs.CheatConfig.isGuiCheatsPvpDisabling;
-import static com.example.Configs.Config.*;
 import static com.example.Constants.GSON;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.*;
@@ -44,22 +42,24 @@ public class Utils {
     }
 
     public static void putNameplateUuidEntry(Map.Entry<UUID, String> entry) {
-        nameplateUuids = Stream.concat(nameplateUuids.entrySet().stream(), Stream.of(entry))
+        config.nameplateUuids = Stream.concat(config.nameplateUuids.entrySet().stream(), Stream.of(entry))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> newValue));
-        handleNameplateSave();
+        config.saveConfig();
+//        handleNameplateSave();
     }
     public static void removeNameplateUuidEntry(UUID uuid) {
-        nameplateUuids = nameplateUuids.entrySet().stream()
+        config.nameplateUuids = config.nameplateUuids.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(uuid))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-        handleNameplateSave();
+        config.saveConfig();
+//        handleNameplateSave();
     }
-    private static void handleNameplateSave() {
-        handleUnsafeJsonSave("nameplates", nameplateUuids);
-    }
+//    private static void handleNameplateSave() {
+//        handleUnsafeJsonSave("nameplates", nameplateUuids);
+//    }
     public static void doMovementToggleDisable() {
-        isSneakEnabled = false;
-        isSprintEnabled = false;
+        config.isSneakEnabled = false;
+        config.isSprintEnabled = false;
 
         isJumpEnabled = false;
         isForwardEnabled = false;
@@ -68,11 +68,11 @@ public class Utils {
         isBackwardEnabled = false;
     }
     public static void handlePvpDamage() {
-        if (isMovementTogglePvpDisabling)
+        if (config.isMovementTogglePvpDisabling)
             doMovementToggleDisable();
 
         // Cheats start
-        if (isGuiCheatsPvpDisabling)
+        if (cheatConfig.isGuiCheatsPvpDisabling)
             currentXrayType = "";
         // Cheats end
     }

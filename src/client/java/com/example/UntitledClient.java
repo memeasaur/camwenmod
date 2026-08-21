@@ -28,15 +28,14 @@ import org.lwjgl.glfw.GLFW;
 import java.util.*;
 import java.util.function.BiFunction;
 
-import static com.example.Configs.Utils.init;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
-    public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
-    public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
+    static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
+    static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
     //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
 //    static {
@@ -223,8 +222,6 @@ public class UntitledClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        init("config", Config.class);
-        init("cheat-config", CheatConfig.class);
 //        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
 //            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
 //                for (JsonElement jsonElement : newUpdates)

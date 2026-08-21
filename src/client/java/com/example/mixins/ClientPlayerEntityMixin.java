@@ -15,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.Configs.CheatConfig.isAutoCobweb;
-import static com.example.Configs.CheatConfig.isDarknessDisabled;
-import static com.example.Configs.Config.*;
 import static com.example.Constants.FLY_BOOST_MULTIPLIER;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.DelayedClientState.*;
@@ -54,9 +51,9 @@ public abstract class ClientPlayerEntityMixin {
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.currentScreen;
         boolean isCurrentHandledScreen = currentScreen instanceof HandledScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
-        SNEAK_VANILLA.setPressed((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || isSneakEnabled);
+        SNEAK_VANILLA.setPressed((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
         if (!isCurrentHandledScreen) { // you better not fork-remove this! or you are gonna have a bad time!
-            SPRINT_VANILLA.setPressed((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || isSprintEnabled);
+            SPRINT_VANILLA.setPressed((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
             JUMP_VANILLA.setPressed((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
             FORWARD_VANILLA.setPressed((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
             LEFT_VANILLA.setPressed((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
@@ -64,7 +61,7 @@ public abstract class ClientPlayerEntityMixin {
             BACKWARD_VANILLA.setPressed((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
         }
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-            if (isFlyBoostEnabled && player.isCreative()) {
+            if (config.isFlyBoostEnabled && player.isCreative()) {
                 PlayerAbilities abilities = player.getAbilities();
                 if (abilities.flying &&
                         (SPRINT_VANILLA.isPressed() || SPRINT_TOGGLE.isPressed() || SPRINT_ENABLE.isPressed())) {
@@ -81,7 +78,7 @@ public abstract class ClientPlayerEntityMixin {
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
 
 
-            if (isAutoCobweb) {
+            if (cheatConfig.isAutoCobweb) {
                 onAutoCobwebTick(player);
             }
         }
@@ -89,7 +86,7 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "tickNausea", at = @At("RETURN"))
     void onTickNausea(CallbackInfo ci) {
-        if (isDarknessDisabled) {
+        if (cheatConfig.isDarknessDisabled) {
             this.prevNauseaIntensity = 0.f;
             this.nauseaIntensity = 0.f;
         }
