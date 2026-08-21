@@ -427,61 +427,58 @@ public class UntitledClient implements ClientModInitializer {
                 matrices.multiply(camera.getRotation());
                 // diamond
                 {
-                    float size = 0.25f;
-                    matrices.scale(size, size, size);
-                    assert context.consumers() != null;
-                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-                    Vector3f Top = new Vector3f(0, 1, 0);
-                    Vector3f Bottom = new Vector3f(0, -1, 0);
-                    Vector3f Left = new Vector3f(-1, 0, 0);
-                    Vector3f Right = new Vector3f(1, 0, 0);
-                    MatrixStack.Entry entry = matrices.peek();
-                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-
-                    {
-                        Vector3f forward = new Vector3f(0, 0, -1);
-                        camera.getRotation().transform(forward);
-                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-                        if (look.dotProduct(toMarker) > 0.995) {
-//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-                        }
-                    }
+//                    matrices.push();
+//                    float size = 0.25f;
+//                    matrices.scale(size, size, size);
+//                    assert context.consumers() != null;
+//                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+//                    Vector3f Top = new Vector3f(0, 1, 0);
+//                    Vector3f Bottom = new Vector3f(0, -1, 0);
+//                    Vector3f Left = new Vector3f(-1, 0, 0);
+//                    Vector3f Right = new Vector3f(1, 0, 0);
+//                    MatrixStack.Entry entry = matrices.peek();
+//                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+//                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
+//                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+//                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+//                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
+//                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+//
+//                    {
+//                        Vector3f forward = new Vector3f(0, 0, -1);
+//                        camera.getRotation().transform(forward);
+//                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+//                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+//                        if (look.dotProduct(toMarker) > 0.995) {
+////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+//                        }
+//                    }
+//                    matrices.pop();
                 }
                 // distance
                 {
                     var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
+                    matrices.push();
+                    matrices.scale(-0.025f, -0.025f, 0.025f);
                     String text = String.format("%.1fm", camera.getPos().distanceTo(pos));
 
-//                    float textWidth = textRenderer.getWidth(text);
-//                    matrices.push();
-//                    matrices.translate(
-//                            -textWidth / 2.0f,
-//                            -textRenderer.fontHeight / 2.0f,
-//                            0
-//                    );
                     textRenderer.draw(
                             Text.literal(text),
-                            0,
-                            0,
+                            (float) -textRenderer.getWidth(text) / 2,
+                            (float) -textRenderer.fontHeight / 2,
                             0xFFFFFFFF,
                             false,
                             matrices.peek().getPositionMatrix(),
                             context.consumers(),
-                            TextRenderer.TextLayerType.NORMAL,
+                            TextRenderer.TextLayerType.SEE_THROUGH,
                             0,
                             0xF000F0
                     );
-//                    matrices.pop();
+                    matrices.pop();
                 }
                 // name
                 {
-//                    TODO;
+//                    TODO; -> should only appear when looked at?
                 }
                 matrices.pop();
             }

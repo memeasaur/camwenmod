@@ -4,18 +4,15 @@
 
 >rally that places an on-screen waypoint
 >teammate api that lets you see their health and current location in the world
-    >TODO -> screen-space icon that is projected from a real-world location. but have it rendered at the edge of the render if necessary, like minimap waypoints do
 	>/focus
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
 	>shows waypoints on all visible, turn out of render ones into local-only last-seen waypoints
-	>chat message when hitting teammates?
 	>also works for different name colors for different teams
-	>message when hitting teammate?
-	>option for blatant where it cancels the swings that hit teammates
-	>option for ignoring autoclicker starts that would hit teammates
+	>message when hitting teammate
+	>option for ignoring attacks that would hit teammates
 	>follow mod, copies inputs from other player
-	>counts enemies
+	>counts enemies (local?)
 	>works on their zombie as well
 
 >20cps live click autoclicker?
