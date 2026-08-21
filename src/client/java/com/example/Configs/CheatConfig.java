@@ -9,6 +9,7 @@ import static com.example.Configs.Utils.init;
 public class CheatConfig {
     public static boolean isGuiCheatsPvpDisabling = true;
 
+    TODO;
     public static int[][] immutableRecordedAutoclickerClicks = new int[0][];
     public static MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
     public static float autoclickerStartingMultiplier = 1.f;

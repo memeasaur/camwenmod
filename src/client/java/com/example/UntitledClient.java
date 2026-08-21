@@ -98,20 +98,18 @@ public class UntitledClient implements ClientModInitializer {
     public static Map<UUID, String> nameplateUuids; // TODO move to config
 
     static {
-        new Thread(() -> {
-            try {
-                if (getDeserializedJsonBlocking("nameplates") instanceof Map map)
-                    nameplateUuids = ((Map<String, String>) map).entrySet().stream()
-                            .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
-                else
-                    nameplateUuids = Map.of();
-            } catch (Exception e) {
-                var client = MinecraftClient.getInstance();
-                if (client.player instanceof ClientPlayerEntity player)
-                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
-                // TODO -> console this
-            }
-        }).start();
+        try {
+            if (getDeserializedJsonBlocking("nameplates") instanceof Map map)
+                nameplateUuids = ((Map<String, String>) map).entrySet().stream()
+                        .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
+            else
+                nameplateUuids = Map.of();
+        } catch (Exception e) {
+            var client = MinecraftClient.getInstance();
+            if (client.player instanceof ClientPlayerEntity player)
+                client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
+            // TODO -> console this
+        }
     }
 
     public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
