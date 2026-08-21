@@ -35,6 +35,7 @@ public class CheatConfig {
     public boolean isRandomDoubleClickEnabled = true;
     public int randomDoubleClickMaxInterval = 0; // TODO
 
+    // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated

@@ -413,6 +413,8 @@ public class UntitledClient implements ClientModInitializer {
             Vec3d cameraPos = camera.getPos();
             float tickDelta = context.tickCounter().getTickDelta(false);
 
+            TODO; // if targetted? names etc. should be drawn, distances should be drawn
+            TODO; // this should only do it if the player is visible in the view
             for (PlayerEntity player : context.world().getPlayers()) {
                 Vec3d pos = player.getLerpedPos(tickDelta)
                         .add(0, player.getHeight() + 0.5, 0);
@@ -444,12 +446,13 @@ public class UntitledClient implements ClientModInitializer {
 
                 matrices.pop();
             }
+            TODO; // players out of the view should have markers drawn on the edge of the screen
 //            for (VisiblePlayer player : getPlayers()) {
 //                if (context.world().getPlayers().stream().anyMatch(each -> each.getUuid().equals(player.getTableEntry().getUuid()))) {
 //                    continue;
 //                }
 //
-//                TODO; // draw waypoints of far away players + distances
+            TODO; // supabase players
 //            }
         });
     }
