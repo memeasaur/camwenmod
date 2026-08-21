@@ -7,7 +7,7 @@ import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
     // TODO -> serialize configs in server (?)
-    public Map<UUID, String> nameplateUuids;
+    public Map<UUID, String> nameplateUuids = Map.of();
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
