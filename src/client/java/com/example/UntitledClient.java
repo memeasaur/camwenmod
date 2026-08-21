@@ -30,7 +30,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import static com.example.Configs.CheatConfig.*;
 import static com.example.Configs.Config.*;
 import static com.example.Configs.Utils.init;
 import static com.example.Constants.*;
@@ -99,7 +98,7 @@ public class UntitledClient implements ClientModInitializer {
 
     static {
         try {
-            if (getDeserializedJsonBlocking("nameplates") instanceof Map map)
+            if (getDeserializedJsonBlocking("nameplates", ) instanceof Map map)
                 nameplateUuids = ((Map<String, String>) map).entrySet().stream()
                         .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
             else
