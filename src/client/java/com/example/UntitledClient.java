@@ -23,7 +23,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
@@ -478,6 +477,7 @@ public class UntitledClient implements ClientModInitializer {
                 }
                 // name
                 {
+                    // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
 //                    TODO; -> should only appear when looked at?
                 }
                 matrices.pop();
