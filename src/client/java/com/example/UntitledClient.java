@@ -458,16 +458,13 @@ public class UntitledClient implements ClientModInitializer {
                     var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
                     String text = String.format("%.1fm", camera.getPos().distanceTo(pos));
 
-                    float textWidth = textRenderer.getWidth(text);
-
-                    matrices.push();
-
-                    matrices.translate(
-                            -textWidth / 2.0f,
-                            -textRenderer.fontHeight / 2.0f,
-                            0
-                    );
-
+//                    float textWidth = textRenderer.getWidth(text);
+//                    matrices.push();
+//                    matrices.translate(
+//                            -textWidth / 2.0f,
+//                            -textRenderer.fontHeight / 2.0f,
+//                            0
+//                    );
                     textRenderer.draw(
                             Text.literal(text),
                             0,
@@ -476,15 +473,15 @@ public class UntitledClient implements ClientModInitializer {
                             false,
                             matrices.peek().getPositionMatrix(),
                             context.consumers(),
-                            TextRenderer.TextLayerType.SEE_THROUGH,
+                            TextRenderer.TextLayerType.NORMAL,
                             0,
                             0xF000F0
                     );
-                    matrices.pop();
+//                    matrices.pop();
                 }
                 // name
                 {
-                    TODO;
+//                    TODO;
                 }
                 matrices.pop();
             }
