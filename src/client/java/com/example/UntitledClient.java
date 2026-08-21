@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.Configs.CheatConfig;
+import com.example.Configs.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static com.example.Configs.CheatConfig.*;
 import static com.example.Configs.Config.*;
+import static com.example.Configs.Utils.init;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
@@ -145,51 +148,51 @@ public class UntitledClient implements ClientModInitializer {
     public static boolean isYLower;
 
     // Cheats start
-    static {
-        new Thread(() -> {
-            try {
-                if (getDeserializedJsonBlocking("cheat-config") instanceof Map config) { // TODO -> this shit was a bad idea
-                    isGuiCheatsPvpDisabling = (boolean) config.get("isGuiCheatsPvpDisabling");
-                    if (config.get("immutableRecordedAutoclickerClicks") instanceof List foo && config.get("immutableRecordedAutoclickerMovements") instanceof List bar && foo.size() == bar.size()) {
-                        {
-                            var lists1 = (List<List<Number>>) foo;
-                            int[][] tempClicks = new int[lists1.size()][];
-                            for (int i = 0; i < lists1.size(); i++) {
-                                List<Number> inner = lists1.get(i);
-                                tempClicks[i] = new int[inner.size()]; // TODO ? chatgpt did this
-                                for (int j = 0; j < inner.size(); j++) {
-                                    tempClicks[i][j] = inner.get(j).intValue();
-                                }
-                            }
-                            immutableRecordedAutoclickerClicks = tempClicks;
-                        }
-                        {
-                            var lists2 = (List<List<Map<String, Number>>>) bar;
-                            MouseMovement[][] movements = new MouseMovement[lists2.size()][];
-                            for (int i = 0; i < lists2.size(); i++) {
-                                List<Map<String, Number>> inner = lists2.get(i);
-                                movements[i] = new MouseMovement[inner.size()];
-                                for (int j = 0; j < inner.size(); j++) {
-                                    Map<String, Number> map = inner.get(j);
-                                    movements[i][j] = new MouseMovement(map.get("delayNanos").intValue(), map.get("deltaX").intValue(), map.get("deltaY").intValue());
-                                }
-                            }
-                            immutableRecordedAutoclickerMovements = movements;
-                        }
-                    }
-                    autoclickerStartingMultiplier = ((Number) config.get("autoclickerStartingMultiplier")).floatValue();
-                    autoclickerEndingMultiplier = ((Number) config.get("autoclickerEndingMultiplier")).floatValue();
-                    glfwToggleAutoclickerKeybind = ((Number) config.get("glfwToggleAutoclickerKeybind")).intValue();
-                    glfwEnableAutoclickerKeybind = ((Number) config.get("glfwEnableAutoclickerKeybind")).intValue();
-                    glfwDisableAutoclickerKeybind = ((Number) config.get("glfwDisableAutoclickerKeybind")).intValue();
-                    glfwToggleBlockXrayKeybind = ((Number) config.get("glfwToggleBlockXrayKeybind")).intValue();
-                    glfwTogglePlayerXrayKeybind = ((Number) config.get("glfwTogglePlayerXrayKeybind")).intValue();
-                }
-            } catch (Exception e) {
-                MinecraftClient.getInstance().execute(() -> MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(e.getMessage()), false));
-            }
-        }).start();
-    }
+//    static {
+//        new Thread(() -> {
+//            try {
+//                if (getDeserializedJsonBlocking("cheat-config") instanceof Map config) { // TODO -> this shit was a bad idea
+//                    isGuiCheatsPvpDisabling = (boolean) config.get("isGuiCheatsPvpDisabling");
+//                    if (config.get("immutableRecordedAutoclickerClicks") instanceof List foo && config.get("immutableRecordedAutoclickerMovements") instanceof List bar && foo.size() == bar.size()) {
+//                        {
+//                            var lists1 = (List<List<Number>>) foo;
+//                            int[][] tempClicks = new int[lists1.size()][];
+//                            for (int i = 0; i < lists1.size(); i++) {
+//                                List<Number> inner = lists1.get(i);
+//                                tempClicks[i] = new int[inner.size()]; // TODO ? chatgpt did this
+//                                for (int j = 0; j < inner.size(); j++) {
+//                                    tempClicks[i][j] = inner.get(j).intValue();
+//                                }
+//                            }
+//                            immutableRecordedAutoclickerClicks = tempClicks;
+//                        }
+//                        {
+//                            var lists2 = (List<List<Map<String, Number>>>) bar;
+//                            MouseMovement[][] movements = new MouseMovement[lists2.size()][];
+//                            for (int i = 0; i < lists2.size(); i++) {
+//                                List<Map<String, Number>> inner = lists2.get(i);
+//                                movements[i] = new MouseMovement[inner.size()];
+//                                for (int j = 0; j < inner.size(); j++) {
+//                                    Map<String, Number> map = inner.get(j);
+//                                    movements[i][j] = new MouseMovement(map.get("delayNanos").intValue(), map.get("deltaX").intValue(), map.get("deltaY").intValue());
+//                                }
+//                            }
+//                            immutableRecordedAutoclickerMovements = movements;
+//                        }
+//                    }
+//                    autoclickerStartingMultiplier = ((Number) config.get("autoclickerStartingMultiplier")).floatValue();
+//                    autoclickerEndingMultiplier = ((Number) config.get("autoclickerEndingMultiplier")).floatValue();
+//                    glfwToggleAutoclickerKeybind = ((Number) config.get("glfwToggleAutoclickerKeybind")).intValue();
+//                    glfwEnableAutoclickerKeybind = ((Number) config.get("glfwEnableAutoclickerKeybind")).intValue();
+//                    glfwDisableAutoclickerKeybind = ((Number) config.get("glfwDisableAutoclickerKeybind")).intValue();
+//                    glfwToggleBlockXrayKeybind = ((Number) config.get("glfwToggleBlockXrayKeybind")).intValue();
+//                    glfwTogglePlayerXrayKeybind = ((Number) config.get("glfwTogglePlayerXrayKeybind")).intValue();
+//                }
+//            } catch (Exception e) {
+//                MinecraftClient.getInstance().execute(() -> MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(e.getMessage()), false));
+//            }
+//        }).start();
+//    }
 
     public static boolean isAutoclickerEnabled = false;
     public static boolean isHeldAutoclickerPressed;
@@ -226,6 +229,8 @@ public class UntitledClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        init("config", Config.class);
+        init("cheat-config", CheatConfig.class);
 //        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
 //            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
 //                for (JsonElement jsonElement : newUpdates)

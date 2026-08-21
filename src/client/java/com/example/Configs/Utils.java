@@ -13,23 +13,22 @@ import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.Utils.*;
 
 public class Utils {
-    static void init(String fileNamePrefix, Class<?> clazz) {
-        new Thread(() -> {
-            if (getDeserializedJsonBlocking(fileNamePrefix) instanceof Map config) {
-                for (Field field : clazz.getDeclaredFields()) {
+    public static void init(String fileNamePrefix, Class<?> clazz) {
+        if (getDeserializedJsonBlocking(fileNamePrefix) instanceof Map config) {
+            for (Field field : clazz.getDeclaredFields()) {
 //                    if ( instanceof Object object) { // TODO -> this doesn't handle the type changing
 //                    }
-                    try {
-                        field.set(null, config.get(field.getName()));
-                    } catch (Exception e) {
-                        MinecraftClient minecraftClient = MinecraftClient.getInstance();
-                        if (minecraftClient.player instanceof ClientPlayerEntity player)
-                            minecraftClient.execute(() -> player.sendMessage(Text.literal("deserialize reflection err"), false));
-                    }
+                try {
+                    field.set(null, config.get(field.getName()));
+                } catch (Exception e) {
+                    MinecraftClient minecraftClient = MinecraftClient.getInstance();
+                    if (minecraftClient.player instanceof ClientPlayerEntity player)
+                        minecraftClient.execute(() -> player.sendMessage(Text.literal("deserialize reflection err"), false));
                 }
             }
-        }).start();
+        }
     }
+
     static void handleSave(String fileNamePrefix, Class<?> clazz) {
         handleUnsafeJsonSave(fileNamePrefix, Arrays.stream(clazz.getDeclaredFields()).map(field -> {
                     try {

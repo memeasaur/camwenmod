@@ -27,9 +27,6 @@ public class Config {
     public static boolean isMovementToggleMirrorPressDisabling = false;
     public static boolean isMovementToggleIndividualPressDisabling = false; // TODO impl
 
-    static {
-        init("config", Config.class);
-    }
     public static void saveConfig() {
         handleSave("config", Config.class);
     }

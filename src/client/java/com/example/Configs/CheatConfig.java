@@ -41,9 +41,6 @@ public class CheatConfig {
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
-    static {
-        init("cheat-config", CheatConfig.class);
-    }
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
     }
