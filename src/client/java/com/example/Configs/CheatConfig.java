@@ -4,6 +4,7 @@ import com.example.MouseMovement;
 import org.lwjgl.glfw.GLFW;
 
 import static com.example.Configs.Utils.handleSave;
+import static com.example.Configs.Utils.init;
 
 public class CheatConfig {
     public static boolean isGuiCheatsPvpDisabling = true;
@@ -41,7 +42,7 @@ public class CheatConfig {
     public static int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
     static {
-        // TODO -> init and handle the autoclicker recordings manually if they're a problem
+        init("cheat-config", CheatConfig.class);
     }
     public static void saveCheatConfig() {
         handleSave("cheat-config", CheatConfig.class);
