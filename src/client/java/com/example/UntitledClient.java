@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
@@ -413,21 +414,10 @@ public class UntitledClient implements ClientModInitializer {
             Vec3d cameraPos = camera.getPos();
             float tickDelta = context.tickCounter().getTickDelta(false);
 
-//            TODO; // if targetted? names etc. should be drawn, distances should be drawn
 //            TODO; // this should only do it if the player is visible in the view
             for (PlayerEntity player : context.world().getPlayers()) {
                 Vec3d pos = player.getLerpedPos(tickDelta)
                         .add(0, player.getHeight() + 0.5, 0);
-                {
-                    Vector3f forward = new Vector3f(0, 0, -1);
-                    camera.getRotation().transform(forward);
-                    Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-                    Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-                    boolean lookedAt = look.dotProduct(toMarker) > 0.995;
-                    if (lookedAt) {
-                        return;
-                    }
-                }
 
                 matrices.push();
                 matrices.translate(
@@ -435,25 +425,67 @@ public class UntitledClient implements ClientModInitializer {
                         pos.y - cameraPos.y,
                         pos.z - cameraPos.z);
                 matrices.multiply(camera.getRotation());
-                // .scale
+                // diamond
                 {
                     float size = 0.25f;
                     matrices.scale(size, size, size);
-                }
-                assert context.consumers() != null;
-                VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-                Vector3f Top = new Vector3f(0, 1, 0);
-                Vector3f Bottom = new Vector3f(0, -1, 0);
-                Vector3f Left = new Vector3f(-1, 0, 0);
-                Vector3f Right = new Vector3f(1, 0, 0);
-                MatrixStack.Entry entry = matrices.peek();
-                Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                Foo.vertex(entry, Left).color(255, 0, 0, 175);
-                Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-                Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                Foo.vertex(entry, Right).color(255, 0, 0, 175);
-                Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+                    assert context.consumers() != null;
+                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+                    Vector3f Top = new Vector3f(0, 1, 0);
+                    Vector3f Bottom = new Vector3f(0, -1, 0);
+                    Vector3f Left = new Vector3f(-1, 0, 0);
+                    Vector3f Right = new Vector3f(1, 0, 0);
+                    MatrixStack.Entry entry = matrices.peek();
+                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
 
+                    {
+                        Vector3f forward = new Vector3f(0, 0, -1);
+                        camera.getRotation().transform(forward);
+                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+                        if (look.dotProduct(toMarker) > 0.995) {
+//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+                        }
+                    }
+                }
+                // distance
+                {
+                    var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
+                    String text = String.format("%.1fm", camera.getPos().distanceTo(pos));
+
+                    float textWidth = textRenderer.getWidth(text);
+
+                    matrices.push();
+
+                    matrices.translate(
+                            -textWidth / 2.0f,
+                            -textRenderer.fontHeight / 2.0f,
+                            0
+                    );
+
+                    textRenderer.draw(
+                            Text.literal(text),
+                            0,
+                            0,
+                            0xFFFFFFFF,
+                            false,
+                            matrices.peek().getPositionMatrix(),
+                            context.consumers(),
+                            TextRenderer.TextLayerType.SEE_THROUGH,
+                            0,
+                            0xF000F0
+                    );
+                    matrices.pop();
+                }
+                // name
+                {
+                    TODO;
+                }
                 matrices.pop();
             }
 //            TODO; // players out of the view should have markers drawn on the edge of the screen
