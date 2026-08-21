@@ -257,7 +257,7 @@ public class Constants {
                     config.saveConfig();
 
                     // Cheats start
-                    config.saveConfig();
+                    cheatConfig.saveCheatConfig();
                     // Cheats end
                 })
                 .tooltip(Tooltip.of(Text.literal(tooltip)))
@@ -269,7 +269,7 @@ public class Constants {
                     onPress.run();
                     config.saveConfig();
                     // Cheats start
-                    config.saveConfig();
+                    cheatConfig.saveCheatConfig();
                     // Cheats end
                 })
                 .position(x, y)

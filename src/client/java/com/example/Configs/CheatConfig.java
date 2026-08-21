@@ -21,12 +21,12 @@ public class CheatConfig {
     public int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
     public boolean isAutomaticWTapping = true; // TODO -> impl?
-    public boolean isEthylene = false;
+    public boolean isEthylene = true;
     public boolean isAutoCobweb = false;
 
-    public float targetingMarginBypass = .0f;
+    public float targetingMarginBypass = .1f;
 
-    public boolean isDarknessDisabled = false;
+    public boolean isDarknessDisabled = true;
 
     public boolean isAutoClickInventoryEnabled = false; // TODO -> finish
 
