@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.example.Configs.Config.isFullbrightEnabled;
+
 import static com.example.UntitledClient.*;
 
 
@@ -17,7 +17,7 @@ import static com.example.UntitledClient.*;
 public class LivingEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "hasStatusEffect", cancellable = true)
     private void onHasStatusEffect(RegistryEntry<StatusEffect> effect, CallbackInfoReturnable<Boolean> cir) {
-        if (effect == StatusEffects.NIGHT_VISION && (isFullbrightEnabled || FULLBRIGHT_HOLD.isPressed())) {
+        if (effect == StatusEffects.NIGHT_VISION && (config.isFullbrightEnabled || FULLBRIGHT_HOLD.isPressed())) {
             cir.setReturnValue(true);
             cir.cancel();
         }

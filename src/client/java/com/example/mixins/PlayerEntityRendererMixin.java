@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.example.UntitledClient.nameplateUuids;
+import static com.example.UntitledClient.config;
 
 @Mixin(PlayerEntityRenderer.class)
 public class PlayerEntityRendererMixin {
@@ -33,7 +33,7 @@ public class PlayerEntityRendererMixin {
     @Inject(at = @At(value = "RETURN"), method = "updateRenderState(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V")
     private void onUpdateRenderState(AbstractClientPlayerEntity abstractClientPlayerEntity, PlayerEntityRenderState playerEntityRenderState, float f, CallbackInfo ci) {
         if (playerEntityRenderState.displayName instanceof Text text) {
-            if (nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof String team)
+            if (config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof String team)
                 playerEntityRenderState.displayName = text.copy().setStyle(text.getStyle().withColor(
                         switch (team) {
                             case "ally" -> Formatting.AQUA;

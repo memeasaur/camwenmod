@@ -8,13 +8,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.Configs.Config.isWeakAttackSoundDisabled;
+import static com.example.UntitledClient.config;
 
 @Mixin(SoundManager.class)
 public class SoundManagerMixin {
     @Inject(method = "play", at = @At("HEAD"), cancellable = true)
     void onPlay(SoundInstance soundInstance, CallbackInfo ci) {
-        if (isWeakAttackSoundDisabled && soundInstance.getId().equals(SoundEvents.ENTITY_PLAYER_ATTACK_WEAK.id())) {
+        if (config.isWeakAttackSoundDisabled && soundInstance.getId().equals(SoundEvents.ENTITY_PLAYER_ATTACK_WEAK.id())) {
             ci.cancel();
         }
     }

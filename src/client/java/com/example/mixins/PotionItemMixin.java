@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static com.example.Configs.Config.currentPotionEnchantmentGlintType;
+import static com.example.UntitledClient.config;
 
 @Mixin(PotionItem.class)
 public class PotionItemMixin extends Item {
@@ -16,7 +16,7 @@ public class PotionItemMixin extends Item {
     }
     @Override
     public boolean hasGlint(ItemStack stack) {
-        if (currentPotionEnchantmentGlintType.equals("1.8")) {
+        if (config.currentPotionEnchantmentGlintType.equals("1.8")) {
             PotionContentsComponent potionContents = stack.get(DataComponentTypes.POTION_CONTENTS);
             return super.hasGlint(stack) || (potionContents != null && potionContents.hasEffects());
         } else {

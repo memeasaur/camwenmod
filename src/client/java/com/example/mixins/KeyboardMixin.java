@@ -4,7 +4,6 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.text.Text;
@@ -23,8 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.Configs.CheatConfig.*;
-import static com.example.Configs.Config.*;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.Screens.Constants.*;
@@ -56,9 +53,9 @@ public class KeyboardMixin {
             int action,
             int modifiers,
             CallbackInfo ci) {
-        if (isMovementToggleMirrorPressDisabling) {
-            if (getIsKeyBindingPressed(SNEAK_VANILLA) == isSneakEnabled
-                    && getIsKeyBindingPressed(SPRINT_VANILLA) == isSprintEnabled
+        if (config.isMovementToggleMirrorPressDisabling) {
+            if (getIsKeyBindingPressed(SNEAK_VANILLA) == config.isSneakEnabled
+                    && getIsKeyBindingPressed(SPRINT_VANILLA) == config.isSprintEnabled
                     && getIsKeyBindingPressed(JUMP_VANILLA) == isJumpEnabled
                     && getIsKeyBindingPressed(FORWARD_VANILLA) == isForwardEnabled
                     && getIsKeyBindingPressed(LEFT_VANILLA) == isLeftEnabled
@@ -90,43 +87,43 @@ public class KeyboardMixin {
 
         if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
             if (!isSneakToggleButtonPressed)
-                isSneakEnabled = !isSneakEnabled;
+                config.isSneakEnabled = !config.isSneakEnabled;
             while (SNEAK_TOGGLE.wasPressed()) {
             }
         } else
             isSneakToggleButtonPressed = false;
         if (getIsKeyBindingPressed(SNEAK_ENABLE)) { // TODO these could benefit from the handling above too, but they aren't toggled so w/e
-            isSneakEnabled = true;
+            config.isSneakEnabled = true;
             while (SNEAK_ENABLE.wasPressed()) {
             }
         }
         if (getIsKeyBindingPressed(SNEAK_DISABLE)) {
-            isSneakEnabled = false;
+            config.isSneakEnabled = false;
             while (SNEAK_DISABLE.wasPressed()) {
             }
         }
 
         while (SPRINT_TOGGLE.wasPressed())
-            isSprintEnabled = !isSprintEnabled;
+            config.isSprintEnabled = !config.isSprintEnabled;
         while (SPRINT_ENABLE.wasPressed())
-            isSprintEnabled = true;
+            config.isSprintEnabled = true;
         while (SPRINT_DISABLE.wasPressed())
-            isSprintEnabled = false;
+            config.isSprintEnabled = false;
 
         if (getIsKeyBindingPressed(FULLBRIGHT_TOGGLE)) {
             if (!isFullbrightToggleButtonPressed)
-                isFullbrightEnabled = !isFullbrightEnabled;
+                config.isFullbrightEnabled = !config.isFullbrightEnabled;
             while (FULLBRIGHT_TOGGLE.wasPressed()) {
             }
         } else
             isFullbrightToggleButtonPressed = false;
         if (getIsKeyBindingPressed(FULLBRIGHT_ENABLE)) { // TODO: see -> sneak handling meme
-            isFullbrightEnabled = true;
+            config.isFullbrightEnabled = true;
             while (FULLBRIGHT_ENABLE.wasPressed()) {
             }
         }
         if (getIsKeyBindingPressed(FULLBRIGHT_DISABLE)) {
-            isFullbrightEnabled = false;
+            config.isFullbrightEnabled = false;
             while (FULLBRIGHT_DISABLE.wasPressed()) {
             }
         }
@@ -134,7 +131,7 @@ public class KeyboardMixin {
         while (ALLY_TOGGLE.wasPressed())
             if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(nameplateUuids.get(playerUuid), "ally"))
+                if (Objects.equals(config.nameplateUuids.get(playerUuid), "ally"))
                     removeNameplateUuidEntry(playerUuid);
                 else
                     putNameplateUuidEntry(Map.entry(playerUuid, "ally"));
@@ -142,7 +139,7 @@ public class KeyboardMixin {
         while (ENEMY_TOGGLE.wasPressed())
             if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(nameplateUuids.get(playerUuid), "enemy"))
+                if (Objects.equals(config.nameplateUuids.get(playerUuid), "enemy"))
                     removeNameplateUuidEntry(playerUuid);
                 else
                     putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
@@ -150,7 +147,7 @@ public class KeyboardMixin {
         while (FOCUS_TOGGLE.wasPressed())
             if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(nameplateUuids.get(playerUuid), "focus"))
+                if (Objects.equals(config.nameplateUuids.get(playerUuid), "focus"))
                     removeNameplateUuidEntry(playerUuid);
                 else
                     putNameplateUuidEntry(Map.entry(playerUuid, "focus"));
@@ -158,7 +155,7 @@ public class KeyboardMixin {
         while (NAMEPLATE_CYCLE.wasPressed())
             if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
                 UUID playerUuid = playerEntity.getUuid();
-                switch (nameplateUuids.getOrDefault(playerUuid, "")) {
+                switch (config.nameplateUuids.getOrDefault(playerUuid, "")) {
                     case "ally" -> putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
                     case "enemy" -> putNameplateUuidEntry(Map.entry(playerUuid, "focus"));
                     case "focus" -> removeNameplateUuidEntry(playerUuid);
@@ -183,23 +180,23 @@ public class KeyboardMixin {
             // Cheats end
         }
 
-        for (Map.Entry<Integer, KeyBinding> entry : duplicateKeybinds.entrySet()) {
-            int entryKey = entry.getKey();
-            if (getIsKeyPressed(entryKey)) {
-                if (!pressedDuplicateKeybindKeys.contains(entryKey)) {
-                    entry.getValue().setPressed(true);
-                    pressedDuplicateKeybindKeys.add(entryKey);
-                }
-            } else if (pressedDuplicateKeybindKeys.contains(entryKey)) {
-                pressedDuplicateKeybindKeys.remove(entryKey);
-                KeyBinding keyBinding = entry.getValue();
-                keyBinding.setPressed(getIsKeyBindingPressed(keyBinding));
-            }
-        }
+//        for (Map.Entry<Integer, KeyBinding> entry : config.duplicateKeybinds.entrySet()) {
+//            int entryKey = entry.getKey();
+//            if (getIsKeyPressed(entryKey)) {
+//                if (!pressedDuplicateKeybindKeys.contains(entryKey)) {
+//                    entry.getValue().setPressed(true);
+//                    pressedDuplicateKeybindKeys.add(entryKey);
+//                }
+//            } else if (pressedDuplicateKeybindKeys.contains(entryKey)) {
+//                pressedDuplicateKeybindKeys.remove(entryKey);
+//                KeyBinding keyBinding = entry.getValue();
+//                keyBinding.setPressed(getIsKeyBindingPressed(keyBinding));
+//            }
+//        }
 
         // Cheats start
         if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null) { // TODO config this (?)
-            if (getIsKeyPressed(glfwToggleBlockXrayKeybind)) {
+            if (getIsKeyPressed(cheatConfig.glfwToggleBlockXrayKeybind)) {
                 if (!isBlockToggleKeyPressed) {
                     isBlockToggleKeyPressed = true;
                     currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
@@ -208,7 +205,7 @@ public class KeyboardMixin {
             } else
                 isBlockToggleKeyPressed = false;
 
-            if (getIsKeyPressed(glfwTogglePlayerXrayKeybind)) {
+            if (getIsKeyPressed(cheatConfig.glfwTogglePlayerXrayKeybind)) {
                 if (!isPlayerToggleKeyPressed) {
                     isPlayerToggleKeyPressed = true;
                     currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
@@ -216,10 +213,10 @@ public class KeyboardMixin {
                 }
             } else
                 isPlayerToggleKeyPressed = false;
-            if (getIsKeyPressed(glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
+            if (getIsKeyPressed(cheatConfig.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
                 if (!isAutoclickerToggleKeyPressed) {
                     isAutoclickerToggleKeyPressed = true;
-                    if (immutableRecordedAutoclickerClicks.length == 0) {
+                    if (cheatConfig.immutableRecordedAutoclickerClicks.length == 0) {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
@@ -239,10 +236,10 @@ public class KeyboardMixin {
             } else {
                 isAutoclickerToggleKeyPressed = false;
             }
-            if (getIsKeyPressed(glfwEnableAutoclickerKeybind)) {
+            if (getIsKeyPressed(cheatConfig.glfwEnableAutoclickerKeybind)) {
                 if (!isAutoclickerEnableKeyPressed) {
                     isAutoclickerEnableKeyPressed = true;
-                    if (immutableRecordedAutoclickerClicks.length == 0) {
+                    if (cheatConfig.immutableRecordedAutoclickerClicks.length == 0) {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
@@ -257,7 +254,7 @@ public class KeyboardMixin {
                 }
             } else
                 isAutoclickerEnableKeyPressed = false;
-            if (getIsKeyPressed(glfwDisableAutoclickerKeybind)) {
+            if (getIsKeyPressed(cheatConfig.glfwDisableAutoclickerKeybind)) {
                 if (!isAutoclickerDisableKeyPressed) {
                     isAutoclickerDisableKeyPressed = true;
                     GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
@@ -266,7 +263,7 @@ public class KeyboardMixin {
                 }
             } else
                 isAutoclickerDisableKeyPressed = false;
-            if (getIsKeyPressed(glfwToggleMirrorMovementKeybind)) {
+            if (getIsKeyPressed(cheatConfig.glfwToggleMirrorMovementKeybind)) {
                 if (nullableMirrorMovementPlayer != null) {
                     nullableMirrorMovementPlayer = null;
                 } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
@@ -293,8 +290,8 @@ public class KeyboardMixin {
 
     @Unique
     private void doMovementToggleEnable() {
-        isSneakEnabled = getIsKeyBindingPressed(SNEAK_VANILLA);
-        isSprintEnabled = getIsKeyBindingPressed(SPRINT_VANILLA);
+        config.isSneakEnabled = getIsKeyBindingPressed(SNEAK_VANILLA);
+        config.isSprintEnabled = getIsKeyBindingPressed(SPRINT_VANILLA);
 
         isJumpEnabled = getIsKeyBindingPressed(JUMP_VANILLA);
         isForwardEnabled = getIsKeyBindingPressed(FORWARD_VANILLA);
