@@ -19,7 +19,7 @@
 	>works on their zombie as well
 
 >20cps random double clicker w/o flagging vulcan:
-    >maybe I should do better than spacing out the double clicks randomly from 50-75, maybe it should ramp up on it's own as well
+    >maybe the doubles should ramp up differently?
 >20cps ac w/o flagging vulcan:
     >if I get this to not flag, I could have it instead of holding down my left click, just use my live clicks as the sequence
     >need to increase kurtosis to make vulcan not flag, consider doing skewness as well

@@ -99,13 +99,15 @@ public class Constants {
             } else {
                 streak++;
             }
-            final int peakStreak = 30;
-            final float peakStreakPercentage = Math.min(
-                    1.f,
-                    (float) streak / peakStreak);
+            final int peakStreak = 15; // TODO -> this shouldn't be a constant
+//            final float peakStreakProgress = Math.min(
+//                    1.f,
+//                    (float) streak / peakStreak);
+            float x = Math.min(1.0f, (float) streak / peakStreak);
+            float peakStreakProgress = x * x * (3.0f - 2.0f * x);
 
             final int doubleClickPercentage = 54;
-            if (ThreadLocalRandom.current().nextFloat() < peakStreakPercentage &&
+            if (ThreadLocalRandom.current().nextFloat() < peakStreakProgress &&
                     ThreadLocalRandom.current().nextInt(100) < doubleClickPercentage) {
                 randomDoubleClickExecutor.schedule(
                         () -> {
