@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
@@ -28,9 +27,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
-import static com.example.Configs.Config.*;
 import static com.example.Configs.Utils.init;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
@@ -38,6 +35,8 @@ import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
+    public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
+    public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
     //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
 //    static {
@@ -94,41 +93,39 @@ public class UntitledClient implements ClientModInitializer {
         ));
     }
 
-    public static Map<UUID, String> nameplateUuids; // TODO move to config
+//    static {
+//        try {
+//            if (getDeserializedJsonBlocking("nameplates", ) instanceof Map map)
+//                nameplateUuids = ((Map<String, String>) map).entrySet().stream()
+//                        .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
+//            else
+//                nameplateUuids = Map.of();
+//        } catch (Exception e) {
+//            var client = MinecraftClient.getInstance();
+//            if (client.player instanceof ClientPlayerEntity player)
+//                client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
+//            // TODO -> console this
+//        }
+//    }
 
-    static {
-        try {
-            if (getDeserializedJsonBlocking("nameplates", ) instanceof Map map)
-                nameplateUuids = ((Map<String, String>) map).entrySet().stream()
-                        .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
-            else
-                nameplateUuids = Map.of();
-        } catch (Exception e) {
-            var client = MinecraftClient.getInstance();
-            if (client.player instanceof ClientPlayerEntity player)
-                client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
-            // TODO -> console this
-        }
-    }
+//    public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
 
-    public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
-
-    static {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                if (getDeserializedJsonBlocking("duplicateKeybinds") instanceof Map map)
-                    duplicateKeybinds = null; //((Map<Integer, Integer>)map);
-                else
-                    duplicateKeybinds = Map.of(); // GLFW.GLFW_KEY_G, USE_VANILLA
-            } catch (Exception e) {
-                var client = MinecraftClient.getInstance();
-                if (client.player instanceof ClientPlayerEntity player)
-                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
-                // TODO -> console this
-            }
-        }).start();
-    }
+//    static {
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(1000);
+//                if (getDeserializedJsonBlocking("duplicateKeybinds", ) instanceof Map map)
+//                    duplicateKeybinds = null; //((Map<Integer, Integer>)map);
+//                else
+//                    duplicateKeybinds = Map.of(); // GLFW.GLFW_KEY_G, USE_VANILLA
+//            } catch (Exception e) {
+//                var client = MinecraftClient.getInstance();
+//                if (client.player instanceof ClientPlayerEntity player)
+//                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
+//                // TODO -> console this
+//            }
+//        }).start();
+//    }
 
     //    public static final KeyBinding KEYBIND_CONSOLE = getAbstractPvpUtilsKeybind("Console"); TODO
     public static boolean isDebugModeEnabled = false;
@@ -250,7 +247,7 @@ public class UntitledClient implements ClientModInitializer {
 //                player.sendMessage(Text.of(String.valueOf(player.isUsingItem())), false);
 //            } TODO finish (?)
             if (client.player instanceof ClientPlayerEntity player) {
-                if (isAttackCooldownNotificationEnabled) {
+                if (config.isAttackCooldownNotificationEnabled) {
                     float f = player.getAttackCooldownProgress(.5f);
                     if (f >= 1.0f && isAttackCooldown && lastAttackCooldownProgress != 1.0f) {
                         player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), 1, 1);
@@ -282,7 +279,7 @@ public class UntitledClient implements ClientModInitializer {
                             (context, v) -> {
                                 StringBuilder stringBuilder = new StringBuilder("[");
                                 boolean flag = false;
-                                if (isToggleSneakGuiEnabled) {
+                                if (config.isToggleSneakGuiEnabled) {
                                     if (isForwardEnabled) {
                                         stringBuilder.append("Forward");
                                         flag = true;
@@ -298,7 +295,7 @@ public class UntitledClient implements ClientModInitializer {
                                         boolean isSprintingElseDone = player.isSprinting() && !isFlying; // TODO probably can't do both of these anyway
                                         boolean isSneakingElseDone = isSneaking && !isFlying;
                                         if (isSprintingElseDone &&
-                                                (isSprintEnabled || OPTIONS.getSprintToggled().getValue())) {
+                                                (config.isSprintEnabled || OPTIONS.getSprintToggled().getValue())) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sprinting");
@@ -306,7 +303,7 @@ public class UntitledClient implements ClientModInitializer {
                                             isSprintingElseDone = false;
                                         }
                                         if (isSneakingElseDone &&
-                                                (isSneakEnabled || OPTIONS.getSneakToggled().getValue())) {
+                                                (config.isSneakEnabled || OPTIONS.getSneakToggled().getValue())) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sneaking");
@@ -376,7 +373,7 @@ public class UntitledClient implements ClientModInitializer {
                                             0xffffff);
                                 }
 
-                                if (isAttackIndicatorDataEnabled &&
+                                if (config.isAttackIndicatorDataEnabled &&
                                         (!lastHitDistance.isEmpty() || lastHitStrength != EMPTY_TEXT)) {
                                     Text text = Text.literal(lastHitDistance + " ").append(lastHitStrength);
                                     context.drawTextWithShadow(TEXT_RENDERER,
@@ -408,7 +405,7 @@ public class UntitledClient implements ClientModInitializer {
                         .writeMaskState(RenderPhase.COLOR_MASK)
                         .build(false)); // TODO ?
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            if (!isPlayerWaypointsEnabled) {
+            if (!cheatConfig.isPlayerWaypointsEnabled) {
                 return;
             }
 

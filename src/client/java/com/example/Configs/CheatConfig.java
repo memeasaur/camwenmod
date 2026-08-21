@@ -8,7 +8,6 @@ import static com.example.Configs.Utils.handleSave;
 public class CheatConfig {
     public boolean isGuiCheatsPvpDisabling = true;
 
-    TODO;
     public int[][] immutableRecordedAutoclickerClicks = new int[0][];
     public MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
     public float autoclickerStartingMultiplier = 1.f;
@@ -41,7 +40,5 @@ public class CheatConfig {
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
-    public void saveCheatConfig() {
-        handleSave("cheat-config", CheatConfig.class);
-    }
+    public void saveCheatConfig() {handleSave("cheat-config", CheatConfig.class);}
 }

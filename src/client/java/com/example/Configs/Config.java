@@ -1,9 +1,13 @@
 package com.example.Configs;
 
+import java.util.Map;
+import java.util.UUID;
+
 import static com.example.Configs.Utils.handleSave;
 
 public class Config {
     // TODO -> serialize configs in server (?)
+    public Map<UUID, String> nameplateUuids;
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
