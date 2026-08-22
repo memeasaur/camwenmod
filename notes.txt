@@ -3,6 +3,8 @@
 >add brackets everywhere that I decided not to use them
 
 >rally that places an on-screen waypoint
+    >should work for drops, too
+    >should also be able to play team permanent waypoints like hasa etc.
 >teammate api that lets you see their health and current location in the world
 	>/focus
 	>can see teammates inventories, can see their remaining consumables above head
@@ -26,6 +28,7 @@
     >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
     >autoclicker shouldn't click in inventory when the mouse is holding something and the hovered slot is that same thing
 >automatic head run (legit):
+
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 
