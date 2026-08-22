@@ -21,9 +21,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
@@ -418,87 +421,98 @@ public class UntitledClient implements ClientModInitializer {
 
             TODO; // method for converting world-space into screen-space
             for (PlayerEntity player : context.world().getPlayers()) {
-                Vec3d pos = player.getLerpedPos(tickDelta)
-                        .add(0, player.getHeight() + 0.5, 0);
-
-                matrices.push();
-                matrices.translate(
-                        pos.x - cameraPos.x,
-                        pos.y - cameraPos.y,
-                        pos.z - cameraPos.z);
-                matrices.multiply(camera.getRotation());
-                // diamond TODO -> player heads
-                {
-                    matrices.push();
-                    float size = 0.25f;
-                    matrices.scale(size, size, size);
-                    assert context.consumers() != null;
-                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-                    Vector3f Top = new Vector3f(0, 1, 0);
-                    Vector3f Bottom = new Vector3f(0, -1, 0);
-                    Vector3f Left = new Vector3f(-1, 0, 0);
-                    Vector3f Right = new Vector3f(1, 0, 0);
-                    MatrixStack.Entry entry = matrices.peek();
-                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
-                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-
-                    {
-                        Vector3f forward = new Vector3f(0, 0, -1);
-                        camera.getRotation().transform(forward);
-                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-                        if (look.dotProduct(toMarker) > 0.995) {
-//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-                        }
-                    }
-                    matrices.pop();
-                }
-                // distance
-                {
-                    var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
-                    matrices.push();
-                    matrices.scale(0.025f, -0.025f, 0.025f);
-                    String text = String.format("%.1fm", cameraPos.distanceTo(pos));
-                    float x = -textRenderer.getWidth(text) / 2.0f;
-                    textRenderer.draw(
-                            Text.literal(text),
-                            x,
-                            0,
-                            0xFFFFFFFF,
-                            false,
-                            matrices.peek().getPositionMatrix(),
-                            context.consumers(),
-                            TextRenderer.TextLayerType.SEE_THROUGH,
-                            0,
-                            0xF000F0
-                    );
-                    matrices.pop();
-                }
-                // TODO name
-                {
-                    // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
-//                    TODO; -> should only appear when looked at
-                    // TODO -> extra info should also appear when moused over
-                }
-                matrices.pop();
+                TODO;
             }
-//            TODO; // players out of the view should have markers drawn on the edge of the screen
-//            for (VisiblePlayer player : getPlayers()) {
-//                if (context.world().getPlayers().stream().anyMatch(each -> each.getUuid().equals(player.getTableEntry().getUuid()))) {
-//                    continue;
-//                }
-//
-//            }
             if (supabaseManager != null) {
                 for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
                     TODO;
                 }
             }
         });
+    }
+
+    private void drawPlayerWaypoint(Vec3d pos, Camera camera, Matrix4f projection) {
+//        Vec3d pos = player.getLerpedPos(tickDelta)
+//                .add(0, player.getHeight() + 0.5, 0);
+        Vec3d relative = pos.subtract(camera.getPos());
+
+        Vector4f clipPos = new Vector4f(
+                (float) relative.x,
+                (float) relative.y,
+                (float) relative.z,
+                1.0f
+        );
+        camera.getRotation().transform(clipPos);
+        projection.transform(clipPos);
+
+        float x = clipPos.x() / clipPos.w();
+        float y = clipPos.y() / clipPos.w();
+        Vec2f screenPos = new Vec2f(x, y);
+
+        matrices.push();
+        matrices.translate(
+                pos.x - cameraPos.x,
+                pos.y - cameraPos.y,
+                pos.z - cameraPos.z);
+        matrices.multiply(camera.getRotation());
+        // diamond TODO -> player heads
+        {
+            matrices.push();
+            float size = 0.25f;
+            matrices.scale(size, size, size);
+            assert context.consumers() != null;
+            VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+            Vector3f Top = new Vector3f(0, 1, 0);
+            Vector3f Bottom = new Vector3f(0, -1, 0);
+            Vector3f Left = new Vector3f(-1, 0, 0);
+            Vector3f Right = new Vector3f(1, 0, 0);
+            MatrixStack.Entry entry = matrices.peek();
+            Foo.vertex(entry, Top).color(255, 0, 0, 175);
+            Foo.vertex(entry, Left).color(255, 0, 0, 175);
+            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+            Foo.vertex(entry, Top).color(255, 0, 0, 175);
+            Foo.vertex(entry, Right).color(255, 0, 0, 175);
+            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+
+            {
+                Vector3f forward = new Vector3f(0, 0, -1);
+                camera.getRotation().transform(forward);
+                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+                if (look.dotProduct(toMarker) > 0.995) {
+//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+                }
+            }
+            matrices.pop();
+        }
+        // distance
+        {
+            var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
+            matrices.push();
+            matrices.scale(0.025f, -0.025f, 0.025f);
+            String text = String.format("%.1fm", cameraPos.distanceTo(pos));
+            float x = -textRenderer.getWidth(text) / 2.0f;
+            textRenderer.draw(
+                    Text.literal(text),
+                    x,
+                    0,
+                    0xFFFFFFFF,
+                    false,
+                    matrices.peek().getPositionMatrix(),
+                    context.consumers(),
+                    TextRenderer.TextLayerType.SEE_THROUGH,
+                    0,
+                    0xF000F0
+            );
+            matrices.pop();
+        }
+        // TODO name
+        {
+            // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
+//                    TODO; -> should only appear when looked at
+            // TODO -> extra info should also appear when moused over
+        }
+        matrices.pop();
     }
 
     private static boolean handleGetIsEnabled(
