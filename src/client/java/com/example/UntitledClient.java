@@ -422,18 +422,19 @@ public class UntitledClient implements ClientModInitializer {
             TODO; // method for converting world-space into screen-space
             for (PlayerEntity player : context.world().getPlayers()) {
                 TODO;
+                //        Vec3d pos = player.getLerpedPos(tickDelta)
+//                .add(0, player.getHeight() + 0.5, 0);
+                drawPlayerWaypoint();
             }
             if (supabaseManager != null) {
                 for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
-                    TODO;
+                    drawPlayerWaypoint();
                 }
             }
         });
     }
 
     private void drawPlayerWaypoint(Vec3d pos, Camera camera, Matrix4f projection) {
-//        Vec3d pos = player.getLerpedPos(tickDelta)
-//                .add(0, player.getHeight() + 0.5, 0);
         Vec3d relative = pos.subtract(camera.getPos());
 
         Vector4f clipPos = new Vector4f(
