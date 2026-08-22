@@ -414,7 +414,7 @@ public class UntitledClient implements ClientModInitializer {
             Vec3d cameraPos = camera.getPos();
             float tickDelta = context.tickCounter().getTickDelta(false);
 
-//            TODO; // this should only do it if the player is visible in the view
+            TODO; // method for converting world-space into screen-space
             for (PlayerEntity player : context.world().getPlayers()) {
                 Vec3d pos = player.getLerpedPos(tickDelta)
                         .add(0, player.getHeight() + 0.5, 0);
@@ -425,7 +425,7 @@ public class UntitledClient implements ClientModInitializer {
                         pos.y - cameraPos.y,
                         pos.z - cameraPos.z);
                 matrices.multiply(camera.getRotation());
-                // diamond
+                // diamond TODO -> player heads
                 {
                     matrices.push();
                     float size = 0.25f;
@@ -476,10 +476,11 @@ public class UntitledClient implements ClientModInitializer {
                     );
                     matrices.pop();
                 }
-                // name
+                // TODO name
                 {
                     // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
-//                    TODO; -> should only appear when looked at?
+//                    TODO; -> should only appear when looked at
+                    // TODO -> extra info should also appear when moused over
                 }
                 matrices.pop();
             }
