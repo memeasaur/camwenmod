@@ -35,7 +35,7 @@ val supabaseClient: SupabaseClient = createSupabaseClient(
     install(Realtime)
 }
 
-class SupabaseManager(loginEmail: String) {
+class SupabaseManager(loginEmail: String, loginCode: String) {
     // TODO -> data?
 
     class VisiblePlayer(
@@ -43,6 +43,7 @@ class SupabaseManager(loginEmail: String) {
     ) {
         val inventorySlots: Array<ItemStack> = Array(36) { ItemStack.EMPTY }
     }
+
     @Serializable
     data class VisiblePlayerTableEntry(
         val uuid: UUID,
@@ -59,28 +60,33 @@ class SupabaseManager(loginEmail: String) {
         @SerialName("health_consumables_used")
         val healthConsumablesUsed: Int
     )
+
     @Serializable
     data class AccountInventorySlotsEntry(
         val uuid: String,
         val index: Int,
     )
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    val players = ArrayList<VisiblePlayer>()
+    private val scope =
+        CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    suspend fun sendEmail() {
+    init {
+        TODO;
         supabaseClient.auth.signInWith(OTP) {
             this.email = loginEmail
         }
-    }
-    suspend fun tryVerifyOtp(token: String) {
-        try {
-            supabaseClient.auth.verifyEmailOtp(OtpType.Email.EMAIL, , token)
-        } catch (e: Exception) {
-            TODO
-            println("Error: ${e.message}")
+        scope.launch {
+            try {
+                supabaseClient.auth.verifyEmailOtp(OtpType.Email.EMAIL,, token)
+            } catch (e: Exception) {
+                TODO
+                println("Error: ${e.message}")
+            }
         }
     }
+
+    val players = ArrayList<VisiblePlayer>()
+
     suspend fun onLogin(): ArrayList<VisiblePlayer> {
         val result = ArrayList<VisiblePlayer>()
         // party_visible_accounts
