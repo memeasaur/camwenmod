@@ -159,7 +159,7 @@ public class Constants {
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
                         if (threadClient.currentScreen != null &&
-                                (!cheatConfig.isAutoClickInventoryEnabled || !(threadClient.currentScreen instanceof InventoryScreen && getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)))) {
+                                (!(threadClient.currentScreen instanceof InventoryScreen || !cheatConfig.isAutoClickInventoryEnabled || !getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)))) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
                             firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
