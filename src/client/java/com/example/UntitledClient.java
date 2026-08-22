@@ -23,6 +23,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
@@ -426,45 +427,45 @@ public class UntitledClient implements ClientModInitializer {
                 matrices.multiply(camera.getRotation());
                 // diamond
                 {
-//                    matrices.push();
-//                    float size = 0.25f;
-//                    matrices.scale(size, size, size);
-//                    assert context.consumers() != null;
-//                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-//                    Vector3f Top = new Vector3f(0, 1, 0);
-//                    Vector3f Bottom = new Vector3f(0, -1, 0);
-//                    Vector3f Left = new Vector3f(-1, 0, 0);
-//                    Vector3f Right = new Vector3f(1, 0, 0);
-//                    MatrixStack.Entry entry = matrices.peek();
-//                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-//                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
-//                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-//                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
-//                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
-//                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-//
-//                    {
-//                        Vector3f forward = new Vector3f(0, 0, -1);
-//                        camera.getRotation().transform(forward);
-//                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-//                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-//                        if (look.dotProduct(toMarker) > 0.995) {
-////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-//                        }
-//                    }
-//                    matrices.pop();
+                    matrices.push();
+                    float size = 0.25f;
+                    matrices.scale(size, size, size);
+                    assert context.consumers() != null;
+                    VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+                    Vector3f Top = new Vector3f(0, 1, 0);
+                    Vector3f Bottom = new Vector3f(0, -1, 0);
+                    Vector3f Left = new Vector3f(-1, 0, 0);
+                    Vector3f Right = new Vector3f(1, 0, 0);
+                    MatrixStack.Entry entry = matrices.peek();
+                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Left).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Top).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Right).color(255, 0, 0, 175);
+                    Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+
+                    {
+                        Vector3f forward = new Vector3f(0, 0, -1);
+                        camera.getRotation().transform(forward);
+                        Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+                        Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+                        if (look.dotProduct(toMarker) > 0.995) {
+//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+                        }
+                    }
+                    matrices.pop();
                 }
                 // distance
                 {
                     var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
                     matrices.push();
-                    matrices.scale(-0.025f, -0.025f, 0.025f);
-                    String text = String.format("%.1fm", camera.getPos().distanceTo(pos));
-
+                    matrices.scale(0.025f, -0.025f, 0.025f);
+                    String text = String.format("%.1fm", cameraPos.distanceTo(pos));
+                    float x = -textRenderer.getWidth(text) / 2.0f;
                     textRenderer.draw(
                             Text.literal(text),
-                            (float) -textRenderer.getWidth(text) / 2,
-                            (float) -textRenderer.fontHeight / 2,
+                            x,
+                            0,
                             0xFFFFFFFF,
                             false,
                             matrices.peek().getPositionMatrix(),
