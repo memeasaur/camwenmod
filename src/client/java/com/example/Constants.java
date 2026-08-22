@@ -15,20 +15,18 @@ import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.net.http.HttpClient;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
 
-import static com.example.Configs.CheatConfig.*;
 import static com.example.DelayedClientState.ATTACK_VANILLA;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.getIsKeyPressed;
 import static org.joml.Math.lerp;
 
 public class Constants {
-    public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
+//    public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
     public static final Gson GSON = new Gson();
     public static final Random RANDOM = new Random(); // TODO remove
