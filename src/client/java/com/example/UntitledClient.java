@@ -37,6 +37,8 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
     static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
+    @Nullable
+    static private SupabaseManager supabaseManager = new SupabaseManager("foo", "bar");
     //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
 //    static {
@@ -490,8 +492,12 @@ public class UntitledClient implements ClientModInitializer {
 //                    continue;
 //                }
 //
-//            TODO; // supabase players
 //            }
+            if (supabaseManager != null) {
+                for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
+                    TODO;
+                }
+            }
         });
     }
 

@@ -20,10 +20,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
 import java.util.UUID
 
 val supabaseClient: SupabaseClient = createSupabaseClient(
@@ -33,6 +36,12 @@ val supabaseClient: SupabaseClient = createSupabaseClient(
     install(Auth)
     install(Postgrest)
     install(Realtime)
+}
+
+suspend fun onEmailEntered(email: String) {
+    supabaseClient.auth.signInWith(OTP) {
+        this.email = email
+    }
 }
 
 class SupabaseManager(loginEmail: String, loginCode: String) {
@@ -67,92 +76,77 @@ class SupabaseManager(loginEmail: String, loginCode: String) {
         val index: Int,
     )
 
-    private val scope =
-        CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-    init {
-        TODO;
-        supabaseClient.auth.signInWith(OTP) {
-            this.email = loginEmail
-        }
-        scope.launch {
-            try {
-                supabaseClient.auth.verifyEmailOtp(OtpType.Email.EMAIL,, token)
-            } catch (e: Exception) {
-                TODO
-                println("Error: ${e.message}")
-            }
-        }
-    }
-
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     val players = ArrayList<VisiblePlayer>()
 
-    suspend fun onLogin(): ArrayList<VisiblePlayer> {
-        val result = ArrayList<VisiblePlayer>()
-        // party_visible_accounts
-        run {
-            val buffer = Channel<PostgresAction>(Channel.UNLIMITED)
-            val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
-            scope.launch {
-                partyVisibleAccountsChannel.postgresChangeFlow<PostgresAction>("public") {
-                    table = "party_visible_accounts"
-                }
-                    .collect { action -> buffer.send(action) }
-            }
-            partyVisibleAccountsChannel.subscribe(true)
-            result.addAll(
-                supabaseClient.from("party_visible_accounts")
-                    .select()
-                    .decodeList<VisiblePlayerTableEntry>()
-                    .map { each -> VisiblePlayer(each) }
-            )
-            ClientTickEvents.START_CLIENT_TICK.register { client ->
-                while (true) { // TODO ?
-                    val action = buffer.tryReceive().getOrNull();
-                    if (action == null) {
-                        break;
+    init {
+        runBlocking { // TODO -> async?
+            try {
+                supabaseClient.auth.verifyEmailOtp(OtpType.Email.EMAIL, loginEmail, loginCode)
+                // party_visible_accounts
+                run {
+                    val buffer = Channel<PostgresAction>(Channel.UNLIMITED)
+                    val partyVisibleAccountsChannel = supabaseClient.realtime.channel("party_visible_accounts")
+                    scope.launch {
+                        partyVisibleAccountsChannel.postgresChangeFlow<PostgresAction>("public") {
+                            table = "party_visible_accounts"
+                        }
+                            .collect { action -> buffer.send(action) }
                     }
-
-                    when (action) {
-                        is PostgresAction.Insert -> {
-                            val new = VisiblePlayer(action.decodeRecord<VisiblePlayerTableEntry>())
-                            players.add(new)
-                        }
-
-                        is PostgresAction.Delete -> {
-                            val index = players.indexOfFirst {
-                                it.tableEntry.uuid == action.decodeOldRecord<VisiblePlayerTableEntry>().uuid
+                    partyVisibleAccountsChannel.subscribe(true)
+                    players.addAll(
+                        supabaseClient.from("party_visible_accounts")
+                            .select()
+                            .decodeList<VisiblePlayerTableEntry>()
+                            .map { each -> VisiblePlayer(each) }
+                    )
+                    ClientTickEvents.START_CLIENT_TICK.register { _ ->
+                        while (true) { // TODO ?
+                            val action = buffer.tryReceive().getOrNull();
+                            if (action == null) {
+                                break;
                             }
-                            if (index != -1) {
-                                players.removeAt(index)
-                            } else {
-                                // TODO
-                            }
-                        }
 
-                        is PostgresAction.Update -> {
-                            val new = action.decodeRecord<VisiblePlayerTableEntry>()
-                            val index = players.indexOfFirst {
-                                it.tableEntry.uuid == new.uuid
-                            }
-                            if (index == -1) {
-                                // TODO ?
-                                players.add(VisiblePlayer(new))
-                            } else {
-                                players[index].tableEntry = new
-                            }
-                        }
+                            when (action) {
+                                is PostgresAction.Insert -> {
+                                    val new = VisiblePlayer(action.decodeRecord<VisiblePlayerTableEntry>())
+                                    players.add(new)
+                                }
 
-                        else -> {
-                            // TODO -> crash?
-                            Unit
+                                is PostgresAction.Delete -> {
+                                    val index = players.indexOfFirst {
+                                        it.tableEntry.uuid == action.decodeOldRecord<VisiblePlayerTableEntry>().uuid
+                                    }
+                                    if (index != -1) {
+                                        players.removeAt(index)
+                                    } else {
+                                        // TODO
+                                    }
+                                }
+
+                                is PostgresAction.Update -> {
+                                    val new = action.decodeRecord<VisiblePlayerTableEntry>()
+                                    val index = players.indexOfFirst {
+                                        it.tableEntry.uuid == new.uuid
+                                    }
+                                    if (index == -1) {
+                                        // TODO ?
+                                        players.add(VisiblePlayer(new))
+                                    } else {
+                                        players[index].tableEntry = new
+                                    }
+                                }
+
+                                else -> {
+                                    // TODO -> crash?
+                                    Unit
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
 
-        // account_inventory_slots
+                // account_inventory_slots
 //    run {
 //        val buffer = Channel<PostgresAction>(Channel.UNLIMITED)
 //        val accountInventorySlotsChannel = supabaseClient.realtime.channel("account_inventory_slots")
@@ -175,6 +169,9 @@ class SupabaseManager(loginEmail: String, loginCode: String) {
 //            TODO;
 //        }
 //    }
-        return result
+            } catch (e: Exception) {
+                MinecraftClient.getInstance().player?.sendMessage(Text.literal("login error: " + e.localizedMessage), false)
+            }
+        }
     }
 }
