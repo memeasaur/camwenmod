@@ -152,6 +152,9 @@ public class Constants {
                     int currentAutoclickerIndex = 1; // this is accounting for the initial mouse press, which is used
                     int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
+                        TODO; // -> differentiate between ramping clicks and peak clicks
+                        TODO; // extend the ramp-up ones so kurtosis doesn't change
+                        TODO; // then just iterate the peak click recordings randomly
                         lerp[0] = firstMacroLengthMinus1 != -1
                                 ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
                                 : cheatConfig.autoclickerEndingMultiplier;
