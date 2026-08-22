@@ -28,7 +28,7 @@ public class CheatConfig {
 
     public boolean isDarknessDisabled = true;
 
-    public boolean isAutoClickInventoryEnabled = false; // TODO -> finish
+    public boolean isAutoClickInventoryEnabled = true; // TODO -> finish
 
     // TODO -> triple-clicks possible?
     // TODO -> min interval?
