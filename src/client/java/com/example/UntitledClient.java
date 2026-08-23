@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
@@ -390,90 +391,114 @@ public class UntitledClient implements ClientModInitializer {
                                     }
                                 }
                             }));
+
+            HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
+                wrapper.attachLayerBefore(
+                        IdentifiedLayer.CHAT,
+                        EXAMPLE_LAYER,
+                        (context, renderTickCounter) -> {
+                            if (!cheatConfig.isPlayerWaypointsEnabled) {
+                                return;
+                            }
+
+                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
+                            Vec3d cameraPos = camera.getPos();
+
+                            assert MINECRAFT_CLIENT_INSTANCE.world != null;
+                            for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+//                                Vec3d pos = player.getLerpedPos(tickDelta).add(0, player.getHeight() + 0.5, 0);
+                                drawPlayerWaypoint(
+                                        player.getLerpedPos(renderTickCounter.getTickDelta(false)),
+                                        camera,
+                                        ,
+                                        context);
+                            }
+                            if (supabaseManager != null) {
+                                for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
+                                    drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
+                                }
+                            }
+                        });
+            });
         }
 
 //        TODO; // task for sending the http payloads of all the shared info
         //        TODO; // register task for drawing waypoints of far away players
-        RenderLayer WAYPOINT_LAYER = RenderLayer.of(
-                "waypoint",
-                VertexFormats.POSITION_COLOR,
-                VertexFormat.DrawMode.TRIANGLES,
-                256,
-                false, // TODO ?
-                false, // TODO ?
-                RenderLayer.MultiPhaseParameters.builder()
-                        .program(RenderPhase.POSITION_COLOR_PROGRAM)
-                        .depthTest(RenderLayer.ALWAYS_DEPTH_TEST)
-                        .cull(RenderPhase.DISABLE_CULLING)
-                        .writeMaskState(RenderPhase.COLOR_MASK)
-                        .build(false)); // TODO ?
-        WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            if (!cheatConfig.isPlayerWaypointsEnabled) {
-                return;
-            }
-
-            MatrixStack matrices = context.matrixStack();
-            assert matrices != null;
-
-            Camera camera = context.camera();
-            Vec3d cameraPos = camera.getPos();
-            float tickDelta = context.tickCounter().getTickDelta(false);
-
-            TODO; // method for converting world-space into screen-space
-            for (PlayerEntity player : context.world().getPlayers()) {
-                TODO;
-                //        Vec3d pos = player.getLerpedPos(tickDelta)
-//                .add(0, player.getHeight() + 0.5, 0);
-                drawPlayerWaypoint();
-            }
-            if (supabaseManager != null) {
-                for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
-                    drawPlayerWaypoint();
-                }
-            }
-        });
+//        RenderLayer WAYPOINT_LAYER = RenderLayer.of(
+//                "waypoint",
+//                VertexFormats.POSITION_COLOR,
+//                VertexFormat.DrawMode.TRIANGLES,
+//                256,
+//                false, // TODO ?
+//                false, // TODO ?
+//                RenderLayer.MultiPhaseParameters.builder()
+//                        .program(RenderPhase.POSITION_COLOR_PROGRAM)
+//                        .depthTest(RenderLayer.ALWAYS_DEPTH_TEST)
+//                        .cull(RenderPhase.DISABLE_CULLING)
+//                        .writeMaskState(RenderPhase.COLOR_MASK)
+//                        .build(false)); // TODO ?
     }
 
-    private void drawPlayerWaypoint(Vec3d pos, Camera camera, Matrix4f projection) {
+    private void drawPlayerWaypoint(
+            Vec3d pos, Camera camera, Matrix4f projection, DrawContext drawContext) {
         Vec3d relative = pos.subtract(camera.getPos());
 
         Vector4f clipPos = new Vector4f(
                 (float) relative.x,
                 (float) relative.y,
                 (float) relative.z,
-                1.0f
+                1.0f // ?
         );
         camera.getRotation().transform(clipPos);
         projection.transform(clipPos);
 
         float x = clipPos.x() / clipPos.w();
         float y = clipPos.y() / clipPos.w();
-        Vec2f screenPos = new Vec2f(x, y);
+//        Vec2f screenPos = new Vec2f(x, y);
 
-        matrices.push();
-        matrices.translate(
-                pos.x - cameraPos.x,
-                pos.y - cameraPos.y,
-                pos.z - cameraPos.z);
-        matrices.multiply(camera.getRotation());
+//        matrices.push();
+//        matrices.translate(
+//                pos.x - cameraPos.x,
+//                pos.y - cameraPos.y,
+//                pos.z - cameraPos.z);
+//        matrices.multiply(camera.getRotation());
         // diamond TODO -> player heads
         {
-            matrices.push();
-            float size = 0.25f;
-            matrices.scale(size, size, size);
-            assert context.consumers() != null;
-            VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-            Vector3f Top = new Vector3f(0, 1, 0);
-            Vector3f Bottom = new Vector3f(0, -1, 0);
-            Vector3f Left = new Vector3f(-1, 0, 0);
-            Vector3f Right = new Vector3f(1, 0, 0);
-            MatrixStack.Entry entry = matrices.peek();
-            Foo.vertex(entry, Top).color(255, 0, 0, 175);
-            Foo.vertex(entry, Left).color(255, 0, 0, 175);
-            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-            Foo.vertex(entry, Top).color(255, 0, 0, 175);
-            Foo.vertex(entry, Right).color(255, 0, 0, 175);
-            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+//            matrices.push();
+//            float size = 0.25f;
+//            matrices.scale(size, size, size);
+//            assert context.consumers() != null;
+//            VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
+//            Vector3f Top = new Vector3f(0, 1, 0);
+//            Vector3f Bottom = new Vector3f(0, -1, 0);
+//            Vector3f Left = new Vector3f(-1, 0, 0);
+//            Vector3f Right = new Vector3f(1, 0, 0);
+//            MatrixStack.Entry entry = matrices.peek();
+//            Foo.vertex(entry, Top).color(255, 0, 0, 175);
+//            Foo.vertex(entry, Left).color(255, 0, 0, 175);
+//            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+//            Foo.vertex(entry, Top).color(255, 0, 0, 175);
+//            Foo.vertex(entry, Right).color(255, 0, 0, 175);
+//            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
+
+            int size = 6;
+            int intX = (int) x;
+            int intY = (int) y;
+            drawContext.fill(
+                    intX - 1,
+                    intY - size,
+                    intX + 2,
+                    intY + size + 1,
+                    0xAFFF0000
+            );
+
+            drawContext.fill(
+                    intX - size,
+                    intY - 1,
+                    intX + size + 1,
+                    intY + 2,
+                    0xAFFF0000
+            );
 
             {
                 Vector3f forward = new Vector3f(0, 0, -1);
@@ -484,28 +509,28 @@ public class UntitledClient implements ClientModInitializer {
 //                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
                 }
             }
-            matrices.pop();
+//            matrices.pop();
         }
         // distance
         {
-            var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
-            matrices.push();
-            matrices.scale(0.025f, -0.025f, 0.025f);
-            String text = String.format("%.1fm", cameraPos.distanceTo(pos));
-            float x = -textRenderer.getWidth(text) / 2.0f;
-            textRenderer.draw(
-                    Text.literal(text),
-                    x,
-                    0,
-                    0xFFFFFFFF,
-                    false,
-                    matrices.peek().getPositionMatrix(),
-                    context.consumers(),
-                    TextRenderer.TextLayerType.SEE_THROUGH,
-                    0,
-                    0xF000F0
-            );
-            matrices.pop();
+//            var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
+//            matrices.push();
+//            matrices.scale(0.025f, -0.025f, 0.025f);
+//            String text = String.format("%.1fm", cameraPos.distanceTo(pos));
+//            float x = -textRenderer.getWidth(text) / 2.0f;
+//            textRenderer.draw(
+//                    Text.literal(text),
+//                    x,
+//                    0,
+//                    0xFFFFFFFF,
+//                    false,
+//                    matrices.peek().getPositionMatrix(),
+//                    context.consumers(),
+//                    TextRenderer.TextLayerType.SEE_THROUGH,
+//                    0,
+//                    0xF000F0
+//            );
+//            matrices.pop();
         }
         // TODO name
         {
@@ -513,7 +538,7 @@ public class UntitledClient implements ClientModInitializer {
 //                    TODO; -> should only appear when looked at
             // TODO -> extra info should also appear when moused over
         }
-        matrices.pop();
+//        matrices.pop();
     }
 
     private static boolean handleGetIsEnabled(

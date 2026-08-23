@@ -16,6 +16,7 @@
 	>follow mod, copies inputs from other player
 	>counts enemies (local?)
 	>works on their zombie as well
+	>shows their held item as well?
 
 >20cps live click autoclicker?
 >20cps random double clicker w/o flagging vulcan:
