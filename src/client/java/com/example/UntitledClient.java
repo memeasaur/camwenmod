@@ -392,34 +392,40 @@ public class UntitledClient implements ClientModInitializer {
                                 }
                             }));
 
-            HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
-                wrapper.attachLayerBefore(
-                        IdentifiedLayer.CHAT,
-                        EXAMPLE_LAYER,
-                        (context, renderTickCounter) -> {
-                            if (!cheatConfig.isPlayerWaypointsEnabled) {
-                                return;
-                            }
-
-                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
-                            Vec3d cameraPos = camera.getPos();
-
-                            assert MINECRAFT_CLIENT_INSTANCE.world != null;
-                            for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
-//                                Vec3d pos = player.getLerpedPos(tickDelta).add(0, player.getHeight() + 0.5, 0);
-                                drawPlayerWaypoint(
-                                        player.getLerpedPos(renderTickCounter.getTickDelta(false)),
-                                        camera,
-                                        ,
-                                        context);
-                            }
-                            if (supabaseManager != null) {
-                                for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
-                                    drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
+            {
+                final Matrix4f[] projection = new Matrix4f[1];
+                WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+                    projection[0] = new Matrix4f(context.projectionMatrix());
+                });
+                HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
+                    wrapper.attachLayerBefore(
+                            IdentifiedLayer.CHAT,
+                            EXAMPLE_LAYER,
+                            (context, renderTickCounter) -> {
+                                if (!cheatConfig.isPlayerWaypointsEnabled) {
+                                    return;
                                 }
-                            }
-                        });
-            });
+
+                                Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
+                                Vec3d cameraPos = camera.getPos();
+
+                                assert MINECRAFT_CLIENT_INSTANCE.world != null;
+                                for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+//                                Vec3d pos = player.getLerpedPos(tickDelta).add(0, player.getHeight() + 0.5, 0);
+                                    drawPlayerWaypoint(
+                                            player.getLerpedPos(renderTickCounter.getTickDelta(false)),
+                                            camera,
+                                            projection[0],
+                                            context);
+                                }
+                                if (supabaseManager != null) {
+//                                    for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
+//                                        drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
+//                                    }
+                                }
+                            });
+                });
+            }
         }
 
 //        TODO; // task for sending the http payloads of all the shared info
