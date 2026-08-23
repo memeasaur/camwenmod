@@ -275,7 +275,7 @@ public class UntitledClient implements ClientModInitializer {
         // Cheats end
 
         {
-            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils", "hud-example-layer");
+            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils1", "hud-example-layer");
             HudLayerRegistrationCallback.EVENT.register((wrapper) ->
                     wrapper.attachLayerBefore(
                             IdentifiedLayer.CHAT,
@@ -391,41 +391,42 @@ public class UntitledClient implements ClientModInitializer {
                                     }
                                 }
                             }));
+        }
 
-            {
-                final Matrix4f[] projection = new Matrix4f[1];
-                WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-                    projection[0] = new Matrix4f(context.projectionMatrix());
-                });
-                HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
-                    wrapper.attachLayerBefore(
-                            IdentifiedLayer.CHAT,
-                            EXAMPLE_LAYER,
-                            (context, renderTickCounter) -> {
-                                if (!cheatConfig.isPlayerWaypointsEnabled) {
-                                    return;
-                                }
+        {
+            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils2", "hud-example-layer");
+            final Matrix4f[] projection = new Matrix4f[1];
+            WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+                projection[0] = new Matrix4f(context.projectionMatrix());
+            });
+            HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
+                wrapper.attachLayerBefore(
+                        IdentifiedLayer.CHAT,
+                        EXAMPLE_LAYER,
+                        (context, renderTickCounter) -> {
+                            if (!cheatConfig.isPlayerWaypointsEnabled) {
+                                return;
+                            }
 
-                                Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
-                                Vec3d cameraPos = camera.getPos();
+                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
+                            Vec3d cameraPos = camera.getPos();
 
-                                assert MINECRAFT_CLIENT_INSTANCE.world != null;
-                                for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+                            assert MINECRAFT_CLIENT_INSTANCE.world != null;
+                            for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
 //                                Vec3d pos = player.getLerpedPos(tickDelta).add(0, player.getHeight() + 0.5, 0);
-                                    drawPlayerWaypoint(
-                                            player.getLerpedPos(renderTickCounter.getTickDelta(false)),
-                                            camera,
-                                            projection[0],
-                                            context);
-                                }
-                                if (supabaseManager != null) {
+                                drawPlayerWaypoint(
+                                        player.getLerpedPos(renderTickCounter.getTickDelta(false)),
+                                        camera,
+                                        projection[0],
+                                        context);
+                            }
+                            if (supabaseManager != null) {
 //                                    for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
 //                                        drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
 //                                    }
-                                }
-                            });
-                });
-            }
+                            }
+                        });
+            });
         }
 
 //        TODO; // task for sending the http payloads of all the shared info
