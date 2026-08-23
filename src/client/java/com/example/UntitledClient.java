@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -489,8 +490,11 @@ public class UntitledClient implements ClientModInitializer {
 //            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
 
             int size = 6;
-            int intX = (int) x;
-            int intY = (int) y;
+            Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
+            float screenX = (x + 1) / 2 * window.getScaledWidth();
+            float screenY = (1 - y) / 2 * window.getScaledHeight();
+            int intX = (int) screenX;
+            int intY = (int) screenY;
             drawContext.fill(
                     intX - 1,
                     intY - size,
