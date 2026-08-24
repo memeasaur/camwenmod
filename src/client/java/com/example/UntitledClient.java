@@ -446,7 +446,7 @@ public class UntitledClient implements ClientModInitializer {
     private void drawPlayerWaypoint(
             Vec3d pos, Camera camera, Matrix4f projection, DrawContext drawContext) {
         Vec3d relative = pos.subtract(camera.getPos());
-        TODO; // gl
+//        TODO; // gl
 
         Vector4f clipPos = new Vector4f(
                 (float) relative.x,
