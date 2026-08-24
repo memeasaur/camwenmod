@@ -13,11 +13,13 @@
 	>shows waypoints on all visible, turn out of render ones into local-only last-seen waypoints
 	>also works for different name colors for different teams
 	>message when hitting teammate
+	>message when getting hit by teammate
 	>option for ignoring attacks that would hit teammates
 	>follow mod, copies inputs from other player
 	>counts enemies (local?)
 	>works on their zombie as well
 	>shows their held item as well?
+	>ability to see players' potion effects and timers?
 
 >20cps live click autoclicker?
 >20cps random double clicker w/o flagging vulcan:
@@ -43,7 +45,6 @@
 >let me sprint while blind? (blatant)
 >allow to place cobwebs through player hitbox (blatant)
 >fake inventory that you can view while running
->autoclick waits to start until it's a valid hit? this is pretty blatant triggerbot
 >trajectories/enderPearl aimbot bow aimbot etc
 >swings go through friends (blatant)
 >faster tick-rate (blatant)
@@ -52,92 +53,50 @@
     >should just disable and enable sprint
 >hold right click and it maxes dps with the bow (blatant)
 
->friend everyone in a radius around me
 >360 degree fov keybind
 >speech to text chat typer?
 >league style pings
->fight tracker
->map for allowing multiple buttons for one cooldown
 >keybind for disabling players blocking your view
 >add option for hitting ground in adventure mode for mineZ
->ability to see players' potion effects and timers?
 
 >different keybind for opening and closing door
 >pretty sure it's currently spawning double particles on server hit
->tells you when your splashes heal the person you're fucking fighting
 >safe w tap release button/block etc.
 >sound indicator for crossbow and bow fully charged
 >something along the lines of a.) only playing player hit sounds that you get on other players b.) a different hit sound etc.
->toggle chat keybind
->show texture pack widget
 >cheat keybinds not working until the config screen is opened?
 >make block breaking progress continue while using item
->cycle through packs button
->open texture pack screen button
 >sprinting removes toggle sneak option + double tap w removes toggle sneak option
 >ability to block hit without letting go of right click? type meme
 >player name/skin etc. spoofer
 >xray turns blocks into glass instead of cancelling their render (?) toggle
->notify when player is in range (?) maybe this isn't soft cheating (?)
 >don't cull spawners ever (? or, make all whitelisted xray blocks never cull)
 >make ores show up in xray
 >cave mode xray
->hard cheats aim assist -> store actual mouse movements, iterate over them and apply them if the mouse would end up on the target
 
 >enable -> chat collects all strings -> disable -> see all the valid names
 >repeated chat message nameplate changer uses don't work, it needs another message (?)
 >make search any player functionality in nameplate changer gui
 >make search bar in nameplate changer gui
 >rally chat listener, this being abstract enough to catch everything would be sick
-
->account switcher (?)
 >(?), revert potion particles just being the last potion you consumed
->potion effect utilizing the vanilla indicator
 
 >figure out the message matching thing. or just make it a click like it probably always should've been
-
-    >ability to communicate with other mod user
-        >need to auth with mojang somehow
-                    >connect to an owned minecraft server (auth.potpissers.com). or:
-                    >use their creds + mojang api + open source
-        >users/webapp just request information directly from user's directly
-        >agree to not use 1.7 sprint
-        >share nameplate colors
-        >create parties that share nameplate colors
-        >test each other for cheats
-        >agree to use raw input for clicks instead of higher level methods
-        >client-side anticheat
-        >these messages are only seen on camwenmod clients unless the server allows otherwise
-
     >gui option for showing when you have a sprint hit queued up
     >these custom particles and sounds should apply for other players on your screen too -> it should be configurable whether the sound plays for just you or for just enemies or both (soft cheating ?), + if server allows it
     >make miss and weak attack sounds configurable
     >ability to toggle all nameplate on this page, rather than just the entire collection
     >option for showing all key-presses in toggleSneak gui
-    >make left-handed mode bypass
-    >disable seeing other players using left-handed mode
-    >cps (attack) tracker -> listens to the actual in-game swings
     >off-hand automatically becomes main hand meme. if allowed (?). -> tools without right-click can be used in off-hand by right-clicking, and weapons can be used in off-hand if enabled
         >do this for swords too, since it isn't cheating the cooldown
         >serialize nameplate changes/state locally + in-server + save sodium settings etc. in server
         >recommended mods
     >console screen for all system messages/logs
-    >option/requirement for toggleSneak/autorun to not work in inventory/chat etc. unless server explicitly allows it, like vanilla
-    >disable miss sounds etc. meme
-    >ability to have different nameplate configs that you can swap between + have them for certain servers
-    >add night vision slider
-    >option for adjusting/disabling weather when fullBright is on
-    >rally macros like potpissers if absorbing macro mod
-    >fall damage calculator (?)
-    >lunar waypoints + whatever api shit
+    >fall damage calculator
     >can see other mod users' nameplate changes; probably only their allies/enemies
-    >mod user messaging system/friends list etc.
-    >would like to maybe integrate more closely with vanilla toggle-sprint/sneak (?)
     >allow raw 1.7 packs to be used in current version
-    >"programmer art+" + option for replacing fallback fires to low fire
     >1.7 enchantment glint
     >1.7 potion enchantment glint option
-
 
 >Private version
     >xray creative or op meme
