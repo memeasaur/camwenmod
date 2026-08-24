@@ -38,6 +38,7 @@
 >always move at head-run speed? (blatant)
 >impl sneaky reach
 
+>remove cursor shake from view bobbing if present?
 >freecam
 >automatic grapple? (blatant)
 >hit delta tracker
