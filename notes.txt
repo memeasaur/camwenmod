@@ -3,7 +3,6 @@
 >add brackets everywhere that I decided not to use them
 
 >ignore right click inputs that are too early on the grapple
->reach that works by determining the straight-head distance
 >rally that places an on-screen waypoint
     >should work for drops, too
     >should also be able to play team permanent waypoints like hasa etc.
