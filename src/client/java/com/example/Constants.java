@@ -130,6 +130,7 @@ public class Constants {
             isHeldAutoclickerPressed = true; // this is accounting for the initial mouse press, which is used
             final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.immutableRecordedAutoclickerClicks.length)};
             final boolean[] isCurrentlyReversed = new boolean[]{false};
+            TODO; // gl
             final float[] lerp = new float[]{cheatConfig.autoclickerStartingMultiplier};
             nullableCurrentHeldAutoclickerTask = new Thread() {
                 final HashSet<Integer> seenIndexes = new HashSet<>();
