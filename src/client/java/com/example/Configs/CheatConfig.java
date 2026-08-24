@@ -38,6 +38,8 @@ public class CheatConfig {
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
 
+    public boolean isSneakyReachEnabled = false;
+
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 

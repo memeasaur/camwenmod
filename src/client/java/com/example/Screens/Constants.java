@@ -499,6 +499,14 @@ public class Constants {
                         cheatConfig.isPlayerWaypointsEnabled,
                         is -> cheatConfig.isPlayerWaypointsEnabled = is,
                         ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "sneaky reach (beware)",
+                        x + xModifier,
+                        y,
+                        cheatConfig.isSneakyReachEnabled,
+                        is -> cheatConfig.isSneakyReachEnabled = is,
+                        ""));
 //                addDrawableChild(getConfigButtonWidget(
 //                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
