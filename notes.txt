@@ -2,7 +2,11 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
->ignore right click inputs that are too early on the grapple
+>automatic head run (legit):
+    >automatically free-looks your camera to the correct angle for head-running
+    >could snap your head view if lunar client etc. freelook does that, it probably doesn't
+>make ethylene change the fov still
+>ignore right click inputs that are too early on the grapple so I can spam/hold it
 >rally that places an on-screen waypoint
     >should work for drops, too
     >should also be able to play team permanent waypoints like hasa etc.
@@ -31,16 +35,13 @@
     >apparently my recorder's up and down press order is off by 1
     >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
     >autoclicker shouldn't click in inventory when the mouse is holding something and the hovered slot is that same thing
->automatic head run (legit):
-    >automatically free-looks your camera to the correct angle for head-running
-    >could snap your head view if lunar client etc. freelook does that, it probably doesn't
-    >always move at head-run speed? (blatant)
->freecam
+>always move at head-run speed? (blatant)
+>impl sneaky reach
 
+>freecam
 >automatic grapple? (blatant)
 >hit delta tracker
 >make the kb reduction client-side thing configurable
->make ethylene change the fov still
 >make the auto cobweb work without me holding right click so i can try it on my own as well
 >let me sprint while blind? (blatant)
 >allow to place cobwebs through player hitbox (blatant)
