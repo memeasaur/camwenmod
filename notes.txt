@@ -35,7 +35,7 @@
     >always move at head-run speed? (blatant)
 >freecam
 
->automatic grapple?
+>automatic grapple? (blatant)
 >hit delta tracker
 >make the kb reduction client-side thing configurable
 >make ethylene change the fov still
