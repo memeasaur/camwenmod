@@ -2,6 +2,8 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>record regular clicks and spam clicks separately with separate multipliers
+    >maybe butterfly clicking has a different kurtosis and that would be useful here
 >random double clicker probably would let me get higher cps
 >I could disable all my combat cheats when autoclicker is off
 >make the kb reduction client-side thing configurable if I can't do 20cps
