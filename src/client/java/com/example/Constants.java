@@ -150,23 +150,19 @@ public class Constants {
                     int currentAutoclickerIndex = 1; // this is accounting for the initial mouse press, which is used
                     int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
-//                        TODO; // -> differentiate between ramping clicks and peak clicks
-//                        TODO; // I'm thinking I can do this entirely here
-//                        TODO; // extend the ramp-up ones so kurtosis doesn't change
-//                        TODO; // then just iterate the peak click recordings randomly
-//                        TODO; // only lerp it on the second iteration and then keep it down there
+                        TODO;
                         lerp[0] = firstMacroLengthMinus1 != -1
                                 ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
                                 : cheatConfig.autoclickerEndingMultiplier;
                         LockSupport.parkNanos(
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
-//                        TODO; // -> it shouldn't do the fill thing
                         if (threadClient.currentScreen != null
                                 && (
-                                !(threadClient.currentScreen instanceof InventoryScreen)
+                                !(threadClient.currentScreen instanceof InventoryScreen inventoryScreen)
                                         || !cheatConfig.isAutoClickInventoryEnabled
                                         || !getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)
+                                        || !inventoryScreen.getScreenHandler().getCursorStack().isEmpty()
                         )) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
@@ -191,7 +187,7 @@ public class Constants {
                                 } else
                                     currentAutoclickerIndex--;
                             }
-                            isHeldAutoclickerPressed = ((currentAutoclickerIndex - 1) & 1) == 0;
+                            isHeldAutoclickerPressed = (currentAutoclickerIndex & 1) == 0;
 //                            if (isHeldAutoclickerPressed)
                             threadClient.execute(() -> {
 //                                    if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
