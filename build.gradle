@@ -49,24 +49,21 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
 	modImplementation("maven.modrinth:sodium:${project.sodium_version}")
 
-	// Cheats start
 	implementation("com.github.kwhat:jnativehook:2.2.2")
 	include "com.github.kwhat:jnativehook:2.2.2"
 	implementation("net.fabricmc:fabric-language-kotlin:1.13.13+kotlin.2.4.10")
-    // Cheats end
 
 //	implementation(platform("io.github.jan-tennert.supabase:bom:3.7.0"))
 	implementation("io.github.jan-tennert.supabase:auth-kt:3.7.0")
-	include("io.github.jan-tennert.supabase:auth-kt:3.7.0")
+//	include("io.github.jan-tennert.supabase:auth-kt:3.7.0")
 	implementation("io.github.jan-tennert.supabase:postgrest-kt:3.7.0")
-	include("io.github.jan-tennert.supabase:postgrest-kt:3.7.0")
+//	include("io.github.jan-tennert.supabase:postgrest-kt:3.7.0")
 	implementation("io.github.jan-tennert.supabase:realtime-kt:3.7.0")
-	include("io.github.jan-tennert.supabase:realtime-kt:3.7.0")
+//	include("io.github.jan-tennert.supabase:realtime-kt:3.7.0")
 	implementation("io.ktor:ktor-client-cio:3.4.0")
-	include("io.ktor:ktor-client-cio:3.4.0")
+//	include("io.ktor:ktor-client-cio:3.4.0")
 }
 
 processResources {
