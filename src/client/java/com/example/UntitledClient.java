@@ -417,11 +417,11 @@ public class UntitledClient implements ClientModInitializer {
                                         projection[0],
                                         context);
                             }
-                            if (supabaseManager != null) {
-//                                    for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
-//                                        drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
-//                                    }
-                            }
+//                            if (supabaseManager != null) {
+////                                    for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
+////                                        drawPlayerWaypoint(supabasePlayer.getTableEntry().getLocationX());
+////                                    }
+//                            }
                         });
             });
         }
