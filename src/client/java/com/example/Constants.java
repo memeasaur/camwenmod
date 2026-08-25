@@ -15,7 +15,6 @@ import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
@@ -147,7 +146,7 @@ public class Constants {
 //                    int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
                         lerp[0] = recordingCounter == 1
-                                ? cheatConfig.autoclickerStartingMultiplier
+                                ? lerp(1.f, cheatConfig.autoclickerStartingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
                                 : recordingCounter == 2
                                 ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
                                 : cheatConfig.autoclickerEndingMultiplier;
@@ -258,7 +257,7 @@ public class Constants {
                                 currentRecordedAutoclicker = cheatConfig.immutableRecordedAutoclickerMovements[lastRecordedAutoclickerIndex];
                                 currentAutoclickerIndex = 0;
                                 currentMacroIndexLengthMinus1 = currentRecordedAutoclicker.length - 1;
-                            } else if (!isCurrentlyReversed[0]) {
+                            } else if (true) { // !isCurrentlyReversed[0] TODO -> remove
 //                                if (currentAutoclickerIndex >= currentRecordedAutoclicker.length - 1) {
 //                                    firstMacroLengthMinus1 = -1;
 //                                    isCurrentlyReversed = true;

@@ -2,6 +2,7 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>random double clicker probably would let me get higher cps
 >I could disable all my combat cheats when autoclicker is off
 >make the kb reduction client-side thing configurable if I can't do 20cps
 >always move at head-run speed? (blatant)
@@ -29,10 +30,7 @@
 	>shows their held item as well?
 	>ability to see players' potion effects and timers?
 
->ac:
-    >I shouldn't have this reversing meme, I should just have more recordings
-    >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
-
+>don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?
 >freecam
 >automatic grapple? (blatant)
