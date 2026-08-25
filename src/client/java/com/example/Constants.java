@@ -154,6 +154,7 @@ public class Constants {
 //                        TODO; // I'm thinking I can do this entirely here
 //                        TODO; // extend the ramp-up ones so kurtosis doesn't change
 //                        TODO; // then just iterate the peak click recordings randomly
+//                        TODO; // only lerp it on the second iteration and then keep it down there
                         lerp[0] = firstMacroLengthMinus1 != -1
                                 ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
                                 : cheatConfig.autoclickerEndingMultiplier;
