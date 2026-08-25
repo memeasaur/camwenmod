@@ -26,7 +26,7 @@ import static com.example.Utils.getIsKeyPressed;
 import static org.joml.Math.lerp;
 
 public class Constants {
-//    public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
+    //    public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
     public static final Gson GSON = new Gson();
     public static final Random RANDOM = new Random(); // TODO remove
@@ -160,8 +160,13 @@ public class Constants {
                         LockSupport.parkNanos(
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
-                        if (threadClient.currentScreen != null &&
-                                (!(threadClient.currentScreen instanceof InventoryScreen || !cheatConfig.isAutoClickInventoryEnabled || !getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)))) {
+//                        TODO; // -> it shouldn't do the fill thing
+                        if (threadClient.currentScreen != null
+                                && (
+                                !(threadClient.currentScreen instanceof InventoryScreen)
+                                        || !cheatConfig.isAutoClickInventoryEnabled
+                                        || !getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)
+                        )) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
                             firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
