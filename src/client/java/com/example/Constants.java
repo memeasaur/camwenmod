@@ -129,31 +129,31 @@ public class Constants {
         if (nullableCurrentHeldAutoclickerTask == null && (clientDontUseThis.currentScreen == null || clientDontUseThis.currentScreen instanceof InventoryScreen) && clientDontUseThis.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
             isHeldAutoclickerPressed = true; // this is accounting for the initial mouse press, which is used
             final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.immutableRecordedAutoclickerClicks.length)};
-            final boolean[] isCurrentlyReversed = new boolean[]{false};
+//            final boolean[] isCurrentlyReversed = new boolean[]{false};
             final float[] lerp = new float[]{cheatConfig.autoclickerStartingMultiplier};
             nullableCurrentHeldAutoclickerTask = new Thread() {
-                final HashSet<Integer> seenIndexes = new HashSet<>();
                 int[] currentRecordedAutoclicker = cheatConfig.immutableRecordedAutoclickerClicks[currentAutoclickerMacroIndex[0]];
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
+                int recordingCounter = 1;
                 final Runnable getNextRecordedAutoclicker = () -> {
+                    recordingCounter++;
                     int newIndex = RANDOM.nextInt(cheatConfig.immutableRecordedAutoclickerClicks.length);
-                    while (seenIndexes.contains(newIndex))
-                        newIndex = RANDOM.nextInt(cheatConfig.immutableRecordedAutoclickerClicks.length);
                     currentRecordedAutoclicker = cheatConfig.immutableRecordedAutoclickerClicks[newIndex];
-                    seenIndexes.add(newIndex);
-                    if (seenIndexes.size() >= cheatConfig.immutableRecordedAutoclickerClicks.length)
-                        seenIndexes.clear();
                 };
 
                 @Override
                 public void run() {
                     int currentAutoclickerIndex = 1; // this is accounting for the initial mouse press, which is used
-                    int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
+//                    int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
-                        TODO;
-                        lerp[0] = firstMacroLengthMinus1 != -1
-                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
+                        lerp[0] = recordingCounter == 1
+                                ? cheatConfig.autoclickerStartingMultiplier
+                                : recordingCounter == 2
+                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
                                 : cheatConfig.autoclickerEndingMultiplier;
+//                        lerp[0] = firstMacroLengthMinus1 != -1
+//                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / firstMacroLengthMinus1)
+//                                : cheatConfig.autoclickerEndingMultiplier;
                         LockSupport.parkNanos(
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
@@ -166,27 +166,29 @@ public class Constants {
                         )) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?
-                            firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
-                            isCurrentlyReversed[0] = false;
+//                            firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1; // TODO ?
+//                            isCurrentlyReversed[0] = false;
                         } // TODO -> change the speed if blocking/using item (?, not sure how to handle this exactly -> completely stopping clicks seems wrong, maybe immediately pivoting to the lower multiplier is better?)
                         else {
-                            if (!isCurrentlyReversed[0]) {
+//                            if (!isCurrentlyReversed[0]) {
                                 if (currentAutoclickerIndex >= currentRecordedAutoclicker.length - 1) {
-                                    firstMacroLengthMinus1 = -1;
-                                    isCurrentlyReversed[0] = true;
+//                                    firstMacroLengthMinus1 = -1;
+//                                    isCurrentlyReversed[0] = true;
                                     getNextRecordedAutoclicker.run();
-                                    currentAutoclickerIndex = currentRecordedAutoclicker.length - 2; // this one ends on not pressed, so start on pressed
-                                } // TODO -> external gui should give warnings for if you're wrapping around and suggest recording longer macros
+                                    currentAutoclickerIndex = 0;
+//                                    currentAutoclickerIndex = currentRecordedAutoclicker.length - 2; // this one ends on not pressed, so start on pressed
+                                }
                                 else
                                     currentAutoclickerIndex++;
-                            } else {
-                                if (currentAutoclickerIndex <= 0) {
-                                    isCurrentlyReversed[0] = false;
-                                    getNextRecordedAutoclicker.run();
-                                    currentAutoclickerIndex = 1; // this one ends on pressed, so start on not pressed
-                                } else
-                                    currentAutoclickerIndex--;
-                            }
+//                            }
+//                            else {
+//                                if (currentAutoclickerIndex <= 0) {
+//                                    isCurrentlyReversed[0] = false;
+//                                    getNextRecordedAutoclicker.run();
+//                                    currentAutoclickerIndex = 1; // this one ends on pressed, so start on not pressed
+//                                } else
+//                                    currentAutoclickerIndex--;
+//                            }
                             isHeldAutoclickerPressed = (currentAutoclickerIndex & 1) == 0;
 //                            if (isHeldAutoclickerPressed)
                             threadClient.execute(() -> {
