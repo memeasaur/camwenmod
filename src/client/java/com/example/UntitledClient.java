@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,8 +18,11 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +42,7 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
     static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
-//    @Nullable
+    //    @Nullable
 //    static private SupabaseManager supabaseManager = new SupabaseManager("foo", "bar");
     //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
@@ -441,6 +445,16 @@ public class UntitledClient implements ClientModInitializer {
 //                        .cull(RenderPhase.DISABLE_CULLING)
 //                        .writeMaskState(RenderPhase.COLOR_MASK)
 //                        .build(false)); // TODO ?
+
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            ItemStack stack = player.getStackInHand(hand);
+
+            if (cheatConfig.isGrappleGroundCheckEnabled && stack.isOf(Items.FISHING_ROD) && player.fishHook != null) {
+                return ActionResult.FAIL;
+            }
+
+            return ActionResult.PASS;
+        });
     }
 
     private void drawPlayerWaypoint(

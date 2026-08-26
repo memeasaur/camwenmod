@@ -265,13 +265,13 @@ public class KeyboardMixin {
                 }
             } else
                 isAutoclickerDisableKeyPressed = false;
-            if (getIsKeyPressed(cheatConfig.glfwToggleMirrorMovementKeybind)) {
-                if (nullableMirrorMovementPlayer != null) {
-                    nullableMirrorMovementPlayer = null;
-                } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
-                    nullableMirrorMovementPlayer = player;
-                }
-            }
+//            if (getIsKeyPressed(cheatConfig.glfwToggleMirrorMovementKeybind)) {
+//                if (nullableMirrorMovementPlayer != null) {
+//                    nullableMirrorMovementPlayer = null;
+//                } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
+//                    nullableMirrorMovementPlayer = player;
+//                }
+//            }
 //            if (getIsKeyPressed(glfwToggleRandomDoubleClickKeybind)) {
 //                if (!isRandomDoubleClickToggleKeyPressed) {
 //                    isRandomDoubleClickToggleKeyPressed = true;
