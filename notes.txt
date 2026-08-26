@@ -31,6 +31,11 @@
 	>works on their zombie as well
 	>shows their held item as well?
 	>ability to see players' potion effects and timers?
+	>conservative estimate health indicators:
+        >uses hits on you to know how much damage things do to certain armor values
+        >uses conservative estimates of healing
+        >uses your healing data for the values
+        >fall damage
 
 >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?
@@ -110,7 +115,6 @@
     >allow toggleSprint to stop your sprint without letting go of W
     >togglable ability to spam click and have it not go through unless attack cooldown high enough
 	>hit tracker/potion tracker in external gui
-	>health indicator/armor in external gui
 >hard cheat version
     >option for chase hits to never be kb hits, only if it's undetectable though
     >elytra helper -> perfect angles etc.
