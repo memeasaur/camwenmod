@@ -3,13 +3,16 @@ package com.example.Configs;
 import com.example.MouseMovement;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+
 import static com.example.Utils.serializeJsonBlocking;
 
 public class CheatConfig {
     public boolean isGuiCheatsPvpDisabling = true;
 
-    public int[][] immutableRecordedAutoclickerClicks = new int[0][];
-    public MouseMovement[][] immutableRecordedAutoclickerMovements = new MouseMovement[0][];
+    public record clickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
+    }
+    public ArrayList<clickRecording> recordedClickSequences = new ArrayList<>();
     public float autoclickerStartingMultiplier = 1.f;
     public float autoclickerEndingMultiplier = 1.f;
     public int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
@@ -45,6 +48,5 @@ public class CheatConfig {
 
     public void saveCheatConfig() {
         serializeJsonBlocking("cheat-config", this);
-//        handleSave("cheat-config", CheatConfig.class);
     }
 }

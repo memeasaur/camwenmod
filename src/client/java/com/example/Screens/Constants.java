@@ -1,5 +1,6 @@
 package com.example.Screens;
 
+import com.example.Configs.CheatConfig;
 import com.example.MouseMovement;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -19,6 +20,7 @@ import net.minecraft.text.Text;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
@@ -598,37 +600,46 @@ public class Constants {
                     Thread.sleep(10); // TODO just queue them and wait for them all to be absolutely finished
                     GlobalScreen.removeNativeMouseListener(nativeMouseListener);
                     GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
-                    int[] newRecordedAutoclickerClicks;
-                    if (!mutableMacroClicks.isEmpty()) {
-                        int oldLength = cheatConfig.immutableRecordedAutoclickerClicks.length;
-                        {
-                            int newLength = oldLength + 1;
-                            {
-                                int[][] newMatrix = new int[newLength][];
-                                System.arraycopy(cheatConfig.immutableRecordedAutoclickerClicks, 0, newMatrix, 0, oldLength);
-                                cheatConfig.immutableRecordedAutoclickerClicks = newMatrix;
-                            }
-                            {
-                                MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
-                                System.arraycopy(cheatConfig.immutableRecordedAutoclickerMovements, 0, newMatrix1, 0, oldLength);
-                                cheatConfig.immutableRecordedAutoclickerMovements = newMatrix1;
-                            }
-                        }
-                        newRecordedAutoclickerClicks = mutableMacroClicks.stream()
-                                .skip(2)
-                                .mapToInt(Integer::intValue)
-                                .toArray();
-                        cheatConfig.immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
+                    int[] newRecordedAutoclickerClicks = !mutableMacroClicks.isEmpty()
+                            ?
+                            ((Supplier<int[]>) () -> {
+                                {
+                                    int oldLength = cheatConfig.recordedClickSequences.length;
+                                    {
+                                        int newLength = oldLength + 1;
+                                        {
+                                            CheatConfig.clickRecording[] newMatrix = new CheatConfig.clickRecording[newLength];
+                                            System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix, 0, oldLength);
+                                            cheatConfig.recordedClickSequences = newMatrix;
+                                        }
+                                        {
+                                            MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
+                                            System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix1, 0, oldLength);
+                                            cheatConfig.recordedClickSequences = newMatrix1;
+                                        }
+                                    }
+                                    newRecordedAutoclickerClicks = mutableMacroClicks.stream()
+                                            .skip(2)
+                                            .mapToInt(Integer::intValue)
+                                            .toArray();
+                                    cheatConfig.immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
 
-                        MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                        cheatConfig.immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
-                    } else
-                        newRecordedAutoclickerClicks = null;
+                                    MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
+                                    cheatConfig.immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
+
+                                }
+                            }).get()
+                            : null;
+//                    if (!mutableMacroClicks.isEmpty()) {
+//                    } else {
+//                        newRecordedAutoclickerClicks = null;
+//                    }
                     threadClientInstance.execute(() -> {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                             player.sendMessage(newRecordedAutoclickerClicks != null
                                     ? getAutoclickerText(newRecordedAutoclickerClicks)
                                     : Text.literal("invalid macro"), true); // TODO -> console
+                        }
                     });
                 } catch (Exception e) {
                     threadClientInstance.execute(() -> {
