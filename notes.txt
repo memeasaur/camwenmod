@@ -3,9 +3,6 @@
 >add brackets everywhere that I decided not to use them
 
 >always move at head-run speed? (blatant)
->automatic head run (legit):
-    >automatically free-looks your camera to the correct angle for head-running
-    >could snap your head view if lunar client etc. freelook does that, it probably doesn't
 >rally that places an on-screen waypoint
     >should work for drops, too
     >should also be able to play team permanent waypoints like hasa etc.
