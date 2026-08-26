@@ -127,17 +127,17 @@ public class Constants {
         // TODO -> method-ize that check
         if (nullableCurrentHeldAutoclickerTask == null && (clientDontUseThis.currentScreen == null || clientDontUseThis.currentScreen instanceof InventoryScreen) && clientDontUseThis.player instanceof ClientPlayerEntity player && !player.isUsingItem()) {
             isHeldAutoclickerPressed = true; // this is accounting for the initial mouse press, which is used
-            final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.recordedClickSequences.length)};
+            final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.recordedClickSequences.size())};
             final boolean[] isCurrentlyReversed = new boolean[]{false};
-            final float[] lerp = new float[]{cheatConfig.autoclickerStartingMultiplier};
+            final float[] lerp = new float[]{cheatConfig.autoclickerJitterStartingMultiplier};
             nullableCurrentHeldAutoclickerTask = new Thread() {
-                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences[currentAutoclickerMacroIndex[0]].clicks();
+                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).clicks();
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
                 int recordingCounter = 1;
                 final Runnable getNextRecordedAutoclicker = () -> {
                     recordingCounter++;
-                    int newIndex = RANDOM.nextInt(cheatConfig.recordedClickSequences.length);
-                    currentRecordedAutoclicker = cheatConfig.recordedClickSequences[newIndex].clicks();
+                    int newIndex = RANDOM.nextInt(cheatConfig.recordedClickSequences.size());
+                    currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(newIndex).clicks();
                 };
 
                 @Override
@@ -146,10 +146,10 @@ public class Constants {
 //                    int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
                         lerp[0] = recordingCounter == 1
-                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
+                                ? lerp(cheatConfig.autoclickerJitterStartingMultiplier, cheatConfig.autoclickerJitterEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
 //                                : recordingCounter == 2
 //                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
-                                : cheatConfig.autoclickerEndingMultiplier;
+                                : cheatConfig.autoclickerJitterEndingMultiplier;
                         LockSupport.parkNanos(
                                 (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
                         // TODO -> shift + right click could also be an autoclicker here
@@ -208,7 +208,7 @@ public class Constants {
             nullableCurrentHeldAutoclickerTask.start();
             Thread task = nullableCurrentHeldAutoclickerTask;
             new Thread() {
-                MouseMovement[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences[currentAutoclickerMacroIndex[0]].movements();
+                MouseMovement[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).movements();
                 int currentAutoclickerIndex = 1;
                 int currentMacroIndexLengthMinus1 = currentRecordedAutoclicker.length - 1;
                 int lastRecordedAutoclickerIndex = currentAutoclickerMacroIndex[0];
@@ -249,7 +249,7 @@ public class Constants {
 //                            } // TODO -> change the speed if blocking/using item (?, not sure how to handle this exactly -> completely stopping clicks seems wrong, maybe immediately pivoting to the lower multiplier is better?)
                             if (lastRecordedAutoclickerIndex != currentAutoclickerMacroIndex[0]) {
                                 lastRecordedAutoclickerIndex = currentAutoclickerMacroIndex[0];
-                                currentRecordedAutoclicker = cheatConfig.recordedClickSequences[lastRecordedAutoclickerIndex].movements();
+                                currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(lastRecordedAutoclickerIndex).movements();
                                 currentAutoclickerIndex = 0;
                                 currentMacroIndexLengthMinus1 = currentRecordedAutoclicker.length - 1;
                             } else if (!isCurrentlyReversed[0]) {
@@ -283,8 +283,9 @@ public class Constants {
 //                        isHeldAutoclickerPressed = false;
 //                        threadClient.execute(() -> ATTACK_VANILLA.setPressed(false));
                     } catch (Exception e) {
-                        if (isDebugModeEnabled)
+                        if (isDebugModeEnabled) {
                             threadClient.execute(() -> MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(e.getMessage()), false));
+                        }
                     }
                 }
             }.start();

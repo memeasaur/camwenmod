@@ -216,9 +216,10 @@ public class KeyboardMixin {
             if (getIsKeyPressed(cheatConfig.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
                 if (!isAutoclickerToggleKeyPressed) {
                     isAutoclickerToggleKeyPressed = true;
-                    if (cheatConfig.immutableRecordedAutoclickerClicks.length == 0) {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                    if (cheatConfig.recordedClickSequences.isEmpty()) {
+                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+                        }
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
                     } else {
                         if (isAutoclickerEnabled) {
@@ -239,9 +240,10 @@ public class KeyboardMixin {
             if (getIsKeyPressed(cheatConfig.glfwEnableAutoclickerKeybind)) {
                 if (!isAutoclickerEnableKeyPressed) {
                     isAutoclickerEnableKeyPressed = true;
-                    if (cheatConfig.immutableRecordedAutoclickerClicks.length == 0) {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+                    if (cheatConfig.recordedClickSequences.isEmpty()) {
+                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+                        }
                         MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
                     } else {
                         if (!isAutoclickerEnabled) {

@@ -13,8 +13,10 @@ public class CheatConfig {
     public record clickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
     }
     public ArrayList<clickRecording> recordedClickSequences = new ArrayList<>();
-    public float autoclickerStartingMultiplier = 1.f;
-    public float autoclickerEndingMultiplier = 1.f;
+    public float autoclickerJitterStartingMultiplier = 1.f;
+    public float autoclickerJitterEndingMultiplier = 1.f;
+    public float autoclickerSlowStartingMultiplier = 1.5f;
+    public float autoclickerSlowEndingMultiplier = 1.5f;
     public int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
