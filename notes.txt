@@ -2,10 +2,10 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>merge cheat config and regular config
 >record regular clicks and spam clicks separately with separate multipliers
     >maybe butterfly clicking has a different kurtosis and that would be useful here
->random double clicker probably would let me get higher cps
->I could disable all my combat cheats when autoclicker is off
+>random double clicker probably would let me get away with higher cps
 >make the kb reduction client-side thing configurable if I can't do 20cps
 >always move at head-run speed? (blatant)
 >impl sneaky reach
@@ -54,6 +54,7 @@
     >should just disable and enable sprint
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
+>fix cheat keybinds not working until the config screen is opened
 
 >360 degree fov keybind
 >speech to text chat typer?
@@ -66,7 +67,6 @@
 >safe w tap release button/block etc.
 >sound indicator for crossbow and bow fully charged
 >something along the lines of a.) only playing player hit sounds that you get on other players b.) a different hit sound etc.
->cheat keybinds not working until the config screen is opened?
 >make block breaking progress continue while using item
 >sprinting removes toggle sneak option + double tap w removes toggle sneak option
 >ability to block hit without letting go of right click? type meme
