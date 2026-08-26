@@ -131,25 +131,31 @@ public abstract class MinecraftClientMixin {
     private void onDoAttackReturn(CallbackInfoReturnable<Boolean> cir) {
         isAttackCooldown = true;
 
-        if (this.crosshairTarget != null &&
+        if (cheatConfig.isSneakyReachEnabled &&
+                this.crosshairTarget != null &&
                 this.crosshairTarget.getType() == HitResult.Type.MISS &&
-                MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+                this.cameraEntity instanceof Entity camera &&
+                player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
             float tickDelta = this.getRenderTickCounter().getTickDelta(false);
             var foo = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
-                    this.cameraEntity,
+                    camera,
                     4.f,
                     4.f, // TODO ?
                     tickDelta);
-            var camera = this.cameraEntity;
-            camera.setYaw();
+            float pitch = camera.getPitch();
+            camera.setPitch(0);
             var bar = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
                     camera,
                     player.getBlockInteractionRange(),
                     player.getEntityInteractionRange(),
                     tickDelta);
-            camera.setYaw();
-            TODO; // -> message
+            camera.setPitch(pitch); // TODO -> debug by not setting this back
+            if (foo.getType() == HitResult.Type.ENTITY &&
+                    bar.getType() == HitResult.Type.ENTITY &&
+                    ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity()) {
+                player.sendMessage(Text.literal("cheating"), false);
+            }
         }
     }
 //    @Inject(method = "doItemUse", at = @At(value = "HEAD"))
