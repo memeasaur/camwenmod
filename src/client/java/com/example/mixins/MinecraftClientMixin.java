@@ -114,6 +114,7 @@ public class MinecraftClientMixin {
         if (this.crosshairTarget != null &&
                 this.crosshairTarget.getType() == HitResult.Type.MISS) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
+            TODO;
         }
     }
 //    @Inject(method = "doItemUse", at = @At(value = "HEAD"))
