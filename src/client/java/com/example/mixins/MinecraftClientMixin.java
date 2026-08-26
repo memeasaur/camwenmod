@@ -3,7 +3,11 @@ package com.example.mixins;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +32,7 @@ import static com.example.Utils.handlePvpDamage;
 
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
@@ -35,6 +40,21 @@ public class MinecraftClientMixin {
     @Shadow
     @Nullable
     public HitResult crosshairTarget;
+
+    @Shadow
+    @Final
+    public GameRenderer gameRenderer;
+
+    @Shadow
+    @Nullable
+    public Entity cameraEntity;
+
+    @Shadow
+    public abstract RenderTickCounter getRenderTickCounter();
+
+    @Shadow
+    @Nullable
+    public ClientPlayerInteractionManager interactionManager;
 
     @Inject(at = @At(value = "HEAD"), method = "doAttack")
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
@@ -112,9 +132,24 @@ public class MinecraftClientMixin {
         isAttackCooldown = true;
 
         if (this.crosshairTarget != null &&
-                this.crosshairTarget.getType() == HitResult.Type.MISS) {
+                this.crosshairTarget.getType() == HitResult.Type.MISS &&
+                MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
-            TODO;
+            float tickDelta = this.getRenderTickCounter().getTickDelta(false);
+            var foo = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
+                    this.cameraEntity,
+                    4.f,
+                    4.f, // TODO ?
+                    tickDelta);
+            var camera = this.cameraEntity;
+            camera.setYaw();
+            var bar = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
+                    camera,
+                    player.getBlockInteractionRange(),
+                    player.getEntityInteractionRange(),
+                    tickDelta);
+            camera.setYaw();
+            TODO; // -> message
         }
     }
 //    @Inject(method = "doItemUse", at = @At(value = "HEAD"))
