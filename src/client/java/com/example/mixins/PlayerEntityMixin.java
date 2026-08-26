@@ -9,9 +9,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.example.UntitledClient.cheatConfig;
 import static com.example.Utils.handlePvpDamage;
@@ -36,5 +37,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             this.setSprinting(true);
         }
         // cheats end
+    }
+
+    // TODO -> this is fickle, but every solution seems like it's gonna be fickle
+    // requiring this to be signed off on when updating would be nice
+    @ModifyConstant(method = "attack", constant = @Constant(doubleValue = 0.6))
+    double onAttackConstant(double value) {
+        return cheatConfig.attackVelocityBypass;
     }
 }

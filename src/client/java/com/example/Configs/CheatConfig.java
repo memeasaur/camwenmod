@@ -45,6 +45,8 @@ public class CheatConfig {
 
     public boolean isSneakyReachEnabled = false;
 
+    public double attackVelocityBypass = 0.6;
+
     // TODO -> impl? might not be possible with how simulated clients get replicated
     public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
 

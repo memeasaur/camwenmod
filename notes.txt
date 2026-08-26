@@ -2,6 +2,8 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
+    >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
 >make the kb reduction client-side thing configurable if I can't do 20cps
 >always move at head-run speed? (blatant)
 >impl sneaky reach

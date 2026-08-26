@@ -510,6 +510,13 @@ public class Constants {
                         cheatConfig.isSneakyReachEnabled,
                         is -> cheatConfig.isSneakyReachEnabled = is,
                         ""));
+                xModifier += 150;
+                addDrawableChild(getConfigButtonWidget(
+                        "change attack self velocity multiplier. current: " + cheatConfig.attackVelocityBypass,
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
+                        x + xModifier,
+                        y,
+                        "opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"));
 //                addDrawableChild(getConfigButtonWidget(
 //                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
@@ -569,6 +576,7 @@ public class Constants {
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> cheatConfig.glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> cheatConfig.glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number, CHEAT_CONFIG);
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number, CHEAT_CONFIG);
 
 //    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
     // Cheats end
