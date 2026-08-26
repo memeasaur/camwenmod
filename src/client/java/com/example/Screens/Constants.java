@@ -20,7 +20,6 @@ import net.minecraft.text.Text;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
@@ -600,44 +599,31 @@ public class Constants {
                     Thread.sleep(10); // TODO just queue them and wait for them all to be absolutely finished
                     GlobalScreen.removeNativeMouseListener(nativeMouseListener);
                     GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
-                    int[] newRecordedAutoclickerClicks = !mutableMacroClicks.isEmpty()
-                            ?
-                            ((Supplier<int[]>) () -> {
-                                {
-                                    int oldLength = cheatConfig.recordedClickSequences.length;
-                                    {
-                                        int newLength = oldLength + 1;
-                                        {
-                                            CheatConfig.clickRecording[] newMatrix = new CheatConfig.clickRecording[newLength];
-                                            System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix, 0, oldLength);
-                                            cheatConfig.recordedClickSequences = newMatrix;
-                                        }
-                                        {
-                                            MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
-                                            System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix1, 0, oldLength);
-                                            cheatConfig.recordedClickSequences = newMatrix1;
-                                        }
-                                    }
-                                    newRecordedAutoclickerClicks = mutableMacroClicks.stream()
-                                            .skip(2)
-                                            .mapToInt(Integer::intValue)
-                                            .toArray();
-                                    cheatConfig.immutableRecordedAutoclickerClicks[oldLength] = newRecordedAutoclickerClicks;
-
-                                    MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                                    cheatConfig.immutableRecordedAutoclickerMovements[oldLength] = newRecordedAutoclickerMovements;
-
-                                }
-                            }).get()
-                            : null;
-//                    if (!mutableMacroClicks.isEmpty()) {
-//                    } else {
-//                        newRecordedAutoclickerClicks = null;
-//                    }
+                    boolean flag = !mutableMacroClicks.isEmpty();
+                    if (flag) {
+//                        int oldLength = cheatConfig.recordedClickSequences.length;
+//                        {
+//                            int newLength = oldLength + 1;
+//                            {
+//                                CheatConfig.clickRecording[] newMatrix = new CheatConfig.clickRecording[newLength];
+//                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix, 0, oldLength);
+//                                cheatConfig.recordedClickSequences = newMatrix;
+//                            }
+//                            {
+//                                MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
+//                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix1, 0, oldLength);
+//                                cheatConfig.recordedClickSequences = newMatrix1;
+//                            }
+//                        }
+                        int[] newRecordedAutoclickerClicks = mutableMacroClicks.stream().skip(2).mapToInt(Integer::intValue).toArray();
+                        MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
+                        TODO; // isSlow
+                        cheatConfig.recordedClickSequences.add(new CheatConfig.clickRecording(newRecordedAutoclickerClicks, newRecordedAutoclickerMovements, false));
+                    }
                     threadClientInstance.execute(() -> {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-                            player.sendMessage(newRecordedAutoclickerClicks != null
-                                    ? getAutoclickerText(newRecordedAutoclickerClicks)
+                            player.sendMessage(flag
+                                    ? getAutoclickerText(cheatConfig.recordedClickSequences.getLast().clicks())
                                     : Text.literal("invalid macro"), true); // TODO -> console
                         }
                     });
@@ -658,17 +644,13 @@ public class Constants {
         @Override
         protected void init() {
             int y = 20;
-            int originalLength = cheatConfig.immutableRecordedAutoclickerClicks.length;
-            for (int[] macro : cheatConfig.immutableRecordedAutoclickerClicks) {
-                addDrawableChild(ButtonWidget.builder(getAutoclickerText(macro), (button) -> {
-                            int[][] newMatrix = new int[originalLength - 1][];
-                            int i = 0;
-                            for (int[] macro1 : cheatConfig.immutableRecordedAutoclickerClicks)
-                                if (macro != macro1)
-                                    newMatrix[i++] = macro1;
-                            cheatConfig.immutableRecordedAutoclickerClicks = newMatrix;
-                            MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
-                        })
+            for (CheatConfig.clickRecording clickRecording : cheatConfig.recordedClickSequences) {
+                addDrawableChild(ButtonWidget.builder(
+                                getAutoclickerText(clickRecording.clicks()),
+                                (button) -> {
+                                    cheatConfig.recordedClickSequences.remove(clickRecording); // TODO ?
+                                    MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
+                                })
                         .position(20, y += 20)
                         .tooltip(Tooltip.of(Text.literal("click to delete")))
                         .build());
