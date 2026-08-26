@@ -18,6 +18,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
@@ -449,7 +450,10 @@ public class UntitledClient implements ClientModInitializer {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
 
-            if (cheatConfig.isGrappleGroundCheckEnabled && stack.isOf(Items.FISHING_ROD) && player.fishHook != null) {
+            if (cheatConfig.isGrappleGroundCheckEnabled &&
+                    stack.isOf(Items.FISHING_ROD) &&
+                    player.fishHook instanceof FishingBobberEntity hook &&
+                    !hook.isOnGround()) {
                 return ActionResult.FAIL;
             }
 
