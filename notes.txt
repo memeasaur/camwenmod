@@ -2,18 +2,13 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
->merge cheat config and regular config
->record regular clicks and spam clicks separately with separate multipliers
-    >maybe butterfly clicking has a different kurtosis and that would be useful here
->random double clicker probably would let me get away with higher cps
 >make the kb reduction client-side thing configurable if I can't do 20cps
 >always move at head-run speed? (blatant)
 >impl sneaky reach
 >automatic head run (legit):
     >automatically free-looks your camera to the correct angle for head-running
     >could snap your head view if lunar client etc. freelook does that, it probably doesn't
->make ethylene change the fov still
->ignore right click inputs that are too early on the grapple so I can spam/hold it
+>ignore right click inputs that are too early on the grapple so I can spam it
 >rally that places an on-screen waypoint
     >should work for drops, too
     >should also be able to play team permanent waypoints like hasa etc.
@@ -37,6 +32,11 @@
         >uses your healing data for the values
         >fall damage
 
+>random double clicker probably would let me get away with higher cps
+    >not really because two clicks in the same tick or around the same tick isn't as useful, and stretching them out just turns it into an autoclicker essentially
+>make ethylene change the fov still
+>merge cheat config and regular config?
+>butterfly clicking for more random kurtosis?
 >should slow the clicker down when it's in the inv
 >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?

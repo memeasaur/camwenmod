@@ -552,7 +552,7 @@ public class Constants {
         @Override
         protected void init() {
             int y = 20;
-            for (CheatConfig.clickRecording clickRecording : cheatConfig.recordedClickSequences) {
+            for (CheatConfig.ClickRecording clickRecording : cheatConfig.recordedClickSequences) {
                 addDrawableChild(ButtonWidget.builder(
                                 getAutoclickerText(clickRecording.clicks()),
                                 (button) -> {

@@ -10,9 +10,9 @@ import static com.example.Utils.serializeJsonBlocking;
 public class CheatConfig {
     public boolean isGuiCheatsPvpDisabling = true;
 
-    public record clickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
+    public record ClickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
     }
-    public ArrayList<clickRecording> recordedClickSequences = new ArrayList<>();
+    public ArrayList<ClickRecording> recordedClickSequences = new ArrayList<>();
     public float autoclickerJitterStartingMultiplier = 1.f;
     public float autoclickerJitterEndingMultiplier = 1.f;
     public float autoclickerSlowStartingMultiplier = 1.5f;

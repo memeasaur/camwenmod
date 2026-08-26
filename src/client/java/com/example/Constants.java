@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.Configs.CheatConfig;
 import com.example.mixins.MouseMixin;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
@@ -129,15 +130,14 @@ public class Constants {
             isHeldAutoclickerPressed = true; // this is accounting for the initial mouse press, which is used
             final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.recordedClickSequences.size())};
             final boolean[] isCurrentlyReversed = new boolean[]{false};
-            final float[] lerp = new float[]{cheatConfig.autoclickerJitterStartingMultiplier};
             nullableCurrentHeldAutoclickerTask = new Thread() {
-                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).clicks();
+//                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).clicks();
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
                 int recordingCounter = 1;
                 final Runnable getNextRecordedAutoclicker = () -> {
                     recordingCounter++;
                     int newIndex = RANDOM.nextInt(cheatConfig.recordedClickSequences.size());
-                    currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(newIndex).clicks();
+                    currentAutoclickerMacroIndex[0] = newIndex;
                 };
 
                 @Override
@@ -145,13 +145,28 @@ public class Constants {
                     int currentAutoclickerIndex = 1; // this is accounting for the initial mouse press, which is used
 //                    int firstMacroLengthMinus1 = currentRecordedAutoclicker.length - 1;
                     while (nullableCurrentHeldAutoclickerTask == this) {
-                        lerp[0] = recordingCounter == 1
-                                ? lerp(cheatConfig.autoclickerJitterStartingMultiplier, cheatConfig.autoclickerJitterEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
-//                                : recordingCounter == 2
-//                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
-                                : cheatConfig.autoclickerJitterEndingMultiplier;
-                        LockSupport.parkNanos(
-                                (long) (currentRecordedAutoclicker[currentAutoclickerIndex] / lerp[0]));
+                        CheatConfig.ClickRecording clickRecording = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]);
+                        final float lerp;
+                        if (recordingCounter == 1) {
+                            final float progress = (float) currentAutoclickerIndex / (float) (clickRecording.clicks().length - 1);
+                            if (clickRecording.isSlow()) {
+                                lerp = lerp(cheatConfig.autoclickerSlowStartingMultiplier, cheatConfig.autoclickerSlowEndingMultiplier, progress);
+                            } else {
+                                lerp = lerp(cheatConfig.autoclickerJitterStartingMultiplier, cheatConfig.autoclickerJitterEndingMultiplier, progress);
+                            }
+                        } else {
+                            if (clickRecording.isSlow()) {
+                                lerp = cheatConfig.autoclickerSlowEndingMultiplier;
+                            } else {
+                                lerp = cheatConfig.autoclickerJitterEndingMultiplier;
+                            }
+                        }
+//                        float lerp = recordingCounter == 1
+//                                ?
+////                                : recordingCounter == 2
+////                                ? lerp(cheatConfig.autoclickerStartingMultiplier, cheatConfig.autoclickerEndingMultiplier, (float) currentAutoclickerIndex / (float) (currentRecordedAutoclicker.length - 1))
+//                                : cheatConfig.autoclickerJitterEndingMultiplier;
+                        LockSupport.parkNanos((long) (clickRecording.clicks()[currentAutoclickerIndex] / lerp));
                         // TODO -> shift + right click could also be an autoclicker here
                         if (threadClient.currentScreen != null
                                 && (
@@ -167,7 +182,7 @@ public class Constants {
                         } // TODO -> change the speed if blocking/using item (?, not sure how to handle this exactly -> completely stopping clicks seems wrong, maybe immediately pivoting to the lower multiplier is better?)
                         else {
                             if (!isCurrentlyReversed[0]) {
-                                if (currentAutoclickerIndex >= currentRecordedAutoclicker.length - 1) {
+                                if (currentAutoclickerIndex >= clickRecording.clicks().length - 1) {
 //                                    firstMacroLengthMinus1 = -1;
                                     isCurrentlyReversed[0] = true;
                                     getNextRecordedAutoclicker.run();
@@ -231,7 +246,8 @@ public class Constants {
 
                         while (nullableCurrentHeldAutoclickerTask == task) {
                             MouseMovement mouseMovement = currentRecordedAutoclicker[currentAutoclickerIndex];
-                            LockSupport.parkNanos((long) (mouseMovement.delayNanos() / lerp[0]));
+                            // I removed the lerp from this, so it doesn't match the click if it's lerped at all, doesn't matter
+                            LockSupport.parkNanos(mouseMovement.delayNanos());
                             if (cheatConfig.isAutoclickerShakeEnabled && threadClient.currentScreen == null && threadClient.player instanceof ClientPlayerEntity player && !player.isUsingItem())
                                 threadClient.execute(() -> {
                                     long handle = MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle();

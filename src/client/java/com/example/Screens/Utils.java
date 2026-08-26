@@ -47,7 +47,8 @@ public class Utils {
             }
         };
     }
-    static Screen getAbstractKeybindInputScreen(Text title, Consumer<Integer> consumer, Screen returnScreen) {
+    static Screen getAbstractKeybindInputScreen(
+            Text title, Consumer<Integer> consumer, Screen returnScreen) {
         return getAbstractInputScreen(title, (threadInstance) ->
                 consumer.accept(getGlfwInputBlocking(threadInstance, title)), returnScreen);
     }
@@ -270,7 +271,7 @@ public class Utils {
 //                        }
                             int[] newRecordedAutoclickerClicks = mutableMacroClicks.stream().skip(2).mapToInt(Integer::intValue).toArray();
                             MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                            cheatConfig.recordedClickSequences.add(new CheatConfig.clickRecording(
+                            cheatConfig.recordedClickSequences.add(new CheatConfig.ClickRecording(
                                     newRecordedAutoclickerClicks,
                                     newRecordedAutoclickerMovements,
                                     isSlow));
