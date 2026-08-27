@@ -47,11 +47,13 @@ public class Utils {
             }
         };
     }
+
     static Screen getAbstractKeybindInputScreen(
             Text title, Consumer<Integer> consumer, Screen returnScreen) {
         return getAbstractInputScreen(title, (threadInstance) ->
                 consumer.accept(getGlfwInputBlocking(threadInstance, title)), returnScreen);
     }
+
     static int getGlfwInputBlocking(MinecraftClient threadClientInstance, Text title) {
         try {
             int[] resultKey = new int[]{0};
@@ -78,6 +80,7 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
     static Screen getAbstractKeyboardSequenceScreen(Text title, Function<String, Boolean> isValidHandler, BiConsumer<String, MinecraftClient> finalStringConsumer, Screen returnScreen) {
         return getAbstractInputScreen(title, client -> {
             try {
@@ -98,8 +101,7 @@ public class Utils {
                     latch.await();
                 }
                 finalStringConsumer.accept(floatBuilder.toString(), client);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                         player.sendMessage(Text.literal("getabstractkeyboardsequencescreen " + e.getMessage()), false);
@@ -107,31 +109,33 @@ public class Utils {
             }
         }, returnScreen);
     }
+
     private static final boolean[] getFloatInputScreenFlag = new boolean[]{false};
-    static Screen getFloatInputScreen(Text title, Consumer<Float> consumer, Screen returnScreen) {
+
+    static Screen getDoubleInputScreen(
+            Text title, Consumer<Double> consumer, Screen returnScreen) {
         return getAbstractKeyboardSequenceScreen(title, (string) -> {
-            if (Character.isDigit(string.charAt(0)))
+            if (Character.isDigit(string.charAt(0))) {
                 return true;
+                }
             else if (string.charAt(0) == '.' && !getFloatInputScreenFlag[0]) {
                 getFloatInputScreenFlag[0] = true;
                 return true;
-            }
-            else
+            } else
                 return false;
         }, (finalFloatString, client) -> {
             if (!finalFloatString.isEmpty() && !finalFloatString.equals(".")) {
-                consumer.accept(Float.parseFloat(finalFloatString));
-                client.execute(() ->
-                        client.setScreen(CONFIG));
+                consumer.accept(Double.parseDouble(finalFloatString));
+                client.execute(() -> client.setScreen(CONFIG));
                 // TODO -> going back to config twice seems odd here
-            }
-            else
+            } else
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                         player.sendMessage(Text.literal("invalid float"), true); // TODO -> console
                 });
         }, returnScreen);
     }
+
     static CompletableFuture<HttpResponse<String>> getHandledMojangApiFuture(Supplier<CompletableFuture<HttpResponse<String>>> unhandledFutureSupplier) {
         return unhandledFutureSupplier.get()
                 .exceptionally(err -> {
@@ -160,6 +164,7 @@ public class Utils {
                         return CompletableFuture.completedFuture(response);
                 });
     }
+
     static void handleAbstractMojangApiNameplateUpdaterScreen(Function<ClientPlayNetworkHandler, ArrayList<CompletableFuture<Constants.nameplateUpdaterEntry>>> handler) {
         try {
             if (MINECRAFT_CLIENT_INSTANCE.getNetworkHandler() instanceof ClientPlayNetworkHandler networkHandler) {
@@ -174,8 +179,7 @@ public class Utils {
                                     MINECRAFT_CLIENT_INSTANCE.setScreen(NAMEPLATE_UPDATER));
                         });
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                 player.sendMessage(Text.literal(e.getMessage()), false);
         }
@@ -192,6 +196,7 @@ public class Utils {
     // Cheats end
 
     private static final Object AUTOCLICK_MACRO_RECORDER_LOCK = new Object();
+
     public static Screen BuildAutoclickMacroRecorderScreen(final Text title, final boolean isSlow) {
         return getAbstractInputScreen(
                 title,

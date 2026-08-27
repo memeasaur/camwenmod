@@ -43,7 +43,7 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
     static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
-//    @Nullable
+    //    @Nullable
 //    static private SupabaseManager supabaseManager = new SupabaseManager("foo", "bar");
     //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
 //    private static JsonArray newUpdates;
@@ -90,6 +90,7 @@ public class UntitledClient implements ClientModInitializer {
             ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
             FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
             NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
+//    TODO; // set this every frame
     public static final KeyBinding
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");

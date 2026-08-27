@@ -551,10 +551,10 @@ public class Constants {
     private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwToggleAutoclickerKeybind = key, CHEAT_CONFIG);
     private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwEnableAutoclickerKeybind = key, CHEAT_CONFIG);
     private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwDisableAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerJitterStartingMultiplier = number, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerJitterEndingMultiplier = number, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerSlowStartingMultiplier = number, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getFloatInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerSlowEndingMultiplier = number, CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerJitterStartingMultiplier = number.floatValue(), CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerJitterEndingMultiplier = number.floatValue(), CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerSlowStartingMultiplier = number.floatValue(), CHEAT_CONFIG);
+    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerSlowEndingMultiplier = number.floatValue(), CHEAT_CONFIG);
     private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
         @Override
         protected void init() {
@@ -575,8 +575,8 @@ public class Constants {
 
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> cheatConfig.glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> cheatConfig.glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number, CHEAT_CONFIG);
-    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getFloatInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number, CHEAT_CONFIG);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number.floatValue(), CHEAT_CONFIG);
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number, CHEAT_CONFIG);
 
 //    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
     // Cheats end
