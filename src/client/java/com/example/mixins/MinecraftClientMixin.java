@@ -156,7 +156,7 @@ public abstract class MinecraftClientMixin {
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
                     interactionManager != null) {
-                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
+//                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
                 player.sendMessage(Text.literal("cheating"), false);
             }
         }

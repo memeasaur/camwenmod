@@ -78,11 +78,12 @@ public abstract class ClientPlayerEntityMixin {
             } else
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
 
-            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
-                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
-                assert camera != null;
-                ((EntityInvoker)camera).setRotation(player.getYaw() - 45.0f, camera.getPitch());
-            }
+            TODO;
+//            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
+//                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
+//                assert camera != null;
+//                ((EntityInvoker)camera).setRotation(player.getYaw() - 45.0f, camera.getPitch());
+//            }
 
 
             if (cheatConfig.isAutoCobweb) {
