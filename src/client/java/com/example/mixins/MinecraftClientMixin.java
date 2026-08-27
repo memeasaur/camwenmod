@@ -138,14 +138,14 @@ public abstract class MinecraftClientMixin {
                 player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
             float tickDelta = this.getRenderTickCounter().getTickDelta(false);
-            var foo = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
+            var foo = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
                     camera,
                     4.f,
                     4.f, // TODO ?
                     tickDelta);
             float pitch = camera.getPitch();
             camera.setPitch(0);
-            var bar = ((GameRendererInvoker) this.gameRenderer).findCrosshairTarget(
+            var bar = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
                     camera,
                     player.getBlockInteractionRange(),
                     player.getEntityInteractionRange(),
@@ -156,7 +156,8 @@ public abstract class MinecraftClientMixin {
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
                     interactionManager != null) {
-//                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
+                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
+                // TODO -> debugMode this
                 player.sendMessage(Text.literal("cheating"), false);
             }
         }

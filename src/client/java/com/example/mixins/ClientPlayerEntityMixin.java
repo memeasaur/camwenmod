@@ -78,12 +78,12 @@ public abstract class ClientPlayerEntityMixin {
             } else
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
 
-            TODO;
-//            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
-//                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
-//                assert camera != null;
-//                ((EntityInvoker)camera).setRotation(player.getYaw() - 45.0f, camera.getPitch());
-//            }
+            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
+                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
+                assert camera != null;
+                // TODO -> I think I have to implement my own freelook for this
+                ((EntityInvoker)camera).invokeSetRotation(player.getYaw() - 45.0f, camera.getPitch());
+            }
 
 
             if (cheatConfig.isAutoCobweb) {

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(GameRenderer.class)
 public interface GameRendererInvoker {
     @Invoker("findCrosshairTarget")
-    HitResult findCrosshairTarget(
+    HitResult invokeFindCrosshairTarget(
             Entity camera,
             double blockInteractionRange,
             double entityInteractionRange,
