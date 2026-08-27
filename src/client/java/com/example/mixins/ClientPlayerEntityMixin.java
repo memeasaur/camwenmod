@@ -3,6 +3,7 @@ package com.example.mixins;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -78,7 +79,7 @@ public abstract class ClientPlayerEntityMixin {
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
 
             if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
-                var camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
+                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
                 assert camera != null;
                 ((EntityInvoker)camera).setRotation(player.getYaw() - 45.0f, camera.getPitch());
             }
