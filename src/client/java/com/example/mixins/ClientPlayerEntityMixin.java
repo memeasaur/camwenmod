@@ -52,7 +52,7 @@ public abstract class ClientPlayerEntityMixin {
         boolean isCurrentHandledScreen = currentScreen instanceof HandledScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
         SNEAK_VANILLA.setPressed((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
-        if (!isCurrentHandledScreen) { // you better not fork-remove this! or you are gonna have a bad time!
+        if (!isCurrentHandledScreen) {
             SPRINT_VANILLA.setPressed((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
             JUMP_VANILLA.setPressed((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
             FORWARD_VANILLA.setPressed((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
@@ -76,6 +76,12 @@ public abstract class ClientPlayerEntityMixin {
                     abilities.setFlySpeed(BASE_FLY_SPEED);
             } else
                 player.getAbilities().setFlySpeed(BASE_FLY_SPEED);
+
+            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
+                var camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
+                assert camera != null;
+                ((EntityInvoker)camera).setRotation(player.getYaw() - 45.0f, camera.getPitch());
+            }
 
 
             if (cheatConfig.isAutoCobweb) {

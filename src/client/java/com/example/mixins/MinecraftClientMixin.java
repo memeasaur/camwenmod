@@ -151,9 +151,12 @@ public abstract class MinecraftClientMixin {
                     player.getEntityInteractionRange(),
                     tickDelta);
             camera.setPitch(pitch); // TODO -> debug by not setting this back
+            assert interactionManager != null;
             if (foo.getType() == HitResult.Type.ENTITY &&
                     bar.getType() == HitResult.Type.ENTITY &&
-                    ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity()) {
+                    ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
+                    interactionManager != null) {
+                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
                 player.sendMessage(Text.literal("cheating"), false);
             }
         }

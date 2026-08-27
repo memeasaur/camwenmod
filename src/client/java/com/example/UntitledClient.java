@@ -90,7 +90,6 @@ public class UntitledClient implements ClientModInitializer {
             ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
             FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
             NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
-    TODO; // set this every frame
     public static final KeyBinding
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");

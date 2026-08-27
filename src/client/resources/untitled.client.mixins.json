@@ -22,6 +22,7 @@
   },
   "mixins": [
     "BlockItemMixin",
+    "EntityInvoker",
     "EntityMixin",
     "LivingEntityMixin",
     "LivingEntityMixinInterface",
