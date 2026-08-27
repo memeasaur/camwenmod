@@ -468,6 +468,7 @@ public class UntitledClient implements ClientModInitializer {
             Vec3d pos, Camera camera, Matrix4f projection, DrawContext drawContext) {
         Vec3d relative = pos.subtract(camera.getPos());
         TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
+        // java has a websocket I can use for this apparently
 
         Vector4f clipPos = new Vector4f(
                 (float) relative.x,
