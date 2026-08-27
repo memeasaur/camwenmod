@@ -90,7 +90,7 @@ public class UntitledClient implements ClientModInitializer {
             ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
             FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
             NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
-//    TODO; // set this every frame
+    TODO; // set this every frame
     public static final KeyBinding
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
@@ -468,7 +468,7 @@ public class UntitledClient implements ClientModInitializer {
     private void drawPlayerWaypoint(
             Vec3d pos, Camera camera, Matrix4f projection, DrawContext drawContext) {
         Vec3d relative = pos.subtract(camera.getPos());
-//        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
+        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
         // java has a websocket I can use for this apparently
 
         Vector4f clipPos = new Vector4f(
