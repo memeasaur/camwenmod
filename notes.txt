@@ -25,6 +25,7 @@
         >uses your healing data for the values
         >fall damage
 
+>implement freelook and do the automatic head-run thing
 >always move at head-run speed? (blatant)
 >I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
     >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
