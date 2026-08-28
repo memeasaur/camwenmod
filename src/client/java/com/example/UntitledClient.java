@@ -13,9 +13,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.PlayerSkinDrawer;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
@@ -419,11 +422,15 @@ public class UntitledClient implements ClientModInitializer {
                             Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
                             assert MINECRAFT_CLIENT_INSTANCE.world != null;
                             for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+                                if (!(player instanceof AbstractClientPlayerEntity clientPlayerEntity)) {
+                                    continue;
+                                }
                                 drawPlayerWaypoint(
-                                        player.getLerpedPos(renderTickCounter.getTickDelta(false)),
+                                        player.getLerpedPos(renderTickCounter.getTickDelta(false))
+                                                .add(0, player.getHeight() / 2, 0),
                                         camera,
                                         projection[0],
-                                        context);
+                                        context, clientPlayerEntity.getSkinTextures());
 //                                drawPlayerWaypoint(
 //                                        new Vec3d(0, 64, 0),
 //                                        camera,
@@ -472,7 +479,11 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private void drawPlayerWaypoint(
-            Vec3d worldPos, Camera camera, Matrix4f projection, DrawContext drawContext) {
+            Vec3d worldPos,
+            Camera camera,
+            Matrix4f projection,
+            DrawContext drawContext,
+            SkinTextures skinTextures) {
         Vec3d cameraRelativePos = worldPos.subtract(camera.getPos());
 //        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
         // java has a websocket I can use for this apparently
@@ -505,25 +516,30 @@ public class UntitledClient implements ClientModInitializer {
         // diamond TODO -> player heads
         {
 
-            int size = 6;
+            int size = 12;
             Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
             int screenX = (int) ((ndcX + 1) / 2 * window.getScaledWidth());
             int screenY = (int) ((1 - ndcY) / 2 * window.getScaledHeight());
-            drawContext.fill(
-                    screenX - 1,
-                    screenY - size,
-                    screenX + 2,
-                    screenY + size + 1,
-                    0xAFFF0000
-            );
-
-            drawContext.fill(
-                    screenX - size,
-                    screenY - 1,
-                    screenX + size + 1,
-                    screenY + 2,
-                    0xAFFF0000
-            );
+            PlayerSkinDrawer.draw(
+                    drawContext,
+                    skinTextures,
+                    screenX - size / 2,
+                    screenY - size / 2,
+                    size);
+//            drawContext.fill(
+//                    screenX - 1,
+//                    screenY - size,
+//                    screenX + 2,
+//                    screenY + size + 1,
+//                    0xAFFF0000
+//            );
+//            drawContext.fill(
+//                    screenX - size,
+//                    screenY - 1,
+//                    screenX + size + 1,
+//                    screenY + 2,
+//                    0xAFFF0000
+//            );
 
             {
 //                Vector3f forward = new Vector3f(0, 0, -1);
