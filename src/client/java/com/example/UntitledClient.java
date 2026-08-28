@@ -232,6 +232,8 @@ public class UntitledClient implements ClientModInitializer {
     private static double lastEndTickHeight;
 //    private static boolean isUpdateNotified = false;
 
+    public static boolean isGrappleReady = false;
+
     @Override
     public void onInitializeClient() {
 //        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
@@ -453,14 +455,14 @@ public class UntitledClient implements ClientModInitializer {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
 
-            TODO; // -> listen for the sound that plays (door creaks)
             if (cheatConfig.isGrappleGroundCheckEnabled &&
                     stack.isOf(Items.FISHING_ROD) &&
-                    player.fishHook instanceof FishingBobberEntity hook &&
-                    !hook.isOnGround()) {
+                    player.fishHook instanceof FishingBobberEntity &&
+                    !isGrappleReady) {
                 return ActionResult.FAIL;
             }
 
+            isGrappleReady = false;
             return ActionResult.PASS;
         });
     }

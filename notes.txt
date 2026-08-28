@@ -24,6 +24,7 @@
         >uses conservative estimates of healing
         >uses your healing data for the values
         >fall damage
+    >shows plo when you aren't in the shotbow party
 
 >implement freelook and do the automatic head-run thing
 >always move at head-run speed? (blatant)
