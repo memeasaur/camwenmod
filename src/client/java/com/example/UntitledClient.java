@@ -46,30 +46,10 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
     static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
-    //    @Nullable
-//    static private SupabaseManager supabaseManager = new SupabaseManager("foo", "bar");
-    //    public static final ModMetadata METADATA = FabricLoader.getInstance().getModContainer("untitled").get().getMetadata();
-//    private static JsonArray newUpdates;
-//    static {
-//        new Thread(() -> {
-//            try {
-//                String response = HTTP_CLIENT.send(HttpRequest.newBuilder()
-//                        .uri(URI.create("https://xapkbnegosbyhmondqti.supabase.co/rest/v1/fabricpvputils_updates?version=gt." + METADATA.getVersion() + "&order=version.desc"))
-//                        .header("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhcGtibmVnb3NieWhtb25kcXRpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTgxNTMsImV4cCI6MjA2NDM3NDE1M30.qevIYqIPh3BhiGHj_gppbggv-42RQedaF8Zd-aI5fZA")
-//                        .build(), HttpResponse.BodyHandlers.ofString()).body();
-//                newUpdates = JsonParser.parseString(response).getAsJsonArray();
-//                for (JsonElement element : newUpdates)
-//                    if (element.getAsJsonObject().get("is_critical").getAsBoolean())
-//                        MinecraftClient.getInstance().execute(() -> {
-//                            MINECRAFT_CLIENT_INSTANCE.scheduleStop();
-//                            throw new RuntimeException("pvputils missing critical update. force stopping");
-//                        });
-//            } catch (IOException | InterruptedException e) {
-//                if (MinecraftClient.getInstance().player instanceof ClientPlayerEntity player)
-//                    MinecraftClient.getInstance().execute(() -> player.sendMessage(Text.literal("updates request failed"), false));
-//            }
-//        }).start();
-//    }
+    TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
+    // java has a websocket I can use for this apparently
+    //        TODO; // task for sending the http payloads of all the shared info
+    //        TODO; // register task for drawing waypoints of far away players
     public static final KeyBinding // TODO -> idk why it crashes when I move these
             SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
             SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
@@ -110,42 +90,6 @@ public class UntitledClient implements ClientModInitializer {
                 "PvpUtils"
         ));
     }
-
-//    static {
-//        try {
-//            if (getDeserializedJsonBlocking("nameplates", ) instanceof Map map)
-//                nameplateUuids = ((Map<String, String>) map).entrySet().stream()
-//                        .collect(Collectors.toMap(entry -> UUID.fromString(entry.getKey()), Map.Entry::getValue));
-//            else
-//                nameplateUuids = Map.of();
-//        } catch (Exception e) {
-//            var client = MinecraftClient.getInstance();
-//            if (client.player instanceof ClientPlayerEntity player)
-//                client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
-//            // TODO -> console this
-//        }
-//    }
-
-//    public static Map<Integer, KeyBinding> duplicateKeybinds; // TODO move to config
-
-//    static {
-//        new Thread(() -> {
-//            try {
-//                Thread.sleep(1000);
-//                if (getDeserializedJsonBlocking("duplicateKeybinds", ) instanceof Map map)
-//                    duplicateKeybinds = null; //((Map<Integer, Integer>)map);
-//                else
-//                    duplicateKeybinds = Map.of(); // GLFW.GLFW_KEY_G, USE_VANILLA
-//            } catch (Exception e) {
-//                var client = MinecraftClient.getInstance();
-//                if (client.player instanceof ClientPlayerEntity player)
-//                    client.execute(() -> player.sendMessage(Text.literal(e.getMessage()), false));
-//                // TODO -> console this
-//            }
-//        }).start();
-//    }
-
-    //    public static final KeyBinding KEYBIND_CONSOLE = getAbstractPvpUtilsKeybind("Console"); TODO
     public static boolean isDebugModeEnabled = false;
     public static boolean isSprintReset = true;
     public static boolean
@@ -160,52 +104,6 @@ public class UntitledClient implements ClientModInitializer {
     public static boolean isYLower;
 
     // Cheats start
-//    static {
-//        new Thread(() -> {
-//            try {
-//                if (getDeserializedJsonBlocking("cheat-config") instanceof Map config) { // TODO -> this shit was a bad idea
-//                    isGuiCheatsPvpDisabling = (boolean) config.get("isGuiCheatsPvpDisabling");
-//                    if (config.get("immutableRecordedAutoclickerClicks") instanceof List foo && config.get("immutableRecordedAutoclickerMovements") instanceof List bar && foo.size() == bar.size()) {
-//                        {
-//                            var lists1 = (List<List<Number>>) foo;
-//                            int[][] tempClicks = new int[lists1.size()][];
-//                            for (int i = 0; i < lists1.size(); i++) {
-//                                List<Number> inner = lists1.get(i);
-//                                tempClicks[i] = new int[inner.size()]; // TODO ? chatgpt did this
-//                                for (int j = 0; j < inner.size(); j++) {
-//                                    tempClicks[i][j] = inner.get(j).intValue();
-//                                }
-//                            }
-//                            immutableRecordedAutoclickerClicks = tempClicks;
-//                        }
-//                        {
-//                            var lists2 = (List<List<Map<String, Number>>>) bar;
-//                            MouseMovement[][] movements = new MouseMovement[lists2.size()][];
-//                            for (int i = 0; i < lists2.size(); i++) {
-//                                List<Map<String, Number>> inner = lists2.get(i);
-//                                movements[i] = new MouseMovement[inner.size()];
-//                                for (int j = 0; j < inner.size(); j++) {
-//                                    Map<String, Number> map = inner.get(j);
-//                                    movements[i][j] = new MouseMovement(map.get("delayNanos").intValue(), map.get("deltaX").intValue(), map.get("deltaY").intValue());
-//                                }
-//                            }
-//                            immutableRecordedAutoclickerMovements = movements;
-//                        }
-//                    }
-//                    autoclickerStartingMultiplier = ((Number) config.get("autoclickerStartingMultiplier")).floatValue();
-//                    autoclickerEndingMultiplier = ((Number) config.get("autoclickerEndingMultiplier")).floatValue();
-//                    glfwToggleAutoclickerKeybind = ((Number) config.get("glfwToggleAutoclickerKeybind")).intValue();
-//                    glfwEnableAutoclickerKeybind = ((Number) config.get("glfwEnableAutoclickerKeybind")).intValue();
-//                    glfwDisableAutoclickerKeybind = ((Number) config.get("glfwDisableAutoclickerKeybind")).intValue();
-//                    glfwToggleBlockXrayKeybind = ((Number) config.get("glfwToggleBlockXrayKeybind")).intValue();
-//                    glfwTogglePlayerXrayKeybind = ((Number) config.get("glfwTogglePlayerXrayKeybind")).intValue();
-//                }
-//            } catch (Exception e) {
-//                MinecraftClient.getInstance().execute(() -> MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(e.getMessage()), false));
-//            }
-//        }).start();
-//    }
-
     public static boolean isAutoclickerEnabled = false;
     public static boolean isHeldAutoclickerPressed;
 
@@ -243,19 +141,9 @@ public class UntitledClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-//        ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, v) -> {
-//            if (newUpdates != null && !isUpdateNotified && MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-//                for (JsonElement jsonElement : newUpdates)
-//                    player.sendMessage(Text.literal("pvputils missed update: " + jsonElement.getAsJsonObject().get("summary").getAsString()), false);
-//                isUpdateNotified = true;
-//            }
-//        });
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
             lastHitDisplayTimer++;
         });
-//        ClientPlayConnectionEvents.INIT.register((handler, client) -> {
-//            // TODO ?
-//        });
 
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
 //            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
@@ -450,22 +338,6 @@ public class UntitledClient implements ClientModInitializer {
             });
         }
 
-//        TODO; // task for sending the http payloads of all the shared info
-        //        TODO; // register task for drawing waypoints of far away players
-//        RenderLayer WAYPOINT_LAYER = RenderLayer.of(
-//                "waypoint",
-//                VertexFormats.POSITION_COLOR,
-//                VertexFormat.DrawMode.TRIANGLES,
-//                256,
-//                false, // TODO ?
-//                false, // TODO ?
-//                RenderLayer.MultiPhaseParameters.builder()
-//                        .program(RenderPhase.POSITION_COLOR_PROGRAM)
-//                        .depthTest(RenderLayer.ALWAYS_DEPTH_TEST)
-//                        .cull(RenderPhase.DISABLE_CULLING)
-//                        .writeMaskState(RenderPhase.COLOR_MASK)
-//                        .build(false)); // TODO ?
-
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
 
@@ -489,8 +361,6 @@ public class UntitledClient implements ClientModInitializer {
             DrawContext drawContext,
             AbstractClientPlayerEntity player) {
         Vec3d cameraRelativePos = worldPos.subtract(camera.getPos());
-//        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
-        // java has a websocket I can use for this apparently
 
         Vector4f clipPos = new Vector4f(
                 (float) cameraRelativePos.x,
