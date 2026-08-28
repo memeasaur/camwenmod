@@ -48,7 +48,7 @@ public class CheatConfig {
     public double attackVelocityBypass = 0.6;
 
     // TODO -> config
-    public boolean isGrappleGroundCheckEnabled = true;
+    public boolean isGrappleGroundCheckEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
 //    public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
