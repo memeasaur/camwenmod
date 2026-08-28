@@ -18,7 +18,6 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
@@ -434,7 +433,8 @@ public class UntitledClient implements ClientModInitializer {
                                                 .add(0, player.getHeight() / 2, 0),
                                         camera,
                                         projection[0],
-                                        context, clientPlayerEntity.getSkinTextures());
+                                        context,
+                                        clientPlayerEntity);
 //                                drawPlayerWaypoint(
 //                                        new Vec3d(0, 64, 0),
 //                                        camera,
@@ -487,7 +487,7 @@ public class UntitledClient implements ClientModInitializer {
             Camera camera,
             Matrix4f projection,
             DrawContext drawContext,
-            SkinTextures skinTextures) {
+            AbstractClientPlayerEntity player) {
         Vec3d cameraRelativePos = worldPos.subtract(camera.getPos());
 //        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
         // java has a websocket I can use for this apparently
@@ -532,48 +532,40 @@ public class UntitledClient implements ClientModInitializer {
                     screenY + (backgroundSize + 1) / 2,
                     0xAFFF0000
             );
+//            TODO; // green for teammates
+//            TODO; // config option for only doing teammates
             PlayerSkinDrawer.draw(
                     drawContext,
-                    skinTextures,
+                    player.getSkinTextures(),
                     screenX - size / 2,
                     screenY - size / 2,
                     size);
-        }
-        // distance
-        {
-//            var textRenderer = MINECRAFT_CLIENT_INSTANCE.textRenderer;
-//            matrices.push();
-//            matrices.scale(0.025f, -0.025f, 0.025f);
-//            String text = String.format("%.1fm", cameraPos.distanceTo(pos));
-//            float x = -textRenderer.getWidth(text) / 2.0f;
-//            textRenderer.draw(
-//                    Text.literal(text),
-//                    x,
-//                    0,
-//                    0xFFFFFFFF,
-//                    false,
-//                    matrices.peek().getPositionMatrix(),
-//                    context.consumers(),
-//                    TextRenderer.TextLayerType.SEE_THROUGH,
-//                    0,
-//                    0xF000F0
-//            );
-//            matrices.pop();
-        }
-        {
-//                Vector3f forward = new Vector3f(0, 0, -1);
-//                camera.getRotation().transform(forward);
-//                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-//                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-//                if (look.dotProduct(toMarker) > 0.995) {
-////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-//                }
-        }
-        // TODO name
-        {
-            // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
-//                    TODO; -> should only appear when looked at
-            // TODO -> extra info should also appear when moused over
+
+            // distance
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity clientPlayerEntity) {
+                double distance = clientPlayerEntity.getPos().distanceTo(worldPos);
+                String distanceText = String.format("%.1fm", distance);
+
+                drawText(screenX, distanceText, screenY, size, drawContext);
+            }
+            // name
+            {
+                Vector3f forward = new Vector3f(0, 0, -1);
+                camera.getRotation().transform(forward);
+                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+                Vec3d toMarker = worldPos.subtract(camera.getPos()).normalize();
+                if (look.dotProduct(toMarker) > 0.995) {
+                    // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
+                    // TODO -> extra info should also appear when moused over
+                    String name = player.getNameForScoreboard();
+                    drawText(
+                            screenX,
+                            name,
+                            screenY + size / 2 + 2 - TEXT_RENDERER.fontHeight - 2,
+                            size,
+                            drawContext);
+                }
+            }
         }
     }
 
@@ -586,5 +578,18 @@ public class UntitledClient implements ClientModInitializer {
             return true;
         }
         return flag;
+    }
+
+    private static void drawText(
+            int screenX, String text, int screenY, int size, DrawContext drawContext) {
+        int textX = screenX - TEXT_RENDERER.getWidth(text) / 2;
+        int textY = screenY + size / 2 + 2;
+        drawContext.drawTextWithShadow(
+                TEXT_RENDERER,
+                text,
+                textX,
+                textY,
+                0xFFFFFF
+        );
     }
 }
