@@ -418,7 +418,7 @@ public class UntitledClient implements ClientModInitializer {
                         IdentifiedLayer.CHAT,
                         EXAMPLE_LAYER,
                         (context, renderTickCounter) -> {
-                            if (!cheatConfig.isPlayerWaypointsEnabled) {
+                            if (!cheatConfig.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isPressed()) {
                                 return;
                             }
 
@@ -561,7 +561,7 @@ public class UntitledClient implements ClientModInitializer {
                     drawText(
                             screenX,
                             name,
-                            screenY + size / 2 + 2 - TEXT_RENDERER.fontHeight - 2,
+                            screenY - size / 2 - TEXT_RENDERER.fontHeight - 2,
                             size,
                             drawContext);
                 }
