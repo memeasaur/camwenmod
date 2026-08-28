@@ -28,6 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
@@ -416,16 +417,18 @@ public class UntitledClient implements ClientModInitializer {
                             }
 
                             Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
-                            Vec3d cameraPos = camera.getPos();
-
                             assert MINECRAFT_CLIENT_INSTANCE.world != null;
                             for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
-//                                Vec3d pos = player.getLerpedPos(tickDelta).add(0, player.getHeight() + 0.5, 0);
                                 drawPlayerWaypoint(
                                         player.getLerpedPos(renderTickCounter.getTickDelta(false)),
                                         camera,
                                         projection[0],
                                         context);
+//                                drawPlayerWaypoint(
+//                                        new Vec3d(0, 64, 0),
+//                                        camera,
+//                                        projection[0],
+//                                        context);
                             }
 //                            if (supabaseManager != null) {
 ////                                    for (SupabaseManager.VisiblePlayer supabasePlayer : supabaseManager.getPlayers()) {
@@ -469,79 +472,67 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private void drawPlayerWaypoint(
-            Vec3d pos, Camera camera, Matrix4f projection, DrawContext drawContext) {
-        Vec3d relative = pos.subtract(camera.getPos());
-        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
+            Vec3d worldPos, Camera camera, Matrix4f projection, DrawContext drawContext) {
+        Vec3d cameraRelativePos = worldPos.subtract(camera.getPos());
+//        TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
         // java has a websocket I can use for this apparently
 
         Vector4f clipPos = new Vector4f(
-                (float) relative.x,
-                (float) relative.y,
-                (float) relative.z,
+                (float) cameraRelativePos.x,
+                (float) cameraRelativePos.y,
+                (float) cameraRelativePos.z,
                 1.0f // ?
         );
-        camera.getRotation().transform(clipPos);
+        Quaternionf cameraRotation = new Quaternionf(camera.getRotation());
+        cameraRotation.conjugate().transform(clipPos);
         projection.transform(clipPos);
 
-        float x = clipPos.x() / clipPos.w();
-        float y = clipPos.y() / clipPos.w();
-//        Vec2f screenPos = new Vec2f(x, y);
+        float ndcX = clipPos.x() / clipPos.w();
+        float ndcY = clipPos.y() / clipPos.w();
 
-//        matrices.push();
-//        matrices.translate(
-//                pos.x - cameraPos.x,
-//                pos.y - cameraPos.y,
-//                pos.z - cameraPos.z);
-//        matrices.multiply(camera.getRotation());
+        if (clipPos.w() < 0) {
+            ndcX = -ndcX;
+            ndcY = -ndcY;
+            float max = Math.max(Math.abs(ndcX), Math.abs(ndcY));
+            if (max > 0.0f) {
+                ndcX /= max;
+                ndcY /= max;
+            }
+        }
+        ndcX = Math.clamp(ndcX, -1.0f, 1.0f);
+        ndcY = Math.clamp(ndcY, -1.0f, 1.0f);
+
         // diamond TODO -> player heads
         {
-//            matrices.push();
-//            float size = 0.25f;
-//            matrices.scale(size, size, size);
-//            assert context.consumers() != null;
-//            VertexConsumer Foo = context.consumers().getBuffer(WAYPOINT_LAYER);
-//            Vector3f Top = new Vector3f(0, 1, 0);
-//            Vector3f Bottom = new Vector3f(0, -1, 0);
-//            Vector3f Left = new Vector3f(-1, 0, 0);
-//            Vector3f Right = new Vector3f(1, 0, 0);
-//            MatrixStack.Entry entry = matrices.peek();
-//            Foo.vertex(entry, Top).color(255, 0, 0, 175);
-//            Foo.vertex(entry, Left).color(255, 0, 0, 175);
-//            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
-//            Foo.vertex(entry, Top).color(255, 0, 0, 175);
-//            Foo.vertex(entry, Right).color(255, 0, 0, 175);
-//            Foo.vertex(entry, Bottom).color(255, 0, 0, 175);
 
             int size = 6;
             Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-            float screenX = (x + 1) / 2 * window.getScaledWidth();
-            float screenY = (1 - y) / 2 * window.getScaledHeight();
-            int intX = (int) screenX;
-            int intY = (int) screenY;
+            int screenX = (int) ((ndcX + 1) / 2 * window.getScaledWidth());
+            int screenY = (int) ((1 - ndcY) / 2 * window.getScaledHeight());
             drawContext.fill(
-                    intX - 1,
-                    intY - size,
-                    intX + 2,
-                    intY + size + 1,
+                    screenX - 1,
+                    screenY - size,
+                    screenX + 2,
+                    screenY + size + 1,
                     0xAFFF0000
             );
 
             drawContext.fill(
-                    intX - size,
-                    intY - 1,
-                    intX + size + 1,
-                    intY + 2,
+                    screenX - size,
+                    screenY - 1,
+                    screenX + size + 1,
+                    screenY + 2,
                     0xAFFF0000
             );
 
             {
-                Vector3f forward = new Vector3f(0, 0, -1);
-                camera.getRotation().transform(forward);
-                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-                if (look.dotProduct(toMarker) > 0.995) {
-//                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-                }
+//                Vector3f forward = new Vector3f(0, 0, -1);
+//                camera.getRotation().transform(forward);
+//                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+//                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+//                if (look.dotProduct(toMarker) > 0.995) {
+////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+//                }
             }
 //            matrices.pop();
         }
