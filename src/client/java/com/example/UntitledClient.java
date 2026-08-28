@@ -457,8 +457,9 @@ public class UntitledClient implements ClientModInitializer {
 
             if (cheatConfig.isGrappleGroundCheckEnabled &&
                     stack.isOf(Items.FISHING_ROD) &&
-                    player.fishHook instanceof FishingBobberEntity &&
-                    !isGrappleReady) {
+                    player.fishHook instanceof FishingBobberEntity fishHook &&
+                    !isGrappleReady &&
+                    !fishHook.isOnGround()) {
                 return ActionResult.FAIL;
             }
 

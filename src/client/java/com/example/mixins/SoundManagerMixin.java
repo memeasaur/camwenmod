@@ -16,14 +16,15 @@ import static com.example.UntitledClient.isGrappleReady;
 
 @Mixin(SoundManager.class)
 public class SoundManagerMixin {
-    @Inject(method = "play", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "play*", at = @At("HEAD"), cancellable = true)
     void onPlay(SoundInstance soundInstance, CallbackInfo ci) {
         if (config.isWeakAttackSoundDisabled && soundInstance.getId().equals(SoundEvents.ENTITY_PLAYER_ATTACK_WEAK.id())) {
             ci.cancel();
         }
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
                 player.fishHook != null &&
-                player.getMainHandStack().isOf(Items.FISHING_ROD)) {
+                player.getMainHandStack().isOf(Items.FISHING_ROD) &&
+                soundInstance.getId().equals(SoundEvents.BLOCK_IRON_DOOR_CLOSE.id())) {
             isGrappleReady = true;
         }
     }
