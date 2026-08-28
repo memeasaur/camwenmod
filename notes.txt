@@ -5,8 +5,9 @@
 >message when hitting teammate
 >message when getting hit by teammate
 >option for ignoring attacks that would hit teammates
->teammate api that lets you see their health and current location in the world
+>teammate api that lets you see their current location in the world
 	>/focus
+	>health
 	>can see teammates inventories, can see their remaining consumables above head
 	>tracks enemy consumables, and coalesces with the api
 	>shows waypoints on all visible, turn out of render ones into local-only last-seen waypoints
