@@ -534,6 +534,14 @@ public class Constants {
                         cheatConfig.isAutoClickInventoryEnabled,
                         is -> cheatConfig.isAutoClickInventoryEnabled = is,
                         ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "grapple ground check",
+                        x + xModifier,
+                        y,
+                        cheatConfig.isGrappleGroundCheckEnabled,
+                        is -> cheatConfig.isGrappleGroundCheckEnabled = is,
+                        ""));
             }
         }
     };

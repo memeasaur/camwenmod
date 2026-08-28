@@ -48,7 +48,6 @@ public class CheatConfig {
 
     public double attackVelocityBypass = 0.6;
 
-    TODO; // -> config
     public boolean isGrappleGroundCheckEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated
