@@ -98,7 +98,11 @@ public class UntitledClient implements ClientModInitializer {
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
     public static final KeyBinding
-            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
+            PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
+            PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)");
+    public static final KeyBinding
+            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config"),
+            KEYBIND_CHEAT_CONFIG = getAbstractPvpUtilsKeybind("Config (cheats)");
 
     private static KeyBinding getAbstractPvpUtilsKeybind(String name) {
         return KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -513,44 +517,27 @@ public class UntitledClient implements ClientModInitializer {
         ndcX = Math.clamp(ndcX, -1.0f, 1.0f);
         ndcY = Math.clamp(ndcY, -1.0f, 1.0f);
 
-        // diamond TODO -> player heads
+        // player head
         {
 
             int size = 12;
             Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
             int screenX = (int) ((ndcX + 1) / 2 * window.getScaledWidth());
             int screenY = (int) ((1 - ndcY) / 2 * window.getScaledHeight());
+            int backgroundSize = size + 4;
+            drawContext.fill(
+                    screenX - backgroundSize / 2,
+                    screenY - backgroundSize / 2,
+                    screenX + (backgroundSize + 1) / 2,
+                    screenY + (backgroundSize + 1) / 2,
+                    0xAFFF0000
+            );
             PlayerSkinDrawer.draw(
                     drawContext,
                     skinTextures,
                     screenX - size / 2,
                     screenY - size / 2,
                     size);
-//            drawContext.fill(
-//                    screenX - 1,
-//                    screenY - size,
-//                    screenX + 2,
-//                    screenY + size + 1,
-//                    0xAFFF0000
-//            );
-//            drawContext.fill(
-//                    screenX - size,
-//                    screenY - 1,
-//                    screenX + size + 1,
-//                    screenY + 2,
-//                    0xAFFF0000
-//            );
-
-            {
-//                Vector3f forward = new Vector3f(0, 0, -1);
-//                camera.getRotation().transform(forward);
-//                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-//                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
-//                if (look.dotProduct(toMarker) > 0.995) {
-////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
-//                }
-            }
-//            matrices.pop();
         }
         // distance
         {
@@ -573,13 +560,21 @@ public class UntitledClient implements ClientModInitializer {
 //            );
 //            matrices.pop();
         }
+        {
+//                Vector3f forward = new Vector3f(0, 0, -1);
+//                camera.getRotation().transform(forward);
+//                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
+//                Vec3d toMarker = pos.subtract(camera.getPos()).normalize();
+//                if (look.dotProduct(toMarker) > 0.995) {
+////                        TODO; // if targawetted? names etc. should be drawn, distances should be drawn
+//                }
+        }
         // TODO name
         {
             // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
 //                    TODO; -> should only appear when looked at
             // TODO -> extra info should also appear when moused over
         }
-//        matrices.pop();
     }
 
     private static boolean handleGetIsEnabled(

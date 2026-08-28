@@ -2,7 +2,6 @@ package com.example.mixins;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.Keyboard;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -166,18 +165,25 @@ public class KeyboardMixin {
         while (KEYBIND_CONFIG.wasPressed()) {
             MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
 
-            // Cheats start
-            new Thread(() -> {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e); // TODO
-                }
-                if (getIsKeyBindingPressed(KEYBIND_CONFIG))
-                    MinecraftClient.getInstance().execute(() ->
-                            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG));
-            }).start();
-            // Cheats end
+//            // Cheats start
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(3000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e); // TODO
+//                }
+//                if (getIsKeyBindingPressed(KEYBIND_CONFIG))
+//                    MinecraftClient.getInstance().execute(() ->
+//                            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG));
+//            }).start();
+//            // Cheats end
+        }
+        while (KEYBIND_CHEAT_CONFIG.wasPressed()) {
+            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+        }
+
+        while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
+            cheatConfig.isPlayerWaypointsEnabled = !cheatConfig.isPlayerWaypointsEnabled;
         }
 
 //        for (Map.Entry<Integer, KeyBinding> entry : config.duplicateKeybinds.entrySet()) {

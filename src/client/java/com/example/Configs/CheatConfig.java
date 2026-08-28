@@ -18,6 +18,8 @@ public class CheatConfig {
     public float autoclickerJitterEndingMultiplier = 1.f;
     public float autoclickerSlowStartingMultiplier = 1.5f;
     public float autoclickerSlowEndingMultiplier = 1.5f;
+//    TODO; // put all keybinds in the real keybind thing?
+    // then simplify the config screen
     public int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
     public int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
