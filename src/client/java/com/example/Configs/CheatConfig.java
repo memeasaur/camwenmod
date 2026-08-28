@@ -12,6 +12,7 @@ public class CheatConfig {
 
     public record ClickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
     }
+
     public ArrayList<ClickRecording> recordedClickSequences = new ArrayList<>();
     public float autoclickerJitterStartingMultiplier = 1.f;
     public float autoclickerJitterEndingMultiplier = 1.f;
@@ -47,7 +48,7 @@ public class CheatConfig {
 
     public double attackVelocityBypass = 0.6;
 
-    // TODO -> config
+    TODO; // -> config
     public boolean isGrappleGroundCheckEnabled = false;
 
     // TODO -> impl? might not be possible with how simulated clients get replicated

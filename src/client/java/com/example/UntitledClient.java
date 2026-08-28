@@ -453,7 +453,7 @@ public class UntitledClient implements ClientModInitializer {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
 
-            // TODO -> listen for the sound that plays? only if other players don't play it when they throw it
+            TODO; // -> listen for the sound that plays (door creaks)
             if (cheatConfig.isGrappleGroundCheckEnabled &&
                     stack.isOf(Items.FISHING_ROD) &&
                     player.fishHook instanceof FishingBobberEntity hook &&
