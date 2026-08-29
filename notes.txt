@@ -22,6 +22,11 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
+>faster tick-rate (blatant)
+>hold right click and it maxes dps with the bow (blatant)
+    >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
+>fix cheat keybinds not working until the config screen is opened
+
 >always move at head-run speed? (blatant)
     >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >don't show waypoints if the player is visible? (might be too expensive)
@@ -38,26 +43,20 @@
     >not really because two clicks in the same tick or around the same tick isn't as useful, and stretching them out just turns it into an autoclicker essentially
 >make ethylene change the fov still
 >merge cheat config and regular config?
->butterfly clicking for more random kurtosis?
->should slow the clicker down when it's in the inv
 >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?
->freecam
+>freeCam
 >automatic grapple? (blatant)
 >hit delta tracker
->make the auto cobweb work without me holding right click so i can try it on my own as well
+>make the auto cobweb work without me holding right click so I can try it on my own as well
 >let me sprint while blind? (blatant)
 >allow to place cobwebs through player hitbox (blatant)
 >fake inventory that you can view while running
 >trajectories/enderPearl aimbot bow aimbot etc
 >swings go through friends (blatant)
->faster tick-rate (blatant)
 >automatic head run (blatant, hold a button and it head runs for you while it's held)
 >automatic w tap (NVM. shotbow literally doesn't have w-tapping lol)
     >should just disable and enable sprint
->hold right click and it maxes dps with the bow (blatant)
-    >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
->fix cheat keybinds not working until the config screen is opened
 
 >360 degree fov keybind
 >speech to text chat typer?
@@ -111,8 +110,6 @@
     >esp/tracers in external window
     >radar in external window, + if allowed meme
 >soft cheat version
-    >the autoclicker could just be in the external gui, and communicate with the client for minecraft-related integration (?, this would probably not let me integrate so closely with the client though)
-
     >make 1.9 hits cancel when you're hitting someone with immunity
     >allow sneaking and swimming upwards in water
     >allow toggleSprint to stop your sprint without letting go of W
