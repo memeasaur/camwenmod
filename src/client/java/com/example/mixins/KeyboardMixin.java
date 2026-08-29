@@ -179,9 +179,9 @@ public class KeyboardMixin {
             }).start();
 //            // Cheats end
         }
-        while (KEYBIND_CHEAT_CONFIG.wasPressed()) {
-            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-        }
+//        while (KEYBIND_CHEAT_CONFIG.wasPressed()) {
+//            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+//        }
 
         while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
             cheatConfig.isPlayerWaypointsEnabled = !cheatConfig.isPlayerWaypointsEnabled;

@@ -82,8 +82,8 @@ public class UntitledClient implements ClientModInitializer {
             PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
             PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)");
     public static final KeyBinding
-            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config"),
-            KEYBIND_CHEAT_CONFIG = getAbstractPvpUtilsKeybind("Config (cheats)");
+            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
+//            KEYBIND_CHEAT_CONFIG = getAbstractPvpUtilsKeybind("Config (cheats)");
 
     private static KeyBinding getAbstractPvpUtilsKeybind(String name) {
         return KeyBindingHelper.registerKeyBinding(new KeyBinding(
