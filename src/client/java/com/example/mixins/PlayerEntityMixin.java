@@ -31,6 +31,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(at = @At(value = "RETURN"), method = "applyDamage")
     private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+//        TODO;
         if (source.getAttacker() instanceof PlayerEntity attacker &&
                 MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
             handlePvpDamage();

@@ -100,6 +100,11 @@ public abstract class ClientPlayerEntityMixin {
         }
     }
 
+//    @Inject(method = "updateHealth", at = @At("RETURN"))
+//    void onUpdateHealth(float health, CallbackInfo ci) {
+//        TODO;
+//    }
+
     @Unique
     boolean hasCurrentUseActionPlacedCobweb = false; // TODO ?
 
@@ -130,4 +135,5 @@ public abstract class ClientPlayerEntityMixin {
 //        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
 //        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
     }
+
 }
