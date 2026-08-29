@@ -16,6 +16,7 @@ import static com.example.UntitledClient.config;
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onHealthUpdate", at = @At("HEAD"))
     void onOnHealthUpdate(HealthUpdateS2CPacket packet, CallbackInfo ci) {
+        // TODO -> get amount of damage taken from teammate? might be impossible
         if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)) {
             return;
         }
