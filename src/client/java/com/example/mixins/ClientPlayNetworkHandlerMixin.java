@@ -2,6 +2,8 @@ package com.example.mixins;
 
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,4 +36,13 @@ public class ClientPlayNetworkHandlerMixin {
 //    @Inject(method = "onEntityDamage", at = @At("RETURN"))
 //    void onOnEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {
 //    }
+
+    @Inject(method = "onEntitySpawn", at = @At("RETURN"))
+    void onOnEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+        // TODO -> waypoint this?
+        if (packet.getEntityType() == EntityType.LIGHTNING_BOLT &&
+                MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+            player.sendMessage(Text.literal(packet.getX() + ", " + packet.getY() + ", " + packet.getZ()), false);
+        }
+    }
 }
