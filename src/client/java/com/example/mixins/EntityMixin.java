@@ -31,6 +31,7 @@ public class EntityMixin {
             if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
                     player == entity) {
                 onPvpDamage();
+                player.sendMessage(Text.literal("test"), false);
 
                 if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
                     player.sendMessage(Text.literal("ally damaged you: " + attacker.getName()), false);
