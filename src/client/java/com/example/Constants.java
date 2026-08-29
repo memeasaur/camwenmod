@@ -131,7 +131,7 @@ public class Constants {
             final int[] currentAutoclickerMacroIndex = new int[]{RANDOM.nextInt(cheatConfig.recordedClickSequences.size())};
             final boolean[] isCurrentlyReversed = new boolean[]{false};
             nullableCurrentHeldAutoclickerTask = new Thread() {
-                //                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).clicks();
+//                int[] currentRecordedAutoclicker = cheatConfig.recordedClickSequences.get(currentAutoclickerMacroIndex[0]).clicks();
                 private final MinecraftClient threadClient = MinecraftClient.getInstance();
                 int recordingCounter = 1;
                 final Runnable getNextRecordedAutoclicker = () -> {
@@ -168,13 +168,13 @@ public class Constants {
 //                                : cheatConfig.autoclickerJitterEndingMultiplier;
                         LockSupport.parkNanos((long) (clickRecording.clicks()[currentAutoclickerIndex] / lerp));
                         // TODO -> shift + right click could also be an autoclicker here
+                        // TODO -> check if its an inventory click and the hotbar is full
                         if (threadClient.currentScreen != null
                                 && (
                                 !(threadClient.currentScreen instanceof InventoryScreen inventoryScreen)
                                         || !cheatConfig.isAutoClickInventoryEnabled
                                         || !getIsKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)
                                         || !inventoryScreen.getScreenHandler().getCursorStack().isEmpty()
-                                        || TODO
                         )) {
                             getNextRecordedAutoclicker.run();
                             currentAutoclickerIndex = 0; // TODO this seems retarded?

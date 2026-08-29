@@ -314,6 +314,7 @@ public class UntitledClient implements ClientModInitializer {
                             Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
                             assert MINECRAFT_CLIENT_INSTANCE.world != null;
                             for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+                                // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
                                 if (!(player instanceof AbstractClientPlayerEntity clientPlayerEntity) || player == MINECRAFT_CLIENT_INSTANCE.player) {
                                     continue;
                                 }
