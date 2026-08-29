@@ -69,7 +69,7 @@ public class Utils {
         isBackwardEnabled = false;
     }
 
-    public static void handlePvpDamage() {
+    public static void onPvpDamage() {
         if (config.isMovementTogglePvpDisabling)
             doMovementToggleDisable();
 

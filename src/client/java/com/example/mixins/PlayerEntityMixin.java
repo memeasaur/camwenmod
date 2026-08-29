@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.cheatConfig;
 import static com.example.UntitledClient.config;
-import static com.example.Utils.handlePvpDamage;
+import static com.example.Utils.onPvpDamage;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -30,11 +30,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(at = @At(value = "RETURN"), method = "applyDamage")
-    private void onApplyDamage(ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
-        TODO;
+    private void onApplyDamage(
+            ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+//        TODO;
         if (source.getAttacker() instanceof PlayerEntity attacker &&
                 MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-            handlePvpDamage();
 
             player.sendMessage(Text.literal("test"), false);
             if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {

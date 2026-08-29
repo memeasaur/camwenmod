@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.example.Constants.*;
 import static com.example.UntitledClient.*;
-import static com.example.Utils.handlePvpDamage;
+import static com.example.Utils.onPvpDamage;
 
 
 @Mixin(MinecraftClient.class)
@@ -116,7 +116,7 @@ public abstract class MinecraftClientMixin {
             }
 
             if (entityHitResult.getEntity() instanceof PlayerEntity) {
-                handlePvpDamage();
+                onPvpDamage();
             }
 
             if (config.isSharpnessParticleReverted && player.getMainHandStack().getEnchantments().getEnchantmentEntries().stream().anyMatch(x -> Enchantments.SHARPNESS.equals(x.getKey().getKey().orElse(null)))) // TODO fuck
