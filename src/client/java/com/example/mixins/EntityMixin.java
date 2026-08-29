@@ -4,13 +4,17 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.cheatConfig;
+import static com.example.UntitledClient.config;
 import static com.example.Utils.onPvpDamage;
 
 @Mixin(Entity.class)
@@ -27,6 +31,11 @@ public class EntityMixin {
                 player == entity &&
                 source.getAttacker() instanceof PlayerEntity attacker) {
             onPvpDamage();
+
+            player.sendMessage(Text.literal("test"), false);
+            if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
+                player.sendMessage(Text.literal(attacker.getName() + " damaged you"), false);
+            }
         }
     }
 }

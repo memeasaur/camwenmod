@@ -32,15 +32,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(at = @At(value = "RETURN"), method = "applyDamage")
     private void onApplyDamage(
             ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
-//        TODO;
-        if (source.getAttacker() instanceof PlayerEntity attacker &&
-                MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-
-            player.sendMessage(Text.literal("test"), false);
-            if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
-                player.sendMessage(Text.literal(attacker.getName() + " damaged you for " + amount), false);
-            }
-        }
+        // this doesn't run on the client
+        throw new RuntimeException("Intentional crash");
     }
 
     @Inject(at = @At(value = "RETURN"), method = "attack")

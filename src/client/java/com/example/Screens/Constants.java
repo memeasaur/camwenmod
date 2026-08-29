@@ -101,7 +101,11 @@ public class Constants {
                         config.isWeakAttackSoundDisabled,
                         is -> config.isWeakAttackSoundDisabled = is,
                         ""));
-                xModifier += 150;
+            }
+            y += 20;
+
+            {
+                int xModifier = 0;
                 addDrawableChild(getConfigCheckboxWidget(
                         "damage taken value notification",
                         x + xModifier,
@@ -109,11 +113,6 @@ public class Constants {
                         config.isDamageTakenValueNotificationEnabled,
                         is -> config.isDamageTakenValueNotificationEnabled = is,
                         ""));
-            }
-            y += 20;
-
-            {
-                int xModifier = 0;
 //                addDrawableChild(getConfigButtonWidget("list changed nameplates", () ->
 //                        handleAbstractMojangApiNameplateUpdaterScreen((nonnullNetworkHandler) -> {
 //                            ArrayList<CompletableFuture<nameplateUpdaterEntry>> futureEntries = new ArrayList<>();
