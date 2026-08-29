@@ -6,7 +6,6 @@
 >waypoint coords when hovering and it isn't in render
 >stop autoclicker from throwing pots out of hotbar
     >if hotbar full, stop clicks
->message when hitting teammate
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health

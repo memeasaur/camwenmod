@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
@@ -24,25 +25,14 @@ public class EntityMixin {
         cir.setReturnValue(cheatConfig.targetingMarginBypass);
     }
 
-    @Inject(method = "clientDamage", at = @At("HEAD"))
-    private void onClientDamage(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        Entity entity = (Entity) (Object) this;
-        if (source.getAttacker() instanceof PlayerEntity attacker) {
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
-                    player == entity) {
-                onPvpDamage();
-                player.sendMessage(Text.literal("test"), false);
+//    @Inject(method = "onDamaged", at = @At("HEAD"))
+//    void onOnDamaged(DamageSource damageSource, CallbackInfo ci) {
+//        // doesn't run, not sure why it doesn't when the packet works totally fine but w/e
+    // these methods are probably both overridden. it is: livingEntity overrides it
+//    }
 
-                if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
-                    player.sendMessage(Text.literal("ally damaged you: " + attacker.getName()), false);
-                }
-            }
-            if (MINECRAFT_CLIENT_INSTANCE.player == attacker &&
-                    entity instanceof PlayerEntity &&
-                    cheatConfig.isTeamHitMessagingEnabled &&
-                    Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
-                attacker.sendMessage(Text.literal("you damaged ally: " + attacker.getName()), false);
-            }
-        }
-    }
+//    @Inject(method = "clientDamage", at = @At("HEAD"))
+//    private void onClientDamage(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+//        //  -> this literally never runs?
+//    }
 }
