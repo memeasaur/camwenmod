@@ -1,7 +1,6 @@
 package com.example.mixins;
 
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +17,7 @@ public class ClientPlayNetworkHandlerMixin {
         MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal("healthUpdate"), false);
     }
 
-    @Inject(method = "onEntityDamage", at = @At("RETURN"))
-    void onOnEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {
-        MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal("entityDamage"), false);
-    }
+//    @Inject(method = "onEntityDamage", at = @At("RETURN"))
+//    void onOnEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {
+//    }
 }

@@ -6,6 +6,7 @@
     "ChatHudMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
     "GameRendererInvoker",
     "GameRendererMixin",
     "HeldItemRendererMixin",
