@@ -2,7 +2,6 @@ package com.example.Screens;
 
 import com.example.Configs.CheatConfig;
 import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -21,6 +20,191 @@ import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
 public class Constants {
+    private static CheckboxWidget getConfigCheckboxWidget(
+            String text, boolean isChecked, Consumer<Boolean> consumer, String tooltip) {
+        return CheckboxWidget.builder(Text.literal(text), TEXT_RENDERER)
+//                .pos(x, y)
+                .checked(isChecked)
+                .callback((v, is) -> {
+                    consumer.accept(is);
+                    config.saveConfig();
+
+                    // Cheats start
+                    cheatConfig.saveCheatConfig();
+                    // Cheats end
+                })
+                .tooltip(Tooltip.of(Text.literal(tooltip)))
+                .build();
+    }
+
+    private static ButtonWidget getConfigButtonWidget(
+            String title, Runnable onPress, String tooltip) {
+        return ButtonWidget.builder(Text.literal(title), v -> {
+                    onPress.run();
+                    config.saveConfig();
+                    // Cheats start
+                    cheatConfig.saveCheatConfig();
+                    // Cheats end
+                })
+//                .position(x, y)
+                .tooltip(Tooltip.of(Text.literal(tooltip)))
+                .build();
+    }
+
+    record nameplateUpdaterEntry(String name, UUID uuid) {
+    }
+
+    static nameplateUpdaterEntry[] currentNameplateUpdatePlayers;
+    private static final Text
+            ALLY_TEXT = Text.literal("ally"),
+            ENEMY_TEXT = Text.literal("enemy"),
+            FOCUS_TEXT = Text.literal("focus"),
+            NEUTRAL_TEXT = Text.literal("neutral");
+    private static int nameplateUpdaterPage = 1;
+    public static final Screen NAMEPLATE_UPDATER = new Screen(Text.literal("nameplate updater")) { // TODO -> keybind for this
+        final Consumer<Integer> handlePagination = (page) -> {
+            nameplateUpdaterPage = page;
+            MINECRAFT_CLIENT_INSTANCE.setScreen(NAMEPLATE_UPDATER);
+            nameplateUpdaterPage = 1;
+        };
+
+        @Override
+        protected void init() {
+            int currentPage = nameplateUpdaterPage;
+            int y = 0;
+            int startingI = (currentPage - 1) * 15;
+
+            {
+                Consumer<String> handle = (teamString) -> new Thread(() -> {
+                    for (nameplateUpdaterEntry foo : currentNameplateUpdatePlayers)
+                        putNameplateUuidEntry(Map.entry(foo.uuid, teamString)); // TODO -> make ally string enum or constant or something
+                    MinecraftClient.getInstance().execute(() -> handlePagination.accept(currentPage));
+                }).start();
+                int x = 0;
+                addDrawableChild(ButtonWidget.builder(Text.literal("ally all"), (v) ->
+                                handle.accept("ally"))
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(Text.literal("enemy all"), (v) ->
+                                handle.accept("enemy"))
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(Text.literal("focus all"), (v) ->
+                                handle.accept("focus"))
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(Text.literal("neutral all"), (v) -> new Thread(() -> {
+                            for (nameplateUpdaterEntry foo : currentNameplateUpdatePlayers)
+                                removeNameplateUuidEntry(foo.uuid);
+                            MinecraftClient.getInstance().execute(() -> handlePagination.accept(currentPage));
+                        }).start())
+                        .position(x, y)
+                        .build());
+            }
+            y += 20;
+
+            final int perPage = 10;
+            for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + perPage); i++) {
+                nameplateUpdaterEntry playerListEntry = currentNameplateUpdatePlayers[i];
+                UUID uuid = playerListEntry.uuid;
+                String team = config.nameplateUuids.getOrDefault(uuid, "neutral");
+                var textWidget = new TextWidget(Text.literal(playerListEntry.name), TEXT_RENDERER);
+                textWidget.setPosition(100, y);
+                textWidget.setTextColor(switch (team) {
+                    case "neutral" -> YELLOW_RGB;
+                    case "ally" -> AQUA_RGB;
+                    case "enemy" -> RED_RGB;
+                    case "focus" -> LIGHT_PURPLE_RGB;
+                    default -> throw new RuntimeException("nameplate color error 1");
+                });
+                int x = 0;
+                y += 10;
+                addDrawableChild(textWidget);
+                addDrawableChild(ButtonWidget.builder(ALLY_TEXT, (v) -> {
+                            textWidget.setTextColor(AQUA_RGB);
+                            putNameplateUuidEntry(Map.entry(uuid, "ally"));
+                        })
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(ENEMY_TEXT, (v) -> {
+                            textWidget.setTextColor(RED_RGB);
+                            putNameplateUuidEntry(Map.entry(uuid, "enemy"));
+                        })
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(FOCUS_TEXT, (v) -> {
+                            textWidget.setTextColor(LIGHT_PURPLE_RGB);
+                            putNameplateUuidEntry(Map.entry(uuid, "focus"));
+                        })
+                        .position(x, y)
+                        .build());
+                x += 150;
+                addDrawableChild(ButtonWidget.builder(NEUTRAL_TEXT, (v) -> {
+                            textWidget.setTextColor(YELLOW_RGB);
+                            removeNameplateUuidEntry(uuid);
+                        })
+                        .position(x, y)
+                        .build());
+                x += 150;
+                y += 20;
+            }
+            y += 20;
+            if (currentPage > 1)
+                addDrawableChild(ButtonWidget.builder(Text.literal("previous page"), (v) -> {
+                            nameplateUpdaterPage = currentPage - 1;
+                            MINECRAFT_CLIENT_INSTANCE.setScreen(NAMEPLATE_UPDATER);
+                            nameplateUpdaterPage = 1;
+                        })
+                        .position(20, y)
+                        .build());
+            if (startingI + 15 < currentNameplateUpdatePlayers.length)
+                addDrawableChild(ButtonWidget.builder(Text.literal("next page"), (v) ->
+                                handlePagination.accept(currentPage + 1))
+                        .position(120, y)
+                        .build());
+        }
+    };
+
+    // Cheats start
+    private static final Screen AUTOCLICK_JITTER_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatch"), false);
+    private static final Screen AUTOCLICK_SLOW_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatchSlow"), true);
+    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwToggleAutoclickerKeybind = key);
+    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwEnableAutoclickerKeybind = key);
+    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwDisableAutoclickerKeybind = key);
+    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerJitterStartingMultiplier = number.floatValue());
+    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerJitterEndingMultiplier = number.floatValue());
+    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerSlowStartingMultiplier = number.floatValue());
+    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerSlowEndingMultiplier = number.floatValue());
+    private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
+        @Override
+        protected void init() {
+            int y = 20;
+            for (CheatConfig.ClickRecording clickRecording : cheatConfig.recordedClickSequences) {
+                addDrawableChild(ButtonWidget.builder(
+                                getAutoclickerText(clickRecording.clicks()),
+                                (button) -> {
+                                    cheatConfig.recordedClickSequences.remove(clickRecording); // TODO ?
+                                    MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
+                                })
+                        .position(20, y += 20)
+                        .tooltip(Tooltip.of(Text.literal("click to delete")))
+                        .build());
+            }
+        }
+    };
+
+    private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> cheatConfig.glfwTogglePlayerXrayKeybind = key);
+    private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> cheatConfig.glfwToggleBlockXrayKeybind = key);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number.floatValue());
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number);
+
+//    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
+
     // TODO -> let mod keybinds be changed here, too
     // TODO -> do the other movement toggles here, too
     public static final Screen CONFIG = buildConfigScreen("pvputils config", List.of(
@@ -222,191 +406,6 @@ public class Constants {
 //                        .position(x + xModifier, y)
 //                        .tooltip(Tooltip.of(Text.literal("opens keybind recorder")))
 //                        .build());
-    private static CheckboxWidget getConfigCheckboxWidget(
-            String text, boolean isChecked, Consumer<Boolean> consumer, String tooltip) {
-        return CheckboxWidget.builder(Text.literal(text), TEXT_RENDERER)
-//                .pos(x, y)
-                .checked(isChecked)
-                .callback((v, is) -> {
-                    consumer.accept(is);
-                    config.saveConfig();
-
-                    // Cheats start
-                    cheatConfig.saveCheatConfig();
-                    // Cheats end
-                })
-                .tooltip(Tooltip.of(Text.literal(tooltip)))
-                .build();
-    }
-
-    private static ButtonWidget getConfigButtonWidget(
-            String title, Runnable onPress, String tooltip) {
-        return ButtonWidget.builder(Text.literal(title), v -> {
-                    onPress.run();
-                    config.saveConfig();
-                    // Cheats start
-                    cheatConfig.saveCheatConfig();
-                    // Cheats end
-                })
-//                .position(x, y)
-                .tooltip(Tooltip.of(Text.literal(tooltip)))
-                .build();
-    }
-
-    record nameplateUpdaterEntry(String name, UUID uuid) {
-    }
-
-    static nameplateUpdaterEntry[] currentNameplateUpdatePlayers;
-    private static final Text
-            ALLY_TEXT = Text.literal("ally"),
-            ENEMY_TEXT = Text.literal("enemy"),
-            FOCUS_TEXT = Text.literal("focus"),
-            NEUTRAL_TEXT = Text.literal("neutral");
-    private static int nameplateUpdaterPage = 1;
-    public static final Screen NAMEPLATE_UPDATER = new Screen(Text.literal("nameplate updater")) { // TODO -> keybind for this
-        final Consumer<Integer> handlePagination = (page) -> {
-            nameplateUpdaterPage = page;
-            MINECRAFT_CLIENT_INSTANCE.setScreen(NAMEPLATE_UPDATER);
-            nameplateUpdaterPage = 1;
-        };
-
-        @Override
-        protected void init() {
-            int currentPage = nameplateUpdaterPage;
-            int y = 0;
-            int startingI = (currentPage - 1) * 15;
-
-            {
-                Consumer<String> handle = (teamString) -> new Thread(() -> {
-                    for (nameplateUpdaterEntry foo : currentNameplateUpdatePlayers)
-                        putNameplateUuidEntry(Map.entry(foo.uuid, teamString)); // TODO -> make ally string enum or constant or something
-                    MinecraftClient.getInstance().execute(() -> handlePagination.accept(currentPage));
-                }).start();
-                int x = 0;
-                addDrawableChild(ButtonWidget.builder(Text.literal("ally all"), (v) ->
-                                handle.accept("ally"))
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(Text.literal("enemy all"), (v) ->
-                                handle.accept("enemy"))
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(Text.literal("focus all"), (v) ->
-                                handle.accept("focus"))
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(Text.literal("neutral all"), (v) -> new Thread(() -> {
-                            for (nameplateUpdaterEntry foo : currentNameplateUpdatePlayers)
-                                removeNameplateUuidEntry(foo.uuid);
-                            MinecraftClient.getInstance().execute(() -> handlePagination.accept(currentPage));
-                        }).start())
-                        .position(x, y)
-                        .build());
-            }
-            y += 20;
-
-            final int perPage = 10;
-            for (int i = startingI; i < Math.min(currentNameplateUpdatePlayers.length, startingI + perPage); i++) {
-                nameplateUpdaterEntry playerListEntry = currentNameplateUpdatePlayers[i];
-                UUID uuid = playerListEntry.uuid;
-                String team = config.nameplateUuids.getOrDefault(uuid, "neutral");
-                var textWidget = new TextWidget(Text.literal(playerListEntry.name), TEXT_RENDERER);
-                textWidget.setPosition(100, y);
-                textWidget.setTextColor(switch (team) {
-                    case "neutral" -> YELLOW_RGB;
-                    case "ally" -> AQUA_RGB;
-                    case "enemy" -> RED_RGB;
-                    case "focus" -> LIGHT_PURPLE_RGB;
-                    default -> throw new RuntimeException("nameplate color error 1");
-                });
-                int x = 0;
-                y += 10;
-                addDrawableChild(textWidget);
-                addDrawableChild(ButtonWidget.builder(ALLY_TEXT, (v) -> {
-                            textWidget.setTextColor(AQUA_RGB);
-                            putNameplateUuidEntry(Map.entry(uuid, "ally"));
-                        })
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(ENEMY_TEXT, (v) -> {
-                            textWidget.setTextColor(RED_RGB);
-                            putNameplateUuidEntry(Map.entry(uuid, "enemy"));
-                        })
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(FOCUS_TEXT, (v) -> {
-                            textWidget.setTextColor(LIGHT_PURPLE_RGB);
-                            putNameplateUuidEntry(Map.entry(uuid, "focus"));
-                        })
-                        .position(x, y)
-                        .build());
-                x += 150;
-                addDrawableChild(ButtonWidget.builder(NEUTRAL_TEXT, (v) -> {
-                            textWidget.setTextColor(YELLOW_RGB);
-                            removeNameplateUuidEntry(uuid);
-                        })
-                        .position(x, y)
-                        .build());
-                x += 150;
-                y += 20;
-            }
-            y += 20;
-            if (currentPage > 1)
-                addDrawableChild(ButtonWidget.builder(Text.literal("previous page"), (v) -> {
-                            nameplateUpdaterPage = currentPage - 1;
-                            MINECRAFT_CLIENT_INSTANCE.setScreen(NAMEPLATE_UPDATER);
-                            nameplateUpdaterPage = 1;
-                        })
-                        .position(20, y)
-                        .build());
-            if (startingI + 15 < currentNameplateUpdatePlayers.length)
-                addDrawableChild(ButtonWidget.builder(Text.literal("next page"), (v) ->
-                                handlePagination.accept(currentPage + 1))
-                        .position(120, y)
-                        .build());
-        }
-    };
-
-    // Cheats start
-    private static final Screen AUTOCLICK_JITTER_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatch"), false);
-    private static final Screen AUTOCLICK_SLOW_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatchSlow"), true);
-    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwToggleAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwEnableAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> cheatConfig.glfwDisableAutoclickerKeybind = key, CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerJitterStartingMultiplier = number.floatValue(), CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerJitterEndingMultiplier = number.floatValue(), CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + cheatConfig.autoclickerJitterStartingMultiplier + ")"), number -> cheatConfig.autoclickerSlowStartingMultiplier = number.floatValue(), CHEAT_CONFIG);
-    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + cheatConfig.autoclickerJitterEndingMultiplier + ")"), number -> cheatConfig.autoclickerSlowEndingMultiplier = number.floatValue(), CHEAT_CONFIG);
-    private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
-        @Override
-        protected void init() {
-            int y = 20;
-            for (CheatConfig.ClickRecording clickRecording : cheatConfig.recordedClickSequences) {
-                addDrawableChild(ButtonWidget.builder(
-                                getAutoclickerText(clickRecording.clicks()),
-                                (button) -> {
-                                    cheatConfig.recordedClickSequences.remove(clickRecording); // TODO ?
-                                    MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
-                                })
-                        .position(20, y += 20)
-                        .tooltip(Tooltip.of(Text.literal("click to delete")))
-                        .build());
-            }
-        }
-    };
-
-    private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> cheatConfig.glfwTogglePlayerXrayKeybind = key, CHEAT_CONFIG);
-    private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> cheatConfig.glfwToggleBlockXrayKeybind = key, CHEAT_CONFIG);
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> cheatConfig.targetingMarginBypass = number.floatValue(), CHEAT_CONFIG);
-    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number, CHEAT_CONFIG);
-
-//    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
-
     public static final Screen CHEAT_CONFIG = buildConfigScreen("cheat config", List.of(
             getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), "lists all current recorded autoclickers"),
             getConfigButtonWidget("record jitter autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_MACRO_RECORDER), "opens blank recording screen"),

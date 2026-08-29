@@ -49,9 +49,9 @@ public class Utils {
     }
 
     static Screen getAbstractKeybindInputScreen(
-            Text title, Consumer<Integer> consumer, Screen returnScreen) {
+            Text title, Consumer<Integer> consumer) {
         return getAbstractInputScreen(title, (threadInstance) ->
-                consumer.accept(getGlfwInputBlocking(threadInstance, title)), returnScreen);
+                consumer.accept(getGlfwInputBlocking(threadInstance, title)), Constants.CHEAT_CONFIG);
     }
 
     static int getGlfwInputBlocking(MinecraftClient threadClientInstance, Text title) {
@@ -113,7 +113,7 @@ public class Utils {
     private static final boolean[] getFloatInputScreenFlag = new boolean[]{false};
 
     static Screen getDoubleInputScreen(
-            Text title, Consumer<Double> consumer, Screen returnScreen) {
+            Text title, Consumer<Double> consumer) {
         return getAbstractKeyboardSequenceScreen(title, (string) -> {
             if (Character.isDigit(string.charAt(0))) {
                 return true;
@@ -133,7 +133,7 @@ public class Utils {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
                         player.sendMessage(Text.literal("invalid float"), true); // TODO -> console
                 });
-        }, returnScreen);
+        }, Constants.CHEAT_CONFIG);
     }
 
     static CompletableFuture<HttpResponse<String>> getHandledMojangApiFuture(Supplier<CompletableFuture<HttpResponse<String>>> unhandledFutureSupplier) {
