@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import static com.example.Utils.serializeJsonBlocking;
 
 public class CheatConfig {
-    public boolean isGuiCheatsPvpDisabling = true;
+    // TODO -> config
+    public boolean isGuiCheatsPvpDisabling = false;
 
     public record ClickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
     }
@@ -29,12 +30,12 @@ public class CheatConfig {
     public int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
 
     public boolean isAutomaticWTapping = true; // TODO -> impl?
-    public boolean isEthylene = true;
+    public boolean isEthylene = false;
     public boolean isAutoCobweb = false;
 
-    public float targetingMarginBypass = .1f;
+    public float targetingMarginBypass = .0f;
 
-    public boolean isDarknessDisabled = true;
+    public boolean isDarknessDisabled = false;
 
     public boolean isAutoClickInventoryEnabled = true;
 
