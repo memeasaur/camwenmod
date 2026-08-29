@@ -1,4 +1,3 @@
->waypoint coords when hovering and it isn't in render
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health
