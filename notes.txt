@@ -2,6 +2,7 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
+>waypoint on lightning strike if possible
 >don't show waypoints if the player is visible
 >waypoint coords when hovering and it isn't in render
 >stop autoclicker from throwing pots out of hotbar
