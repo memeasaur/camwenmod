@@ -158,7 +158,7 @@ public abstract class MinecraftClientMixin {
                     interactionManager != null) {
                 interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
                 // TODO -> debugMode this
-                player.sendMessage(Text.literal("cheating"), false);
+//                player.sendMessage(Text.literal("cheating"), false);
             }
         }
     }
