@@ -21,36 +21,70 @@ import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
 public class Constants {
-    public static final Screen CONFIG = new Screen(Text.literal("pvputils config")) {
-        @Override
-        protected void init() {
-            int y = 20;
-            int x = 20;
-
+    // TODO -> let mod keybinds be changed here, too
+    // TODO -> do the other movement toggles here, too
+    public static final Screen CONFIG = buildConfigScreen("pvputils config", List.of(
+            getConfigCheckboxWidget("togglesneak gui", config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"),
+            getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
+            getConfigCheckboxWidget("movement toggle mirror press cancel", config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"),
+            getConfigCheckboxWidget(
+                    "damage taken value notification",
+                    config.isDamageTakenValueNotificationEnabled,
+                    is -> config.isDamageTakenValueNotificationEnabled = is,
+                    ""),
+            getConfigCheckboxWidget("sneak", config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"),
+            getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
+            getConfigCheckboxWidget("fake night vision", config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"),
+            getConfigCheckboxWidget(
+                    "weak attack disabled",
+                    config.isWeakAttackSoundDisabled,
+                    is -> config.isWeakAttackSoundDisabled = is,
+                    ""),
+            getConfigButtonWidget("change player xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
+            getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
+            getConfigCheckboxWidget(
+                    "ethylene",
+                    cheatConfig.isEthylene,
+                    is -> cheatConfig.isEthylene = is,
+                    "shotbow lol"),
+            getConfigButtonWidget(
+                    "change targeting margin. current: " + cheatConfig.targetingMarginBypass,
+                    () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
+                    "opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+            getConfigCheckboxWidget(
+                    "blindness disable",
+                    cheatConfig.isDarknessDisabled,
+                    is -> cheatConfig.isDarknessDisabled = is,
+                    "darkness + blindness + nausea"),
+            getConfigCheckboxWidget(
+                    "player waypoints",
+                    cheatConfig.isPlayerWaypointsEnabled,
+                    is -> cheatConfig.isPlayerWaypointsEnabled = is,
+                    ""),
+            getConfigCheckboxWidget(
+                    "sneaky reach (beware)",
+                    cheatConfig.isSneakyReachEnabled,
+                    is -> cheatConfig.isSneakyReachEnabled = is,
+                    ""),
+            getConfigButtonWidget(
+                    "change attack self velocity multiplier. current: " + cheatConfig.attackVelocityBypass,
+                    () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
+                    "opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+            getConfigCheckboxWidget(
+                    "grapple ground check",
+                    cheatConfig.isGrappleGroundCheckEnabled,
+                    is -> cheatConfig.isGrappleGroundCheckEnabled = is,
+                    ""),
+            getConfigCheckboxWidget(
+                    "team hit messaging",
+                    cheatConfig.isTeamHitMessagingEnabled,
+                    is -> cheatConfig.isTeamHitMessagingEnabled = is,
+                    "")
+    ));
 //            addDrawableChild(getConfigCheckboxWidget("debug mode", x, y, isDebugModeEnabled, is -> isDebugModeEnabled = is, "logs to minecraft chat"));
-//            y += 20;
-
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget("togglesneak gui", x + xModifier, y, config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("autorun pvp disable", x + xModifier, y, config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("movement toggle mirror press cancel", x + xModifier, y, config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"));
-            }
-            y += 20;
-
 //            addDrawableChild(getConfigCheckboxWidget("enable notification noise when attack indicator reaches threshold", x, y, config.isAttackCooldownNotificationEnabled, is -> config.isAttackCooldownNotificationEnabled = is, ""));
-//            y += 20;
-
 //            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't reach threshold", x, y, config.isAttackCooldownWarningEnabled, is -> config.isAttackCooldownWarningEnabled = is, "play warning sound when attack didn't reach threshold"));
-//            y += 20;
-
 //            addDrawableChild(getConfigCheckboxWidget("enable warning noise when attack doesn't knockback or crit", x, y, config.isSweepAttackWarningEnabled, is -> config.isSweepAttackWarningEnabled = is, "plays warning sound when sweep hitting"));
-//            y += 20;
-
-            {
-                int xModifier = 0;
 //                addDrawableChild(getConfigButtonWidget("potion enchantment glint revert: " + (config.currentPotionEnchantmentGlintType.isEmpty() ? "none" : config.currentPotionEnchantmentGlintType), () -> {
 //                    config.currentPotionEnchantmentGlintType = switch (config.currentPotionEnchantmentGlintType) {
 //                        case "" -> "1.8";
@@ -59,60 +93,14 @@ public class Constants {
 //                    };
 //                    MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
 //                }, x + xModifier, y, "reverts potion enchantment glint to 1.8"));
-//                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("enable removal of attack hand lowering", x + xModifier, y, config.isAttackLoweringDisabled, is -> config.isAttackLoweringDisabled = is, ""));
-//                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("enable reverted sharpness particles", x + xModifier, y, config.isSharpnessParticleReverted, is -> config.isSharpnessParticleReverted = is, ""));
-//                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("enable reverted crit particles", x + xModifier, y, config.isCritParticleReverted, is -> config.isCritParticleReverted = is, "warning: don't use this, modern minecraft handles crits differently"));
-            }
-//            y += 20;
-
-            {
-//                int xModifier = 0;
 //                addDrawableChild(getConfigCheckboxWidget("knockback particles", x + xModifier, y, config.isKnockbackParticleEnabled, is -> config.isKnockbackParticleEnabled = is, ""));
-//                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("sweep particles", x + xModifier, y, config.isSweepParticleEnabled, is -> config.isSweepParticleEnabled = is, ""));
-//                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("bleed particles", x + xModifier, y, config.isBleedParticleEnabled, is -> config.isBleedParticleEnabled = is, ""));
-            }
-//            y += 20;
-
 //            addDrawableChild(getConfigCheckboxWidget("enable attack indicator information widget", x, y, config.isAttackIndicatorDataEnabled, is -> config.isAttackIndicatorDataEnabled = is, "shows range and attack cooldown percentage when attacking and swinging, respectively"));
-//            y += 20;
-
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget("sneak", x + xModifier, y, config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("sprint", x + xModifier, y, config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"));
-                xModifier += 150;
-                // TODO -> do the other movement toggles here, too
 //                addDrawableChild(getConfigCheckboxWidget("fly boost", x + xModifier, y, config.isFlyBoostEnabled, is -> config.isFlyBoostEnabled = is, "sprint while flying to use it"));
-//                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget("fake night vision", x + xModifier, y, config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"));
-                // TODO -> keybind changer
-                // TODO -> let mod keybinds be changed here, too
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "weak attack disabled",
-                        x + xModifier,
-                        y,
-                        config.isWeakAttackSoundDisabled,
-                        is -> config.isWeakAttackSoundDisabled = is,
-                        ""));
-            }
-            y += 20;
-
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "damage taken value notification",
-                        x + xModifier,
-                        y,
-                        config.isDamageTakenValueNotificationEnabled,
-                        is -> config.isDamageTakenValueNotificationEnabled = is,
-                        ""));
 //                addDrawableChild(getConfigButtonWidget("list changed nameplates", () ->
 //                        handleAbstractMojangApiNameplateUpdaterScreen((nonnullNetworkHandler) -> {
 //                            ArrayList<CompletableFuture<nameplateUpdaterEntry>> futureEntries = new ArrayList<>();
@@ -127,7 +115,6 @@ public class Constants {
 //                            }
 //                            return futureEntries;
 //                        }), x + xModifier, y, "opens nameplate updater, it could take a while to open"));
-//                xModifier += 150;
 //                addDrawableChild(ButtonWidget.builder(Text.literal("list online players' nameplates"), button -> {
 //                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
 //                                currentNameplateUpdatePlayers = player.networkHandler.getPlayerList().stream()
@@ -146,7 +133,6 @@ public class Constants {
 //                        .position(x + xModifier, y)
 //                        .tooltip(Tooltip.of(Text.literal("opens nameplate updater")))
 //                        .build());
-//                xModifier += 150;
 //                addDrawableChild(
 //                        ButtonWidget.builder(Text.literal("list matching recent chat message's nameplates"),
 //                                        button ->
@@ -225,27 +211,21 @@ public class Constants {
 //                                .position(x + xModifier, y)
 //                                .tooltip(Tooltip.of(Text.literal("opens nameplate updater")))
 //                                .build());
-            }
-//            y += 20;
-            {
-//                int xModifier = 0;
 //                addDrawableChild(ButtonWidget.builder(Text.literal("create duplicate vanilla keybind"), button ->
 //                                MINECRAFT_CLIENT_INSTANCE.setScreen(getAbstractKeyboardSequenceScreen(Text.literal("keyboard only: press vanilla keybind then press desired duplicate keybind"), (sequence) -> sequence.length() >= 2, (inputString, client) -> // TODO getting the string here instead of just using the input is retarded/lazy but I guess I am, too
 //                                        client.execute(() -> {
 //                                            // TODO
-////                                            for (KeyBinding keyBinding : OPTIONS.allKeys)
-////                                                if (InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode() == ) )
+
+    /// /                                            for (KeyBinding keyBinding : OPTIONS.allKeys)
+    /// /                                                if (InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode() == ) )
 //                                        }), CONFIG)))
 //                        .position(x + xModifier, y)
 //                        .tooltip(Tooltip.of(Text.literal("opens keybind recorder")))
 //                        .build());
-            }
-        }
-    };
-
-    private static CheckboxWidget getConfigCheckboxWidget(String text, int x, int y, boolean isChecked, Consumer<Boolean> consumer, String tooltip) {
+    private static CheckboxWidget getConfigCheckboxWidget(
+            String text, boolean isChecked, Consumer<Boolean> consumer, String tooltip) {
         return CheckboxWidget.builder(Text.literal(text), TEXT_RENDERER)
-                .pos(x, y)
+//                .pos(x, y)
                 .checked(isChecked)
                 .callback((v, is) -> {
                     consumer.accept(is);
@@ -259,7 +239,8 @@ public class Constants {
                 .build();
     }
 
-    private static ButtonWidget getConfigButtonWidget(String title, Runnable onPress, int x, int y, String tooltip) {
+    private static ButtonWidget getConfigButtonWidget(
+            String title, Runnable onPress, String tooltip) {
         return ButtonWidget.builder(Text.literal(title), v -> {
                     onPress.run();
                     config.saveConfig();
@@ -267,7 +248,7 @@ public class Constants {
                     cheatConfig.saveCheatConfig();
                     // Cheats end
                 })
-                .position(x, y)
+//                .position(x, y)
                 .tooltip(Tooltip.of(Text.literal(tooltip)))
                 .build();
     }
@@ -392,174 +373,7 @@ public class Constants {
     };
 
     // Cheats start
-    public static final Screen CHEAT_CONFIG = new Screen(Text.literal("cheat config")) {
-        @Override
-        protected void init() {
-            int y = 20;
-            int x = 20;
-
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), x + xModifier, y, "lists all current recorded autoclickers"));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("record jitter autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_MACRO_RECORDER), x + xModifier, y, "opens blank recording screen"));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change jitter autoclick starting multiplier. current: " + cheatConfig.autoclickerJitterStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerJitterStartingMultiplier));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change jitter autoclick ending multiplier. current: " + cheatConfig.autoclickerJitterEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerJitterEndingMultiplier));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("record slow autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_MACRO_RECORDER), x + xModifier, y, "opens blank recording screen"));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change slow autoclick starting multiplier. current: " + cheatConfig.autoclickerSlowStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerSlowStartingMultiplier));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change slow autoclick ending multiplier. current: " + cheatConfig.autoclickerSlowEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER), x + xModifier, y, "opens float recording screen. current: " + cheatConfig.autoclickerSlowEndingMultiplier));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("change autoclick toggle keybind. current: " + cheatConfig.glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
-                xModifier += 150;
-//                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + cheatConfig.glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
-//                xModifier += 150;
-//                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + cheatConfig.glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
-//                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "autoclick shake",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isAutoclickerShakeEnabled,
-                        is -> cheatConfig.isAutoclickerShakeEnabled = is,
-                        "recorded autoclicker mouse movement"));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigButtonWidget("change player xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "ethylene",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isEthylene,
-                        is -> cheatConfig.isEthylene = is,
-                        "shotbow lol"));
-//                xModifier += 150;
-//                addDrawableChild(getConfigCheckboxWidget(
-//                        "automatic w tap",
-//                        x + xModifier,
-//                        y,
-//                        isAutomaticWTapping,
-//                        is -> isAutomaticWTapping = is,
-//                        "shotbow lol"));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "cobweb autoclicker",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isAutoCobweb,
-                        is -> cheatConfig.isAutoCobweb = is,
-                        "shotbow lol"));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget(
-                        "change targeting margin. current: " + cheatConfig.targetingMarginBypass,
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
-                        x + xModifier,
-                        y,
-                        "opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"));
-
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "blindness disable",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isDarknessDisabled,
-                        is -> cheatConfig.isDarknessDisabled = is,
-                        "darkness + blindness + nausea"));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "random double click",
-                        x + xModifier,
-                        y,
-                        isRandomDoubleClickEnabled,
-                        is -> {
-                            isRandomDoubleClickEnabled = is;
-                            if (isRandomDoubleClickEnabled) {
-                                GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-                            } else {
-                                GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-                            }
-                        },
-                        ""));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "player waypoints",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isPlayerWaypointsEnabled,
-                        is -> cheatConfig.isPlayerWaypointsEnabled = is,
-                        ""));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "sneaky reach (beware)",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isSneakyReachEnabled,
-                        is -> cheatConfig.isSneakyReachEnabled = is,
-                        ""));
-                xModifier += 150;
-                addDrawableChild(getConfigButtonWidget(
-                        "change attack self velocity multiplier. current: " + cheatConfig.attackVelocityBypass,
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
-                        x + xModifier,
-                        y,
-                        "opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"));
-//                addDrawableChild(getConfigButtonWidget(
-//                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
-//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
-//                        x + xModifier,
-//                        y,
-//                        "opens keybind recorder screen"));
-            }
-            y += 20;
-            {
-                int xModifier = 0;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "inventory autoclicker",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isAutoClickInventoryEnabled,
-                        is -> cheatConfig.isAutoClickInventoryEnabled = is,
-                        ""));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "grapple ground check",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isGrappleGroundCheckEnabled,
-                        is -> cheatConfig.isGrappleGroundCheckEnabled = is,
-                        ""));
-                xModifier += 150;
-                addDrawableChild(getConfigCheckboxWidget(
-                        "team hit messaging",
-                        x + xModifier,
-                        y,
-                        cheatConfig.isTeamHitMessagingEnabled,
-                        is -> cheatConfig.isTeamHitMessagingEnabled = is,
-                        ""));
-            }
-        }
-    };
+    TODO;
 
     static {
         try {
@@ -602,5 +416,58 @@ public class Constants {
     private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> cheatConfig.attackVelocityBypass = number, CHEAT_CONFIG);
 
 //    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
-    // Cheats end
+
+    public static final Screen CHEAT_CONFIG = buildConfigScreen("cheat config", List.of(
+            getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), "lists all current recorded autoclickers"),
+            getConfigButtonWidget("record jitter autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_MACRO_RECORDER), "opens blank recording screen"),
+            getConfigButtonWidget("change jitter autoclick starting multiplier. current: " + cheatConfig.autoclickerJitterStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + cheatConfig.autoclickerJitterStartingMultiplier),
+            getConfigButtonWidget("change jitter autoclick ending multiplier. current: " + cheatConfig.autoclickerJitterEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + cheatConfig.autoclickerJitterEndingMultiplier),
+            getConfigButtonWidget("record slow autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_MACRO_RECORDER), "opens blank recording screen"),
+            getConfigButtonWidget("change slow autoclick starting multiplier. current: " + cheatConfig.autoclickerSlowStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + cheatConfig.autoclickerSlowStartingMultiplier),
+            getConfigButtonWidget("change slow autoclick ending multiplier. current: " + cheatConfig.autoclickerSlowEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + cheatConfig.autoclickerSlowEndingMultiplier),
+            getConfigButtonWidget("change autoclick toggle keybind. current: " + cheatConfig.glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
+            getConfigCheckboxWidget(
+                    "autoclick shake",
+                    cheatConfig.isAutoclickerShakeEnabled,
+                    is -> cheatConfig.isAutoclickerShakeEnabled = is,
+                    "recorded autoclicker mouse movement"),
+            getConfigCheckboxWidget(
+                    "cobweb autoclicker",
+                    cheatConfig.isAutoCobweb,
+                    is -> cheatConfig.isAutoCobweb = is,
+                    "shotbow lol"),
+            getConfigCheckboxWidget(
+                    "random double click",
+                    isRandomDoubleClickEnabled,
+                    is -> {
+                        isRandomDoubleClickEnabled = is;
+                        if (isRandomDoubleClickEnabled) {
+                            GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                        } else {
+                            GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+                        }
+                    },
+                    ""),
+            getConfigCheckboxWidget(
+                    "inventory autoclicker",
+                    cheatConfig.isAutoClickInventoryEnabled,
+                    is -> cheatConfig.isAutoClickInventoryEnabled = is,
+                    "")
+            //                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + cheatConfig.glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+//                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + cheatConfig.glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
+//                addDrawableChild(getConfigCheckboxWidget(
+//                        "automatic w tap",
+//                        x + xModifier,
+//                        y,
+//                        isAutomaticWTapping,
+//                        is -> isAutomaticWTapping = is,
+//                        "shotbow lol"));
+//                addDrawableChild(getConfigButtonWidget(
+//                        "change random double click keybind. current: : " + glfwToggleRandomDoubleClickKeybind,
+//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER),
+//                        x + xModifier,
+//                        y,
+//                        "opens keybind recorder screen"));
+    ));
+// Cheats end
 }

@@ -18,7 +18,7 @@ import static com.example.UntitledClient.isGrappleReady;
 public class SoundManagerMixin {
     @Inject(method = "play*", at = @At("HEAD"), cancellable = true)
     void onPlay(SoundInstance soundInstance, CallbackInfo ci) {
-        if (config.isWeakAttackSoundDisabled && soundInstance.getId().equals(SoundEvents.ENTITY_PLAYER_ATTACK_WEAK.id())) {
+        if (config.isWeakAttackSoundDisabled && soundInstance.getId().equals(SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE.id())) {
             ci.cancel();
         }
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&

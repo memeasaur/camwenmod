@@ -1,6 +1,8 @@
 package com.example;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -11,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -136,4 +139,21 @@ public class Utils {
 //            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
 //                player.sendMessage(Text.literal("unsafejsonsave err: " + e.getMessage()), false);
 //        }
+
+    public static Screen buildConfigScreen(String name, List<ClickableWidget> clickableWidgets) {
+        return new Screen(Text.literal(name)) {
+            @Override
+            protected void init() {
+                int y = 20;
+                int x = 20;
+                for (int i = 0; i < clickableWidgets.size(); ++i) {
+                    int column = i % 4;
+                    int row = i / 4;
+                    ClickableWidget widget = clickableWidgets.get(i);
+                    widget.setPosition(x + 150 * column, y + 20 * row);
+                    addDrawableChild(widget);
+                }
+            }
+        };
+    }
 }
