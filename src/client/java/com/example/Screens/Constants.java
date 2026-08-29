@@ -224,7 +224,10 @@ public class Constants {
                     config.isWeakAttackSoundDisabled,
                     is -> config.isWeakAttackSoundDisabled = is,
                     ""),
-            getConfigButtonWidget("change player xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
+            getConfigButtonWidget(
+                    "change player xray toggle keybind",
+                    () -> MINECRAFT_CLIENT_INSTANCE.setScreen(PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER),
+                    "opens keybind recorder screen"),
             getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
             getConfigCheckboxWidget(
                     "ethylene",
@@ -232,9 +235,9 @@ public class Constants {
                     is -> cheatConfig.isEthylene = is,
                     "shotbow lol"),
             getConfigButtonWidget(
-                    "change targeting margin. current: " + cheatConfig.targetingMarginBypass,
+                    "change targeting margin",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
-                    "opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+                    "current: " + cheatConfig.targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
             getConfigCheckboxWidget(
                     "blindness disable",
                     cheatConfig.isDarknessDisabled,
@@ -251,9 +254,9 @@ public class Constants {
                     is -> cheatConfig.isSneakyReachEnabled = is,
                     ""),
             getConfigButtonWidget(
-                    "change attack self velocity multiplier. current: " + cheatConfig.attackVelocityBypass,
+                    "change attack self velocity multiplier",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
-                    "opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+                    "current: " + cheatConfig.attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
             getConfigCheckboxWidget(
                     "grapple ground check",
                     cheatConfig.isGrappleGroundCheckEnabled,
