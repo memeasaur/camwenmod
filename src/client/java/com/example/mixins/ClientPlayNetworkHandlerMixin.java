@@ -12,10 +12,10 @@ import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-    @Inject(method = "onHealthUpdate", at = @At("RETURN"))
-    void onOnHealthUpdate(HealthUpdateS2CPacket packet, CallbackInfo ci) {
-        MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal("healthUpdate"), false);
-    }
+//    @Inject(method = "onHealthUpdate", at = @At("RETURN"))
+//    void onOnHealthUpdate(HealthUpdateS2CPacket packet, CallbackInfo ci) {
+//        MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal("healthUpdate"), false);
+//    }
 
 //    @Inject(method = "onEntityDamage", at = @At("RETURN"))
 //    void onOnEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {

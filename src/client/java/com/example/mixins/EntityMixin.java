@@ -21,7 +21,7 @@ public class EntityMixin {
 
     @Inject(method = "clientDamage", at = @At("HEAD"))
     private void onClientDamage(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-//        TODO;
+        TODO;
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
 //            player.sendMessage(Text.literal(source.), false);
 //        }
