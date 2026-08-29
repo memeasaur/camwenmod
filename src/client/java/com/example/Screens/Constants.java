@@ -75,14 +75,6 @@ public class Constants {
 //                addDrawableChild(getConfigCheckboxWidget("sweep particles", x + xModifier, y, config.isSweepParticleEnabled, is -> config.isSweepParticleEnabled = is, ""));
 //                xModifier += 150;
 //                addDrawableChild(getConfigCheckboxWidget("bleed particles", x + xModifier, y, config.isBleedParticleEnabled, is -> config.isBleedParticleEnabled = is, ""));
-//                xModifier += 150;
-//                addDrawableChild(getConfigCheckboxWidget(
-//                        "weak attack disabled",
-//                        x + xModifier,
-//                        y,
-//                        config.isWeakAttackSoundDisabled,
-//                        is -> config.isWeakAttackSoundDisabled = is,
-//                        ""));
             }
 //            y += 20;
 
@@ -101,6 +93,14 @@ public class Constants {
                 addDrawableChild(getConfigCheckboxWidget("fake night vision", x + xModifier, y, config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"));
                 // TODO -> keybind changer
                 // TODO -> let mod keybinds be changed here, too
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "weak attack disabled",
+                        x + xModifier,
+                        y,
+                        config.isWeakAttackSoundDisabled,
+                        is -> config.isWeakAttackSoundDisabled = is,
+                        ""));
             }
             y += 20;
 

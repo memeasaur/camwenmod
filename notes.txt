@@ -2,12 +2,10 @@
 >start using asserts and requireNonNull etc.
 >add brackets everywhere that I decided not to use them
 
->dont waypoint self
 >waypoint coloring
 >waypoint coords when hovering and it isn't in render
 >put damage taken value in chat so I can compare weapons
 >stop autoclicker from throwing pots out of hotbar
->player waypoints detect minez particles?
 >message when hitting teammate
 >message when getting hit by teammate
 >option for ignoring attacks that would hit teammates
@@ -31,6 +29,7 @@
     >shows plo when you aren't in the shotbow party (party waypoints)
 >always move at head-run speed? (blatant)
 
+>player waypoints detect minez particles?
 >rally that places an on-screen waypoint
     >should work for drops, too
     >should also be able to play team permanent waypoints like hasa etc.
