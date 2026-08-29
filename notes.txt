@@ -3,13 +3,10 @@
 >add brackets everywhere that I decided not to use them
 
 >don't show waypoints if the player is visible
->waypoint coloring
 >waypoint coords when hovering and it isn't in render
->put damage taken value in chat so I can compare weapons
 >stop autoclicker from throwing pots out of hotbar
     >if hotbar full, stop clicks
 >message when hitting teammate
->message when getting hit by teammate
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health

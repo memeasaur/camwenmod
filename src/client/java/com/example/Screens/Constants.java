@@ -101,6 +101,14 @@ public class Constants {
                         config.isWeakAttackSoundDisabled,
                         is -> config.isWeakAttackSoundDisabled = is,
                         ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "damage taken value notification",
+                        x + xModifier,
+                        y,
+                        config.isDamageTakenValueNotificationEnabled,
+                        is -> config.isDamageTakenValueNotificationEnabled = is,
+                        ""));
             }
             y += 20;
 
@@ -541,6 +549,14 @@ public class Constants {
                         y,
                         cheatConfig.isGrappleGroundCheckEnabled,
                         is -> cheatConfig.isGrappleGroundCheckEnabled = is,
+                        ""));
+                xModifier += 150;
+                addDrawableChild(getConfigCheckboxWidget(
+                        "team hit messaging",
+                        x + xModifier,
+                        y,
+                        cheatConfig.isTeamHitMessagingEnabled,
+                        is -> cheatConfig.isTeamHitMessagingEnabled = is,
                         ""));
             }
         }

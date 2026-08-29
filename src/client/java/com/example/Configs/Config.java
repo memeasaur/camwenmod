@@ -25,7 +25,6 @@ public class Config {
     public boolean isSweepAttackWarningEnabled = false;
     public boolean isAttackIndicatorDataEnabled = false;
     public boolean isWeakAttackSoundDisabled = false;
-    TODO;
     public boolean isDamageTakenValueNotificationEnabled = false;
 
     public boolean isMovementTogglePvpDisabling = false;

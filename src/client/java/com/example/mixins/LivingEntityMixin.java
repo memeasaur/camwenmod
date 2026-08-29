@@ -16,7 +16,8 @@ import static com.example.UntitledClient.*;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "hasStatusEffect", cancellable = true)
-    private void onHasStatusEffect(RegistryEntry<StatusEffect> effect, CallbackInfoReturnable<Boolean> cir) {
+    private void onHasStatusEffect(
+            RegistryEntry<StatusEffect> effect, CallbackInfoReturnable<Boolean> cir) {
         if (effect == StatusEffects.NIGHT_VISION && (config.isFullbrightEnabled || FULLBRIGHT_HOLD.isPressed())) {
             cir.setReturnValue(true);
             cir.cancel();

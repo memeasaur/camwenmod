@@ -46,7 +46,7 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
     static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
-//    TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
+    //    TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
     // java has a websocket I can use for this apparently
     //        TODO; // task for sending the http payloads of all the shared info
     //        TODO; // register task for drawing waypoints of far away players
@@ -90,6 +90,7 @@ public class UntitledClient implements ClientModInitializer {
                 "PvpUtils"
         ));
     }
+
     public static boolean isDebugModeEnabled = false;
     public static boolean isSprintReset = true;
     public static boolean
@@ -400,9 +401,8 @@ public class UntitledClient implements ClientModInitializer {
                     screenY - backgroundSize / 2,
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
-                    0xAFFF0000
+                    Objects.equals(config.nameplateUuids.get(player.getUuid()), "ally") ? 0xAF00FF00 : 0xAFFF0000
             );
-//            TODO; // green for teammates
 //            TODO; // config option for only doing teammates
             PlayerSkinDrawer.draw(
                     drawContext,
