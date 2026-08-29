@@ -1,7 +1,3 @@
->fix all warnings
->start using asserts and requireNonNull etc.
->add brackets everywhere that I decided not to use them
-
 >rally that places an on-screen waypoint
     >should work for drops, too
 >nearby player counter
@@ -25,8 +21,9 @@
         >uses your healing data for the values
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
->always move at head-run speed? (blatant)
 
+>always move at head-run speed? (blatant)
+    >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >don't show waypoints if the player is visible? (might be too expensive)
 >stop autoclicker from pulling pots out of hotbar, maybe I ought to just disable the feature completely
 >option for ignoring attacks that would hit teammates
