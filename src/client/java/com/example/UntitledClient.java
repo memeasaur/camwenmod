@@ -315,7 +315,7 @@ public class UntitledClient implements ClientModInitializer {
                             assert MINECRAFT_CLIENT_INSTANCE.world != null;
                             for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
                                 // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                                if (!(player instanceof AbstractClientPlayerEntity clientPlayerEntity) || player == MINECRAFT_CLIENT_INSTANCE.player) {
+                                if (!(player instanceof AbstractClientPlayerEntity clientPlayerEntity)) {
                                     continue;
                                 }
                                 drawPlayerWaypoint(
@@ -419,7 +419,7 @@ public class UntitledClient implements ClientModInitializer {
 
                 drawText(screenX, distanceText, screenY, size, drawContext);
             }
-            // name
+            // hovered
             {
                 Vector3f forward = new Vector3f(0, 0, -1);
                 camera.getRotation().transform(forward);
@@ -427,14 +427,33 @@ public class UntitledClient implements ClientModInitializer {
                 Vec3d toMarker = worldPos.subtract(camera.getPos()).normalize();
                 if (look.dotProduct(toMarker) > 0.995) {
                     // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
-                    // TODO -> extra info should also appear when moused over
-                    String name = player.getNameForScoreboard();
-                    drawText(
-                            screenX,
-                            name,
-                            screenY - size / 2 - TEXT_RENDERER.fontHeight - 2,
-                            size,
-                            drawContext);
+                    // TODO -> extra info should also appear when MOUSED over
+                    // name
+                    {
+                        String name = player.getNameForScoreboard();
+                        drawText(
+                                screenX,
+                                name,
+                                screenY - size / 2 - TEXT_RENDERER.fontHeight - 2,
+                                size,
+                                drawContext);
+                    }
+                    // coords
+                    {
+                        String coordinates = String.format(
+                                "%.0f, %.0f, %.0f",
+                                worldPos.x,
+                                worldPos.y,
+                                worldPos.z
+                        );
+                        drawText(
+                                screenX,
+                                coordinates,
+                                screenY - size / 2 - TEXT_RENDERER.fontHeight * 2 - 4,
+                                size,
+                                drawContext
+                        );
+                    }
                 }
             }
         }
