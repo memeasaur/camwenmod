@@ -27,14 +27,20 @@ public class EntityMixin {
     @Inject(method = "clientDamage", at = @At("HEAD"))
     private void onClientDamage(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity) (Object) this;
-        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
-                player == entity &&
-                source.getAttacker() instanceof PlayerEntity attacker) {
-            onPvpDamage();
+        if (source.getAttacker() instanceof PlayerEntity attacker) {
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
+                    player == entity) {
+                onPvpDamage();
 
-            player.sendMessage(Text.literal("test"), false);
-            if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
-                player.sendMessage(Text.literal(attacker.getName() + " damaged you"), false);
+                if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
+                    player.sendMessage(Text.literal("ally damaged you: " + attacker.getName()), false);
+                }
+            }
+            if (MINECRAFT_CLIENT_INSTANCE.player == attacker &&
+                    entity instanceof PlayerEntity &&
+                    cheatConfig.isTeamHitMessagingEnabled &&
+                    Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
+                attacker.sendMessage(Text.literal("you damaged ally: " + attacker.getName()), false);
             }
         }
     }

@@ -1,13 +1,9 @@
 package com.example.mixins;
 
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,12 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
-import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.cheatConfig;
-import static com.example.UntitledClient.config;
-import static com.example.Utils.onPvpDamage;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -29,12 +20,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         super(entityType, world);
     }
 
-    @Inject(at = @At(value = "RETURN"), method = "applyDamage")
-    private void onApplyDamage(
-            ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
-        // this doesn't run on the client
-        throw new RuntimeException("Intentional crash");
-    }
+//    @Inject(at = @At(value = "RETURN"), method = "applyDamage")
+//    private void onApplyDamage(
+//            ServerWorld world, DamageSource source, float amount, CallbackInfo ci) {
+//        // this doesn't run on the client
+//        throw new RuntimeException("Intentional crash");
+//    }
 
     @Inject(at = @At(value = "RETURN"), method = "attack")
     private void onAttack(Entity target, CallbackInfo ci) {

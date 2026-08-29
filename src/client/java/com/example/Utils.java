@@ -70,12 +70,15 @@ public class Utils {
     }
 
     public static void onPvpDamage() {
-        if (config.isMovementTogglePvpDisabling)
+        if (config.isMovementTogglePvpDisabling) {
             doMovementToggleDisable();
+        }
 
         // Cheats start
-        if (cheatConfig.isGuiCheatsPvpDisabling)
+        if (cheatConfig.isGuiCheatsPvpDisabling) {
             currentXrayType = "";
+            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload(); // TODO -> method-ize
+        }
         // Cheats end
     }
 
