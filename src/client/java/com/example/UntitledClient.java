@@ -53,7 +53,7 @@ public class UntitledClient implements ClientModInitializer {
     public static HashMap<String, CheatConfig> cheatConfigs = getDeserializedJsonBlocking(
             "cheat-configs",
             new TypeToken<HashMap<String, CheatConfig>>() {
-            }.getType().getClass()) instanceof HashMap<?, ?> map
+            }.getType()) instanceof HashMap<?, ?> map
             ? (HashMap<String, CheatConfig>) map // TODO -> ?
             : new HashMap<>();
     //    TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
