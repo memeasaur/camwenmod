@@ -1,3 +1,5 @@
+>fix tooltip current value thing
+>add toggle for cheats
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health
