@@ -1,22 +1,18 @@
 package com.example.mixins;
 
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
-import static com.example.UntitledClient.cheatConfigs;
+import static com.example.Utils.computeCheatConfig;
 
 @Mixin(Entity.class)
 public class EntityMixin {
     @Inject(method = "getTargetingMargin", at = @At("HEAD"), cancellable = true)
     private void onGetTargetingMargin(final CallbackInfoReturnable<Float> cir) {
-        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo) {
-            cir.setReturnValue(cheatConfigs.get(serverInfo.address).targetingMarginBypass);
-        }
+        cir.setReturnValue(computeCheatConfig().targetingMarginBypass);
     }
 
 //    @Inject(method = "onDamaged", at = @At("HEAD"))

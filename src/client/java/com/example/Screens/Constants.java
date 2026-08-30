@@ -1,6 +1,5 @@
 package com.example.Screens;
 
-import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.MinecraftClient;
@@ -201,8 +200,8 @@ public class Constants {
 
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> config.glfwTogglePlayerXrayKeybind = key);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> config.glfwToggleBlockXrayKeybind = key);
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).targetingMarginBypass = number.floatValue());
-    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).attackVelocityBypass = number);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> computeCheatConfig().targetingMarginBypass = number.floatValue());
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
 
 //    private static final Screen RANDOM_DOUBLE_CLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fpng"), (key) -> glfwToggleRandomDoubleClickKeybind = key, CHEAT_CONFIG);
 
@@ -232,13 +231,13 @@ public class Constants {
             getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
             getConfigCheckboxWidget(
                     "ethylene",
-                    cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).isEthylene,
-                    is -> cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).isEthylene = is,
+                    computeCheatConfig().isEthylene,
+                    is -> computeCheatConfig().isEthylene = is,
                     "shotbow lol"),
             getConfigButtonWidget(
                     "change targeting margin",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
-                    "current: " + cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+                    "current: " + computeCheatConfig().targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
             getConfigCheckboxWidget(
                     "blindness disable",
                     config.isDarknessDisabled,
@@ -251,13 +250,13 @@ public class Constants {
                     ""),
             getConfigCheckboxWidget(
                     "sneaky reach (beware)",
-                    cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).isSneakyReachEnabled,
-                    is -> cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).isSneakyReachEnabled = is,
+                    computeCheatConfig().isSneakyReachEnabled,
+                    is -> computeCheatConfig().isSneakyReachEnabled = is,
                     ""),
             getConfigButtonWidget(
                     "change attack self velocity multiplier",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
-                    "current: " + cheatConfigs.computeIfAbsent(MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry().address, v -> new CheatConfig()).attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+                    "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
             getConfigCheckboxWidget(
                     "grapple ground check",
                     config.isGrappleGroundCheckEnabled,

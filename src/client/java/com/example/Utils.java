@@ -1,9 +1,11 @@
 package com.example;
 
+import com.example.Configs.CheatConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
@@ -155,5 +157,15 @@ public class Utils {
                 }
             }
         };
+    }
+    private static String computeServerName() {
+        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo) {
+            return serverInfo.address;
+        }
+        return "singlePlayer";
+    }
+
+    public static CheatConfig computeCheatConfig() {
+        return cheatConfigs.computeIfAbsent(computeServerName(), v -> new CheatConfig());
     }
 }
