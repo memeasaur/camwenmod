@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
-import static com.example.UntitledClient.cheatConfig;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.onPvpDamage;
 
@@ -54,13 +53,13 @@ public class ClientPlayNetworkHandlerMixin {
                 // TODO -> player == attacker?
                 onPvpDamage();
 
-                if (cheatConfig.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
+                if (config.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
                     player.sendMessage(Text.literal("ally damaged you: " + attacker.getName().getString()), false);
                 }
             }
             if (MINECRAFT_CLIENT_INSTANCE.player == attacker &&
                     entity instanceof PlayerEntity &&
-                    cheatConfig.isTeamHitMessagingEnabled &&
+                    config.isTeamHitMessagingEnabled &&
                     Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
                 attacker.sendMessage(Text.literal("you damaged ally: " + attacker.getName().getString()), false);
             }
