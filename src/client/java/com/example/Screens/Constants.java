@@ -235,7 +235,7 @@ public class Constants {
                     is -> computeCheatConfig().isEthylene = is,
                     "shotbow lol"),
             getConfigButtonWidget(
-                    "change targeting margin",
+                    "current: " + computeCheatConfig().targetingMarginBypass + ".change targeting margin",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
                     "current: " + computeCheatConfig().targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
             getConfigCheckboxWidget(

@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -97,7 +98,7 @@ public class Utils {
         }
     }
 
-    public static <T> T getDeserializedJsonBlocking(String fileNamePrefix, Class<T> clazz) {
+    public static <T> T getDeserializedJsonBlocking(String fileNamePrefix, Type clazz) {
         try (FileReader reader = new FileReader("pvputils-" + fileNamePrefix + ".json")) {
             return GSON.fromJson(reader, clazz);
         } catch (IOException e) {
