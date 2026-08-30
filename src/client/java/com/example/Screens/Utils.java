@@ -1,6 +1,6 @@
 package com.example.Screens;
 
-import com.example.Configs.CheatConfig;
+import com.example.Configs.Config;
 import com.example.MouseMovement;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 import static com.example.Constants.*;
 import static com.example.Constants.SCHEDULED_EXECUTOR_SERVICE;
 import static com.example.Screens.Constants.*;
-import static com.example.UntitledClient.cheatConfig;
+import static com.example.UntitledClient.config;
 import static com.example.Utils.getIsKeyPressed;
 
 public class Utils {
@@ -276,7 +276,7 @@ public class Utils {
 //                        }
                             int[] newRecordedAutoclickerClicks = mutableMacroClicks.stream().skip(2).mapToInt(Integer::intValue).toArray();
                             MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                            cheatConfig.recordedClickSequences.add(new CheatConfig.ClickRecording(
+                            config.recordedClickSequences.add(new Config.ClickRecording(
                                     newRecordedAutoclickerClicks,
                                     newRecordedAutoclickerMovements,
                                     isSlow));
@@ -284,7 +284,7 @@ public class Utils {
                         threadClientInstance.execute(() -> {
                             if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                                 player.sendMessage(flag
-                                        ? getAutoclickerText(cheatConfig.recordedClickSequences.getLast().clicks())
+                                        ? getAutoclickerText(config.recordedClickSequences.getLast().clicks())
                                         : Text.literal("invalid macro"), true); // TODO -> console
                             }
                         });

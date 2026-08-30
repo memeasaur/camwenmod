@@ -1,12 +1,10 @@
 package com.example.mixins;
 
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
-import static com.example.UntitledClient.cheatConfig;
+import static com.example.UntitledClient.cheatConfigs;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -35,7 +33,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void onAttack(Entity target, CallbackInfo ci) {
         // cheats start
         // TODO -> check if I was sprinting originally
-        if (cheatConfig.isEthylene) {
+        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo &&
+                cheatConfigs.get(serverInfo.address).isEthylene) {
             this.setSprinting(true);
         }
         // TODO -> remove
@@ -52,6 +51,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         // TODO -> check if ethylene is enabled and if I'm taking bad knockback, and return 1.0 for this if I'm not to ethylene harder
         // also, this being raised would technically slow down my ethylene if I don't address this
 //        return value;
-        return cheatConfig.attackVelocityBypass;
+        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo) {
+            return cheatConfigs.get(serverInfo.address).attackVelocityBypass;
+        }
+
+        return value;
     }
 }
