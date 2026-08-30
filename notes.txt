@@ -3,6 +3,9 @@
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
 >impl sliders +or text fields
 >only show waypoints of players that are out of the viewport
+>nearby player counter
+>360 degree fov keybind
+>add option for hitting ground in adventure mode
 
 >make ethylene change the fov still
 >faster tick-rate (blatant)
@@ -28,16 +31,13 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
->360 degree fov keybind
->add option for hitting ground in adventure mode for mineZ
 >freeCam
->nearby player counter
 >impl last-seen waypoints w/ timers
 
 >automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
 >always move at head-run speed? (blatant)
     >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
->stop autoclicker from pulling pots out of hotbar, maybe I ought to just disable the feature completely
+>stop autoclicker from pulling pots out of hotbar, maybe I ought to just add an option to disable the feature completely
 >option for ignoring attacks that would hit teammates
 >player waypoints detect mineZ particles?
     >just do waypoints on particles?
@@ -47,7 +47,6 @@
 >sneaky reach
     >just gonna do this lazily at first, and just check the neutral angle on misses
     >every hit within 3 blocks being valid vs actually finding a valid hit, as in cases where a neutral angle isn't possible
->don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?
 >automatic grapple? (blatant)
     >instead do this with the autoclicker and checking for each click
