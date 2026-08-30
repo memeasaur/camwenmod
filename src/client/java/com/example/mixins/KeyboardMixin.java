@@ -184,7 +184,7 @@ public class KeyboardMixin {
 //        }
 
         while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
-            cheatConfig.isPlayerWaypointsEnabled = !cheatConfig.isPlayerWaypointsEnabled;
+            config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
         }
 
 //        for (Map.Entry<Integer, KeyBinding> entry : config.duplicateKeybinds.entrySet()) {
@@ -203,7 +203,7 @@ public class KeyboardMixin {
 
         // Cheats start
         if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null) { // TODO config this (?)
-            if (getIsKeyPressed(cheatConfig.glfwToggleBlockXrayKeybind)) {
+            if (getIsKeyPressed(config.glfwToggleBlockXrayKeybind)) {
                 if (!isBlockToggleKeyPressed) {
                     isBlockToggleKeyPressed = true;
                     currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
@@ -212,7 +212,7 @@ public class KeyboardMixin {
             } else
                 isBlockToggleKeyPressed = false;
 
-            if (getIsKeyPressed(cheatConfig.glfwTogglePlayerXrayKeybind)) {
+            if (getIsKeyPressed(config.glfwTogglePlayerXrayKeybind)) {
                 if (!isPlayerToggleKeyPressed) {
                     isPlayerToggleKeyPressed = true;
                     currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
@@ -220,10 +220,10 @@ public class KeyboardMixin {
                 }
             } else
                 isPlayerToggleKeyPressed = false;
-            if (getIsKeyPressed(cheatConfig.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
+            if (getIsKeyPressed(config.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
                 if (!isAutoclickerToggleKeyPressed) {
                     isAutoclickerToggleKeyPressed = true;
-                    if (cheatConfig.recordedClickSequences.isEmpty()) {
+                    if (config.recordedClickSequences.isEmpty()) {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         }
@@ -244,10 +244,10 @@ public class KeyboardMixin {
             } else {
                 isAutoclickerToggleKeyPressed = false;
             }
-            if (getIsKeyPressed(cheatConfig.glfwEnableAutoclickerKeybind)) {
+            if (getIsKeyPressed(config.glfwEnableAutoclickerKeybind)) {
                 if (!isAutoclickerEnableKeyPressed) {
                     isAutoclickerEnableKeyPressed = true;
-                    if (cheatConfig.recordedClickSequences.isEmpty()) {
+                    if (config.recordedClickSequences.isEmpty()) {
                         if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
                             player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
                         }
@@ -263,7 +263,7 @@ public class KeyboardMixin {
                 }
             } else
                 isAutoclickerEnableKeyPressed = false;
-            if (getIsKeyPressed(cheatConfig.glfwDisableAutoclickerKeybind)) {
+            if (getIsKeyPressed(config.glfwDisableAutoclickerKeybind)) {
                 if (!isAutoclickerDisableKeyPressed) {
                     isAutoclickerDisableKeyPressed = true;
                     GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);

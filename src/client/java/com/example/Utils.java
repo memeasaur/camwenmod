@@ -78,7 +78,7 @@ public class Utils {
         }
 
         // Cheats start
-        if (cheatConfig.isGuiCheatsPvpDisabling && currentXrayType != "") {
+        if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
             currentXrayType = "";
             MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload(); // TODO -> method-ize
         }

@@ -6,7 +6,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -87,7 +86,7 @@ public abstract class ClientPlayerEntityMixin {
             }
 
 
-            if (cheatConfig.isAutoCobweb) {
+            if (config.isAutoCobweb) {
                 onAutoCobwebTick(player);
             }
         }
@@ -95,7 +94,7 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "tickNausea", at = @At("RETURN"))
     void onTickNausea(CallbackInfo ci) {
-        if (cheatConfig.isDarknessDisabled) {
+        if (config.isDarknessDisabled) {
             this.prevNauseaIntensity = 0.f;
             this.nauseaIntensity = 0.f;
         }
