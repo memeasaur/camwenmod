@@ -48,7 +48,7 @@ import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();;
-    public static HashMap<String, CheatConfig> cheatConfigs = getDeserializedJsonBlocking("cheat-config", new TypeToken<HashMap<String, CheatConfig>>() {
+    public static HashMap<String, CheatConfig> cheatConfigs = getDeserializedJsonBlocking("cheat-configs", new TypeToken<HashMap<String, CheatConfig>>() {
     }.getType().getClass()) instanceof HashMap<?, ?> map
             ? (HashMap<String, CheatConfig>) map // TODO -> ?
             : new HashMap<>();
