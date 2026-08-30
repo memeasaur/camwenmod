@@ -1,6 +1,6 @@
+>public anonymous supabase account that sends locations but doesn't receive them
 >rally that places an on-screen waypoint
     >should work for drops, too
->automatic mz kill w/ toggle keybind
 >add toggle for cheats
 >teammate api that lets you see their current location in the world
 	>/focus
@@ -21,6 +21,7 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
+>automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
 >nearby player counter
 >impl last-seen waypoints w/ timers
 >faster tick-rate (blatant)
