@@ -1,7 +1,14 @@
+>add toggle for cheats
+>hold right click and it maxes dps with the bow (blatant)
+    >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
+>impl sliders +or text fields
+>only show waypoints of players that are out of the viewport
+
+>make ethylene change the fov still
+>faster tick-rate (blatant)
 >public anonymous supabase account that sends locations but doesn't receive them
 >rally that places an on-screen waypoint
     >should work for drops, too
->add toggle for cheats
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health
@@ -21,34 +28,29 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
->automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
+>360 degree fov keybind
+>add option for hitting ground in adventure mode for mineZ
+>freeCam
 >nearby player counter
 >impl last-seen waypoints w/ timers
->faster tick-rate (blatant)
->hold right click and it maxes dps with the bow (blatant)
-    >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
->impl sliders +or text fields
 
+>automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
 >always move at head-run speed? (blatant)
     >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
->don't show waypoints if the player is visible? (might be too expensive)
 >stop autoclicker from pulling pots out of hotbar, maybe I ought to just disable the feature completely
 >option for ignoring attacks that would hit teammates
 >player waypoints detect mineZ particles?
+    >just do waypoints on particles?
 >implement freelook and do the automatic head-run thing
 >I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
     >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
 >sneaky reach
     >just gonna do this lazily at first, and just check the neutral angle on misses
     >every hit within 3 blocks being valid vs actually finding a valid hit, as in cases where a neutral angle isn't possible
->random double clicker probably would let me get away with higher cps
-    >not really because two clicks in the same tick or around the same tick isn't as useful, and stretching them out just turns it into an autoclicker essentially
->make ethylene change the fov still
->merge cheat config and regular config?
 >don't autoclick when blocking/using item etc. -> flat stopping autoclicks when blocking isn't the move. maybe just cancel one left click per pressed right click?
 >remove cursor shake from view bobbing if present?
->freeCam
 >automatic grapple? (blatant)
+    >instead do this with the autoclicker and checking for each click
 >hit delta tracker
 >make the auto cobweb work without me holding right click so I can try it on my own as well
 >let me sprint while blind? (blatant)
@@ -60,11 +62,9 @@
 >automatic w tap (NVM. shotbow literally doesn't have w-tapping lol)
     >should just disable and enable sprint
 
->360 degree fov keybind
 >speech to text chat typer?
 >league style pings
 >keybind for disabling players blocking your view
->add option for hitting ground in adventure mode for mineZ
 
 >different keybind for opening and closing door
 >pretty sure it's currently spawning double particles on server hit
@@ -74,7 +74,6 @@
 >make block breaking progress continue while using item
 >sprinting removes toggle sneak option + double tap w removes toggle sneak option
 >ability to block hit without letting go of right click? type meme
->player name/skin etc. spoofer
 >xray turns blocks into glass instead of cancelling their render (?) toggle
 >don't cull spawners ever (? or, make all whitelisted xray blocks never cull)
 >make ores show up in xray
