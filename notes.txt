@@ -1,4 +1,3 @@
->cheat-config is per-server now
 >fix tooltip current value thing
 >add toggle for cheats
 >teammate api that lets you see their current location in the world
