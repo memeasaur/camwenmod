@@ -1,3 +1,4 @@
+>cheat-config is per-server now
 >fix tooltip current value thing
 >add toggle for cheats
 >teammate api that lets you see their current location in the world
@@ -26,7 +27,7 @@
 >faster tick-rate (blatant)
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
->fix cheat keybinds not working until the config screen is opened
+>impl sliders +or text fields
 
 >always move at head-run speed? (blatant)
     >might be tough because I have to make sure actually head-running doesn't make me go faster than possible

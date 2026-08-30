@@ -4,6 +4,7 @@ import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import com.google.common.reflect.TypeToken;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -46,8 +47,11 @@ import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
-    static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();
-    static public CheatConfig cheatConfig = getDeserializedJsonBlocking("cheat-config", CheatConfig.class) instanceof CheatConfig foo ? foo : new CheatConfig();
+    static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo ? foo : new Config();;
+    public static HashMap<String, CheatConfig> cheatConfigs = getDeserializedJsonBlocking("cheat-config", new TypeToken<HashMap<String, CheatConfig>>() {
+    }.getType().getClass()) instanceof HashMap<?, ?> map
+            ? (HashMap<String, CheatConfig>) map // TODO -> ?
+            : new HashMap<>();
     //    TODO; // gl. also, I have to just do this without supabase-kt because fabric(?) is retarded
     // java has a websocket I can use for this apparently
     //        TODO; // task for sending the http payloads of all the shared info
@@ -314,7 +318,7 @@ public class UntitledClient implements ClientModInitializer {
                         IdentifiedLayer.CHAT,
                         EXAMPLE_LAYER,
                         (context, renderTickCounter) -> {
-                            if (!cheatConfig.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isPressed()) {
+                            if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isPressed()) {
                                 return;
                             }
 
@@ -350,7 +354,7 @@ public class UntitledClient implements ClientModInitializer {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
 
-            if (cheatConfig.isGrappleGroundCheckEnabled &&
+            if (config.isGrappleGroundCheckEnabled &&
                     stack.isOf(Items.FISHING_ROD) &&
                     player.fishHook instanceof FishingBobberEntity fishHook &&
                     !isGrappleReady &&

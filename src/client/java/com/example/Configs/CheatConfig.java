@@ -1,63 +1,13 @@
 package com.example.Configs;
 
-import com.example.MouseMovement;
-import org.lwjgl.glfw.GLFW;
-
-import java.util.ArrayList;
-
-import static com.example.Utils.serializeJsonBlocking;
-
 public class CheatConfig {
-    // TODO -> config
-    public boolean isGuiCheatsPvpDisabling = false;
-
-    public record ClickRecording(int[] clicks, MouseMovement[] movements, boolean isSlow) {
-    }
-
-    public ArrayList<ClickRecording> recordedClickSequences = new ArrayList<>();
-    public float autoclickerJitterStartingMultiplier = 1.f;
-    public float autoclickerJitterEndingMultiplier = 1.f;
-    public float autoclickerSlowStartingMultiplier = 1.5f;
-    public float autoclickerSlowEndingMultiplier = 1.5f;
-//    TODO; // put all keybinds in the real keybind thing?
-    // then simplify the config screen
-    public int glfwToggleAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
-    public int glfwEnableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
-    public int glfwDisableAutoclickerKeybind = GLFW.GLFW_KEY_UNKNOWN;
-    public boolean isAutoclickerShakeEnabled = true;
-
-    public int glfwToggleBlockXrayKeybind = GLFW.GLFW_KEY_UNKNOWN; // TODO -> hold/active/disable
-    public int glfwTogglePlayerXrayKeybind = GLFW.GLFW_KEY_UNKNOWN;
-
-    public boolean isAutomaticWTapping = true; // TODO -> impl?
+//    public boolean isAutomaticWTapping = true; // TODO -> impl?
     public boolean isEthylene = false;
-    public boolean isAutoCobweb = false;
-
     public float targetingMarginBypass = .0f;
-
-    public boolean isDarknessDisabled = false;
-
-    public boolean isAutoClickInventoryEnabled = true;
-
-    // TODO -> triple-clicks possible?
-    // TODO -> min interval?
-    public boolean isRandomDoubleClickEnabled = true;
-    public int randomDoubleClickMaxInterval = 0; // TODO
-
-    // TODO -> should have an option for it making a noise if a player shows up nearby
-    public boolean isPlayerWaypointsEnabled = false;
-
     public boolean isSneakyReachEnabled = false;
-
     public double attackVelocityBypass = 0.6;
 
-    public boolean isGrappleGroundCheckEnabled = false;
-    public boolean isTeamHitMessagingEnabled = false;
-
-    // TODO -> impl? might not be possible with how simulated clients get replicated
-//    public int glfwToggleMirrorMovementKeybind = GLFW.GLFW_KEY_UNKNOWN;
-
-    public void saveCheatConfig() {
-        serializeJsonBlocking("cheat-config", this);
-    }
+//    public void saveCheatConfig() {
+//        serializeJsonBlocking("cheat-config", this);
+//    }
 }

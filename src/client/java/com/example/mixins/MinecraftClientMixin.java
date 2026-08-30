@@ -4,6 +4,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.enchantment.Enchantments;
@@ -131,7 +132,8 @@ public abstract class MinecraftClientMixin {
     private void onDoAttackReturn(CallbackInfoReturnable<Boolean> cir) {
         isAttackCooldown = true;
 
-        if (cheatConfig.isSneakyReachEnabled &&
+        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo &&
+                cheatConfigs.get(serverInfo.address).isSneakyReachEnabled &&
                 this.crosshairTarget != null &&
                 this.crosshairTarget.getType() == HitResult.Type.MISS &&
                 this.cameraEntity instanceof Entity camera &&
