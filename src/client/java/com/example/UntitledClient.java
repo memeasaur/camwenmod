@@ -369,6 +369,35 @@ public class UntitledClient implements ClientModInitializer {
             isGrappleReady = false;
             return ActionResult.PASS;
         });
+
+        // external screen
+//        {
+//            Thread windowThread = new Thread(() -> {
+////                if (!GLFW.glfwInit()) {
+////                    throw new IllegalStateException("Failed to initialize GLFW");
+////                }
+//                long window = GLFW.glfwCreateWindow(
+//                        800,
+//                        600,
+//                        "My GLFW Window",
+//                        0,
+//                        0
+//                );
+////                if (window == 0) {
+////                    GLFW.glfwTerminate();
+////                    throw new IllegalStateException("Failed to create GLFW window");
+////                }
+//                GLFW.glfwShowWindow(window);
+//                while (!GLFW.glfwWindowShouldClose(window)) {
+//                    GLFW.glfwPollEvents();
+//                }
+//
+//                GLFW.glfwDestroyWindow(window);
+//                GLFW.glfwTerminate();
+//
+//            }, "External GLFW Window");
+//            windowThread.start();
+//        }
     }
 
     private void drawPlayerWaypoint(

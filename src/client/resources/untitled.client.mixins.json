@@ -12,6 +12,7 @@
     "HeldItemRendererMixin",
     "KeyBindingMixin",
     "KeyboardMixin",
+    "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "MouseMixin",
     "PlayerEntityRendererMixin",
