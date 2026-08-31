@@ -8,7 +8,7 @@
 >add option for hitting ground in adventure mode
 >make cheats not work on mobs
 
->external window for waypoints?
+>external window for waypoints
 >make ethylene change the fov still
 >faster tick-rate (blatant)
 >public anonymous supabase account that sends locations but doesn't receive them
