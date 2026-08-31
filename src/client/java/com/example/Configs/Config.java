@@ -30,6 +30,7 @@ public class Config {
     public boolean isAttackIndicatorDataEnabled = false;
     public boolean isWeakAttackSoundDisabled = false;
     public boolean isDamageTakenValueNotificationEnabled = false;
+    public boolean isDepthStriderReverted = true;
 
     public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;

@@ -266,6 +266,11 @@ public class Constants {
                     "team hit messaging",
                     config.isTeamHitMessagingEnabled,
                     is -> config.isTeamHitMessagingEnabled = is,
+                    ""),
+            getConfigCheckboxWidget(
+                    "depth strider leggings revert",
+                    config.isDepthStriderReverted,
+                    is -> config.isDepthStriderReverted = is,
                     "")
     ));
 //            addDrawableChild(getConfigCheckboxWidget("debug mode", x, y, isDebugModeEnabled, is -> isDebugModeEnabled = is, "logs to minecraft chat"));

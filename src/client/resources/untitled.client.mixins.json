@@ -26,6 +26,7 @@
   },
   "mixins": [
     "BlockItemMixin",
+    "EnchantmentMixin",
     "EntityInvoker",
     "EntityMixin",
     "LivingEntityMixin",
