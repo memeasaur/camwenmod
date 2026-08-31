@@ -1,30 +1,14 @@
 package com.example.mixins;
 
-import com.example.TintedArmorFeatureRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.ArmorEntityModel;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Arm;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
 
 import static com.example.UntitledClient.config;
 
@@ -59,24 +43,28 @@ public class PlayerEntityRendererMixin {
         }
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void replaceArmorFeature(
-            EntityRendererFactory.Context ctx,
-            boolean slim,
-            CallbackInfo ci
-    ) {
-        List<FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel>> features = ((LivingEntityRendererAccessor<PlayerEntityRenderState, PlayerEntityModel>) (Object) this).getFeatures();
-        features.removeIf(feature ->
-                feature instanceof ArmorFeatureRenderer<?, ?, ?>
-        );
-        // TODO ?
-        features.add(
-                new TintedArmorFeatureRenderer(
-                        (FeatureRendererContext<PlayerEntityRenderState, PlayerEntityModel>) this,
-                        new ArmorEntityModel(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM_INNER_ARMOR : EntityModelLayers.PLAYER_INNER_ARMOR)),
-                        new ArmorEntityModel(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM_OUTER_ARMOR : EntityModelLayers.PLAYER_OUTER_ARMOR)),
-                        ctx.getEquipmentRenderer()
-                )
-        );
-    }
+//    @Inject(method = "<init>", at = @At("TAIL"))
+//    private void replaceArmorFeature(
+//            EntityRendererFactory.Context ctx,
+//            boolean slim,
+//            CallbackInfo ci
+//    ) {
+//        if (config.nameplateUuids.get(abstractClient)) {
+//            return;
+//        }
+//
+//        List<FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel>> features = ((LivingEntityRendererAccessor<PlayerEntityRenderState, PlayerEntityModel>) (Object) this).getFeatures();
+//        features.removeIf(feature ->
+//                feature instanceof ArmorFeatureRenderer<?, ?, ?>
+//        );
+//        // TODO ?
+//        features.add(
+//                new TintedArmorFeatureRenderer(
+//                        (FeatureRendererContext<PlayerEntityRenderState, PlayerEntityModel>) this,
+//                        new ArmorEntityModel(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM_INNER_ARMOR : EntityModelLayers.PLAYER_INNER_ARMOR)),
+//                        new ArmorEntityModel(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM_OUTER_ARMOR : EntityModelLayers.PLAYER_OUTER_ARMOR)),
+//                        ctx.getEquipmentRenderer()
+//                )
+//        );
+//    }
 }
