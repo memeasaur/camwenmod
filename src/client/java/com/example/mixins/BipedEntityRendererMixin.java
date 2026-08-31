@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 import static com.example.UntitledClient.config;
+import static com.example.Utils.buildReplacementTeamLeatherItemStack;
 
 @Mixin(BipedEntityRenderer.class)
 public class BipedEntityRendererMixin {
@@ -27,16 +28,16 @@ public class BipedEntityRendererMixin {
             // TODO -> maintain the enchantment
             // TODO -> only do this if it's a default iron piece
             if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
-                state.equippedHeadStack = Items.LEATHER_HELMET.getDefaultStack();
+                state.equippedHeadStack = buildReplacementTeamLeatherItemStack(state.equippedHeadStack, Items.LEATHER_HELMET);
             }
-            if (state.equippedHeadStack.isOf(Items.IRON_CHESTPLATE)) {
-                state.equippedChestStack = Items.LEATHER_CHESTPLATE.getDefaultStack();
+            if (state.equippedChestStack.isOf(Items.IRON_CHESTPLATE)) {
+                state.equippedChestStack = buildReplacementTeamLeatherItemStack(state.equippedChestStack, Items.LEATHER_CHESTPLATE);
             }
             if (state.equippedLegsStack.isOf(Items.IRON_LEGGINGS)) {
-                state.equippedLegsStack = Items.LEATHER_LEGGINGS.getDefaultStack();
+                state.equippedLegsStack = buildReplacementTeamLeatherItemStack(state.equippedLegsStack, Items.LEATHER_LEGGINGS);
             }
             if (state.equippedFeetStack.isOf(Items.IRON_BOOTS)) {
-                state.equippedFeetStack = Items.LEATHER_BOOTS.getDefaultStack();
+                state.equippedFeetStack = buildReplacementTeamLeatherItemStack(state.equippedFeetStack, Items.LEATHER_BOOTS);
             }
         }
     }

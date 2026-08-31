@@ -8,6 +8,10 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -168,5 +172,15 @@ public class Utils {
 
     public static CheatConfig computeCheatConfig() {
         return cheatConfigs.computeIfAbsent(computeServerName(), v -> new CheatConfig());
+    }
+
+    public static ItemStack buildReplacementTeamLeatherItemStack(ItemStack original, Item replacement) {
+        ItemStack replacementStack = new ItemStack(replacement, original.getCount());
+        replacementStack.applyComponentsFrom(original.getComponents());
+        replacementStack.set(
+                DataComponentTypes.DYED_COLOR,
+                new DyedColorComponent(0x00FF00, true)
+        );
+        return replacementStack;
     }
 }
