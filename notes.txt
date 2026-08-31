@@ -6,6 +6,7 @@
 >nearby player counter
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
+>make cheats not work on mobs
 
 >external window for waypoints?
 >make ethylene change the fov still
