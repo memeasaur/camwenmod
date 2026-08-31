@@ -1,6 +1,5 @@
 package com.example.Screens;
 
-import com.example.Configs.Config;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -171,32 +170,32 @@ public class Constants {
     };
 
     // Cheats start
-    private static final Screen AUTOCLICK_JITTER_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatch"), false);
-    private static final Screen AUTOCLICK_SLOW_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatchSlow"), true);
-    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwToggleAutoclickerKeybind = key);
-    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwEnableAutoclickerKeybind = key);
-    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwDisableAutoclickerKeybind = key);
-    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + config.autoclickerJitterStartingMultiplier + ")"), number -> config.autoclickerJitterStartingMultiplier = number.floatValue());
-    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + config.autoclickerJitterEndingMultiplier + ")"), number -> config.autoclickerJitterEndingMultiplier = number.floatValue());
-    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + config.autoclickerJitterStartingMultiplier + ")"), number -> config.autoclickerSlowStartingMultiplier = number.floatValue());
-    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + config.autoclickerJitterEndingMultiplier + ")"), number -> config.autoclickerSlowEndingMultiplier = number.floatValue());
-    private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
-        @Override
-        protected void init() {
-            int y = 20;
-            for (Config.ClickRecording clickRecording : config.recordedClickSequences) {
-                addDrawableChild(ButtonWidget.builder(
-                                getAutoclickerText(clickRecording.clicks()),
-                                (button) -> {
-                                    config.recordedClickSequences.remove(clickRecording); // TODO ?
-                                    MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
-                                })
-                        .position(20, y += 20)
-                        .tooltip(Tooltip.of(Text.literal("click to delete")))
-                        .build());
-            }
-        }
-    };
+//    private static final Screen AUTOCLICK_JITTER_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatch"), false);
+//    private static final Screen AUTOCLICK_SLOW_MACRO_RECORDER = BuildAutoclickMacroRecorderScreen(Text.literal("doBatchSlow"), true);
+//    private static final Screen AUTOCLICK_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwToggleAutoclickerKeybind = key);
+//    private static final Screen AUTOCLICK_ENABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwEnableAutoclickerKeybind = key);
+//    private static final Screen AUTOCLICK_DISABLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("bar"), (key) -> config.glfwDisableAutoclickerKeybind = key);
+//    private static final Screen AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + config.autoclickerJitterStartingMultiplier + ")"), number -> config.autoclickerJitterStartingMultiplier = number.floatValue());
+//    private static final Screen AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + config.autoclickerJitterEndingMultiplier + ")"), number -> config.autoclickerJitterEndingMultiplier = number.floatValue());
+//    private static final Screen AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker starting multiplier (" + config.autoclickerJitterStartingMultiplier + ")"), number -> config.autoclickerSlowStartingMultiplier = number.floatValue());
+//    private static final Screen AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER = getDoubleInputScreen(Text.literal("change autoclicker ending multiplier (" + config.autoclickerJitterEndingMultiplier + ")"), number -> config.autoclickerSlowEndingMultiplier = number.floatValue());
+//    private static final Screen RECORDED_AUTOCLICKERS_MANAGER = new Screen(Text.literal("baz")) {
+//        @Override
+//        protected void init() {
+//            int y = 20;
+//            for (Config.ClickRecording clickRecording : config.recordedClickSequences) {
+//                addDrawableChild(ButtonWidget.builder(
+//                                getAutoclickerText(clickRecording.clicks()),
+//                                (button) -> {
+//                                    config.recordedClickSequences.remove(clickRecording); // TODO ?
+//                                    MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER);
+//                                })
+//                        .position(20, y += 20)
+//                        .tooltip(Tooltip.of(Text.literal("click to delete")))
+//                        .build());
+//            }
+//        }
+//    };
 
     private static final Screen PLAYER_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fang"), (key) -> config.glfwTogglePlayerXrayKeybind = key);
     private static final Screen BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER = getAbstractKeybindInputScreen(Text.literal("fong"), (key) -> config.glfwToggleBlockXrayKeybind = key);
@@ -415,41 +414,41 @@ public class Constants {
 //                        .tooltip(Tooltip.of(Text.literal("opens keybind recorder")))
 //                        .build());
     public static final Screen CHEAT_CONFIG = buildConfigScreen("cheat config", List.of(
-            getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), "lists all current recorded autoclickers"),
-            getConfigButtonWidget("record jitter autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_MACRO_RECORDER), "opens blank recording screen"),
-            getConfigButtonWidget("change jitter autoclick starting multiplier. current: " + config.autoclickerJitterStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerJitterStartingMultiplier),
-            getConfigButtonWidget("change jitter autoclick ending multiplier. current: " + config.autoclickerJitterEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerJitterEndingMultiplier),
-            getConfigButtonWidget("record slow autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_MACRO_RECORDER), "opens blank recording screen"),
-            getConfigButtonWidget("change slow autoclick starting multiplier. current: " + config.autoclickerSlowStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerSlowStartingMultiplier),
-            getConfigButtonWidget("change slow autoclick ending multiplier. current: " + config.autoclickerSlowEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerSlowEndingMultiplier),
-            getConfigButtonWidget("change autoclick toggle keybind. current: " + config.glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
-            getConfigCheckboxWidget(
-                    "autoclick shake",
-                    config.isAutoclickerShakeEnabled,
-                    is -> config.isAutoclickerShakeEnabled = is,
-                    "recorded autoclicker mouse movement"),
+//            getConfigButtonWidget("list recorded autoclick macros", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(RECORDED_AUTOCLICKERS_MANAGER), "lists all current recorded autoclickers"),
+//            getConfigButtonWidget("record jitter autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_MACRO_RECORDER), "opens blank recording screen"),
+//            getConfigButtonWidget("change jitter autoclick starting multiplier. current: " + config.autoclickerJitterStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerJitterStartingMultiplier),
+//            getConfigButtonWidget("change jitter autoclick ending multiplier. current: " + config.autoclickerJitterEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_JITTER_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerJitterEndingMultiplier),
+//            getConfigButtonWidget("record slow autoclick macro", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_MACRO_RECORDER), "opens blank recording screen"),
+//            getConfigButtonWidget("change slow autoclick starting multiplier. current: " + config.autoclickerSlowStartingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_STARTING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerSlowStartingMultiplier),
+//            getConfigButtonWidget("change slow autoclick ending multiplier. current: " + config.autoclickerSlowEndingMultiplier, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_SLOW_ENDING_MULTIPLIER_RECORDER), "opens float recording screen. current: " + config.autoclickerSlowEndingMultiplier),
+//            getConfigButtonWidget("change autoclick toggle keybind. current: " + config.glfwToggleAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
+//            getConfigCheckboxWidget(
+//                    "autoclick shake",
+//                    config.isAutoclickerShakeEnabled,
+//                    is -> config.isAutoclickerShakeEnabled = is,
+//                    "recorded autoclicker mouse movement"),
             getConfigCheckboxWidget(
                     "cobweb autoclicker",
                     config.isAutoCobweb,
                     is -> config.isAutoCobweb = is,
-                    "shotbow lol"),
-            getConfigCheckboxWidget(
-                    "random double click",
-                    isRandomDoubleClickEnabled,
-                    is -> {
-                        isRandomDoubleClickEnabled = is;
-                        if (isRandomDoubleClickEnabled) {
-                            GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-                        } else {
-                            GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-                        }
-                    },
-                    ""),
-            getConfigCheckboxWidget(
-                    "inventory autoclicker",
-                    config.isAutoClickInventoryEnabled,
-                    is -> config.isAutoClickInventoryEnabled = is,
-                    "")
+                    "shotbow lol")
+//            getConfigCheckboxWidget(
+//                    "random double click",
+//                    isRandomDoubleClickEnabled,
+//                    is -> {
+//                        isRandomDoubleClickEnabled = is;
+//                        if (isRandomDoubleClickEnabled) {
+//                            GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+//                        } else {
+//                            GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
+//                        }
+//                    },
+//                    ""),
+//            getConfigCheckboxWidget(
+//                    "inventory autoclicker",
+//                    config.isAutoClickInventoryEnabled,
+//                    is -> config.isAutoClickInventoryEnabled = is,
+//                    "")
             //                addDrawableChild(getConfigButtonWidget("change autoclick enable keybind. current: " + cheatConfig.glfwEnableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_ENABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
 //                addDrawableChild(getConfigButtonWidget("change autoclick disable keybind. current: " + cheatConfig.glfwDisableAutoclickerKeybind, () -> MINECRAFT_CLIENT_INSTANCE.setScreen(AUTOCLICK_DISABLE_KEYBIND_RECORDER), x + xModifier, y, "opens keybind recorder screen"));
 //                addDrawableChild(getConfigCheckboxWidget(
