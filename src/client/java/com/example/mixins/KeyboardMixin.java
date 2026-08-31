@@ -1,16 +1,13 @@
 package com.example.mixins;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -220,58 +217,58 @@ public class KeyboardMixin {
                 }
             } else
                 isPlayerToggleKeyPressed = false;
-            if (getIsKeyPressed(config.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
-                if (!isAutoclickerToggleKeyPressed) {
-                    isAutoclickerToggleKeyPressed = true;
-                    if (config.recordedClickSequences.isEmpty()) {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
-                        }
-                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-                    } else {
-                        if (isAutoclickerEnabled) {
-                            GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-                            nullableCurrentHeldAutoclickerTask = null;
-                        } else {// TODO -> external gui for this
-                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS) {
-                                handleAutoclickerMouseHeldDown();
-                            }
-                        }
-                        isAutoclickerEnabled = !isAutoclickerEnabled;
-                    }
-                }
-            } else {
-                isAutoclickerToggleKeyPressed = false;
-            }
-            if (getIsKeyPressed(config.glfwEnableAutoclickerKeybind)) {
-                if (!isAutoclickerEnableKeyPressed) {
-                    isAutoclickerEnableKeyPressed = true;
-                    if (config.recordedClickSequences.isEmpty()) {
-                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
-                        }
-                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-                    } else {
-                        if (!isAutoclickerEnabled) {
-                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-                            isAutoclickerEnabled = true;
-                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
-                                handleAutoclickerMouseHeldDown(); // TODO method-ize this
-                        }
-                    }
-                }
-            } else
-                isAutoclickerEnableKeyPressed = false;
-            if (getIsKeyPressed(config.glfwDisableAutoclickerKeybind)) {
-                if (!isAutoclickerDisableKeyPressed) {
-                    isAutoclickerDisableKeyPressed = true;
-                    GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-                    isAutoclickerEnabled = false;
-                    nullableCurrentHeldAutoclickerTask = null;
-                }
-            } else
-                isAutoclickerDisableKeyPressed = false;
+//            if (getIsKeyPressed(config.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
+//                if (!isAutoclickerToggleKeyPressed) {
+//                    isAutoclickerToggleKeyPressed = true;
+//                    if (config.recordedClickSequences.isEmpty()) {
+//                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+//                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+//                        }
+//                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+//                    } else {
+//                        if (isAutoclickerEnabled) {
+//                            GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+//                            nullableCurrentHeldAutoclickerTask = null;
+//                        } else {// TODO -> external gui for this
+//                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+//                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS) {
+//                                handleAutoclickerMouseHeldDown();
+//                            }
+//                        }
+//                        isAutoclickerEnabled = !isAutoclickerEnabled;
+//                    }
+//                }
+//            } else {
+//                isAutoclickerToggleKeyPressed = false;
+//            }
+//            if (getIsKeyPressed(config.glfwEnableAutoclickerKeybind)) {
+//                if (!isAutoclickerEnableKeyPressed) {
+//                    isAutoclickerEnableKeyPressed = true;
+//                    if (config.recordedClickSequences.isEmpty()) {
+//                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+//                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
+//                        }
+//                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
+//                    } else {
+//                        if (!isAutoclickerEnabled) {
+//                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+//                            isAutoclickerEnabled = true;
+//                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
+//                                handleAutoclickerMouseHeldDown(); // TODO method-ize this
+//                        }
+//                    }
+//                }
+//            } else
+//                isAutoclickerEnableKeyPressed = false;
+//            if (getIsKeyPressed(config.glfwDisableAutoclickerKeybind)) {
+//                if (!isAutoclickerDisableKeyPressed) {
+//                    isAutoclickerDisableKeyPressed = true;
+//                    GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
+//                    isAutoclickerEnabled = false;
+//                    nullableCurrentHeldAutoclickerTask = null;
+//                }
+//            } else
+//                isAutoclickerDisableKeyPressed = false;
 //            if (getIsKeyPressed(cheatConfig.glfwToggleMirrorMovementKeybind)) {
 //                if (nullableMirrorMovementPlayer != null) {
 //                    nullableMirrorMovementPlayer = null;
