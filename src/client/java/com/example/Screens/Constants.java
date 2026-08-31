@@ -266,12 +266,12 @@ public class Constants {
                     "team hit messaging",
                     config.isTeamHitMessagingEnabled,
                     is -> config.isTeamHitMessagingEnabled = is,
-                    ""),
-            getConfigCheckboxWidget(
-                    "depth strider leggings revert",
-                    config.isDepthStriderReverted,
-                    is -> config.isDepthStriderReverted = is,
                     "")
+//            getConfigCheckboxWidget(
+//                    "depth strider leggings revert",
+//                    config.isDepthStriderReverted,
+//                    is -> config.isDepthStriderReverted = is,
+//                    "") TODO -> this causes a bug with removing the depth strider if it isn't always true
     ));
 //            addDrawableChild(getConfigCheckboxWidget("debug mode", x, y, isDebugModeEnabled, is -> isDebugModeEnabled = is, "logs to minecraft chat"));
 //            addDrawableChild(getConfigCheckboxWidget("enable notification noise when attack indicator reaches threshold", x, y, config.isAttackCooldownNotificationEnabled, is -> config.isAttackCooldownNotificationEnabled = is, ""));

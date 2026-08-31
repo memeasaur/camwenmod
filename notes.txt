@@ -34,6 +34,7 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
+>could give depth strider 3 without actually having it (blatant)
 >freeCam
 >impl last-seen waypoints w/ timers
 
