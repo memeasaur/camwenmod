@@ -25,7 +25,7 @@ public class BipedEntityRendererMixin {
             CallbackInfo ci) {
         if (Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")); {
             // TODO -> maintain the enchantment
-            // TODO -> only do this if it's a regular iron piece
+            // TODO -> only do this if it's a default iron piece
             if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
                 state.equippedHeadStack = Items.DIAMOND_HELMET.getDefaultStack();
             }
