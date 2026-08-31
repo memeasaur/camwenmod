@@ -3,6 +3,7 @@
   "package": "com.example.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ArmorFeatureRendererMixin",
     "ChatHudMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
@@ -12,10 +13,10 @@
     "HeldItemRendererMixin",
     "KeyBindingMixin",
     "KeyboardMixin",
-    "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "MouseMixin",
     "PlayerEntityRendererMixin",
+    "PlayerEntityRenderStateMixin",
     "SoundManagerMixin",
     "StatusEffectFogModifierMixin"
   ],

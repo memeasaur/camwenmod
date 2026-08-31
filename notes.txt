@@ -10,7 +10,7 @@
 >finish ethylene (keepsprint)
     >make ethylene change the fov still
 
->external window for waypoints
+>make toggle keybind for disabling xray and waypoints
 >faster tick-rate (blatant)
 >public anonymous supabase account that sends locations but doesn't receive them
 >rally that places an on-screen waypoint
