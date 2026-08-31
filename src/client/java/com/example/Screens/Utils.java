@@ -1,11 +1,5 @@
 package com.example.Screens;
 
-import com.example.Configs.Config;
-import com.example.MouseMovement;
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -15,7 +9,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -29,7 +22,6 @@ import java.util.function.Supplier;
 import static com.example.Constants.*;
 import static com.example.Constants.SCHEDULED_EXECUTOR_SERVICE;
 import static com.example.Screens.Constants.*;
-import static com.example.UntitledClient.config;
 import static com.example.Utils.getIsKeyPressed;
 
 public class Utils {
@@ -186,115 +178,114 @@ public class Utils {
     }
 
     // Cheats start
-    static Text getAutoclickerText(int[] macro) {
-        double durationSeconds = Arrays.stream(macro)
-                .mapToLong(i -> i)
-                .sum() / 1_000_000_000.0;
-        int totalClicks = macro.length / 2;
-        return Text.of(totalClicks + " clicks recorded over ~" + durationSeconds + "s. cps: " + (totalClicks / durationSeconds));
-    }
+//    static Text getAutoclickerText(int[] macro) {
+//        double durationSeconds = Arrays.stream(macro)
+//                .mapToLong(i -> i)
+//                .sum() / 1_000_000_000.0;
+//        int totalClicks = macro.length / 2;
+//        return Text.of(totalClicks + " clicks recorded over ~" + durationSeconds + "s. cps: " + (totalClicks / durationSeconds));
+//    }
     // Cheats end
 
-    private static final Object AUTOCLICK_MACRO_RECORDER_LOCK = new Object();
-
-    public static Screen BuildAutoclickMacroRecorderScreen(final Text title, final boolean isSlow) {
-        return getAbstractInputScreen(
-                title,
-                (threadClientInstance) -> {
-                    try {
-                        ArrayList<Integer> mutableMacroClicks = new ArrayList<>();
-                        long[] lastClickEventNanoseconds = new long[]{System.nanoTime()};
-                        BiConsumer<long[], ArrayList<Integer>> handleAutoclickMacroRecorderIteration = (nanoseconds, macroList) -> {
-                            long currentNanoseconds = System.nanoTime();
-                            long delay = currentNanoseconds - lastClickEventNanoseconds[0];
-                            if (delay > Integer.MAX_VALUE ||
-                                    (!(threadClientInstance.currentScreen instanceof Screen screen) || !screen.getTitle().equals(title)))
-                                synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
-                                    AUTOCLICK_MACRO_RECORDER_LOCK.notify();
-                                }
-                            else {
-                                mutableMacroClicks.add((int) delay);
-                                lastClickEventNanoseconds[0] = currentNanoseconds;
-                            }
-                        };
-                        NativeMouseListener nativeMouseListener = new NativeMouseListener() {
-                            @Override
-                            public void nativeMousePressed(NativeMouseEvent e) { // TODO -> queue these? APPARENTLY jnativehook processes these synchronously (?)
-                                if (e.getButton() == NativeMouseEvent.BUTTON1)
-                                    handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
-                            }
-
-                            @Override
-                            public void nativeMouseReleased(NativeMouseEvent e) {
-                                if (e.getButton() == NativeMouseEvent.BUTTON1 && !mutableMacroClicks.isEmpty())
-                                    handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
-                            }
-                        };
-
-                        ArrayList<MouseMovement> mutableMacroMovements = new ArrayList<>();
-                        NativeMouseMotionListener nativeMouseMotionListener = new NativeMouseMotionListener() {
-                            int lastX = 0;
-                            int lastY = 0;
-                            long lastMoveEventNanoseconds = System.nanoTime();
-
-                            @Override
-                            public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
-                                int x = nativeEvent.getX();
-                                int y = nativeEvent.getY();
-//                    NativeMouseMotionListener.super.nativeMouseMoved(nativeEvent); TODO remove?
-                                long currentNanoseconds = System.nanoTime();
-                                if (mutableMacroClicks.size() > 2) // TODO -> this will track for longer than the duration of the recorded clicks, this is annoying since it gets reversed, but I guess I'm remedying this by messaging the reversal to the fake mouse movement hook
-                                    mutableMacroMovements.add(new MouseMovement((int) (currentNanoseconds - lastMoveEventNanoseconds), x - lastX, y - lastY));
-                                lastX = x;
-                                lastY = y;
-                                lastMoveEventNanoseconds = currentNanoseconds;
-                            }
-                        };
-                        GlobalScreen.addNativeMouseListener(nativeMouseListener);
-                        GlobalScreen.addNativeMouseMotionListener(nativeMouseMotionListener);
-                        synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
-                            AUTOCLICK_MACRO_RECORDER_LOCK.wait();
-                        }
-                        Thread.sleep(10); // TODO just queue them and wait for them all to be absolutely finished
-                        GlobalScreen.removeNativeMouseListener(nativeMouseListener);
-                        GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
-                        boolean flag = !mutableMacroClicks.isEmpty();
-                        if (flag) {
-//                        int oldLength = cheatConfig.recordedClickSequences.length;
-//                        {
-//                            int newLength = oldLength + 1;
-//                            {
-//                                CheatConfig.clickRecording[] newMatrix = new CheatConfig.clickRecording[newLength];
-//                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix, 0, oldLength);
-//                                cheatConfig.recordedClickSequences = newMatrix;
+//    private static final Object AUTOCLICK_MACRO_RECORDER_LOCK = new Object();
+//    public static Screen BuildAutoclickMacroRecorderScreen(final Text title, final boolean isSlow) {
+//        return getAbstractInputScreen(
+//                title,
+//                (threadClientInstance) -> {
+//                    try {
+//                        ArrayList<Integer> mutableMacroClicks = new ArrayList<>();
+//                        long[] lastClickEventNanoseconds = new long[]{System.nanoTime()};
+//                        BiConsumer<long[], ArrayList<Integer>> handleAutoclickMacroRecorderIteration = (nanoseconds, macroList) -> {
+//                            long currentNanoseconds = System.nanoTime();
+//                            long delay = currentNanoseconds - lastClickEventNanoseconds[0];
+//                            if (delay > Integer.MAX_VALUE ||
+//                                    (!(threadClientInstance.currentScreen instanceof Screen screen) || !screen.getTitle().equals(title)))
+//                                synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
+//                                    AUTOCLICK_MACRO_RECORDER_LOCK.notify();
+//                                }
+//                            else {
+//                                mutableMacroClicks.add((int) delay);
+//                                lastClickEventNanoseconds[0] = currentNanoseconds;
 //                            }
-//                            {
-//                                MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
-//                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix1, 0, oldLength);
-//                                cheatConfig.recordedClickSequences = newMatrix1;
+//                        };
+//                        NativeMouseListener nativeMouseListener = new NativeMouseListener() {
+//                            @Override
+//                            public void nativeMousePressed(NativeMouseEvent e) { // TODO -> queue these? APPARENTLY jnativehook processes these synchronously (?)
+//                                if (e.getButton() == NativeMouseEvent.BUTTON1)
+//                                    handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
 //                            }
+//
+//                            @Override
+//                            public void nativeMouseReleased(NativeMouseEvent e) {
+//                                if (e.getButton() == NativeMouseEvent.BUTTON1 && !mutableMacroClicks.isEmpty())
+//                                    handleAutoclickMacroRecorderIteration.accept(lastClickEventNanoseconds, mutableMacroClicks);
+//                            }
+//                        };
+//
+//                        ArrayList<MouseMovement> mutableMacroMovements = new ArrayList<>();
+//                        NativeMouseMotionListener nativeMouseMotionListener = new NativeMouseMotionListener() {
+//                            int lastX = 0;
+//                            int lastY = 0;
+//                            long lastMoveEventNanoseconds = System.nanoTime();
+//
+//                            @Override
+//                            public void nativeMouseMoved(NativeMouseEvent nativeEvent) {
+//                                int x = nativeEvent.getX();
+//                                int y = nativeEvent.getY();
+////                    NativeMouseMotionListener.super.nativeMouseMoved(nativeEvent); TODO remove?
+//                                long currentNanoseconds = System.nanoTime();
+//                                if (mutableMacroClicks.size() > 2) // TODO -> this will track for longer than the duration of the recorded clicks, this is annoying since it gets reversed, but I guess I'm remedying this by messaging the reversal to the fake mouse movement hook
+//                                    mutableMacroMovements.add(new MouseMovement((int) (currentNanoseconds - lastMoveEventNanoseconds), x - lastX, y - lastY));
+//                                lastX = x;
+//                                lastY = y;
+//                                lastMoveEventNanoseconds = currentNanoseconds;
+//                            }
+//                        };
+//                        GlobalScreen.addNativeMouseListener(nativeMouseListener);
+//                        GlobalScreen.addNativeMouseMotionListener(nativeMouseMotionListener);
+//                        synchronized (AUTOCLICK_MACRO_RECORDER_LOCK) {
+//                            AUTOCLICK_MACRO_RECORDER_LOCK.wait();
 //                        }
-                            int[] newRecordedAutoclickerClicks = mutableMacroClicks.stream().skip(2).mapToInt(Integer::intValue).toArray();
-                            MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
-                            config.recordedClickSequences.add(new Config.ClickRecording(
-                                    newRecordedAutoclickerClicks,
-                                    newRecordedAutoclickerMovements,
-                                    isSlow));
-                        }
-                        threadClientInstance.execute(() -> {
-                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-                                player.sendMessage(flag
-                                        ? getAutoclickerText(config.recordedClickSequences.getLast().clicks())
-                                        : Text.literal("invalid macro"), true); // TODO -> console
-                            }
-                        });
-                    } catch (Exception e) {
-                        threadClientInstance.execute(() -> {
-                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
-                                player.sendMessage(Text.literal(e.getMessage()), false);
-                        });
-                    }
-                },
-                CHEAT_CONFIG);
-    }
+//                        Thread.sleep(10); // TODO just queue them and wait for them all to be absolutely finished
+//                        GlobalScreen.removeNativeMouseListener(nativeMouseListener);
+//                        GlobalScreen.removeNativeMouseMotionListener(nativeMouseMotionListener);
+//                        boolean flag = !mutableMacroClicks.isEmpty();
+//                        if (flag) {
+////                        int oldLength = cheatConfig.recordedClickSequences.length;
+////                        {
+////                            int newLength = oldLength + 1;
+////                            {
+////                                CheatConfig.clickRecording[] newMatrix = new CheatConfig.clickRecording[newLength];
+////                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix, 0, oldLength);
+////                                cheatConfig.recordedClickSequences = newMatrix;
+////                            }
+////                            {
+////                                MouseMovement[][] newMatrix1 = new MouseMovement[newLength][];
+////                                System.arraycopy(cheatConfig.recordedClickSequences, 0, newMatrix1, 0, oldLength);
+////                                cheatConfig.recordedClickSequences = newMatrix1;
+////                            }
+////                        }
+//                            int[] newRecordedAutoclickerClicks = mutableMacroClicks.stream().skip(2).mapToInt(Integer::intValue).toArray();
+//                            MouseMovement[] newRecordedAutoclickerMovements = mutableMacroMovements.toArray(new MouseMovement[0]);
+//                            config.recordedClickSequences.add(new Config.ClickRecording(
+//                                    newRecordedAutoclickerClicks,
+//                                    newRecordedAutoclickerMovements,
+//                                    isSlow));
+//                        }
+//                        threadClientInstance.execute(() -> {
+//                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+//                                player.sendMessage(flag
+//                                        ? getAutoclickerText(config.recordedClickSequences.getLast().clicks())
+//                                        : Text.literal("invalid macro"), true); // TODO -> console
+//                            }
+//                        });
+//                    } catch (Exception e) {
+//                        threadClientInstance.execute(() -> {
+//                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)
+//                                player.sendMessage(Text.literal(e.getMessage()), false);
+//                        });
+//                    }
+//                },
+//                CHEAT_CONFIG);
+//    }
 }
