@@ -23,20 +23,20 @@ public class BipedEntityRendererMixin {
             float tickDelta,
             ItemModelManager itemModelResolver,
             CallbackInfo ci) {
-        if (Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")); {
+        if (Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
             // TODO -> maintain the enchantment
             // TODO -> only do this if it's a default iron piece
             if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
-                state.equippedHeadStack = Items.DIAMOND_HELMET.getDefaultStack();
+                state.equippedHeadStack = Items.LEATHER_HELMET.getDefaultStack();
             }
             if (state.equippedHeadStack.isOf(Items.IRON_CHESTPLATE)) {
-                state.equippedChestStack = Items.DIAMOND_CHESTPLATE.getDefaultStack();
+                state.equippedChestStack = Items.LEATHER_CHESTPLATE.getDefaultStack();
             }
             if (state.equippedLegsStack.isOf(Items.IRON_LEGGINGS)) {
-                state.equippedLegsStack = Items.DIAMOND_LEGGINGS.getDefaultStack();
+                state.equippedLegsStack = Items.LEATHER_LEGGINGS.getDefaultStack();
             }
             if (state.equippedFeetStack.isOf(Items.IRON_BOOTS)) {
-                state.equippedFeetStack = Items.DIAMOND_BOOTS.getDefaultStack();
+                state.equippedFeetStack = Items.LEATHER_BOOTS.getDefaultStack();
             }
         }
     }
