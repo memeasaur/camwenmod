@@ -13,10 +13,10 @@
     "HeldItemRendererMixin",
     "KeyBindingMixin",
     "KeyboardMixin",
+    "LivingEntityRendererAccessor",
     "MinecraftClientMixin",
     "MouseMixin",
     "PlayerEntityRendererMixin",
-    "PlayerEntityRenderStateMixin",
     "SoundManagerMixin",
     "StatusEffectFogModifierMixin"
   ],

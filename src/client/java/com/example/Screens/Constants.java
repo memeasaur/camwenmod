@@ -230,7 +230,7 @@ public class Constants {
                     "opens keybind recorder screen"),
             getConfigButtonWidget("change block xray toggle keybind", () -> MINECRAFT_CLIENT_INSTANCE.setScreen(BLOCK_XRAY_TOGGLE_KEYBIND_RECORDER), "opens keybind recorder screen"),
             getConfigCheckboxWidget(
-                    "ethylene",
+                    "keep sprint",
                     computeCheatConfig().isEthylene,
                     is -> computeCheatConfig().isEthylene = is,
                     "shotbow lol"),

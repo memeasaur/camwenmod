@@ -1,71 +1,34 @@
 //package com.example.mixins;
 //
-//import net.minecraft.client.render.RenderLayer;
-//import net.minecraft.client.render.VertexConsumer;
+//import net.minecraft.client.data.Model;
 //import net.minecraft.client.render.VertexConsumerProvider;
+//import net.minecraft.client.render.entity.equipment.EquipmentModel;
 //import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
+//import net.minecraft.client.util.math.MatrixStack;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.item.equipment.EquipmentAsset;
+//import net.minecraft.registry.RegistryKey;
 //import org.spongepowered.asm.mixin.Mixin;
 //import org.spongepowered.asm.mixin.injection.At;
-//import org.spongepowered.asm.mixin.injection.Redirect;
+//import org.spongepowered.asm.mixin.injection.Inject;
+//import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //
 //@Mixin(EquipmentRenderer.class)
 //public class EquipmentRendererMixin {
-//
-//    @Redirect(
-//            method = "render",
-//            at = @At(
-//                    value = "INVOKE",
-//                    target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;"
-//            )
+//    @Inject(
+//            method = "render*",
+//            at = @At("HEAD")
 //    )
-//    private VertexConsumer pvputils$tintArmor(
-//            VertexConsumerProvider provider,
-//            RenderLayer layer
+//    private void renderArmor(
+//            EquipmentModel.LayerType layerType,
+//            RegistryKey<EquipmentAsset> asset,
+//            Model model,
+//            ItemStack stack,
+//            MatrixStack matrices,
+//            VertexConsumerProvider vertexConsumers,
+//            int light,
+//            CallbackInfo ci
 //    ) {
-//        VertexConsumer original = provider.getBuffer(layer);
-//
-//        return new VertexConsumer() {
-//
-//            @Override
-//            public VertexConsumer vertex(float x, float y, float z) {
-//                original.vertex(x, y, z);
-//                return this;
-//            }
-//
-//            @Override
-//            public VertexConsumer color(int r, int g, int b, int a) {
-//                original.color(
-//                        (int) (r * 0.4f),
-//                        g,
-//                        (int) (b * 0.4f),
-//                        a
-//                );
-//                return this;
-//            }
-//
-//            @Override
-//            public VertexConsumer texture(float u, float v) {
-//                original.texture(u, v);
-//                return this;
-//            }
-//
-//            @Override
-//            public VertexConsumer overlay(int u, int v) {
-//                original.overlay(u, v);
-//                return this;
-//            }
-//
-//            @Override
-//            public VertexConsumer light(int u, int v) {
-//                original.light(u, v);
-//                return this;
-//            }
-//
-//            @Override
-//            public VertexConsumer normal(float x, float y, float z) {
-//                original.normal(x, y, z);
-//                return this;
-//            }
-//        };
+//        // stack is available here
 //    }
 //}
