@@ -175,11 +175,15 @@ public class Utils {
     }
 
     public static ItemStack buildReplacementTeamLeatherItemStack(ItemStack original, Item replacement) {
-        ItemStack replacementStack = new ItemStack(replacement, original.getCount());
-        replacementStack.applyComponentsFrom(original.getComponents());
+        ItemStack replacementStack = replacement.getDefaultStack();
+//        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
                 DataComponentTypes.DYED_COLOR,
                 new DyedColorComponent(0x00FF00, true)
+        );
+        replacementStack.set(
+                DataComponentTypes.ENCHANTMENTS,
+                original.getEnchantments()
         );
         return replacementStack;
     }
