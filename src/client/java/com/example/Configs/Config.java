@@ -65,7 +65,7 @@ public class Config {
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
 
-    public boolean isGrappleGroundCheckEnabled = false;
+//    public boolean isGrappleGroundCheckEnabled = false;
     public boolean isTeamHitMessagingEnabled = false;
 
     public void saveConfig() {
