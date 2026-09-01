@@ -6,7 +6,12 @@ import java.util.UUID;
 import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
-    public Map<UUID, String> nameplateUuids = Map.of();
+    public enum nameplateTeam {
+        FRIENDLY,
+        ALLY,
+        ENEMY,
+    }
+    public Map<UUID, nameplateTeam> nameplateUuids = Map.of();
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
