@@ -1,7 +1,6 @@
 package com.example.mixins;
 
 import net.minecraft.client.Keyboard;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -14,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,18 +27,9 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean
-            // Cheats start
-            isBlockToggleKeyPressed = false,
-            isPlayerToggleKeyPressed = false,
-            isAutoclickerToggleKeyPressed = false,
-            isAutoclickerEnableKeyPressed = false,
-            isAutoclickerDisableKeyPressed = false,
-    // Cheats end
-    isSneakToggleButtonPressed = false,
+            isSneakToggleButtonPressed = false,
             isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
-    @Unique
-    private static final HashSet<Integer> pressedDuplicateKeybindKeys = new HashSet<>();
 
     @Inject(at = @At(value = "RETURN"), method = "onKey")
     private void onKey(
@@ -162,19 +151,6 @@ public class KeyboardMixin {
 
         while (KEYBIND_CONFIG.wasPressed()) {
             MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
-
-//            // Cheats start
-            new Thread(() -> {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e); // TODO
-                }
-                if (getIsKeyBindingPressed(KEYBIND_CONFIG))
-                    MinecraftClient.getInstance().execute(() ->
-                            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG));
-            }).start();
-//            // Cheats end
         }
 //        while (KEYBIND_CHEAT_CONFIG.wasPressed()) {
 //            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
@@ -184,114 +160,14 @@ public class KeyboardMixin {
             config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
         }
 
-//        for (Map.Entry<Integer, KeyBinding> entry : config.duplicateKeybinds.entrySet()) {
-//            int entryKey = entry.getKey();
-//            if (getIsKeyPressed(entryKey)) {
-//                if (!pressedDuplicateKeybindKeys.contains(entryKey)) {
-//                    entry.getValue().setPressed(true);
-//                    pressedDuplicateKeybindKeys.add(entryKey);
-//                }
-//            } else if (pressedDuplicateKeybindKeys.contains(entryKey)) {
-//                pressedDuplicateKeybindKeys.remove(entryKey);
-//                KeyBinding keyBinding = entry.getValue();
-//                keyBinding.setPressed(getIsKeyBindingPressed(keyBinding));
-//            }
-//        }
-
-        // Cheats start
-        if (MINECRAFT_CLIENT_INSTANCE.currentScreen == null) { // TODO config this (?)
-            if (getIsKeyPressed(config.glfwToggleBlockXrayKeybind)) {
-                if (!isBlockToggleKeyPressed) {
-                    isBlockToggleKeyPressed = true;
-                    currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
-                    MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
-                }
-            } else
-                isBlockToggleKeyPressed = false;
-
-            if (getIsKeyPressed(config.glfwTogglePlayerXrayKeybind)) {
-                if (!isPlayerToggleKeyPressed) {
-                    isPlayerToggleKeyPressed = true;
-                    currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
-                    MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
-                }
-            } else
-                isPlayerToggleKeyPressed = false;
-//            if (getIsKeyPressed(config.glfwToggleAutoclickerKeybind)) { // TODO -> method-ize this
-//                if (!isAutoclickerToggleKeyPressed) {
-//                    isAutoclickerToggleKeyPressed = true;
-//                    if (config.recordedClickSequences.isEmpty()) {
-//                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-//                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
-//                        }
-//                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-//                    } else {
-//                        if (isAutoclickerEnabled) {
-//                            GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-//                            nullableCurrentHeldAutoclickerTask = null;
-//                        } else {// TODO -> external gui for this
-//                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-//                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS) {
-//                                handleAutoclickerMouseHeldDown();
-//                            }
-//                        }
-//                        isAutoclickerEnabled = !isAutoclickerEnabled;
-//                    }
-//                }
-//            } else {
-//                isAutoclickerToggleKeyPressed = false;
-//            }
-//            if (getIsKeyPressed(config.glfwEnableAutoclickerKeybind)) {
-//                if (!isAutoclickerEnableKeyPressed) {
-//                    isAutoclickerEnableKeyPressed = true;
-//                    if (config.recordedClickSequences.isEmpty()) {
-//                        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-//                            player.sendMessage(Text.literal("no recorded autoclicker macro"), true); // TODO -> idk if these are logged somewhere, they probably are !
-//                        }
-//                        MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-//                    } else {
-//                        if (!isAutoclickerEnabled) {
-//                            GlobalScreen.addNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-//                            isAutoclickerEnabled = true;
-//                            if (GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_1) == GLFW.GLFW_PRESS)
-//                                handleAutoclickerMouseHeldDown(); // TODO method-ize this
-//                        }
-//                    }
-//                }
-//            } else
-//                isAutoclickerEnableKeyPressed = false;
-//            if (getIsKeyPressed(config.glfwDisableAutoclickerKeybind)) {
-//                if (!isAutoclickerDisableKeyPressed) {
-//                    isAutoclickerDisableKeyPressed = true;
-//                    GlobalScreen.removeNativeMouseListener(AUTOCLICKER_MOUSE_LISTENER);
-//                    isAutoclickerEnabled = false;
-//                    nullableCurrentHeldAutoclickerTask = null;
-//                }
-//            } else
-//                isAutoclickerDisableKeyPressed = false;
-//            if (getIsKeyPressed(cheatConfig.glfwToggleMirrorMovementKeybind)) {
-//                if (nullableMirrorMovementPlayer != null) {
-//                    nullableMirrorMovementPlayer = null;
-//                } else if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof PlayerEntity player) {
-//                    nullableMirrorMovementPlayer = player;
-//                }
-//            }
-//            if (getIsKeyPressed(glfwToggleRandomDoubleClickKeybind)) {
-//                if (!isRandomDoubleClickToggleKeyPressed) {
-//                    isRandomDoubleClickToggleKeyPressed = true;
-//                    if (isRandomDoubleClickEnabled) {
-//                        GlobalScreen.removeNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-//                    } else {
-//                        GlobalScreen.addNativeMouseListener(RANDOM_DOUBLE_CLICK_LISTENER);
-//                    }
-//
-//                    isRandomDoubleClickEnabled = !isRandomDoubleClickEnabled;
-//                } else {
-//                    isRandomDoubleClickToggleKeyPressed = false;
-//                }
-//            }
+        while (BLOCK_XRAY_TOGGLE.wasPressed()) {
+            currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
+            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
         }
-        // Cheats end
+        while (PLAYER_XRAY_TOGGLE.wasPressed()) {
+            currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
+            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
+        }
     }
 
     @Unique
@@ -308,6 +184,7 @@ public class KeyboardMixin {
         isMovementToggleMirrorSequencePressed = true;
     }
 
+    @Unique
     private PlayerEntity ComputePlayerRaytrace() {
         final double REACH = 50.f;
         float tickDelta = MINECRAFT_CLIENT_INSTANCE.getRenderTickCounter().getTickDelta(true);
