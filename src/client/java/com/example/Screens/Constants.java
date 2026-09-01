@@ -255,17 +255,17 @@ public class Constants {
             getConfigButtonWidget(
                     "change attack self velocity multiplier",
                     () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
-                    "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+                    "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin")
 //            getConfigCheckboxWidget(
 //                    "grapple ground check",
 //                    config.isGrappleGroundCheckEnabled,
 //                    is -> config.isGrappleGroundCheckEnabled = is,
 //                    ""),
-            getConfigCheckboxWidget(
-                    "team hit messaging",
-                    config.isTeamHitMessagingEnabled,
-                    is -> config.isTeamHitMessagingEnabled = is,
-                    "")
+//            getConfigCheckboxWidget(
+//                    "team hit messaging",
+//                    config.isTeamHitMessagingEnabled,
+//                    is -> config.isTeamHitMessagingEnabled = is,
+//                    "")
 //            getConfigCheckboxWidget(
 //                    "depth strider leggings revert",
 //                    config.isDepthStriderReverted,

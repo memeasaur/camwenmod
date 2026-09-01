@@ -66,7 +66,7 @@ public class Config {
     public boolean isPlayerWaypointsEnabled = false;
 
 //    public boolean isGrappleGroundCheckEnabled = false;
-    public boolean isTeamHitMessagingEnabled = false;
+//    public boolean isTeamHitMessagingEnabled = false;
 
     public void saveConfig() {
         serializeJsonBlocking("config", this);
