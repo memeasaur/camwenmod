@@ -1,6 +1,5 @@
 package com.example.Screens;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;

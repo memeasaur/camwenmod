@@ -51,8 +51,8 @@ dependencies {
     modImplementation("maven.modrinth:sodium:${project.sodium_version}")
     implementation("net.fabricmc:fabric-language-kotlin:1.13.13+kotlin.2.4.10") // TODO -> modImpl?
 
-    implementation("com.github.kwhat:jnativehook:2.2.2")
-    include "com.github.kwhat:jnativehook:2.2.2"
+//    implementation("com.github.kwhat:jnativehook:2.2.2")
+//    include "com.github.kwhat:jnativehook:2.2.2"
 
 //	implementation(platform("io.github.jan-tennert.supabase:bom:3.7.0"))
 

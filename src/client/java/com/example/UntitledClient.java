@@ -2,8 +2,6 @@ package com.example;
 
 import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
 import com.google.common.reflect.TypeToken;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -177,11 +175,6 @@ public class UntitledClient implements ClientModInitializer {
         });
 
         // Cheats start
-        try {
-            GlobalScreen.registerNativeHook();
-        } catch (NativeHookException e) {
-            throw new RuntimeException(e);
-        }
 //        if (isAutoclickerEnabled)
 //            ATTACK_VANILLA.setPressed(isHeldAutoclickerPressed);
         // Cheats end
