@@ -24,19 +24,27 @@ public class BipedEntityRendererMixin {
             float tickDelta,
             ItemModelManager itemModelResolver,
             CallbackInfo ci) {
+        if (!config.isNameplateIronLeatherSwapped) {
+            return;
+        }
+
         if (Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
             // TODO -> only do this if it's a default iron piece
             if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
-                state.equippedHeadStack = buildReplacementTeamLeatherItemStack(state.equippedHeadStack, Items.LEATHER_HELMET);
+                state.equippedHeadStack = buildReplacementTeamLeatherItemStack(
+                        state.equippedHeadStack, Items.LEATHER_HELMET, 0x00FF00);
             }
             if (state.equippedChestStack.isOf(Items.IRON_CHESTPLATE)) {
-                state.equippedChestStack = buildReplacementTeamLeatherItemStack(state.equippedChestStack, Items.LEATHER_CHESTPLATE);
+                state.equippedChestStack = buildReplacementTeamLeatherItemStack(
+                        state.equippedChestStack, Items.LEATHER_CHESTPLATE, 0x00FF00);
             }
             if (state.equippedLegsStack.isOf(Items.IRON_LEGGINGS)) {
-                state.equippedLegsStack = buildReplacementTeamLeatherItemStack(state.equippedLegsStack, Items.LEATHER_LEGGINGS);
+                state.equippedLegsStack = buildReplacementTeamLeatherItemStack(
+                        state.equippedLegsStack, Items.LEATHER_LEGGINGS, 0x00FF00);
             }
             if (state.equippedFeetStack.isOf(Items.IRON_BOOTS)) {
-                state.equippedFeetStack = buildReplacementTeamLeatherItemStack(state.equippedFeetStack, Items.LEATHER_BOOTS);
+                state.equippedFeetStack = buildReplacementTeamLeatherItemStack(
+                        state.equippedFeetStack, Items.LEATHER_BOOTS, 0x00FF00);
             }
         }
     }

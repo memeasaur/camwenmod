@@ -174,12 +174,13 @@ public class Utils {
         return cheatConfigs.computeIfAbsent(computeServerName(), v -> new CheatConfig());
     }
 
-    public static ItemStack buildReplacementTeamLeatherItemStack(ItemStack original, Item replacement) {
+    public static ItemStack buildReplacementTeamLeatherItemStack(
+            ItemStack original, Item replacement, int color) {
         ItemStack replacementStack = replacement.getDefaultStack();
 //        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
                 DataComponentTypes.DYED_COLOR,
-                new DyedColorComponent(0x00FF00, true)
+                new DyedColorComponent(color, true)
         );
         replacementStack.set(
                 DataComponentTypes.ENCHANTMENTS,

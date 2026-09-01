@@ -6,8 +6,4 @@ public class CheatConfig {
     public float targetingMarginBypass = .0f;
     public boolean isSneakyReachEnabled = false;
     public double attackVelocityBypass = 0.6;
-
-//    public void saveCheatConfig() {
-//        serializeJsonBlocking("cheat-config", this);
-//    }
 }

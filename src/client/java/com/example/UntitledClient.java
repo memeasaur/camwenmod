@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,12 +22,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FishingBobberEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -109,14 +103,14 @@ public class UntitledClient implements ClientModInitializer {
             isLeftEnabled,
             isRightEnabled,
             isBackwardEnabled = false;
-    public static String lastHitDistance = "";
-    public static Text lastHitStrength = EMPTY_TEXT;
-    public static int lastHitDisplayTimer = 0;
+//    public static String lastHitDistance = "";
+//    public static Text lastHitStrength = EMPTY_TEXT;
+//    public static int lastHitDisplayTimer = 0;
     public static boolean isYLower;
 
     // Cheats start
-    public static boolean isAutoclickerEnabled = false;
-    public static boolean isHeldAutoclickerPressed;
+//    public static boolean isAutoclickerEnabled = false;
+//    public static boolean isHeldAutoclickerPressed;
 
     public static String currentXrayType = "";
     public static Set<Block> immutableXrayBlocks = Set.of(Blocks.STONE, Blocks.DEEPSLATE, Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.RED_SAND, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.GRANITE, Blocks.GRAVEL); // TODO -> move all destruct-able state to map // Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.FURNACE, Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.ANCIENT_DEBRIS, Blocks.NETHER_GOLD_ORE, Blocks.GOLD_BLOCK, Blocks.RAW_GOLD_BLOCK, Blocks.RAW_IRON_BLOCK, Blocks.RAW_COPPER_BLOCK, Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE, Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE, Blocks.BOOKSHELF, Blocks.COBWEB)); // TODO -> move all destruct-able state to map
@@ -143,18 +137,18 @@ public class UntitledClient implements ClientModInitializer {
     public static PlayerEntity nullableMirrorMovementPlayer = null;
     // Cheats end
 
-    public static boolean isAttackCooldown = false;
-    public static float lastAttackCooldownProgress = 0;
-    private static double lastEndTickHeight;
+//    public static boolean isAttackCooldown = false;
+//    public static float lastAttackCooldownProgress = 0;
+//    private static double lastEndTickHeight;
 //    private static boolean isUpdateNotified = false;
 
-    public static boolean isGrappleReady = false;
+//    public static boolean isGrappleReady = false;
 
     @Override
     public void onInitializeClient() {
-        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
-            lastHitDisplayTimer++;
-        });
+//        ClientTickEvents.END_CLIENT_TICK.register((client) -> {
+//            lastHitDisplayTimer++;
+//        });
 
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
 //            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
@@ -164,21 +158,21 @@ public class UntitledClient implements ClientModInitializer {
 //                player.sendMessage(Text.of(String.valueOf(player.isUsingItem())), false);
 //            } TODO finish (?)
             if (client.player instanceof ClientPlayerEntity player) {
-                if (config.isAttackCooldownNotificationEnabled) {
-                    float f = player.getAttackCooldownProgress(.5f);
-                    if (f >= 1.0f && isAttackCooldown && lastAttackCooldownProgress != 1.0f) {
-                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), 1, 1);
-                        isAttackCooldown = false;
-                    } else if (f >= KNOCKBACK_ATTACK_STRENGTH && isAttackCooldown && lastAttackCooldownProgress < KNOCKBACK_ATTACK_STRENGTH)
-                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), .5f, .5f);
-                    lastAttackCooldownProgress = f;
-                }
+//                if (config.isAttackCooldownNotificationEnabled) {
+//                    float f = player.getAttackCooldownProgress(.5f);
+//                    if (f >= 1.0f && isAttackCooldown && lastAttackCooldownProgress != 1.0f) {
+//                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), 1, 1);
+//                        isAttackCooldown = false;
+//                    } else if (f >= KNOCKBACK_ATTACK_STRENGTH && isAttackCooldown && lastAttackCooldownProgress < KNOCKBACK_ATTACK_STRENGTH)
+//                        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BANJO.value(), .5f, .5f);
+//                    lastAttackCooldownProgress = f;
+//                }
                 if (!player.isSprinting())
                     isSprintReset = true;
 
-                double currentHeight = player.getY();
-                isYLower = currentHeight < lastEndTickHeight;
-                lastEndTickHeight = currentHeight;
+//                double currentHeight = player.getY();
+//                isYLower = currentHeight < lastEndTickHeight;
+//                lastEndTickHeight = currentHeight;
             }
         });
 
@@ -188,8 +182,8 @@ public class UntitledClient implements ClientModInitializer {
         } catch (NativeHookException e) {
             throw new RuntimeException(e);
         }
-        if (isAutoclickerEnabled)
-            ATTACK_VANILLA.setPressed(isHeldAutoclickerPressed);
+//        if (isAutoclickerEnabled)
+//            ATTACK_VANILLA.setPressed(isHeldAutoclickerPressed);
         // Cheats end
 
         {
@@ -295,19 +289,19 @@ public class UntitledClient implements ClientModInitializer {
                                             0xffffff);
                                 }
 
-                                if (config.isAttackIndicatorDataEnabled &&
-                                        (!lastHitDistance.isEmpty() || lastHitStrength != EMPTY_TEXT)) {
-                                    Text text = Text.literal(lastHitDistance + " ").append(lastHitStrength);
-                                    context.drawTextWithShadow(TEXT_RENDERER,
-                                            text,
-                                            (width - TEXT_RENDERER.getWidth(text)) / 2,
-                                            (window.getScaledHeight() - TEXT_RENDERER.fontHeight) / 2 + 20,
-                                            0xffffff);
-                                    if (lastHitDisplayTimer > 40) {
-                                        lastHitDistance = "";
-                                        lastHitStrength = EMPTY_TEXT;
-                                    }
-                                }
+//                                if (config.isAttackIndicatorDataEnabled &&
+//                                        (!lastHitDistance.isEmpty() || lastHitStrength != EMPTY_TEXT)) {
+//                                    Text text = Text.literal(lastHitDistance + " ").append(lastHitStrength);
+//                                    context.drawTextWithShadow(TEXT_RENDERER,
+//                                            text,
+//                                            (width - TEXT_RENDERER.getWidth(text)) / 2,
+//                                            (window.getScaledHeight() - TEXT_RENDERER.fontHeight) / 2 + 20,
+//                                            0xffffff);
+//                                    if (lastHitDisplayTimer > 40) {
+//                                        lastHitDistance = "";
+//                                        lastHitStrength = EMPTY_TEXT;
+//                                    }
+//                                }
                             }));
         }
 
@@ -355,20 +349,20 @@ public class UntitledClient implements ClientModInitializer {
             });
         }
 
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            ItemStack stack = player.getStackInHand(hand);
-
-            if (config.isGrappleGroundCheckEnabled &&
-                    stack.isOf(Items.FISHING_ROD) &&
-                    player.fishHook instanceof FishingBobberEntity fishHook &&
-                    !isGrappleReady &&
-                    !fishHook.isOnGround()) {
-                return ActionResult.FAIL;
-            }
-
-            isGrappleReady = false;
-            return ActionResult.PASS;
-        });
+//        UseItemCallback.EVENT.register((player, world, hand) -> {
+//            ItemStack stack = player.getStackInHand(hand);
+//
+//            if (config.isGrappleGroundCheckEnabled &&
+//                    stack.isOf(Items.FISHING_ROD) &&
+//                    player.fishHook instanceof FishingBobberEntity fishHook &&
+//                    !isGrappleReady &&
+//                    !fishHook.isOnGround()) {
+//                return ActionResult.FAIL;
+//            }
+//
+//            isGrappleReady = false;
+//            return ActionResult.PASS;
+//        });
 
         // external screen
 //        {

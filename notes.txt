@@ -10,6 +10,7 @@
 >finish ethylene (keepsprint)
     >make ethylene change the fov still
 
+>lightning strike waypoints
 >make toggle keybind for disabling xray and waypoints
 >faster tick-rate (blatant)
 >public anonymous supabase account that sends locations but doesn't receive them
@@ -41,7 +42,6 @@
 >automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
 >always move at head-run speed? (blatant)
     >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
->stop autoclicker from pulling pots out of hotbar, maybe I ought to just add an option to disable the feature completely
 >option for ignoring attacks that would hit teammates
 >player waypoints detect mineZ particles?
     >just do waypoints on particles?
