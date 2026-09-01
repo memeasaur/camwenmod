@@ -21,11 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.Constants.GSON;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -50,23 +46,20 @@ public class Utils {
         }
     }
 
-    public static void putNameplateUuidEntry(Map.Entry<UUID, String> entry) {
-        config.nameplateUuids = Stream.concat(config.nameplateUuids.entrySet().stream(), Stream.of(entry))
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> newValue));
-        config.saveConfig();
-//        handleNameplateSave();
-    }
+//    public static void putNameplateUuidEntry(Map.Entry<UUID, String> entry) {
+//        config.nameplateUuids = Stream.concat(config.nameplateUuids.entrySet().stream(), Stream.of(entry))
+//                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> newValue));
+//        config.saveConfig();
+////        handleNameplateSave();
+//    }
 
-    public static void removeNameplateUuidEntry(UUID uuid) {
-        config.nameplateUuids = config.nameplateUuids.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(uuid))
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-        config.saveConfig();
-//        handleNameplateSave();
-    }
+//    public static void removeNameplateUuidEntry(UUID uuid) {
+//        config.nameplateUuids = config.nameplateUuids.entrySet().stream()
+//                .filter(entry -> !entry.getKey().equals(uuid))
+//                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+//        config.saveConfig();
 
-    //    private static void handleNameplateSave() {
-//        handleUnsafeJsonSave("nameplates", nameplateUuids);
+    /// /        handleNameplateSave();
 //    }
     public static void doMovementToggleDisable() {
         config.isSneakEnabled = false;
@@ -147,7 +140,8 @@ public class Utils {
 //                player.sendMessage(Text.literal("unsafejsonsave err: " + e.getMessage()), false);
 //        }
 
-    public static Screen buildConfigScreen(String name, List<ClickableWidget> clickableWidgets) {
+    public static Screen buildConfigScreen(
+            String name, List<ClickableWidget> clickableWidgets) {
         return new Screen(Text.literal(name)) {
             @Override
             protected void init() {
@@ -163,6 +157,7 @@ public class Utils {
             }
         };
     }
+
     private static String computeServerName() {
         if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo) {
             return serverInfo.address;

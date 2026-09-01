@@ -72,9 +72,9 @@ public class UntitledClient implements ClientModInitializer {
             FULLBRIGHT_HOLD = getAbstractPvpUtilsKeybind("Fullbright (Hold)");
     public static final KeyBinding
             ALLY_TOGGLE = getAbstractPvpUtilsKeybind("Ally (Toggle)"),
-            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
-            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
-            NAMEPLATE_CYCLE = getAbstractPvpUtilsKeybind("Cycle nameplate type");
+            FRIENDLY_TOGGLE = getAbstractPvpUtilsKeybind("Friendly (Toggle)");
+    //            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
+//            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
     public static final KeyBinding
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");

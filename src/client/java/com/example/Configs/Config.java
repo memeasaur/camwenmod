@@ -1,6 +1,6 @@
 package com.example.Configs;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static com.example.Utils.serializeJsonBlocking;
@@ -9,9 +9,10 @@ public class Config {
     public enum nameplateTeam {
         FRIENDLY,
         ALLY,
-        ENEMY,
+//        ENEMY,
+//        FOCUS,
     }
-    public Map<UUID, nameplateTeam> nameplateUuids = Map.of();
+    public HashMap<UUID, nameplateTeam> nameplateUuids = new HashMap<>();
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;

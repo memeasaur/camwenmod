@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import com.example.Configs.Config;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -114,47 +114,16 @@ public class KeyboardMixin {
             }
         }
 
-        while (ALLY_TOGGLE.wasPressed())
-            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
-                UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(config.nameplateUuids.get(playerUuid), "ally"))
-                    removeNameplateUuidEntry(playerUuid);
-                else
-                    putNameplateUuidEntry(Map.entry(playerUuid, "ally"));
-            }
-        while (ENEMY_TOGGLE.wasPressed())
-            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
-                UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(config.nameplateUuids.get(playerUuid), "enemy"))
-                    removeNameplateUuidEntry(playerUuid);
-                else
-                    putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
-            }
-        while (FOCUS_TOGGLE.wasPressed())
-            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
-                UUID playerUuid = playerEntity.getUuid();
-                if (Objects.equals(config.nameplateUuids.get(playerUuid), "focus"))
-                    removeNameplateUuidEntry(playerUuid);
-                else
-                    putNameplateUuidEntry(Map.entry(playerUuid, "focus"));
-            }
-        while (NAMEPLATE_CYCLE.wasPressed())
-            if (ComputePlayerRaytrace() instanceof PlayerEntity playerEntity) {
-                UUID playerUuid = playerEntity.getUuid();
-                switch (config.nameplateUuids.getOrDefault(playerUuid, "")) {
-                    case "ally" -> putNameplateUuidEntry(Map.entry(playerUuid, "enemy"));
-                    case "enemy" -> putNameplateUuidEntry(Map.entry(playerUuid, "focus"));
-                    case "focus" -> removeNameplateUuidEntry(playerUuid);
-                    default -> putNameplateUuidEntry(Map.entry(playerUuid, "ally"));
-                }
-            }
+        while (FRIENDLY_TOGGLE.wasPressed()) {
+            onAbstractNameplateToggle(Config.nameplateTeam.FRIENDLY);
+        }
+        while (ALLY_TOGGLE.wasPressed()) {
+            onAbstractNameplateToggle(Config.nameplateTeam.ALLY);
+        }
 
         while (KEYBIND_CONFIG.wasPressed()) {
             MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
         }
-//        while (KEYBIND_CHEAT_CONFIG.wasPressed()) {
-//            MINECRAFT_CLIENT_INSTANCE.setScreen(CHEAT_CONFIG);
-//        }
 
         while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
             config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
@@ -214,5 +183,20 @@ public class KeyboardMixin {
         }
 
         return null;
+    }
+
+    @Unique
+    void onAbstractNameplateToggle(Config.nameplateTeam team) {
+        if (!(ComputePlayerRaytrace() instanceof PlayerEntity playerEntity)) {
+            return;
+        }
+
+        UUID playerUuid = playerEntity.getUuid();
+        if (config.nameplateUuids.get(playerUuid) == team) {
+            config.nameplateUuids.remove(playerUuid);
+        } else {
+            config.nameplateUuids.put(playerUuid, team);
+        }
+        config.saveConfig();
     }
 }

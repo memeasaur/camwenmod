@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import com.example.Configs.Config;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
@@ -31,13 +32,11 @@ public class PlayerEntityRendererMixin {
             CallbackInfo ci) {
 
         if (playerEntityRenderState.displayName instanceof Text text) {
-            if (config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof String team)
+            if (config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof Config.nameplateTeam team)
                 playerEntityRenderState.displayName = text.copy().setStyle(text.getStyle().withColor(
                         switch (team) {
-                            case "ally" -> Formatting.AQUA;
-                            case "enemy" -> Formatting.RED;
-                            case "focus" -> Formatting.LIGHT_PURPLE;
-                            default -> throw new RuntimeException("pvputils -> invalid team name");
+                            case ALLY -> Formatting.AQUA;
+                            case FRIENDLY -> Formatting.GREEN;
                         }
                 ));
         }
