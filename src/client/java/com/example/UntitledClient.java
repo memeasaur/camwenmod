@@ -319,7 +319,7 @@ public class UntitledClient implements ClientModInitializer {
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
                     config.nameplateUuids.get(player.getUuid()) instanceof Config.NameplateTeam team
-                            ? Objects.requireNonNull(team.color.getColorValue())
+                            ? 0xFF000000 | Objects.requireNonNull(team.color.getColorValue())
                             : 0xAFFF0000
             );
 //            TODO; // config option for only doing teammates
