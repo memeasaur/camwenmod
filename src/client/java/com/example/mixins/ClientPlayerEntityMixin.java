@@ -36,16 +36,7 @@ public abstract class ClientPlayerEntityMixin {
     public float prevNauseaIntensity;
 
     @Shadow
-    public abstract Hand getActiveHand();
-
-    @Shadow
     public abstract boolean isUsingItem();
-
-    //    @Inject(method="addEnchantedHitParticles", at = @At("HEAD"), cancellable = true)
-//    private void onAddEnchantedHitParticles(Entity target, CallbackInfo ci) {
-//        ci.cancel();
-//    }TODO remove
-    boolean bLastTickBlockHitResult = false;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {

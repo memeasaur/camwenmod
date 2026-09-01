@@ -3,20 +3,15 @@
   "package": "com.example.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ArmorFeatureRendererMixin",
     "BipedEntityRendererMixin",
-    "ChatHudMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "GameRendererInvoker",
     "GameRendererMixin",
     "HeldItemRendererMixin",
-    "KeyBindingMixin",
     "KeyboardMixin",
-    "LivingEntityRendererAccessor",
     "MinecraftClientMixin",
-    "MouseMixin",
     "PlayerEntityRendererMixin",
     "SoundManagerMixin",
     "StatusEffectFogModifierMixin"
@@ -25,12 +20,10 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BlockItemMixin",
     "EnchantmentMixin",
     "EntityInvoker",
     "EntityMixin",
     "LivingEntityMixin",
-    "LivingEntityMixinInterface",
     "PlayerEntityMixin",
     "PotionItemMixin",
     "SodiumBlockOcclusionCacheMixin"
