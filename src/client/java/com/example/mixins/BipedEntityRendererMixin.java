@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import com.example.Configs.Config;
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
@@ -28,23 +29,24 @@ public class BipedEntityRendererMixin {
             return;
         }
 
-        if (Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
+        if (config.nameplateUuids.get(entity.getUuid()) instanceof Config.NameplateTeam team) {
             // TODO -> only do this if it's a default iron piece
+            int color = Objects.requireNonNull(team.color.getColorValue());
             if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
                 state.equippedHeadStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedHeadStack, Items.LEATHER_HELMET, 0x00FF00);
+                        state.equippedHeadStack, Items.LEATHER_HELMET, color);
             }
             if (state.equippedChestStack.isOf(Items.IRON_CHESTPLATE)) {
                 state.equippedChestStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedChestStack, Items.LEATHER_CHESTPLATE, 0x00FF00);
+                        state.equippedChestStack, Items.LEATHER_CHESTPLATE, color);
             }
             if (state.equippedLegsStack.isOf(Items.IRON_LEGGINGS)) {
                 state.equippedLegsStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedLegsStack, Items.LEATHER_LEGGINGS, 0x00FF00);
+                        state.equippedLegsStack, Items.LEATHER_LEGGINGS, color);
             }
             if (state.equippedFeetStack.isOf(Items.IRON_BOOTS)) {
                 state.equippedFeetStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedFeetStack, Items.LEATHER_BOOTS, 0x00FF00);
+                        state.equippedFeetStack, Items.LEATHER_BOOTS, color);
             }
         }
     }

@@ -318,7 +318,7 @@ public class UntitledClient implements ClientModInitializer {
                     screenY - backgroundSize / 2,
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
-                    Objects.equals(config.nameplateUuids.get(player.getUuid()), "ally") ? 0xAF00FF00 : 0xAFFF0000
+                    Objects.requireNonNull(config.nameplateUuids.get(player.getUuid()).color.getColorValue())
             );
 //            TODO; // config option for only doing teammates
             PlayerSkinDrawer.draw(

@@ -5,11 +5,12 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Objects;
 
 import static com.example.UntitledClient.config;
 
@@ -31,14 +32,9 @@ public class PlayerEntityRendererMixin {
             float f,
             CallbackInfo ci) {
 
-        if (playerEntityRenderState.displayName instanceof Text text) {
-            if (config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof Config.nameplateTeam team)
-                playerEntityRenderState.displayName = text.copy().setStyle(text.getStyle().withColor(
-                        switch (team) {
-                            case ALLY -> Formatting.AQUA;
-                            case FRIENDLY -> Formatting.GREEN;
-                        }
-                ));
+        if (playerEntityRenderState.displayName instanceof Text text &&
+                config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof Config.NameplateTeam team) {
+            playerEntityRenderState.displayName = text.copy().setStyle(text.getStyle().withColor(Objects.requireNonNull(team.color.getColorValue())));
         }
     }
 

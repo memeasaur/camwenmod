@@ -1,25 +1,33 @@
 package com.example.Configs;
 
+import net.minecraft.util.Formatting;
+
 import java.util.HashMap;
 import java.util.UUID;
 
 import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
-    public enum nameplateTeam {
-        FRIENDLY,
-        ALLY,
-//        ENEMY,
+    public enum NameplateTeam {
+        FRIENDLY(Formatting.GREEN),
+        ALLY(Formatting.AQUA);
+        //        ENEMY,
 //        FOCUS,
+        public final Formatting color;
+
+        NameplateTeam(Formatting color) {
+            this.color = color;
+        }
     }
-    public HashMap<UUID, nameplateTeam> nameplateUuids = new HashMap<>();
+
+    public HashMap<UUID, NameplateTeam> nameplateUuids = new HashMap<>();
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
     public boolean isFullbrightEnabled = false;
     public boolean isFlyBoostEnabled = false;
     public String currentPotionEnchantmentGlintType = "";
-//    public boolean isSharpnessParticleReverted = false;
+    //    public boolean isSharpnessParticleReverted = false;
 //    public boolean isCritParticleReverted = false;
     public boolean isWeakAttackSoundDisabled = false;
     public boolean isDamageTakenValueNotificationEnabled = false;

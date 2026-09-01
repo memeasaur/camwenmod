@@ -115,10 +115,10 @@ public class KeyboardMixin {
         }
 
         while (FRIENDLY_TOGGLE.wasPressed()) {
-            onAbstractNameplateToggle(Config.nameplateTeam.FRIENDLY);
+            onAbstractNameplateToggle(Config.NameplateTeam.FRIENDLY);
         }
         while (ALLY_TOGGLE.wasPressed()) {
-            onAbstractNameplateToggle(Config.nameplateTeam.ALLY);
+            onAbstractNameplateToggle(Config.NameplateTeam.ALLY);
         }
 
         while (KEYBIND_CONFIG.wasPressed()) {
@@ -186,7 +186,7 @@ public class KeyboardMixin {
     }
 
     @Unique
-    void onAbstractNameplateToggle(Config.nameplateTeam team) {
+    void onAbstractNameplateToggle(Config.NameplateTeam team) {
         if (!(ComputePlayerRaytrace() instanceof PlayerEntity playerEntity)) {
             return;
         }
