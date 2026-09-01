@@ -122,7 +122,7 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.wasPressed()) {
-            MINECRAFT_CLIENT_INSTANCE.setScreen(CONFIG);
+            MINECRAFT_CLIENT_INSTANCE.setScreen(buildConfig());
         }
 
         while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
