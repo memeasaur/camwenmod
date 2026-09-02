@@ -1,3 +1,7 @@
+>hcfr:
+    >w tapper: button that lets go of sprint, but only if it needs to be reset
+    >automatic w tap?
+
 >add toggle for cheats
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
@@ -62,8 +66,6 @@
 >trajectories/enderPearl aimbot bow aimbot etc
 >swings go through friends (blatant)
 >automatic head run (blatant, hold a button and it head runs for you while it's held)
->automatic w tap (NVM. shotbow literally doesn't have w-tapping lol)
-    >should just disable and enable sprint
 
 >speech to text chat typer?
 >league style pings
