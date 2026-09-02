@@ -13,7 +13,7 @@ import static com.example.UntitledClient.config;
 public class EnchantmentMixin {
     @Inject(method = "slotMatches", at = @At("HEAD"), cancellable = true)
     void onSlotMatches(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
-        if (config.isDepthStriderReverted && slot == EquipmentSlot.LEGS) {
+        if (true && slot == EquipmentSlot.LEGS) { // TODO config.isDepthStriderReverted
             cir.setReturnValue(true);
         }
     }
