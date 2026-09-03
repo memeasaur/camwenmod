@@ -2,12 +2,9 @@ package com.example;
 
 import com.google.gson.Gson;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
-import java.util.Random;
 import java.util.concurrent.*;
 
 public class Constants {
