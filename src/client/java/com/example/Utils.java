@@ -1,18 +1,7 @@
 package com.example;
 
 import com.example.Configs.CheatConfig;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
+import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.FileNotFoundException;
@@ -22,6 +11,17 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 
 import static com.example.Constants.GSON;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -31,15 +31,15 @@ import static com.example.UntitledClient.isBackwardEnabled;
 
 public class Utils {
     public static boolean getIsKeyPressed(int glfwKeybind) {
-        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), glfwKeybind) == GLFW.GLFW_PRESS;
+        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;
     }
 
-    public static boolean getIsKeyBindingPressed(KeyBinding keyBinding) {
-        InputUtil.Key key = InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey());
-        if (key.getCategory() == InputUtil.Type.KEYSYM) {
-            return getIsKeyPressed(InputUtil.fromTranslationKey(keyBinding.getBoundKeyTranslationKey()).getCode());
-        } else if (key.getCategory() == InputUtil.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getHandle(), key.getCode()) == GLFW.GLFW_PRESS;
+    public static boolean getIsKeyBindingPressed(KeyMapping keyBinding) {
+        InputConstants.Key key = InputConstants.getKey(keyBinding.saveString());
+        if (key.getType() == InputConstants.Type.KEYSYM) {
+            return getIsKeyPressed(InputConstants.getKey(keyBinding.saveString()).getValue());
+        } else if (key.getType() == InputConstants.Type.MOUSE) {
+            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
         } else {
             Objects.requireNonNull(null);
             return false;
@@ -80,7 +80,7 @@ public class Utils {
         // Cheats start
         if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
             currentXrayType = "";
-            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload(); // TODO -> method-ize
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged(); // TODO -> method-ize
         }
         // Cheats end
     }
@@ -89,9 +89,9 @@ public class Utils {
         try (FileWriter writer = new FileWriter("pvputils-" + fileNamePrefix + ".json")) {
             GSON.toJson(jsonCompliantObject, writer);
         } catch (IOException e) {
-            MinecraftClient minecraftClient = MinecraftClient.getInstance();
-            if (minecraftClient.player instanceof ClientPlayerEntity player)
-                minecraftClient.execute(() -> player.sendMessage(Text.literal("serialization failed"), false));
+            Minecraft minecraftClient = Minecraft.getInstance();
+            if (minecraftClient.player instanceof LocalPlayer player)
+                minecraftClient.execute(() -> player.displayClientMessage(Component.literal("serialization failed"), false));
         }
     }
 
@@ -100,9 +100,9 @@ public class Utils {
             return GSON.fromJson(reader, clazz);
         } catch (IOException e) {
             if (!(e instanceof FileNotFoundException)) {
-                MinecraftClient minecraftClient = MinecraftClient.getInstance();
-                if (minecraftClient.player instanceof ClientPlayerEntity player)
-                    minecraftClient.execute(() -> player.sendMessage(Text.literal("deserialization failed: " + e.getMessage()), false));
+                Minecraft minecraftClient = Minecraft.getInstance();
+                if (minecraftClient.player instanceof LocalPlayer player)
+                    minecraftClient.execute(() -> player.displayClientMessage(Component.literal("deserialization failed: " + e.getMessage()), false));
                 // TODO -> console this
             }
             return null;
@@ -141,8 +141,8 @@ public class Utils {
 //        }
 
     public static Screen buildConfigScreen(
-            String name, List<ClickableWidget> clickableWidgets) {
-        return new Screen(Text.literal(name)) {
+            String name, List<AbstractWidget> clickableWidgets) {
+        return new Screen(Component.literal(name)) {
             @Override
             protected void init() {
                 int y = 20;
@@ -150,17 +150,17 @@ public class Utils {
                 for (int i = 0; i < clickableWidgets.size(); ++i) {
                     int column = i % 4;
                     int row = i / 4;
-                    ClickableWidget widget = clickableWidgets.get(i);
+                    AbstractWidget widget = clickableWidgets.get(i);
                     widget.setPosition(x + 150 * column, y + 20 * row);
-                    addDrawableChild(widget);
+                    addRenderableWidget(widget);
                 }
             }
         };
     }
 
     private static String computeServerName() {
-        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServerEntry() instanceof ServerInfo serverInfo) {
-            return serverInfo.address;
+        if (MINECRAFT_CLIENT_INSTANCE.getCurrentServer() instanceof ServerData serverInfo) {
+            return serverInfo.ip;
         }
         return "singlePlayer";
     }
@@ -171,14 +171,14 @@ public class Utils {
 
     public static ItemStack buildReplacementTeamLeatherItemStack(
             ItemStack original, Item replacement, int color) {
-        ItemStack replacementStack = replacement.getDefaultStack();
+        ItemStack replacementStack = replacement.getDefaultInstance();
 //        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
-                DataComponentTypes.DYED_COLOR,
-                new DyedColorComponent(color, true)
+                DataComponents.DYED_COLOR,
+                new DyedItemColor(color, true)
         );
         replacementStack.set(
-                DataComponentTypes.ENCHANTMENTS,
+                DataComponents.ENCHANTMENTS,
                 original.getEnchantments()
         );
         return replacementStack;

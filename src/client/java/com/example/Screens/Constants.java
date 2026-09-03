@@ -1,14 +1,13 @@
 package com.example.Screens;
 
 import com.example.Configs.Config;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CheckboxWidget;
-import net.minecraft.text.Text;
-
 import java.util.*;
 import java.util.function.Consumer;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
@@ -17,12 +16,12 @@ import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
 public class Constants {
-    private static CheckboxWidget getConfigCheckboxWidget(
+    private static Checkbox getConfigCheckboxWidget(
             String text, boolean isChecked, Consumer<Boolean> consumer, String tooltip) {
-        return CheckboxWidget.builder(Text.literal(text), TEXT_RENDERER)
+        return Checkbox.builder(Component.literal(text), TEXT_RENDERER)
 //                .pos(x, y)
-                .checked(isChecked)
-                .callback((v, is) -> {
+                .selected(isChecked)
+                .onValueChange((v, is) -> {
                     consumer.accept(is);
                     config.saveConfig();
 
@@ -30,13 +29,13 @@ public class Constants {
                     serializeJsonBlocking("cheat-configs", cheatConfigs);
                     // Cheats end
                 })
-                .tooltip(Tooltip.of(Text.literal(tooltip)))
+                .tooltip(Tooltip.create(Component.literal(tooltip)))
                 .build();
     }
 
-    private static ButtonWidget getConfigButtonWidget(
+    private static Button getConfigButtonWidget(
             String title, Runnable onPress, String tooltip) {
-        return ButtonWidget.builder(Text.literal(title), v -> {
+        return Button.builder(Component.literal(title), v -> {
                     onPress.run();
                     config.saveConfig();
                     // Cheats start
@@ -44,12 +43,12 @@ public class Constants {
                     // Cheats end
                 })
 //                .position(x, y)
-                .tooltip(Tooltip.of(Text.literal(tooltip)))
+                .tooltip(Tooltip.create(Component.literal(tooltip)))
                 .build();
     }
 
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing"), number -> computeCheatConfig().targetingMarginBypass = number.floatValue());
-    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Text.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().targetingMarginBypass = number.floatValue());
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
 
     // TODO -> let mod keybinds be changed here, too
     // TODO -> do the other movement toggles here, too

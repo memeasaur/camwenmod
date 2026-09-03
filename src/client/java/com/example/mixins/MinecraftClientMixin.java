@@ -1,16 +1,5 @@
 package com.example.mixins;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,16 +13,28 @@ import static com.example.UntitledClient.*;
 import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.onPvpDamage;
 
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-@Mixin(MinecraftClient.class)
+
+@Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
-    public ClientPlayerEntity player;
+    public LocalPlayer player;
 
     @Shadow
     @Nullable
-    public HitResult crosshairTarget;
+    public HitResult hitResult;
 
     @Shadow
     @Final
@@ -44,63 +45,63 @@ public abstract class MinecraftClientMixin {
     public Entity cameraEntity;
 
     @Shadow
-    public abstract RenderTickCounter getRenderTickCounter();
+    public abstract DeltaTracker getDeltaTracker();
 
     @Shadow
     @Nullable
-    public ClientPlayerInteractionManager interactionManager;
+    public MultiPlayerGameMode gameMode;
 
-    @Inject(at = @At(value = "HEAD"), method = "doAttack")
+    @Inject(at = @At(value = "HEAD"), method = "startAttack")
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
         int previousAttackCooldown = isDebugModeEnabled
-                ? MINECRAFT_CLIENT_INSTANCE.attackCooldown
+                ? MINECRAFT_CLIENT_INSTANCE.missTime
                 : 0;
-        MINECRAFT_CLIENT_INSTANCE.attackCooldown = 0;
+        MINECRAFT_CLIENT_INSTANCE.missTime = 0;
         if (player == null) {
             return;
         }
         if (isDebugModeEnabled) {
-            player.sendMessage(
-                    Text.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.attackCooldown),
+            player.displayClientMessage(
+                    Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime),
                     false);
         }
-        if (MINECRAFT_CLIENT_INSTANCE.crosshairTarget instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
-            if (entityHitResult.getEntity() instanceof PlayerEntity) {
+        if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
+            if (entityHitResult.getEntity() instanceof Player) {
                 onPvpDamage();
             }
         }
     }
 
-    @Inject(at = @At(value = "RETURN"), method = "doAttack")
+    @Inject(at = @At(value = "RETURN"), method = "startAttack")
     private void onDoAttackReturn(CallbackInfoReturnable<Boolean> cir) {
 //        isAttackCooldown = true;
 
         if (computeCheatConfig().isSneakyReachEnabled &&
-                this.crosshairTarget != null &&
-                this.crosshairTarget.getType() == HitResult.Type.MISS &&
+                this.hitResult != null &&
+                this.hitResult.getType() == HitResult.Type.MISS &&
                 this.cameraEntity instanceof Entity camera &&
                 player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
-            float tickDelta = this.getRenderTickCounter().getTickDelta(false);
+            float tickDelta = this.getDeltaTracker().getGameTimeDeltaPartialTick(false);
             var foo = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
                     camera,
                     4.f,
                     4.f, // TODO ?
                     tickDelta);
-            float pitch = camera.getPitch();
-            camera.setPitch(0);
+            float pitch = camera.getXRot();
+            camera.setXRot(0);
             var bar = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
                     camera,
-                    player.getBlockInteractionRange(),
-                    player.getEntityInteractionRange(),
+                    player.blockInteractionRange(),
+                    player.entityInteractionRange(),
                     tickDelta);
-            camera.setPitch(pitch); // TODO -> debug by not setting this back
-            assert interactionManager != null;
+            camera.setXRot(pitch); // TODO -> debug by not setting this back
+            assert gameMode != null;
             if (foo.getType() == HitResult.Type.ENTITY &&
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
-                    interactionManager != null) {
-                interactionManager.attackEntity(player, ((EntityHitResult)foo).getEntity());
+                    gameMode != null) {
+                gameMode.attack(player, ((EntityHitResult)foo).getEntity());
                 // TODO -> debugMode this
 //                player.sendMessage(Text.literal("cheating"), false);
             }

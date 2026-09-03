@@ -1,9 +1,9 @@
 package com.example.mixins;
 
-import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(ItemInHandRenderer.class)
 public class HeldItemRendererMixin {
 //    @Unique private static int lastAttackedTicks;
 //    @Inject(at = @At(value = "HEAD"), method = "updateHeldItems")

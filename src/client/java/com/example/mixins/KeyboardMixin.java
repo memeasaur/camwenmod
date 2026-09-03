@@ -1,13 +1,6 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
-import net.minecraft.client.Keyboard;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +9,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 import java.util.UUID;
+import net.minecraft.client.KeyboardHandler;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
@@ -23,7 +23,7 @@ import static com.example.Screens.Constants.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
-@Mixin(value = Keyboard.class)
+@Mixin(value = KeyboardHandler.class)
 public class KeyboardMixin {
     @Unique
     private static boolean
@@ -53,7 +53,7 @@ public class KeyboardMixin {
                 isMovementToggleMirrorSequencePressed = false;
 
         }
-        while (MOVEMENT_TOGGLE.wasPressed()) { // TODO -> I should probably just use if if possible
+        while (MOVEMENT_TOGGLE.consumeClick()) { // TODO -> I should probably just use if if possible
             if (isJumpEnabled
                     || isForwardEnabled
                     || isLeftEnabled
@@ -63,79 +63,79 @@ public class KeyboardMixin {
             else
                 doMovementToggleEnable();
         }
-        while (MOVEMENT_ENABLE.wasPressed()) {
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity)
+        while (MOVEMENT_ENABLE.consumeClick()) {
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer)
                 doMovementToggleEnable();
         }
-        while (MOVEMENT_DISABLE.wasPressed())
+        while (MOVEMENT_DISABLE.consumeClick())
             doMovementToggleDisable();
 
 
         if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
             if (!isSneakToggleButtonPressed)
                 config.isSneakEnabled = !config.isSneakEnabled;
-            while (SNEAK_TOGGLE.wasPressed()) {
+            while (SNEAK_TOGGLE.consumeClick()) {
             }
         } else
             isSneakToggleButtonPressed = false;
         if (getIsKeyBindingPressed(SNEAK_ENABLE)) { // TODO these could benefit from the handling above too, but they aren't toggled so w/e
             config.isSneakEnabled = true;
-            while (SNEAK_ENABLE.wasPressed()) {
+            while (SNEAK_ENABLE.consumeClick()) {
             }
         }
         if (getIsKeyBindingPressed(SNEAK_DISABLE)) {
             config.isSneakEnabled = false;
-            while (SNEAK_DISABLE.wasPressed()) {
+            while (SNEAK_DISABLE.consumeClick()) {
             }
         }
 
-        while (SPRINT_TOGGLE.wasPressed())
+        while (SPRINT_TOGGLE.consumeClick())
             config.isSprintEnabled = !config.isSprintEnabled;
-        while (SPRINT_ENABLE.wasPressed())
+        while (SPRINT_ENABLE.consumeClick())
             config.isSprintEnabled = true;
-        while (SPRINT_DISABLE.wasPressed())
+        while (SPRINT_DISABLE.consumeClick())
             config.isSprintEnabled = false;
 
         if (getIsKeyBindingPressed(FULLBRIGHT_TOGGLE)) {
             if (!isFullbrightToggleButtonPressed)
                 config.isFullbrightEnabled = !config.isFullbrightEnabled;
-            while (FULLBRIGHT_TOGGLE.wasPressed()) {
+            while (FULLBRIGHT_TOGGLE.consumeClick()) {
             }
         } else
             isFullbrightToggleButtonPressed = false;
         if (getIsKeyBindingPressed(FULLBRIGHT_ENABLE)) { // TODO: see -> sneak handling meme
             config.isFullbrightEnabled = true;
-            while (FULLBRIGHT_ENABLE.wasPressed()) {
+            while (FULLBRIGHT_ENABLE.consumeClick()) {
             }
         }
         if (getIsKeyBindingPressed(FULLBRIGHT_DISABLE)) {
             config.isFullbrightEnabled = false;
-            while (FULLBRIGHT_DISABLE.wasPressed()) {
+            while (FULLBRIGHT_DISABLE.consumeClick()) {
             }
         }
 
-        while (FRIENDLY_TOGGLE.wasPressed()) {
+        while (FRIENDLY_TOGGLE.consumeClick()) {
             onAbstractNameplateToggle(Config.NameplateTeam.FRIENDLY);
         }
-        while (ALLY_TOGGLE.wasPressed()) {
+        while (ALLY_TOGGLE.consumeClick()) {
             onAbstractNameplateToggle(Config.NameplateTeam.ALLY);
         }
 
-        while (KEYBIND_CONFIG.wasPressed()) {
+        while (KEYBIND_CONFIG.consumeClick()) {
             MINECRAFT_CLIENT_INSTANCE.setScreen(buildConfig());
         }
 
-        while (PLAYER_WAYPOINTS_TOGGLE.wasPressed()) {
+        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
             config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
         }
 
-        while (BLOCK_XRAY_TOGGLE.wasPressed()) {
+        while (BLOCK_XRAY_TOGGLE.consumeClick()) {
             currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
-            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
         }
-        while (PLAYER_XRAY_TOGGLE.wasPressed()) {
+        while (PLAYER_XRAY_TOGGLE.consumeClick()) {
             currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
-            MINECRAFT_CLIENT_INSTANCE.worldRenderer.reload();
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
         }
     }
 
@@ -154,31 +154,31 @@ public class KeyboardMixin {
     }
 
     @Unique
-    private PlayerEntity ComputePlayerRaytrace() {
+    private Player ComputePlayerRaytrace() {
         final double REACH = 50.f;
-        float tickDelta = MINECRAFT_CLIENT_INSTANCE.getRenderTickCounter().getTickDelta(true);
+        float tickDelta = MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaPartialTick(true);
 
-        ClientPlayerEntity player = MINECRAFT_CLIENT_INSTANCE.player;
-        Vec3d cameraPos = player.getCameraPosVec(tickDelta);
-        Vec3d rotationVec = player.getRotationVec(tickDelta);
-        Vec3d endPos = cameraPos.add(rotationVec.multiply(REACH));
+        LocalPlayer player = MINECRAFT_CLIENT_INSTANCE.player;
+        Vec3 cameraPos = player.getEyePosition(tickDelta);
+        Vec3 rotationVec = player.getViewVector(tickDelta);
+        Vec3 endPos = cameraPos.add(rotationVec.scale(REACH));
 
-        Box searchBox = player.getBoundingBox()
-                .stretch(rotationVec.multiply(REACH))
-                .expand(.3D);
+        AABB searchBox = player.getBoundingBox()
+                .expandTowards(rotationVec.scale(REACH))
+                .inflate(.3D);
 
-        EntityHitResult hitResult = ProjectileUtil.raycast(
+        EntityHitResult hitResult = ProjectileUtil.getEntityHitResult(
                 player,
                 cameraPos,
                 endPos,
                 searchBox,
                 entity -> !entity.isSpectator()
-                        && entity.canHit()
-                        && entity instanceof PlayerEntity,
+                        && entity.isPickable()
+                        && entity instanceof Player,
                 REACH * REACH
         );
 
-        if (hitResult != null && hitResult.getEntity() instanceof PlayerEntity targetPlayer) {
+        if (hitResult != null && hitResult.getEntity() instanceof Player targetPlayer) {
             return targetPlayer;
         }
 
@@ -187,7 +187,7 @@ public class KeyboardMixin {
 
     @Unique
     void onAbstractNameplateToggle(Config.NameplateTeam team) {
-        if (!(ComputePlayerRaytrace() instanceof PlayerEntity playerEntity)) {
+        if (!(ComputePlayerRaytrace() instanceof Player playerEntity)) {
             return;
         }
 

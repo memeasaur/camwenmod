@@ -1,20 +1,20 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.network.chat.Component;
 
 import static com.example.UntitledClient.config;
 
-@Mixin(PlayerEntityRenderer.class)
+@Mixin(AvatarRenderer.class)
 public class PlayerEntityRendererMixin {
 //    @Inject(at = @At(value = "RETURN"), method = "getArmPose(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/util/Arm;)Lnet/minecraft/client/render/entity/model/BipedEntityModel$ArmPose;", cancellable = true)
 //    private static void onGetArmPose(AbstractClientPlayerEntity player, Arm arm, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
@@ -25,16 +25,16 @@ public class PlayerEntityRendererMixin {
 //        // TODO -> disable other player's being left-handed
 //    }
 
-    @Inject(at = @At(value = "RETURN"), method = "updateRenderState(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V")
+    @Inject(at = @At(value = "RETURN"), method = "updateRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V")
     private void onUpdateRenderState(
-            AbstractClientPlayerEntity abstractClientPlayerEntity,
-            PlayerEntityRenderState playerEntityRenderState,
+            AbstractClientPlayer abstractClientPlayerEntity,
+            AvatarRenderState playerEntityRenderState,
             float f,
             CallbackInfo ci) {
 
-        if (playerEntityRenderState.displayName instanceof Text text &&
+        if (playerEntityRenderState.nameTag instanceof Component text &&
                 config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof Config.NameplateTeam team) {
-            playerEntityRenderState.displayName = text.copy().setStyle(text.getStyle().withColor(Objects.requireNonNull(team.color.getColorValue())));
+            playerEntityRenderState.nameTag = text.copy().setStyle(text.getStyle().withColor(Objects.requireNonNull(team.color.getColor())));
         }
     }
 

@@ -1,29 +1,29 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
-import net.minecraft.client.item.ItemModelManager;
-import net.minecraft.client.render.entity.BipedEntityRenderer;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Items;
 
 import static com.example.UntitledClient.config;
 import static com.example.Utils.buildReplacementTeamLeatherItemStack;
 
-@Mixin(BipedEntityRenderer.class)
+@Mixin(HumanoidMobRenderer.class)
 public class BipedEntityRendererMixin {
-    @Inject(at = @At(value = "RETURN"), method = "updateBipedRenderState")
+    @Inject(at = @At(value = "RETURN"), method = "extractHumanoidRenderState")
     private static void onUpdateBipedRenderState(
             LivingEntity entity,
-            BipedEntityRenderState state,
+            HumanoidRenderState state,
             float tickDelta,
-            ItemModelManager itemModelResolver,
+            ItemModelResolver itemModelResolver,
             CallbackInfo ci) {
         if (!config.isNameplateIronLeatherSwapped) {
             return;
@@ -31,22 +31,22 @@ public class BipedEntityRendererMixin {
 
         if (config.nameplateUuids.get(entity.getUuid()) instanceof Config.NameplateTeam team) {
             // TODO -> only do this if it's a default iron piece
-            int color = Objects.requireNonNull(team.color.getColorValue());
-            if (state.equippedHeadStack.isOf(Items.IRON_HELMET)) {
-                state.equippedHeadStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedHeadStack, Items.LEATHER_HELMET, color);
+            int color = Objects.requireNonNull(team.color.getColor());
+            if (state.headEquipment.is(Items.IRON_HELMET)) {
+                state.headEquipment = buildReplacementTeamLeatherItemStack(
+                        state.headEquipment, Items.LEATHER_HELMET, color);
             }
-            if (state.equippedChestStack.isOf(Items.IRON_CHESTPLATE)) {
-                state.equippedChestStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedChestStack, Items.LEATHER_CHESTPLATE, color);
+            if (state.chestEquipment.is(Items.IRON_CHESTPLATE)) {
+                state.chestEquipment = buildReplacementTeamLeatherItemStack(
+                        state.chestEquipment, Items.LEATHER_CHESTPLATE, color);
             }
-            if (state.equippedLegsStack.isOf(Items.IRON_LEGGINGS)) {
-                state.equippedLegsStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedLegsStack, Items.LEATHER_LEGGINGS, color);
+            if (state.legsEquipment.is(Items.IRON_LEGGINGS)) {
+                state.legsEquipment = buildReplacementTeamLeatherItemStack(
+                        state.legsEquipment, Items.LEATHER_LEGGINGS, color);
             }
-            if (state.equippedFeetStack.isOf(Items.IRON_BOOTS)) {
-                state.equippedFeetStack = buildReplacementTeamLeatherItemStack(
-                        state.equippedFeetStack, Items.LEATHER_BOOTS, color);
+            if (state.feetEquipment.is(Items.IRON_BOOTS)) {
+                state.feetEquipment = buildReplacementTeamLeatherItemStack(
+                        state.feetEquipment, Items.LEATHER_BOOTS, color);
             }
         }
     }

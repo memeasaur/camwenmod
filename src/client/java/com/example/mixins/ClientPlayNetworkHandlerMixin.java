@@ -1,15 +1,5 @@
 package com.example.mixins;
 
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,12 +9,23 @@ import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.onPvpDamage;
 
-@Mixin(ClientPlayNetworkHandler.class)
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundDamageEventPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+
+@Mixin(ClientPacketListener.class)
 public class ClientPlayNetworkHandlerMixin {
-    @Inject(method = "onHealthUpdate", at = @At("HEAD"))
-    void onOnHealthUpdate(HealthUpdateS2CPacket packet, CallbackInfo ci) {
+    @Inject(method = "handleSetHealth", at = @At("HEAD"))
+    void onOnHealthUpdate(ClientboundSetHealthPacket packet, CallbackInfo ci) {
         // TODO -> get amount of damage taken from teammate? might be impossible
-        if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player)) {
+        if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)) {
             return;
         }
         float previous = player.getHealth();
@@ -34,19 +35,19 @@ public class ClientPlayNetworkHandlerMixin {
         }
 
         if (config.isDamageTakenValueNotificationEnabled && previous > health) {
-            player.sendMessage(Text.literal(String.valueOf(previous - health)), false);
+            player.displayClientMessage(Component.literal(String.valueOf(previous - health)), false);
         }
     }
 
-    @Inject(method = "onEntityDamage", at = @At("RETURN"))
-    void onOnEntityDamage(EntityDamageS2CPacket packet, CallbackInfo ci) {
-        if (!(MINECRAFT_CLIENT_INSTANCE.world instanceof ClientWorld clientWorld)) {
+    @Inject(method = "handleDamageEvent", at = @At("RETURN"))
+    void onOnEntityDamage(ClientboundDamageEventPacket packet, CallbackInfo ci) {
+        if (!(MINECRAFT_CLIENT_INSTANCE.level instanceof ClientLevel clientWorld)) {
             return;
         }
 
-        Entity entity = clientWorld.getEntityById(packet.entityId());
-        if (clientWorld.getEntityById(packet.sourceCauseId()) instanceof PlayerEntity attacker) {
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
+        Entity entity = clientWorld.getEntity(packet.entityId());
+        if (clientWorld.getEntity(packet.sourceCauseId()) instanceof Player attacker) {
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player &&
                     player == entity) {
                 // TODO -> player == attacker?
                 onPvpDamage();
@@ -64,12 +65,12 @@ public class ClientPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onEntitySpawn", at = @At("RETURN"))
-    void onOnEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+    @Inject(method = "handleAddEntity", at = @At("RETURN"))
+    void onOnEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo ci) {
         // TODO -> waypoint this?
-        if (packet.getEntityType() == EntityType.LIGHTNING_BOLT &&
-                MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
-            player.sendMessage(Text.literal(packet.getX() + ", " + packet.getY() + ", " + packet.getZ()), false);
+        if (packet.getType() == EntityType.LIGHTNING_BOLT &&
+                MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
+            player.displayClientMessage(Component.literal(packet.getX() + ", " + packet.getY() + ", " + packet.getZ()), false);
         }
     }
 }

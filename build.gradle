@@ -1,5 +1,6 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version '1.17.12'
+//    id 'net.fabricmc.fabric-loom-remap' version '1.17.12'
+    id "net.fabricmc.fabric-loom" version '1.17.12'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm'
 }
@@ -45,11 +46,11 @@ loom {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+//    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 //    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation("maven.modrinth:sodium:${project.sodium_version}")
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation("maven.modrinth:sodium:${project.sodium_version}")
     implementation("net.fabricmc:fabric-language-kotlin:1.13.13+kotlin.2.4.10") // TODO -> modImpl?
 
 //    implementation("com.github.kwhat:jnativehook:2.2.2")
@@ -85,7 +86,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 java {
@@ -122,7 +123,7 @@ publishing {
     }
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 //jooq {

@@ -3,26 +3,24 @@ package com.example;
 import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.google.common.reflect.TypeToken;
+import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.Window;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Camera;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -52,43 +50,43 @@ public class UntitledClient implements ClientModInitializer {
     // java has a websocket I can use for this apparently
     //        TODO; // task for sending the http payloads of all the shared info
     //        TODO; // register task for drawing waypoints of far away players
-    public static final KeyBinding // TODO -> idk why it crashes when I move these
+    public static final KeyMapping // TODO -> idk why it crashes when I move these
             SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
             SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
             SNEAK_DISABLE = getAbstractPvpUtilsKeybind("Sneak (Disable)");
-    public static final KeyBinding
+    public static final KeyMapping
             SPRINT_TOGGLE = getAbstractPvpUtilsKeybind("Sprint (Toggle)"),
             SPRINT_ENABLE = getAbstractPvpUtilsKeybind("Sprint (Enable)"),
             SPRINT_DISABLE = getAbstractPvpUtilsKeybind("Sprint (Disable)");
-    public static final KeyBinding
+    public static final KeyMapping
             MOVEMENT_TOGGLE = getAbstractPvpUtilsKeybind("Movement (Toggle)"),
             MOVEMENT_ENABLE = getAbstractPvpUtilsKeybind("Movement (Enable)"),
             MOVEMENT_DISABLE = getAbstractPvpUtilsKeybind("Movement (Disable)");
-    public static final KeyBinding
+    public static final KeyMapping
             FULLBRIGHT_TOGGLE = getAbstractPvpUtilsKeybind("Fullbright (Toggle)"),
             FULLBRIGHT_ENABLE = getAbstractPvpUtilsKeybind("Fullbright (Enable)"),
             FULLBRIGHT_DISABLE = getAbstractPvpUtilsKeybind("Fullbright (Disable)");
-    public static final KeyBinding
+    public static final KeyMapping
             FULLBRIGHT_HOLD = getAbstractPvpUtilsKeybind("Fullbright (Hold)");
-    public static final KeyBinding
+    public static final KeyMapping
             ALLY_TOGGLE = getAbstractPvpUtilsKeybind("Ally (Toggle)"),
             FRIENDLY_TOGGLE = getAbstractPvpUtilsKeybind("Friendly (Toggle)");
     //            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
 //            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
-    public static final KeyBinding
+    public static final KeyMapping
             HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
             HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
-    public static final KeyBinding
+    public static final KeyMapping
             PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
             PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)");
-    public static final KeyBinding
+    public static final KeyMapping
             PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)"),
             BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
-    public static final KeyBinding
+    public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
-    private static KeyBinding getAbstractPvpUtilsKeybind(String name) {
-        return KeyBindingHelper.registerKeyBinding(new KeyBinding(
+    private static KeyMapping getAbstractPvpUtilsKeybind(String name) {
+        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 name,
                 GLFW.GLFW_KEY_UNKNOWN,
                 "PvpUtils"
@@ -133,7 +131,7 @@ public class UntitledClient implements ClientModInitializer {
         });
 
         {
-            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils1", "hud-example-layer");
+            final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils1", "hud-example-layer");
             HudLayerRegistrationCallback.EVENT.register((wrapper) ->
                     wrapper.attachLayerBefore(
                             IdentifiedLayer.CHAT,
@@ -238,7 +236,7 @@ public class UntitledClient implements ClientModInitializer {
         }
 
         {
-            final Identifier EXAMPLE_LAYER = Identifier.of("pvputils2", "hud-example-layer");
+            final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
             final Matrix4f[] projection = new Matrix4f[1];
             WorldRenderEvents.AFTER_ENTITIES.register(context -> {
                 projection[0] = new Matrix4f(context.projectionMatrix());
@@ -273,12 +271,12 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private void drawPlayerWaypoint(
-            Vec3d worldPos,
+            Vec3 worldPos,
             Camera camera,
             Matrix4f projection,
-            DrawContext drawContext,
-            AbstractClientPlayerEntity player) {
-        Vec3d cameraRelativePos = worldPos.subtract(camera.getPos());
+            GuiGraphics drawContext,
+            AbstractClientPlayer player) {
+        Vec3 cameraRelativePos = worldPos.subtract(camera.getPos());
 
         Vector4f clipPos = new Vector4f(
                 (float) cameraRelativePos.x,
@@ -286,7 +284,7 @@ public class UntitledClient implements ClientModInitializer {
                 (float) cameraRelativePos.z,
                 1.0f // ?
         );
-        Quaternionf cameraRotation = new Quaternionf(camera.getRotation());
+        Quaternionf cameraRotation = new Quaternionf(camera.rotation());
         cameraRotation.conjugate().transform(clipPos);
         projection.transform(clipPos);
 
@@ -310,8 +308,8 @@ public class UntitledClient implements ClientModInitializer {
 
             int size = 12;
             Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-            int screenX = (int) ((ndcX + 1) / 2 * window.getScaledWidth());
-            int screenY = (int) ((1 - ndcY) / 2 * window.getScaledHeight());
+            int screenX = (int) ((ndcX + 1) / 2 * window.getGuiScaledWidth());
+            int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
             int backgroundSize = size + 4;
             drawContext.fill(
                     screenX - backgroundSize / 2,
@@ -319,11 +317,11 @@ public class UntitledClient implements ClientModInitializer {
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
                     config.nameplateUuids.get(player.getUuid()) instanceof Config.NameplateTeam team
-                            ? 0xFF000000 | Objects.requireNonNull(team.color.getColorValue())
+                            ? 0xFF000000 | Objects.requireNonNull(team.color.getColor())
                             : 0xAFFF0000
             );
 //            TODO; // config option for only doing teammates
-            PlayerSkinDrawer.draw(
+            PlayerFaceRenderer.draw(
                     drawContext,
                     player.getSkinTextures(),
                     screenX - size / 2,
@@ -331,7 +329,7 @@ public class UntitledClient implements ClientModInitializer {
                     size);
 
             // distance
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity clientPlayerEntity) {
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
                 double distance = clientPlayerEntity.getPos().distanceTo(worldPos);
                 String distanceText = String.format("%.1fm", distance);
 
@@ -340,19 +338,19 @@ public class UntitledClient implements ClientModInitializer {
             // hovered
             {
                 Vector3f forward = new Vector3f(0, 0, -1);
-                camera.getRotation().transform(forward);
-                Vec3d look = new Vec3d(forward.x, forward.y, forward.z).normalize();
-                Vec3d toMarker = worldPos.subtract(camera.getPos()).normalize();
-                if (look.dotProduct(toMarker) > 0.995) {
+                camera.rotation().transform(forward);
+                Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
+                Vec3 toMarker = worldPos.subtract(camera.getPos()).normalize();
+                if (look.dot(toMarker) > 0.995) {
                     // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
                     // TODO -> extra info should also appear when MOUSED over
                     // name
                     {
-                        String name = player.getNameForScoreboard();
+                        String name = player.getScoreboardName();
                         drawText(
                                 screenX,
                                 name,
-                                screenY - size / 2 - TEXT_RENDERER.fontHeight - 2,
+                                screenY - size / 2 - TEXT_RENDERER.lineHeight - 2,
                                 size,
                                 drawContext);
                     }
@@ -367,7 +365,7 @@ public class UntitledClient implements ClientModInitializer {
                         drawText(
                                 screenX,
                                 coordinates,
-                                screenY - size / 2 - TEXT_RENDERER.fontHeight * 2 - 4,
+                                screenY - size / 2 - TEXT_RENDERER.lineHeight * 2 - 4,
                                 size,
                                 drawContext
                         );
@@ -389,8 +387,8 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private static void drawText(
-            int screenX, String text, int screenY, int size, DrawContext drawContext) {
-        int textX = screenX - TEXT_RENDERER.getWidth(text) / 2;
+            int screenX, String text, int screenY, int size, GuiGraphics drawContext) {
+        int textX = screenX - TEXT_RENDERER.width(text) / 2;
         int textY = screenY + size / 2 + 2;
         drawContext.drawTextWithShadow(
                 TEXT_RENDERER,
