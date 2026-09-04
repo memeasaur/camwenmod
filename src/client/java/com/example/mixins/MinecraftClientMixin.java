@@ -84,14 +84,14 @@ public abstract class MinecraftClientMixin {
                 player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
             float tickDelta = this.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-            var foo = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
+            var foo = ((ClientPlayerEntityInvoker) this.player).invokePick(
                     camera,
                     4.f,
                     4.f, // TODO ?
                     tickDelta);
             float pitch = camera.getXRot();
             camera.setXRot(0);
-            var bar = ((GameRendererInvoker) this.gameRenderer).invokeFindCrosshairTarget(
+            var bar = ((ClientPlayerEntityInvoker) this.player).invokePick(
                     camera,
                     player.blockInteractionRange(),
                     player.entityInteractionRange(),
