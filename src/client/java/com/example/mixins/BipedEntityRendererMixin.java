@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
@@ -29,9 +28,9 @@ public class BipedEntityRendererMixin {
             return;
         }
 
-        if (config.nameplateUuids.get(entity.getUuid()) instanceof Config.NameplateTeam team) {
+        if (config.nameplateUuids.get(entity.getUUID()) instanceof Config.NameplateTeam team) {
             // TODO -> only do this if it's a default iron piece
-            int color = Objects.requireNonNull(team.color.getColor());
+            int color = team.color.getValue();
             if (state.headEquipment.is(Items.IRON_HELMET)) {
                 state.headEquipment = buildReplacementTeamLeatherItemStack(
                         state.headEquipment, Items.LEATHER_HELMET, color);

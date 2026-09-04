@@ -1,6 +1,7 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+import net.minecraft.client.input.KeyEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,14 +32,9 @@ public class KeyboardMixin {
             isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
 
-    @Inject(at = @At(value = "RETURN"), method = "onKey")
-    private void onKey(
-            long window,
-            int key,
-            int scancode,
-            int action,
-            int modifiers,
-            CallbackInfo ci) {
+    @Inject(at = @At(value = "RETURN"), method = "keyPress")
+    private void onKeyPress(
+            long handle, int action, KeyEvent event, CallbackInfo ci) {
         if (config.isMovementToggleMirrorPressDisabling) {
             if (getIsKeyBindingPressed(SNEAK_VANILLA) == config.isSneakEnabled
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == config.isSprintEnabled
@@ -122,7 +118,7 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.consumeClick()) {
-            MINECRAFT_CLIENT_INSTANCE.setScreen(buildConfig());
+            MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
         }
 
         while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
@@ -131,11 +127,11 @@ public class KeyboardMixin {
 
         while (BLOCK_XRAY_TOGGLE.consumeClick()) {
             currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
         }
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
             currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
         }
     }
 
@@ -158,7 +154,7 @@ public class KeyboardMixin {
         final double REACH = 50.f;
         float tickDelta = MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaPartialTick(true);
 
-        LocalPlayer player = MINECRAFT_CLIENT_INSTANCE.player;
+        LocalPlayer player = Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player);
         Vec3 cameraPos = player.getEyePosition(tickDelta);
         Vec3 rotationVec = player.getViewVector(tickDelta);
         Vec3 endPos = cameraPos.add(rotationVec.scale(REACH));
@@ -191,7 +187,7 @@ public class KeyboardMixin {
             return;
         }
 
-        UUID playerUuid = playerEntity.getUuid();
+        UUID playerUuid = playerEntity.getUUID();
         if (config.nameplateUuids.get(playerUuid) == team) {
             config.nameplateUuids.remove(playerUuid);
         } else {
