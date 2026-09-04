@@ -33,8 +33,8 @@ public class PlayerEntityRendererMixin {
             CallbackInfo ci) {
 
         if (playerEntityRenderState.nameTag instanceof Component text &&
-                config.nameplateUuids.get(abstractClientPlayerEntity.getUuid()) instanceof Config.NameplateTeam team) {
-            playerEntityRenderState.nameTag = text.copy().setStyle(text.getStyle().withColor(Objects.requireNonNull(team.color.getColor())));
+                config.nameplateUuids.get(abstractClientPlayerEntity.getUUID()) instanceof Config.NameplateTeam team) {
+            playerEntityRenderState.nameTag = text.copy().setStyle(text.getStyle().withColor(team.color.getValue()));
         }
     }
 
