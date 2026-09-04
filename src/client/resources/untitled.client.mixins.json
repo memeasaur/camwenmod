@@ -23,6 +23,7 @@
     "EnchantmentMixin",
     "EntityInvoker",
     "EntityMixin",
+    "LevelRendererMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "PotionItemMixin"

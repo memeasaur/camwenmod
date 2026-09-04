@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -123,6 +122,8 @@ public class UntitledClient implements ClientModInitializer {
                 return original;
                 // TODO -> put outline around the block edges (?)
             });
+
+    public static Matrix4f projectionMatrix;
 
     @Override
     public void onInitializeClient() {
@@ -239,10 +240,10 @@ public class UntitledClient implements ClientModInitializer {
 
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
-            final Matrix4f[] projection = new Matrix4f[1];
-            LevelRenderEvents.AFTER_SOLID_FEATURES.register(context -> {
-                projection[0] = new Matrix4f(context.projectionMatrix());
-            });
+//            final Matrix4f[] projection = new Matrix4f[1];
+//            LevelRenderEvents.AFTER_SOLID_FEATURES.register(context -> {
+//                projection[0] = new Matrix4f(context.projectionMatrix());
+//            });
             HudElementRegistry.attachElementBefore(
                     VanillaHudElements.CHAT,
                     EXAMPLE_LAYER,
@@ -261,7 +262,7 @@ public class UntitledClient implements ClientModInitializer {
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     camera,
-                                    projection[0],
+                                    projectionMatrix,
                                     context,
                                     player);
                         }
