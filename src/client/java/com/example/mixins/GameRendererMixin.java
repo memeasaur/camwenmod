@@ -3,7 +3,6 @@ package com.example.mixins;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.example.UntitledClient.FULLBRIGHT_HOLD;
@@ -16,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class GameRendererMixin {
     @Inject(
             at = @At(value = "HEAD"),
-            method = "getNightVisionScale",
+            method = "nightVisionScale",
             cancellable = true)
     private static void onGetNightVisionStrength(
             LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
