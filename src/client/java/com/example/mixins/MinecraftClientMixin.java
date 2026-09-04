@@ -40,9 +40,9 @@ public abstract class MinecraftClientMixin {
     @Final
     public GameRenderer gameRenderer;
 
-    @Shadow
-    @Nullable
-    public Entity cameraEntity;
+//    @Shadow
+//    @Nullable
+//    public Entity cameraEntity;
 
     @Shadow
     public abstract DeltaTracker getDeltaTracker();
@@ -50,6 +50,9 @@ public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public MultiPlayerGameMode gameMode;
+
+    @Shadow
+    public abstract @org.jspecify.annotations.Nullable Entity getCameraEntity();
 
     @Inject(at = @At(value = "HEAD"), method = "startAttack")
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
@@ -61,9 +64,7 @@ public abstract class MinecraftClientMixin {
             return;
         }
         if (isDebugModeEnabled) {
-            player.displayClientMessage(
-                    Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime),
-                    false);
+            player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
             if (entityHitResult.getEntity() instanceof Player) {
@@ -79,7 +80,7 @@ public abstract class MinecraftClientMixin {
         if (computeCheatConfig().isSneakyReachEnabled &&
                 this.hitResult != null &&
                 this.hitResult.getType() == HitResult.Type.MISS &&
-                this.cameraEntity instanceof Entity camera &&
+                this.getCameraEntity() instanceof Entity camera &&
                 player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
             float tickDelta = this.getDeltaTracker().getGameTimeDeltaPartialTick(false);
@@ -101,7 +102,7 @@ public abstract class MinecraftClientMixin {
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
                     gameMode != null) {
-                gameMode.attack(player, ((EntityHitResult)foo).getEntity());
+                gameMode.attack(player, ((EntityHitResult) foo).getEntity());
                 // TODO -> debugMode this
 //                player.sendMessage(Text.literal("cheating"), false);
             }
