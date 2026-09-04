@@ -11,9 +11,4 @@ public class Constants {
     public static final Gson GSON = new Gson();
     public static final Minecraft MINECRAFT_CLIENT_INSTANCE = Minecraft.getInstance();
     public static final byte FLY_BOOST_MULTIPLIER = 4;
-    public static final int
-            AQUA_RGB = TextColor.fromLegacyFormat(ChatFormatting.AQUA).getValue(), // TODO ?
-            RED_RGB = TextColor.fromLegacyFormat(ChatFormatting.RED).getValue(),
-            LIGHT_PURPLE_RGB = TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE).getValue(),
-            YELLOW_RGB = TextColor.fromLegacyFormat(ChatFormatting.YELLOW).getValue();
 }

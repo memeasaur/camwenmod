@@ -7,6 +7,8 @@ import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -83,6 +85,7 @@ public class UntitledClient implements ClientModInitializer {
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
     private static final KeyMapping.Category PVP_UTILS = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils"));
+
     private static KeyMapping getAbstractPvpUtilsKeybind(String name) {
         return KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 name,
@@ -130,145 +133,137 @@ public class UntitledClient implements ClientModInitializer {
 
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils1", "hud-example-layer");
-            TODO; // hudElementRegistry?
-            HudElementRegistry.addLast(, (foo, bar) -> {
-            });
-            HudLayerRegistrationCallback.EVENT.register((wrapper) ->
-                    wrapper.attachLayerBefore(
-                            IdentifiedLayer.CHAT,
-                            EXAMPLE_LAYER,
-                            (context, v) -> {
-                                StringBuilder stringBuilder = new StringBuilder("[");
-                                boolean flag = false;
-                                if (config.isToggleSneakGuiEnabled) {
-                                    if (isForwardEnabled) {
-                                        stringBuilder.append("Forward");
-                                        flag = true;
-                                    }
-                                    flag =
-                                            handleGetIsEnabled(isJumpEnabled,
-                                                    handleGetIsEnabled(isBackwardEnabled,
-                                                            handleGetIsEnabled(isRightEnabled,
-                                                                    handleGetIsEnabled(isLeftEnabled, flag, stringBuilder, "Left"), stringBuilder, "Right"), stringBuilder, "Backwards"), stringBuilder, "Jump");
-                                    if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
-                                        boolean isFlying = player.getAbilities().flying;
-                                        boolean isSneaking = player.isShiftKeyDown();
-                                        boolean isSprintingElseDone = player.isSprinting() && !isFlying; // TODO probably can't do both of these anyway
-                                        boolean isSneakingElseDone = isSneaking && !isFlying;
-                                        if (isSprintingElseDone &&
-                                                (config.isSprintEnabled || OPTIONS.toggleSprint().get())) {
-                                            if (flag)
-                                                stringBuilder.append(", ");
-                                            stringBuilder.append("Sprinting");
-                                            flag = true;
-                                            isSprintingElseDone = false;
-                                        }
-                                        if (isSneakingElseDone &&
-                                                (config.isSneakEnabled || OPTIONS.toggleCrouch().get())) {
-                                            if (flag)
-                                                stringBuilder.append(", ");
-                                            stringBuilder.append("Sneaking");
-                                            flag = true;
-                                            isSneakingElseDone = false;
-                                        }
-                                        if (flag)
-                                            stringBuilder.append(" (Toggled)");
-                                        boolean keyHeldFlag = false;
-                                        if (isSprintingElseDone && SPRINT_VANILLA.isDown()) {
-                                            if (flag)
-                                                stringBuilder.append(", ");
-                                            stringBuilder.append("Sprinting");
-                                            flag = true;
-                                            keyHeldFlag = true;
-
-                                            isSprintingElseDone = false;
-                                        }
-                                        if (isSneakingElseDone && SNEAK_VANILLA.isDown()) {
-                                            if (flag)
-                                                stringBuilder.append(", ");
-                                            stringBuilder.append("Sneaking");
-                                            flag = true;
-                                            keyHeldFlag = true;
-
-                                            // TODO -> Sneaking (Vanilla) or (Crouching) from height
-                                        }
-                                        if (keyHeldFlag)
-                                            stringBuilder.append(" (Key Held)");
-
-                                        flag = handleGetIsEnabled(isSprintingElseDone, flag, stringBuilder, "Sprinting (Vanilla)");
-
-                                        if (isFlying) {
-                                            StringBuilder flyingBuilder = new StringBuilder();
-                                            boolean flyingFlag = false;
-                                            if (JUMP_VANILLA.isDown()) {
-                                                flyingBuilder.append("Ascending");
-                                                flyingFlag = true;
-                                            }
-                                            if (isSneaking) {
-                                                if (flyingFlag)
-                                                    flyingBuilder.append(", ");
-                                                flyingBuilder.append("Descending");
-                                                flyingFlag = true;
-                                            }
-                                            if (!flyingFlag)
-                                                flyingBuilder.append("Flying");
-                                            if (player.getAbilities().getFlyingSpeed() != BASE_FLY_SPEED)
-                                                flyingBuilder.append(" (")
-                                                        .append(player.getAbilities().getFlyingSpeed() / BASE_FLY_SPEED)
-                                                        .append("x boost)");
-                                            stringBuilder.append(flyingBuilder);
-
-                                            flag = true;
-                                        }
-                                        stringBuilder.append("]  "); // double space from original mod
-                                    }
+            HudElementRegistry.attachElementBefore(
+                    VanillaHudElements.CHAT,
+                    EXAMPLE_LAYER,
+                    (context, _) -> {
+                        StringBuilder stringBuilder = new StringBuilder("[");
+                        boolean flag = false;
+                        if (config.isToggleSneakGuiEnabled) {
+                            if (isForwardEnabled) {
+                                stringBuilder.append("Forward");
+                                flag = true;
+                            }
+                            flag =
+                                    handleGetIsEnabled(isJumpEnabled,
+                                            handleGetIsEnabled(isBackwardEnabled,
+                                                    handleGetIsEnabled(isRightEnabled,
+                                                            handleGetIsEnabled(isLeftEnabled, flag, stringBuilder, "Left"), stringBuilder, "Right"), stringBuilder, "Backwards"), stringBuilder, "Jump");
+                            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
+                                boolean isFlying = player.getAbilities().flying;
+                                boolean isSneaking = player.isShiftKeyDown();
+                                boolean isSprintingElseDone = player.isSprinting() && !isFlying; // TODO probably can't do both of these anyway
+                                boolean isSneakingElseDone = isSneaking && !isFlying;
+                                if (isSprintingElseDone &&
+                                        (config.isSprintEnabled || OPTIONS.toggleSprint().get())) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sprinting");
+                                    flag = true;
+                                    isSprintingElseDone = false;
                                 }
-                                Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-                                int width = window.getGuiScaledWidth();
-                                if (flag) {
-                                    String finalText = stringBuilder.toString();
-                                    context.drawTextWithShadow(TEXT_RENDERER,
-                                            Text.literal(finalText),
-                                            width - TEXT_RENDERER.width(finalText) - 1,
-                                            1,
-                                            0xffffff);
+                                if (isSneakingElseDone &&
+                                        (config.isSneakEnabled || OPTIONS.toggleCrouch().get())) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sneaking");
+                                    flag = true;
+                                    isSneakingElseDone = false;
                                 }
-                            }));
+                                if (flag)
+                                    stringBuilder.append(" (Toggled)");
+                                boolean keyHeldFlag = false;
+                                if (isSprintingElseDone && SPRINT_VANILLA.isDown()) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sprinting");
+                                    flag = true;
+                                    keyHeldFlag = true;
+
+                                    isSprintingElseDone = false;
+                                }
+                                if (isSneakingElseDone && SNEAK_VANILLA.isDown()) {
+                                    if (flag)
+                                        stringBuilder.append(", ");
+                                    stringBuilder.append("Sneaking");
+                                    flag = true;
+                                    keyHeldFlag = true;
+
+                                    // TODO -> Sneaking (Vanilla) or (Crouching) from height
+                                }
+                                if (keyHeldFlag)
+                                    stringBuilder.append(" (Key Held)");
+
+                                flag = handleGetIsEnabled(isSprintingElseDone, flag, stringBuilder, "Sprinting (Vanilla)");
+
+                                if (isFlying) {
+                                    StringBuilder flyingBuilder = new StringBuilder();
+                                    boolean flyingFlag = false;
+                                    if (JUMP_VANILLA.isDown()) {
+                                        flyingBuilder.append("Ascending");
+                                        flyingFlag = true;
+                                    }
+                                    if (isSneaking) {
+                                        if (flyingFlag)
+                                            flyingBuilder.append(", ");
+                                        flyingBuilder.append("Descending");
+                                        flyingFlag = true;
+                                    }
+                                    if (!flyingFlag)
+                                        flyingBuilder.append("Flying");
+                                    if (player.getAbilities().getFlyingSpeed() != BASE_FLY_SPEED)
+                                        flyingBuilder.append(" (")
+                                                .append(player.getAbilities().getFlyingSpeed() / BASE_FLY_SPEED)
+                                                .append("x boost)");
+                                    stringBuilder.append(flyingBuilder);
+
+                                    flag = true;
+                                }
+                                stringBuilder.append("]  "); // double space from original mod
+                            }
+                        }
+                        Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
+                        int width = window.getGuiScaledWidth();
+                        if (flag) {
+                            String finalText = stringBuilder.toString();
+                            context.text(TEXT_RENDERER,
+                                    finalText,
+                                    width - TEXT_RENDERER.width(finalText) - 1,
+                                    1,
+                                    0xffffff);
+                        }
+                    });
         }
 
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
             final Matrix4f[] projection = new Matrix4f[1];
-            WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+            LevelRenderEvents.AFTER_SOLID_FEATURES.register(context -> {
                 projection[0] = new Matrix4f(context.projectionMatrix());
             });
-            TODO;
-            HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
-                wrapper.attachLayerBefore(
-                        IdentifiedLayer.CHAT,
-                        EXAMPLE_LAYER,
-                        (context, renderTickCounter) -> {
-                            if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
-                                return;
-                            }
+            HudElementRegistry.attachElementBefore(
+                    VanillaHudElements.CHAT,
+                    EXAMPLE_LAYER,
+                    (context, _) -> {
+                        if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
+                            return;
+                        }
 
-                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
-                            assert MINECRAFT_CLIENT_INSTANCE.level != null;
-                            for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
-                                // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                                if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-                                    continue;
-                                }
-                                drawPlayerWaypoint(
-                                        player.getPosition(renderTickCounter.getTickDelta(false))
-                                                .add(0, player.getBbHeight() / 2, 0),
-                                        camera,
-                                        projection[0],
-                                        context,
-                                        player);
+                        Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
+                        assert MINECRAFT_CLIENT_INSTANCE.level != null;
+                        for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
+                            // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
+                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+                                continue;
                             }
-                        });
-            });
+                            drawPlayerWaypoint(
+                                    player.position().add(0, player.getBbHeight() / 2, 0),
+                                    camera,
+                                    projection[0],
+                                    context,
+                                    player);
+                        }
+                    });
         }
     }
 
@@ -392,7 +387,7 @@ public class UntitledClient implements ClientModInitializer {
             int screenX, String text, int screenY, int size, GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
         int textY = screenY + size / 2 + 2;
-        drawContext.drawTextWithShadow(
+        drawContext.text(
                 TEXT_RENDERER,
                 text,
                 textX,
