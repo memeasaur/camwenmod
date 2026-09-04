@@ -3,7 +3,6 @@ package com.example;
 import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.google.common.reflect.TypeToken;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

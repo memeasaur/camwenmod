@@ -1,15 +1,14 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.network.chat.Component;
 
 import static com.example.UntitledClient.config;
@@ -25,16 +24,13 @@ public class PlayerEntityRendererMixin {
 //        // TODO -> disable other player's being left-handed
 //    }
 
-    @Inject(at = @At(value = "RETURN"), method = "updateRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V")
-    private void onUpdateRenderState(
-            AbstractClientPlayer abstractClientPlayerEntity,
-            AvatarRenderState playerEntityRenderState,
-            float f,
-            CallbackInfo ci) {
+    @Inject(at = @At(value = "RETURN"), method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V")
+    private void onExtractRenderState(
+            LivingEntity livingEntity, LivingEntityRenderState renderState, float par3, CallbackInfo ci) {
 
-        if (playerEntityRenderState.nameTag instanceof Component text &&
-                config.nameplateUuids.get(abstractClientPlayerEntity.getUUID()) instanceof Config.NameplateTeam team) {
-            playerEntityRenderState.nameTag = text.copy().setStyle(text.getStyle().withColor(team.color.getValue()));
+        if (renderState.nameTag instanceof Component text &&
+                config.nameplateUuids.get(livingEntity.getUUID()) instanceof Config.NameplateTeam team) {
+            renderState.nameTag = text.copy().setStyle(text.getStyle().withColor(team.color.getValue()));
         }
     }
 
