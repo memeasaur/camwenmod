@@ -6,7 +6,6 @@ import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.Camera;
@@ -25,7 +24,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -33,6 +31,7 @@ import java.util.function.BiFunction;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
+import static com.example.Utils.getAbstractPvpUtilsKeybind;
 import static com.example.Utils.getDeserializedJsonBlocking;
 
 public class UntitledClient implements ClientModInitializer {
@@ -83,17 +82,6 @@ public class UntitledClient implements ClientModInitializer {
             BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
-
-    private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
-
-    private static KeyMapping getAbstractPvpUtilsKeybind(String name) {
-        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                name,
-//                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
-                Objects.requireNonNull(PVP_UTILS)
-        ));
-    }
 
     public static boolean isDebugModeEnabled = false;
     public static boolean isSprintReset = true;

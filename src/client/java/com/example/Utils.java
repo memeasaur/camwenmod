@@ -2,6 +2,8 @@ package com.example;
 
 import com.example.Configs.CheatConfig;
 import com.mojang.blaze3d.platform.InputConstants;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
+
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -45,7 +48,7 @@ public class Utils {
             return false;
         }
     }
-    
+
     public static void doMovementToggleDisable() {
         config.isSneakEnabled = false;
         config.isSprintEnabled = false;
@@ -167,5 +170,16 @@ public class Utils {
                 original.getEnchantments()
         );
         return replacementStack;
+    }
+
+    private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
+
+    public static KeyMapping getAbstractPvpUtilsKeybind(String name) {
+        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                name,
+//                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_UNKNOWN,
+                Objects.requireNonNull(PVP_UTILS)
+        ));
     }
 }
