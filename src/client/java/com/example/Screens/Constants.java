@@ -21,7 +21,7 @@ public class Constants {
         return Checkbox.builder(Component.literal(text), TEXT_RENDERER)
 //                .pos(x, y)
                 .selected(isChecked)
-                .onValueChange((v, is) -> {
+                .onValueChange((_, is) -> {
                     consumer.accept(is);
                     config.saveConfig();
 
@@ -35,7 +35,7 @@ public class Constants {
 
     private static Button getConfigButtonWidget(
             String title, Runnable onPress, String tooltip) {
-        return Button.builder(Component.literal(title), v -> {
+        return Button.builder(Component.literal(title), _ -> {
                     onPress.run();
                     config.saveConfig();
                     // Cheats start
@@ -77,7 +77,7 @@ public class Constants {
                         "shotbow lol"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().targetingMarginBypass + ".change targeting margin",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_RECORDER),
                         "current: " + computeCheatConfig().targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
                 getConfigCheckboxWidget(
                         "blindness disable",
@@ -96,7 +96,7 @@ public class Constants {
                         ""),
                 getConfigButtonWidget(
                         "change attack self velocity multiplier",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(ATTACK_VELOCITY_BYPASS_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
                         "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
                 getConfigCheckboxWidget(
                         "nameplate iron colored leather swap",

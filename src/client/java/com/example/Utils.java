@@ -45,22 +45,7 @@ public class Utils {
             return false;
         }
     }
-
-//    public static void putNameplateUuidEntry(Map.Entry<UUID, String> entry) {
-//        config.nameplateUuids = Stream.concat(config.nameplateUuids.entrySet().stream(), Stream.of(entry))
-//                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> newValue));
-//        config.saveConfig();
-////        handleNameplateSave();
-//    }
-
-//    public static void removeNameplateUuidEntry(UUID uuid) {
-//        config.nameplateUuids = config.nameplateUuids.entrySet().stream()
-//                .filter(entry -> !entry.getKey().equals(uuid))
-//                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-//        config.saveConfig();
-
-    /// /        handleNameplateSave();
-//    }
+    
     public static void doMovementToggleDisable() {
         config.isSneakEnabled = false;
         config.isSprintEnabled = false;
@@ -80,7 +65,7 @@ public class Utils {
         // Cheats start
         if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
             currentXrayType = "";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged(); // TODO -> method-ize
+            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData(); // TODO -> method-ize
         }
         // Cheats end
     }
@@ -91,7 +76,7 @@ public class Utils {
         } catch (IOException e) {
             Minecraft minecraftClient = Minecraft.getInstance();
             if (minecraftClient.player instanceof LocalPlayer player)
-                minecraftClient.execute(() -> player.displayClientMessage(Component.literal("serialization failed"), false));
+                minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("serialization failed")));
         }
     }
 
@@ -102,7 +87,7 @@ public class Utils {
             if (!(e instanceof FileNotFoundException)) {
                 Minecraft minecraftClient = Minecraft.getInstance();
                 if (minecraftClient.player instanceof LocalPlayer player)
-                    minecraftClient.execute(() -> player.displayClientMessage(Component.literal("deserialization failed: " + e.getMessage()), false));
+                    minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("deserialization failed: " + e.getMessage())));
                 // TODO -> console this
             }
             return null;
@@ -166,7 +151,7 @@ public class Utils {
     }
 
     public static CheatConfig computeCheatConfig() {
-        return cheatConfigs.computeIfAbsent(computeServerName(), v -> new CheatConfig());
+        return cheatConfigs.computeIfAbsent(computeServerName(), _ -> new CheatConfig());
     }
 
     public static ItemStack buildReplacementTeamLeatherItemStack(
@@ -175,7 +160,7 @@ public class Utils {
 //        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
                 DataComponents.DYED_COLOR,
-                new DyedItemColor(color, true)
+                new DyedItemColor(color)
         );
         replacementStack.set(
                 DataComponents.ENCHANTMENTS,

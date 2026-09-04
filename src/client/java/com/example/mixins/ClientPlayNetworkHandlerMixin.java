@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.onPvpDamage;
+import static net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -17,7 +18,6 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundDamageEventPacket;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 
 @Mixin(ClientPacketListener.class)
@@ -35,7 +35,7 @@ public class ClientPlayNetworkHandlerMixin {
         }
 
         if (config.isDamageTakenValueNotificationEnabled && previous > health) {
-            player.displayClientMessage(Component.literal(String.valueOf(previous - health)), false);
+            player.sendSystemMessage(Component.literal(String.valueOf(previous - health)));
         }
     }
 
@@ -51,26 +51,16 @@ public class ClientPlayNetworkHandlerMixin {
                     player == entity) {
                 // TODO -> player == attacker?
                 onPvpDamage();
-
-//                if (config.isTeamHitMessagingEnabled && Objects.equals(config.nameplateUuids.get(attacker.getUuid()), "ally")) {
-//                    player.sendMessage(Text.literal("ally damaged you: " + attacker.getName().getString()), false);
-//                }
             }
-//            if (MINECRAFT_CLIENT_INSTANCE.player == attacker &&
-//                    entity instanceof PlayerEntity &&
-//                    config.isTeamHitMessagingEnabled &&
-//                    Objects.equals(config.nameplateUuids.get(entity.getUuid()), "ally")) {
-//                attacker.sendMessage(Text.literal("you damaged ally: " + attacker.getName().getString()), false);
-//            }
         }
     }
 
     @Inject(method = "handleAddEntity", at = @At("RETURN"))
     void onOnEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo ci) {
         // TODO -> waypoint this?
-        if (packet.getType() == EntityType.LIGHTNING_BOLT &&
+        if (packet.getType() == LIGHTNING_BOLT &&
                 MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
-            player.displayClientMessage(Component.literal(packet.getX() + ", " + packet.getY() + ", " + packet.getZ()), false);
+            player.sendSystemMessage(Component.literal(packet.getX() + ", " + packet.getY() + ", " + packet.getZ()));
         }
     }
 }
