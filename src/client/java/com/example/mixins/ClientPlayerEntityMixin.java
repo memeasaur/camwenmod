@@ -29,6 +29,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import java.util.Objects;
+
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
     @Shadow
@@ -41,7 +43,7 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.screen;
+        Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
         SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
@@ -71,7 +73,7 @@ public abstract class ClientPlayerEntityMixin {
                 player.getAbilities().setFlyingSpeed(BASE_FLY_SPEED);
 
             if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
-                Entity camera = MINECRAFT_CLIENT_INSTANCE.cameraEntity;
+                Entity camera = MINECRAFT_CLIENT_INSTANCE.getCameraEntity();
                 assert camera != null;
                 // TODO -> I think I have to implement my own freelook for this
                 ((EntityInvoker)camera).invokeSetRotation(player.getYRot() - 45.0f, camera.getXRot());
@@ -121,7 +123,7 @@ public abstract class ClientPlayerEntityMixin {
         }
 
         hasCurrentUseActionPlacedCobweb = true;
-        MINECRAFT_CLIENT_INSTANCE.gameMode.useItemOn(
+        Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.gameMode).useItemOn(
                 player, InteractionHand.MAIN_HAND, blockHitResult);
 //        KeyBindingMixin keyBindingMixin = (KeyBindingMixin) USE_VANILLA;
 //        keyBindingMixin.setTimesPressed(keyBindingMixin.getTimesPressed() + 1);
