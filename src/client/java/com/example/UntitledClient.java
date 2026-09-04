@@ -6,8 +6,11 @@ import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
@@ -79,11 +82,12 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
+    private static final KeyMapping.Category PVP_UTILS = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils"));
     private static KeyMapping getAbstractPvpUtilsKeybind(String name) {
         return KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 name,
                 GLFW.GLFW_KEY_UNKNOWN,
-                "PvpUtils"
+                PVP_UTILS
         ));
     }
 
@@ -118,7 +122,7 @@ public class UntitledClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            if (client.player instanceof ClientPlayerEntity player) {
+            if (client.player instanceof LocalPlayer player) {
                 if (!player.isSprinting())
                     isSprintReset = true;
             }
@@ -126,6 +130,9 @@ public class UntitledClient implements ClientModInitializer {
 
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils1", "hud-example-layer");
+            TODO; // hudElementRegistry?
+            HudElementRegistry.addLast(, (foo, bar) -> {
+            });
             HudLayerRegistrationCallback.EVENT.register((wrapper) ->
                     wrapper.attachLayerBefore(
                             IdentifiedLayer.CHAT,
@@ -143,13 +150,13 @@ public class UntitledClient implements ClientModInitializer {
                                                     handleGetIsEnabled(isBackwardEnabled,
                                                             handleGetIsEnabled(isRightEnabled,
                                                                     handleGetIsEnabled(isLeftEnabled, flag, stringBuilder, "Left"), stringBuilder, "Right"), stringBuilder, "Backwards"), stringBuilder, "Jump");
-                                    if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player) {
+                                    if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
                                         boolean isFlying = player.getAbilities().flying;
-                                        boolean isSneaking = player.isSneaking();
+                                        boolean isSneaking = player.isShiftKeyDown();
                                         boolean isSprintingElseDone = player.isSprinting() && !isFlying; // TODO probably can't do both of these anyway
                                         boolean isSneakingElseDone = isSneaking && !isFlying;
                                         if (isSprintingElseDone &&
-                                                (config.isSprintEnabled || OPTIONS.getSprintToggled().getValue())) {
+                                                (config.isSprintEnabled || OPTIONS.toggleSprint().get())) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sprinting");
@@ -157,7 +164,7 @@ public class UntitledClient implements ClientModInitializer {
                                             isSprintingElseDone = false;
                                         }
                                         if (isSneakingElseDone &&
-                                                (config.isSneakEnabled || OPTIONS.getSneakToggled().getValue())) {
+                                                (config.isSneakEnabled || OPTIONS.toggleCrouch().get())) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sneaking");
@@ -167,7 +174,7 @@ public class UntitledClient implements ClientModInitializer {
                                         if (flag)
                                             stringBuilder.append(" (Toggled)");
                                         boolean keyHeldFlag = false;
-                                        if (isSprintingElseDone && SPRINT_VANILLA.isPressed()) {
+                                        if (isSprintingElseDone && SPRINT_VANILLA.isDown()) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sprinting");
@@ -176,7 +183,7 @@ public class UntitledClient implements ClientModInitializer {
 
                                             isSprintingElseDone = false;
                                         }
-                                        if (isSneakingElseDone && SNEAK_VANILLA.isPressed()) {
+                                        if (isSneakingElseDone && SNEAK_VANILLA.isDown()) {
                                             if (flag)
                                                 stringBuilder.append(", ");
                                             stringBuilder.append("Sneaking");
@@ -193,7 +200,7 @@ public class UntitledClient implements ClientModInitializer {
                                         if (isFlying) {
                                             StringBuilder flyingBuilder = new StringBuilder();
                                             boolean flyingFlag = false;
-                                            if (JUMP_VANILLA.isPressed()) {
+                                            if (JUMP_VANILLA.isDown()) {
                                                 flyingBuilder.append("Ascending");
                                                 flyingFlag = true;
                                             }
@@ -205,9 +212,9 @@ public class UntitledClient implements ClientModInitializer {
                                             }
                                             if (!flyingFlag)
                                                 flyingBuilder.append("Flying");
-                                            if (player.getAbilities().getFlySpeed() != BASE_FLY_SPEED)
+                                            if (player.getAbilities().getFlyingSpeed() != BASE_FLY_SPEED)
                                                 flyingBuilder.append(" (")
-                                                        .append(player.getAbilities().getFlySpeed() / BASE_FLY_SPEED)
+                                                        .append(player.getAbilities().getFlyingSpeed() / BASE_FLY_SPEED)
                                                         .append("x boost)");
                                             stringBuilder.append(flyingBuilder);
 
@@ -217,12 +224,12 @@ public class UntitledClient implements ClientModInitializer {
                                     }
                                 }
                                 Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-                                int width = window.getScaledWidth();
+                                int width = window.getGuiScaledWidth();
                                 if (flag) {
                                     String finalText = stringBuilder.toString();
                                     context.drawTextWithShadow(TEXT_RENDERER,
                                             Text.literal(finalText),
-                                            width - TEXT_RENDERER.getWidth(finalText) - 1,
+                                            width - TEXT_RENDERER.width(finalText) - 1,
                                             1,
                                             0xffffff);
                                 }
@@ -235,29 +242,30 @@ public class UntitledClient implements ClientModInitializer {
             WorldRenderEvents.AFTER_ENTITIES.register(context -> {
                 projection[0] = new Matrix4f(context.projectionMatrix());
             });
+            TODO;
             HudLayerRegistrationCallback.EVENT.register((wrapper) -> {
                 wrapper.attachLayerBefore(
                         IdentifiedLayer.CHAT,
                         EXAMPLE_LAYER,
                         (context, renderTickCounter) -> {
-                            if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isPressed()) {
+                            if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
                                 return;
                             }
 
-                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.getCamera();
-                            assert MINECRAFT_CLIENT_INSTANCE.world != null;
-                            for (PlayerEntity player : MINECRAFT_CLIENT_INSTANCE.world.getPlayers()) {
+                            Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
+                            assert MINECRAFT_CLIENT_INSTANCE.level != null;
+                            for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
                                 // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                                if (!(player instanceof AbstractClientPlayerEntity clientPlayerEntity) || player == MINECRAFT_CLIENT_INSTANCE.player) {
+                                if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
                                     continue;
                                 }
                                 drawPlayerWaypoint(
-                                        player.getLerpedPos(renderTickCounter.getTickDelta(false))
-                                                .add(0, player.getHeight() / 2, 0),
+                                        player.getPosition(renderTickCounter.getTickDelta(false))
+                                                .add(0, player.getBbHeight() / 2, 0),
                                         camera,
                                         projection[0],
                                         context,
-                                        clientPlayerEntity);
+                                        player);
                             }
                         });
             });
@@ -268,9 +276,9 @@ public class UntitledClient implements ClientModInitializer {
             Vec3 worldPos,
             Camera camera,
             Matrix4f projection,
-            GuiGraphics drawContext,
+            GuiGraphicsExtractor drawContext,
             AbstractClientPlayer player) {
-        Vec3 cameraRelativePos = worldPos.subtract(camera.getPos());
+        Vec3 cameraRelativePos = worldPos.subtract(camera.position());
 
         Vector4f clipPos = new Vector4f(
                 (float) cameraRelativePos.x,
@@ -310,21 +318,21 @@ public class UntitledClient implements ClientModInitializer {
                     screenY - backgroundSize / 2,
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
-                    config.nameplateUuids.get(player.getUuid()) instanceof Config.NameplateTeam team
+                    config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team
                             ? 0xFF000000 | Objects.requireNonNull(team.color.getColor())
                             : 0xAFFF0000
             );
 //            TODO; // config option for only doing teammates
-            PlayerFaceRenderer.draw(
+            PlayerFaceExtractor.extractRenderState(
                     drawContext,
-                    player.getSkinTextures(),
+                    player.getSkin(),
                     screenX - size / 2,
                     screenY - size / 2,
                     size);
 
             // distance
             if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
-                double distance = clientPlayerEntity.getPos().distanceTo(worldPos);
+                double distance = clientPlayerEntity.position().distanceTo(worldPos);
                 String distanceText = String.format("%.1fm", distance);
 
                 drawText(screenX, distanceText, screenY, size, drawContext);
@@ -334,7 +342,7 @@ public class UntitledClient implements ClientModInitializer {
                 Vector3f forward = new Vector3f(0, 0, -1);
                 camera.rotation().transform(forward);
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
-                Vec3 toMarker = worldPos.subtract(camera.getPos()).normalize();
+                Vec3 toMarker = worldPos.subtract(camera.position()).normalize();
                 if (look.dot(toMarker) > 0.995) {
                     // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
                     // TODO -> extra info should also appear when MOUSED over
@@ -381,7 +389,7 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private static void drawText(
-            int screenX, String text, int screenY, int size, GuiGraphics drawContext) {
+            int screenX, String text, int screenY, int size, GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
         int textY = screenY + size / 2 + 2;
         drawContext.drawTextWithShadow(
