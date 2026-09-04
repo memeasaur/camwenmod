@@ -25,7 +25,6 @@
     "EntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "PotionItemMixin",
-    "SodiumBlockOcclusionCacheMixin"
+    "PotionItemMixin"
   ]
 }
