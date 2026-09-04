@@ -2,6 +2,8 @@
     >w tapper: button that lets go of sprint, but only if it needs to be reset
     >automatic w tap?
 
+>hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
+    >goal of getting the hit detection of 20cps but only sending like 10cps
 >add toggle for cheats
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
