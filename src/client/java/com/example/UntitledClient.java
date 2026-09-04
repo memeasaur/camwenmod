@@ -3,9 +3,11 @@ package com.example;
 import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.google.common.reflect.TypeToken;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
@@ -84,13 +86,14 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
-    private static final KeyMapping.Category PVP_UTILS = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils"));
+    private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
 
     private static KeyMapping getAbstractPvpUtilsKeybind(String name) {
-        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 name,
+//                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
-                PVP_UTILS
+                Objects.requireNonNull(PVP_UTILS)
         ));
     }
 
@@ -314,7 +317,7 @@ public class UntitledClient implements ClientModInitializer {
                     screenX + (backgroundSize + 1) / 2,
                     screenY + (backgroundSize + 1) / 2,
                     config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team
-                            ? 0xFF000000 | Objects.requireNonNull(team.color.getColor())
+                            ? 0xFF000000 | team.color.getValue()
                             : 0xAFFF0000
             );
 //            TODO; // config option for only doing teammates

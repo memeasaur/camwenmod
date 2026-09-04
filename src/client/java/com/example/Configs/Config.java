@@ -2,19 +2,19 @@ package com.example.Configs;
 
 import java.util.HashMap;
 import java.util.UUID;
-import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextColor;
 
 import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
     public enum NameplateTeam {
-        FRIENDLY(ChatFormatting.GREEN),
-        ALLY(ChatFormatting.AQUA);
+        FRIENDLY(TextColor.GREEN),
+        ALLY(TextColor.AQUA);
         //        ENEMY,
 //        FOCUS,
-        public final ChatFormatting color;
+        public final TextColor color;
 
-        NameplateTeam(ChatFormatting color) {
+        NameplateTeam(TextColor color) {
             this.color = color;
         }
     }
