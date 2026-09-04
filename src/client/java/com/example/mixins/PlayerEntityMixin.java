@@ -44,7 +44,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     // TODO -> this is fickle, but every solution seems like it's gonna be fickle
     // requiring this to be signed off on when updating would be nice
-    @ModifyConstant(method = "attack", constant = @Constant(doubleValue = 0.6))
+    @ModifyConstant(method = "causeExtraKnockback", constant = @Constant(doubleValue = 0.6))
     double onAttackConstant(double value) {
         // TODO -> check if ethylene is enabled and if I'm taking bad knockback, and return 1.0 for this if I'm not to ethylene harder
         // also, this being raised would technically slow down my ethylene if I don't address this
