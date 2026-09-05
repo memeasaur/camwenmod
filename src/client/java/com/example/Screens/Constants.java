@@ -1,13 +1,23 @@
 package com.example.Screens;
 
 import com.example.Configs.Config;
+
 import java.util.*;
 import java.util.function.Consumer;
+
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.TEXT_RENDERER;
@@ -119,7 +129,43 @@ public class Constants {
                         "combat cheats",
                         config.isCheatsEnabled,
                         is -> config.isCheatsEnabled = is,
+                        ""),
+                getConfigButtonWidget(
+                        "send potion count chat message",
+                        () -> {
+                            if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)) {
+                                return;
+                            }
+
+                            int potionCount = 0;
+                            for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+                                if (stack.getItem() instanceof PotionItem &&
+                                        stack.get(DataComponents.POTION_CONTENTS) instanceof PotionContents potionContents &&
+                                        potionContents.is(Potions.STRONG_HEALING)) {
+                                    potionCount += stack.getCount();
+                                }
+                            }
+                            player.connection.sendChat("I have " + potionCount + " health potions");
+                        },
+                        ""),
+                getConfigButtonWidget(
+                        "nearby allies/enemies: " + calculateNearbyPlayerCountString(),
+                        () -> {
+                        },
                         "")
         ));
+    }
+
+    // TODO -> inline?
+    private static String calculateNearbyPlayerCountString() {
+        int nearbyTeammates = 0;
+        List<AbstractClientPlayer> nearbyPlayers = Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players();
+        for (Player each : nearbyPlayers) {
+            if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
+                    (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
+                nearbyTeammates++;
+            }
+        }
+        return nearbyTeammates + "/" + (nearbyPlayers.size() - nearbyTeammates);
     }
 }

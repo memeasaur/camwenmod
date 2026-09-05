@@ -2,9 +2,6 @@
     >make s tap just cancel sprint instead of stopping all movement
 >hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
     >goal of getting the successful hits of 20cps but only sending like 10cps
->keybind to say how many pots I have in party chat
->add toggle for cheats
->nearby player counter
 
 >use glow instead of leather armor? config both
 >don't show waypoints unless they're clamped
