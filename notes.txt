@@ -2,6 +2,7 @@
     >w tapper: button that lets go of sprint, but only if it needs to be reset
     >automatic w tap?
 
+>get the name of the player that just hopped
 >don't show waypoints unless they're clamped
 >handle teammates and enemy nameplates separately for when I only care about enemies etc.
 >keybind to say how many pots I have in party chat
