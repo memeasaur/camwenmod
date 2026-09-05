@@ -4,7 +4,6 @@
     >you set a minimum interval between inputs
     >goal of getting the successful hits of 20cps but only sending like 10cps
     >ignore clicks that are misses?
->handle teammates and enemy nameplates separately for when I only care about enemies etc.
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
