@@ -2,6 +2,8 @@
     >w tapper: button that lets go of sprint, but only if it needs to be reset
     >automatic w tap?
 
+>don't show waypoints unless they're clamped
+>handle teammates and enemy nameplates separately for when I only care about enemies etc.
 >keybind to say how many pots I have in party chat
 >hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
     >goal of getting the successful hits of 20cps but only sending like 10cps
