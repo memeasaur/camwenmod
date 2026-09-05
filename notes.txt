@@ -3,6 +3,7 @@
     >automatic w tap?
 
 >get the name of the player that just hopped
+    >do this by just having a config option that put all logins in chat
 >don't show waypoints unless they're clamped
 >handle teammates and enemy nameplates separately for when I only care about enemies etc.
 >keybind to say how many pots I have in party chat
