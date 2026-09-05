@@ -1,11 +1,14 @@
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
 >hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
+    >you set a minimum interval between inputs
     >goal of getting the successful hits of 20cps but only sending like 10cps
+    >ignore clicks that are misses?
+>handle teammates and enemy nameplates separately for when I only care about enemies etc.
 
+>use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
 >don't show waypoints unless they're clamped
->handle teammates and enemy nameplates separately for when I only care about enemies etc.
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
 >impl sliders +or text fields
