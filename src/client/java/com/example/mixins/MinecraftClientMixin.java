@@ -101,7 +101,8 @@ public abstract class MinecraftClientMixin {
             if (foo.getType() == HitResult.Type.ENTITY &&
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
-                    gameMode != null) {
+                    gameMode != null &&
+                    ((EntityHitResult) foo).getEntity() instanceof Player) {
                 gameMode.attack(player, ((EntityHitResult) foo).getEntity());
                 // TODO -> debugMode this
 //                player.sendMessage(Text.literal("cheating"), false);

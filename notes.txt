@@ -2,6 +2,7 @@
     >w tapper: button that lets go of sprint, but only if it needs to be reset
     >automatic w tap?
 
+>use glow instead of leather armor? config for both
 >get the name of the player that just hopped
     >do this by just having a config option that put all logins in chat
 >don't show waypoints unless they're clamped
@@ -17,7 +18,6 @@
 >nearby player counter
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
->make cheats not work on mobs
 >finish ethylene (keepsprint)
     >make ethylene change the fov still
 

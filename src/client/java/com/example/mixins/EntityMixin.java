@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,7 +14,9 @@ import net.minecraft.world.entity.Entity;
 public class EntityMixin {
     @Inject(method = "getPickRadius", at = @At("HEAD"), cancellable = true)
     private void onGetTargetingMargin(final CallbackInfoReturnable<Float> cir) {
-        cir.setReturnValue(computeCheatConfig().targetingMarginBypass);
+        if (((Object) this) instanceof Player) {
+            cir.setReturnValue(computeCheatConfig().targetingMarginBypass);
+        }
     }
 
 //    @Inject(method = "onDamaged", at = @At("HEAD"))
