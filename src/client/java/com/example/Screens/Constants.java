@@ -161,7 +161,10 @@ public class Constants {
         int nearbyTeammates = 0;
         List<AbstractClientPlayer> nearbyPlayers = Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players();
         for (Player each : nearbyPlayers) {
-            if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
+            if (each == MINECRAFT_CLIENT_INSTANCE.player) {
+                nearbyTeammates++;
+            }
+            else if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
                     (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
                 nearbyTeammates++;
             }
