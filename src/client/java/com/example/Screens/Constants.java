@@ -152,6 +152,11 @@ public class Constants {
                         "nearby allies/enemies: " + calculateNearbyPlayerCountString(),
                         () -> {
                         },
+                        ""),
+                getConfigButtonWidget(
+                        "current player waypoint category: " + TODO,
+                        () -> {
+                        },
                         "")
         ));
     }
