@@ -41,7 +41,6 @@ public class Config {
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
     public boolean isPlayerLoginMessagingEnabled = false;
-    TODO;
     public boolean isCheatsEnabled = true;
 
     public void saveConfig() {

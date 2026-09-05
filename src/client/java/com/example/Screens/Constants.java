@@ -109,6 +109,16 @@ public class Constants {
                             config.nameplateUuids.values().removeIf(each -> each == Config.NameplateTeam.ALLY);
                             config.saveConfig();
                         },
+                        ""),
+                getConfigCheckboxWidget(
+                        "player login messaging",
+                        config.isPlayerLoginMessagingEnabled,
+                        is -> config.isPlayerLoginMessagingEnabled = is,
+                        ""),
+                getConfigCheckboxWidget(
+                        "combat cheats",
+                        config.isCheatsEnabled,
+                        is -> config.isCheatsEnabled = is,
                         "")
         ));
     }
