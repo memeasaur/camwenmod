@@ -77,7 +77,8 @@ public abstract class MinecraftClientMixin {
     private void onDoAttackReturn(CallbackInfoReturnable<Boolean> cir) {
 //        isAttackCooldown = true;
 
-        if (computeCheatConfig().isSneakyReachEnabled &&
+        if (config.isCheatsEnabled &&
+                computeCheatConfig().isSneakyReachEnabled &&
                 this.hitResult != null &&
                 this.hitResult.getType() == HitResult.Type.MISS &&
                 this.getCameraEntity() instanceof Entity camera &&

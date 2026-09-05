@@ -1,6 +1,5 @@
->hcfr:
-    >w tapper: button that lets go of sprint, but only if it needs to be reset
-    >automatic w tap?
+>w tapper: button that lets go of sprint, but only if it needs to be reset
+    >make s tap just cancel sprint instead of stopping all movement
 >hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
     >goal of getting the successful hits of 20cps but only sending like 10cps
 >keybind to say how many pots I have in party chat
@@ -18,6 +17,7 @@
 >finish ethylene (keepsprint)
     >make ethylene change the fov still
 
+>automatic w tap? (blatant?)
 >lightning strike waypoints
 >make toggle keybind for disabling xray and waypoints
 >faster tick-rate (blatant)
