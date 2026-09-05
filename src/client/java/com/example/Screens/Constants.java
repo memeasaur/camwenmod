@@ -154,8 +154,11 @@ public class Constants {
                         },
                         ""),
                 getConfigButtonWidget(
-                        "current player waypoint category: " + TODO,
+                        "current player waypoint category: " + config.playerWaypointCategory.name(),
                         () -> {
+                            Config.PlayerWaypointCategory[] values = Config.PlayerWaypointCategory.values();
+                            config.playerWaypointCategory = values[(config.playerWaypointCategory.ordinal() + 1) % values.length];
+                            config.saveConfig();
                         },
                         "")
         ));

@@ -40,6 +40,11 @@ public class Config {
     public boolean isDarknessDisabled = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
+    public enum PlayerWaypointCategory {
+        ALL,
+        ENEMIES
+    }
+    public PlayerWaypointCategory playerWaypointCategory = PlayerWaypointCategory.ALL;
     public boolean isPlayerLoginMessagingEnabled = false;
     public boolean isCheatsEnabled = true;
 
