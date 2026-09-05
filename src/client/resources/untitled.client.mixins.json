@@ -19,6 +19,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "ClientPacketListenerMixin",
     "ClientPlayerEntityInvoker",
     "EnchantmentMixin",
     "EntityInvoker",

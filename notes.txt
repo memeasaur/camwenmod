@@ -2,7 +2,7 @@
     >w tapper: button that lets go of sprint, but only if it needs to be reset
     >automatic w tap?
 
->use glow instead of leather armor? config for both
+>use glow instead of leather armor? config both
 >get the name of the player that just hopped
     >do this by just having a config option that put all logins in chat
 >don't show waypoints unless they're clamped
@@ -14,7 +14,6 @@
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
 >impl sliders +or text fields
->only show waypoints of players that are out of the viewport
 >nearby player counter
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
