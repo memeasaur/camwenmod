@@ -2,6 +2,8 @@
     >make s tap just cancel sprint instead of stopping all movement
 >wider hitboxes w/o increasing reach: reduce reach to compensate for margin bypass
     >one setting for normal margin bypass, one setting that increases margin bypass by compensates the reach
+>more intelligent attack suppression than rand.nextbool?
+>I think blindness disable is causing render command on wrong thread crashes
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
