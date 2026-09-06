@@ -160,6 +160,11 @@ public class Constants {
                             config.playerWaypointCategory = values[(config.playerWaypointCategory.ordinal() + 1) % values.length];
                             config.saveConfig();
                         },
+                        ""),
+                getConfigCheckboxWidget(
+                        "missed attack suppression",
+                        config.isAttackSuppressionEnabled,
+                        is -> config.isAttackSuppressionEnabled = is,
                         "")
         ));
     }

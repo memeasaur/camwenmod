@@ -48,6 +48,8 @@ public class Config {
     public boolean isPlayerLoginMessagingEnabled = false;
     public boolean isCheatsEnabled = true;
 
+    public boolean isAttackSuppressionEnabled = false;
+
     public void saveConfig() {
         serializeJsonBlocking("config", this);
     }
