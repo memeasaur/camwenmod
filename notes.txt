@@ -4,6 +4,7 @@
     >one setting for normal margin bypass, one setting that increases margin bypass by compensates the reach
 >more intelligent attack suppression than rand.nextbool?
 >I think blindness disable is causing render command on wrong thread crashes
+>sneaky reach: have it compensate for the margin bypass
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
