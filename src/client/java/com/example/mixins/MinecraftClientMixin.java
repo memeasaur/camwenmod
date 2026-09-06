@@ -73,6 +73,7 @@ public abstract class MinecraftClientMixin {
                 onPvpDamage();
             }
         }
+        // TODO -> I could keep a counter for the random boolean passes that get bypass by the hurtTime being 0
         if (new Random().nextBoolean() && // TODO ?
                 (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult) ||
                         !(entityHitResult.getEntity() instanceof Player enemy) ||
