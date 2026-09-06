@@ -4,6 +4,7 @@
     >you set a minimum interval between inputs
     >goal of getting the successful hits of 20cps but only sending like 10cps
     >ignore clicks that are misses? and i frames
+>wider hitboxes w/o flagging reach, reduce reach to compensate for margin bypass
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
