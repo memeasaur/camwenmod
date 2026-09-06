@@ -1,9 +1,5 @@
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
->hit-select/triggerbot? ignores clicks that are misses if they are coming in faster than a certain delay
-    >you set a minimum interval between inputs
-    >goal of getting the successful hits of 20cps but only sending like 10cps
-    >ignore clicks that are misses? and i frames
 >wider hitboxes w/o flagging reach, reduce reach to compensate for margin bypass
 
 >use glow instead of waypoints on nearby players?

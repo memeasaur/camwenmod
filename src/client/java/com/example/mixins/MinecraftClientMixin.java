@@ -25,6 +25,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import java.util.Random;
+
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
@@ -54,7 +56,7 @@ public abstract class MinecraftClientMixin {
     @Shadow
     public abstract @org.jspecify.annotations.Nullable Entity getCameraEntity();
 
-    @Inject(at = @At(value = "HEAD"), method = "startAttack")
+    @Inject(at = @At(value = "HEAD"), method = "startAttack", cancellable = true)
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
         int previousAttackCooldown = isDebugModeEnabled
                 ? MINECRAFT_CLIENT_INSTANCE.missTime
@@ -70,6 +72,13 @@ public abstract class MinecraftClientMixin {
             if (entityHitResult.getEntity() instanceof Player) {
                 onPvpDamage();
             }
+        }
+        if (new Random().nextBoolean() && // TODO ?
+                (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult) ||
+                        !(entityHitResult.getEntity() instanceof Player enemy) ||
+                        enemy.hurtTime > 0)) {
+            cir.setReturnValue(false);
+            return;
         }
     }
 
@@ -98,7 +107,6 @@ public abstract class MinecraftClientMixin {
                     player.entityInteractionRange(),
                     tickDelta);
             camera.setXRot(pitch); // TODO -> debug by not setting this back
-            assert gameMode != null;
             if (foo.getType() == HitResult.Type.ENTITY &&
                     bar.getType() == HitResult.Type.ENTITY &&
                     ((EntityHitResult) foo).getEntity() == ((EntityHitResult) bar).getEntity() &&
