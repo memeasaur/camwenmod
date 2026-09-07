@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import net.minecraft.world.InteractionHand;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -80,18 +82,22 @@ public abstract class MinecraftClientMixin {
                         !(entityHitResult.getEntity() instanceof Player enemy) ||
                         enemy.hurtTime > 0)) {
             cir.setReturnValue(false);
+            Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).swing(InteractionHand.MAIN_HAND);
+            // TODO -> this isn't running side effects
+//            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
+//                    entityHitResult.getEntity() instanceof LivingEntity entity) {
+//                MINECRAFT_CLIENT_INSTANCE.player.magicCrit(entity);
+//            }
             return;
         }
     }
 
     @Inject(at = @At(value = "RETURN"), method = "startAttack")
     private void onDoAttackReturn(CallbackInfoReturnable<Boolean> cir) {
-//        isAttackCooldown = true;
-
-        if (config.isCheatsEnabled &&
+        if (config.isCheatsEnabled && // TODO -> method-ize
                 computeCheatConfig().isSneakyReachEnabled &&
-                this.hitResult != null &&
-                this.hitResult.getType() == HitResult.Type.MISS &&
+                hitResult != null &&
+                hitResult.getType() == HitResult.Type.MISS &&
                 this.getCameraEntity() instanceof Entity camera &&
                 player != null) {
 //            TODO; // give reach to compensate for the angle and re-check, then attack
@@ -103,10 +109,12 @@ public abstract class MinecraftClientMixin {
                     tickDelta);
             float pitch = camera.getXRot();
             camera.setXRot(0);
+            // TODO -> config this?
+            float targetingMarginBypass = computeCheatConfig().targetingMarginBypass;
             var bar = ((ClientPlayerEntityInvoker) this.player).invokePick(
                     camera,
-                    player.blockInteractionRange(),
-                    player.entityInteractionRange(),
+                    player.blockInteractionRange() - targetingMarginBypass,
+                    player.entityInteractionRange() - targetingMarginBypass,
                     tickDelta);
             camera.setXRot(pitch); // TODO -> debug by not setting this back
             if (foo.getType() == HitResult.Type.ENTITY &&
