@@ -58,6 +58,7 @@ public class Constants {
     }
 
     private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().targetingMarginBypass = number.floatValue());
+    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
     private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
 
     // TODO -> let mod keybinds be changed here, too
@@ -89,6 +90,10 @@ public class Constants {
                         "current: " + computeCheatConfig().targetingMarginBypass + ".change targeting margin",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_RECORDER),
                         "current: " + computeCheatConfig().targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+                getConfigButtonWidget(
+                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_WIDTH_BYPASS_RECORDER),
+                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
                 getConfigCheckboxWidget(
                         "blindness disable",
                         config.isDarknessDisabled,

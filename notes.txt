@@ -1,7 +1,5 @@
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
->wider hitboxes w/o increasing reach: reduce reach to compensate for margin bypass
-    >one setting for normal margin bypass, one setting that increases margin bypass by compensates the reach
 >I think blindness disable is causing render command on wrong thread crashes
 >have it still play the suppressed hits on the client without sending the attack rpc
     >these hits aren't accounting for sneaky reach etc.

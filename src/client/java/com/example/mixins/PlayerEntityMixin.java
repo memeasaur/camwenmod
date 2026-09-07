@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -31,18 +32,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(at = @At(value = "RETURN"), method = "attack")
     private void onAttack(Entity target, CallbackInfo ci) {
-        // cheats start
         // TODO -> check if I was sprinting originally
         if (config.isCheatsEnabled &&
                 computeCheatConfig().isEthylene &&
                 target instanceof Player) {
             this.setSprinting(true);
         }
-        // TODO -> remove
-//        if (target instanceof PlayerEntity playerEntity && playerEntity.getStatusEffect(StatusEffects.SPEED) instanceof StatusEffectInstance foo)  {
-//            MINECRAFT_CLIENT_INSTANCE.player.sendMessage(Text.literal(foo.getDuration() + ""), false);
-//        }
-        // cheats end
     }
 
     // TODO -> this is fickle, but every solution seems like it's gonna be fickle
@@ -55,5 +50,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return computeCheatConfig().attackVelocityBypass;
         }
         return value;
+    }
+
+    @Inject(at = @At(value = "RETURN"), method = "entityInteractionRange", cancellable = true)
+    void onEntityInteractionRange(CallbackInfoReturnable<Double> cir) {
+        if (config.isCheatsEnabled) {
+            cir.setReturnValue(cir.getReturnValue() - computeCheatConfig().targetingMarginWidthBypass);
+        }
     }
 }
