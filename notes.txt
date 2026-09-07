@@ -6,6 +6,7 @@
 >I think blindness disable is causing render command on wrong thread crashes
 >sneaky reach: have it compensate for the margin bypass
 >have it still play the suppressed hits on the client without sending the attack rpc
+    >these hits aren't accounting for sneaky reach etc.
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
