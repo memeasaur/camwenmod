@@ -7,4 +7,5 @@ public class CheatConfig {
     public float targetingMarginWidthBypass = 0.f;
     public boolean isSneakyReachEnabled = false;
     public double attackVelocityBypass = 0.6;
+    public float cobwebRangeBypassDelta = 5.f;
 }
