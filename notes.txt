@@ -3,6 +3,7 @@
 >I think blindness disable is causing render command on wrong thread crashes
 >have it still play the suppressed hits on the client without sending the attack rpc
     >these hits aren't accounting for sneaky reach etc.
+>I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
