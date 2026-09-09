@@ -2,6 +2,7 @@
 >implement rally waypoints
 >make depth strider fix work on MineZ
 
+>parkour macro recorder
 >freeCam
 >implement freelook and do the automatic head-run thing
 >w tapper: button that lets go of sprint, but only if it needs to be reset
