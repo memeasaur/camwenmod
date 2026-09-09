@@ -29,6 +29,5 @@ public class LevelRendererMixin {
             CallbackInfo ci
     ) {
         UntitledClient.projectionMatrix = new Matrix4f(projectionMatrix);
-        UntitledClient.cameraRenderState = cameraRenderState;
     }
 }
