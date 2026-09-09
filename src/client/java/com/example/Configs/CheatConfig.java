@@ -8,5 +8,5 @@ public class CheatConfig {
     public boolean isSneakyReachEnabled = false;
     public double attackVelocityBypass = 0.6;
     public boolean isAutoCobweb = false; // TODO -> struct?
-    public float cobwebRangeBypassDelta = .5f;
+    public double cobwebRangeBypassDelta = .5f;
 }
