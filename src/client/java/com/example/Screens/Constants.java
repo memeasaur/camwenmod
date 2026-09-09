@@ -170,7 +170,12 @@ public class Constants {
                         "missed attack suppression",
                         config.isAttackSuppressionEnabled,
                         is -> config.isAttackSuppressionEnabled = is,
-                        "")
+                        ""),
+                getConfigCheckboxWidget(
+                        "auto cobweb",
+                        computeCheatConfig().isAutoCobweb,
+                        is -> computeCheatConfig().isAutoCobweb = is,
+                        "automatically places a web if you're holding right-click. Works more/less consistently depending on cobweb reach setting")
         ));
     }
 

@@ -9,7 +9,6 @@
 >on-screen indicator for player waypoints being on
     >play sound when new player waypoint is seen
 >ethylene sprint needs to only happen when player was already sprinting, right now its letting me sprint backwards
->implement cobweb reach
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
