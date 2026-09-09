@@ -5,6 +5,8 @@
     >these hits aren't accounting for sneaky reach etc.
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >make ethylene hits not sprint
+>implement rally waypoints
+>on-screen indicator for player waypoints being on
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
