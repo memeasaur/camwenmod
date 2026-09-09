@@ -1,6 +1,9 @@
 >fix waypoints (gl)
 >implement rally waypoints
+>make depth strider fix work on MineZ
 
+>freeCam
+>implement freelook and do the automatic head-run thing
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
 >I think blindness disable is causing render command on wrong thread crashes
@@ -51,7 +54,6 @@
     >shows plo when you aren't in the shotbow party (party waypoints)
 
 >could give depth strider 3 without actually having it (blatant)
->freeCam
 >impl last-seen waypoints w/ timers
 
 >automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
@@ -60,7 +62,6 @@
 >option for ignoring attacks that would hit teammates
 >player waypoints detect mineZ particles?
     >just do waypoints on particles?
->implement freelook and do the automatic head-run thing
 >I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
     >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
 >sneaky reach
