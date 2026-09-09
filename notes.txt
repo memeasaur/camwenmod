@@ -13,6 +13,7 @@
 >on-screen indicator for player waypoints being on
     >play sound when new player waypoint is seen
 >ethylene sprint needs to only happen when player was already sprinting, right now its letting me sprint backwards
+    >suppresses hits that would slow?
 >automatic parkour jump
 
 >use glow instead of waypoints on nearby players?
