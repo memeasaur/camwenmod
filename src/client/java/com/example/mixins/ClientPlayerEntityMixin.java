@@ -17,6 +17,7 @@ import static com.example.DelayedClientState.LEFT_VANILLA;
 import static com.example.DelayedClientState.RIGHT_VANILLA;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.UntitledClient.*;
+import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.getIsKeyBindingPressed;
 
 import net.minecraft.client.gui.screens.Screen;
@@ -80,7 +81,7 @@ public abstract class ClientPlayerEntityMixin {
             }
 
 
-            if (config.isAutoCobweb) {
+            if (computeCheatConfig().isAutoCobweb) {
                 onAutoCobwebTick(player);
             }
         }
