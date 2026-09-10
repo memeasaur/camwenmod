@@ -113,7 +113,7 @@ public class UntitledClient implements ClientModInitializer {
     record TempWaypoint(String title, int x, int y, int z) {
     }
 
-    private static ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
+    private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
@@ -233,8 +233,7 @@ public class UntitledClient implements ClientModInitializer {
                             return;
                         }
 
-                        assert MINECRAFT_CLIENT_INSTANCE.level != null;
-                        for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
+                        for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
                             if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
                                 continue;
@@ -243,6 +242,9 @@ public class UntitledClient implements ClientModInitializer {
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
                                     player);
+                        }
+                        for (var each : tempWaypoints) {
+                            drawAbstractWaypoint(new Vec3(each.x, each.y, each.z), context, );
                         }
                     });
         }
@@ -257,6 +259,9 @@ public class UntitledClient implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
     }
 
+    private void drawAbstractWaypoint() {
+        TODO;
+    }
     private void drawPlayerWaypoint(
             Vec3 worldPos,
             GuiGraphicsExtractor drawContext,
@@ -367,6 +372,7 @@ public class UntitledClient implements ClientModInitializer {
         // TODO -> async?
         // TODO -> handle two coordinates. which would require a beacon or something
         // TODO -> handle dimensions?
+//        TODO; // I need to handle the prefix containing numbers
         StringBuilder prefixBuilder = new StringBuilder();
         ArrayList<Integer> locationBuilder = new ArrayList<>();
         StringBuilder coordinateBuilder = new StringBuilder();
@@ -376,9 +382,8 @@ public class UntitledClient implements ClientModInitializer {
                 continue;
             }
 
-            TODO; // I need to handle the prefix containing numbers
-            TODO; // support x, y, z as well
-            if (!coordinateBuilder.isEmpty() && (c == ' ' || c == '.' || c == ',')) {
+//            TODO; // support x, y, z differently
+            if (!coordinateBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
                 locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
                 coordinateBuilder.setLength(0);
                 if (coordinateBuilder.length() == 3) {

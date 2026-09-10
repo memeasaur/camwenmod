@@ -75,9 +75,8 @@ public abstract class ClientPlayerEntityMixin {
 
             if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
                 Entity camera = MINECRAFT_CLIENT_INSTANCE.getCameraEntity();
-                assert camera != null;
                 // TODO -> I think I have to implement my own freelook for this
-                ((EntityInvoker)camera).invokeSetRotation(player.getYRot() - 45.0f, camera.getXRot());
+                Objects.requireNonNull((EntityInvoker) camera).invokeSetRotation(player.getYRot() - 45.0f, camera.getXRot());
             }
 
 
