@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -24,6 +25,7 @@ import org.joml.*;
 
 import java.lang.Math;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 import static com.example.Constants.*;
@@ -417,10 +419,13 @@ public class UntitledClient implements ClientModInitializer {
                 locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
                 coordinateBuilder.setLength(0);
                 if (coordinateBuilder.length() == 3) {
-                    TODO; // timestamp
                     tempWaypoints.add(new TempWaypoint(
                             prefixBuilder.toString(),
                             new Vec3(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));
+                    SCHEDULED_EXECUTOR_SERVICE.schedule(
+                            () -> Minecraft.getInstance().execute(tempWaypoints::removeFirst), // TODO -> this bad
+                            15,
+                            TimeUnit.SECONDS);
                     prefixBuilder.setLength(0);
                     locationBuilder.clear();
                 }
