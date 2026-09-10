@@ -5,10 +5,9 @@ import com.example.Configs.Config;
 import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
@@ -21,8 +20,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -85,7 +82,6 @@ public class UntitledClient implements ClientModInitializer {
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
     public static boolean isDebugModeEnabled = false;
-    public static boolean isSprintReset = true;
     public static boolean
             isJumpEnabled,
             isForwardEnabled,
@@ -112,18 +108,16 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
-//    public static Matrix4f projectionMatrix;
     public static CameraRenderState cameraRenderState;
+
+    record TempWaypoint(String title, int x, int y, int z) {
+    }
+
+    private static ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
-        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            if (client.player instanceof LocalPlayer player) {
-                if (!player.isSprinting())
-                    isSprintReset = true;
-            }
-        });
-
+        // exampleLayer
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils1", "hud-example-layer");
             HudElementRegistry.attachElementBefore(
@@ -228,12 +222,9 @@ public class UntitledClient implements ClientModInitializer {
                     });
         }
 
+        // exampleLayer
         {
             final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
-//            final Matrix4f[] projection = new Matrix4f[1];
-//            LevelRenderEvents.AFTER_SOLID_FEATURES.register(context -> {
-//                projection[0] = new Matrix4f(context.projectionMatrix());
-//            });
             HudElementRegistry.attachElementBefore(
                     VanillaHudElements.CHAT,
                     EXAMPLE_LAYER,
@@ -242,13 +233,12 @@ public class UntitledClient implements ClientModInitializer {
                             return;
                         }
 
-//                        Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
                         assert MINECRAFT_CLIENT_INSTANCE.level != null;
                         for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-//                                continue;
-//                            }
+                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+                                continue;
+                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
@@ -256,12 +246,19 @@ public class UntitledClient implements ClientModInitializer {
                         }
                     });
         }
+
+        // messageCoordsListener
+        ClientReceiveMessageEvents.CHAT.register((
+                message,
+                _,
+                _,
+                _,
+                _) -> onIncomingMessage(message.getString()));
+        ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
     }
 
     private void drawPlayerWaypoint(
             Vec3 worldPos,
-//            Camera camera,
-//            Matrix4f projection,
             GuiGraphicsExtractor drawContext,
             AbstractClientPlayer player) {
         Vec3 cameraPos = cameraRenderState.pos;
@@ -363,6 +360,40 @@ public class UntitledClient implements ClientModInitializer {
                     }
                 }
             }
+        }
+    }
+
+    private void onIncomingMessage(String message) {
+        // TODO -> async?
+        // TODO -> handle two coordinates. which would require a beacon or something
+        // TODO -> handle dimensions?
+        StringBuilder prefixBuilder = new StringBuilder();
+        ArrayList<Integer> locationBuilder = new ArrayList<>();
+        StringBuilder coordinateBuilder = new StringBuilder();
+        for (char c : message.toCharArray()) {
+            if (Character.isDigit(c)) {
+                coordinateBuilder.append(c);
+                continue;
+            }
+
+            TODO; // I need to handle the prefix containing numbers
+            TODO; // support x, y, z as well
+            if (!coordinateBuilder.isEmpty() && (c == ' ' || c == '.' || c == ',')) {
+                locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
+                coordinateBuilder.setLength(0);
+                if (coordinateBuilder.length() == 3) {
+                    tempWaypoints.add(new TempWaypoint(
+                            prefixBuilder.toString(),
+                            locationBuilder.get(0),
+                            locationBuilder.get(1),
+                            locationBuilder.get(2)));
+                    prefixBuilder.setLength(0);
+                    locationBuilder.clear();
+                }
+                continue;
+            }
+
+            prefixBuilder.append(c);
         }
     }
 
