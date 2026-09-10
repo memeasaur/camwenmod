@@ -20,11 +20,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2f;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
+import java.lang.Math;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -255,15 +253,17 @@ public class UntitledClient implements ClientModInitializer {
                             Vector2i screenCoords = calculateScreenCoords(new Vec3(each.x, each.y, each.z));
                             int x = screenCoords.x;
                             int y = screenCoords.y;
-                            int size = 12;
+                            int size = 16;
 
                             // TODO -> diamond
                             context.fill(
-                                    x,
-                                    y - size,
-                                    x + size,
-                                    y,
-                                    0xFFFF69B4);
+                                    x - size / 2,
+                                    y - size / 2,
+                                    x + (size + 1) / 2,
+                                    y + (size + 1) / 2,
+                                    0xFFFF69B4
+                            );
+                            // TODO -> make it centered on the waypoint
                             drawText(x, each.title, y, size, context);
                         }
                         if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
@@ -271,9 +271,9 @@ public class UntitledClient implements ClientModInitializer {
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-//                                continue;
-//                            }
+                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+                                continue;
+                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
@@ -304,7 +304,7 @@ public class UntitledClient implements ClientModInitializer {
                 1.0f // ?
         );
         // camera-relative -> camera space
-        cameraRenderState.orientation.conjugate().transform(result); // TODO -> val
+        new Quaternionf(cameraRenderState.orientation).conjugate().transform(result); // TODO -> val
         // camera space -> clip space
         cameraRenderState.projectionMatrix.transform(result);
 
