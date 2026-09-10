@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -111,7 +112,8 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
-    public static Matrix4f projectionMatrix;
+//    public static Matrix4f projectionMatrix;
+    public static CameraRenderState cameraRenderState;
 
     @Override
     public void onInitializeClient() {
@@ -240,17 +242,15 @@ public class UntitledClient implements ClientModInitializer {
                             return;
                         }
 
-                        Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
+//                        Camera camera = MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera();
                         assert MINECRAFT_CLIENT_INSTANCE.level != null;
                         for (AbstractClientPlayer player : MINECRAFT_CLIENT_INSTANCE.level.players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-                                continue;
-                            }
+//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+//                                continue;
+//                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
-                                    camera,
-                                    projectionMatrix,
                                     context,
                                     player);
                         }
@@ -260,26 +260,29 @@ public class UntitledClient implements ClientModInitializer {
 
     private void drawPlayerWaypoint(
             Vec3 worldPos,
-            Camera camera,
-            Matrix4f projection,
+//            Camera camera,
+//            Matrix4f projection,
             GuiGraphicsExtractor drawContext,
             AbstractClientPlayer player) {
-        Vec3 cameraRelativePos = worldPos.subtract(camera.position());
-
-        Vector4f clipPos = new Vector4f(
-                (float) cameraRelativePos.x,
-                (float) cameraRelativePos.y,
-                (float) cameraRelativePos.z,
+        Vec3 cameraPos = cameraRenderState.pos;
+        // world space -> camera-relative world space
+        Vec3 cameraRelativeWorldPos = worldPos.subtract(cameraPos);
+        Vector4f result = new Vector4f(
+                (float) cameraRelativeWorldPos.x,
+                (float) cameraRelativeWorldPos.y,
+                (float) cameraRelativeWorldPos.z,
                 1.0f // ?
         );
-        Quaternionf cameraRotation = new Quaternionf(camera.rotation());
-        cameraRotation.conjugate().transform(clipPos);
-        projection.transform(clipPos);
+//        Quaternionf cameraRotation = new Quaternionf(cameraRenderState.orientation);
+        // camera-relative -> camera space
+        cameraRenderState.orientation.conjugate().transform(result); // TODO -> val
+        // camera space -> clip space
+        cameraRenderState.projectionMatrix.transform(result);
 
-        float ndcX = clipPos.x() / clipPos.w();
-        float ndcY = clipPos.y() / clipPos.w();
+        float ndcX = result.x() / result.w();
+        float ndcY = result.y() / result.w();
 
-        if (clipPos.w() < 0) {
+        if (result.w() < 0) {
             ndcX = -ndcX;
             ndcY = -ndcY;
             float max = Math.max(Math.abs(ndcX), Math.abs(ndcY));
@@ -326,9 +329,9 @@ public class UntitledClient implements ClientModInitializer {
             // hovered
             {
                 Vector3f forward = new Vector3f(0, 0, -1);
-                camera.rotation().transform(forward);
+                cameraRenderState.orientation.transform(forward);
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
-                Vec3 toMarker = worldPos.subtract(camera.position()).normalize();
+                Vec3 toMarker = worldPos.subtract(cameraPos).normalize();
                 if (look.dot(toMarker) > 0.995) {
                     // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
                     // TODO -> extra info should also appear when MOUSED over

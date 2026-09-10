@@ -1,7 +1,5 @@
->fix waypoints (gl)
 >implement rally waypoints
 >make depth strider fix work on MineZ
->rename to ironmansuit.jar
 >implement rage cheating up and down buttons to match the clicker
 
 >parkour macro recorder
