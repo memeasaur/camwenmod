@@ -264,16 +264,16 @@ public class UntitledClient implements ClientModInitializer {
                                     0xFFFF69B4
                             );
                             // TODO -> make it centered on the waypoint
-                            drawText(x, each.title, y, size, context);
+                            drawText(x, each.title, y, context);
                         }
                         if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
                             return;
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-                                continue;
-                            }
+//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+//                                continue;
+//                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
@@ -358,8 +358,7 @@ public class UntitledClient implements ClientModInitializer {
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
             double distance = clientPlayerEntity.position().distanceTo(worldPos);
             String distanceText = String.format("%.1fm", distance);
-
-            drawText(screenX, distanceText, screenY, size, drawContext);
+            drawText(screenX, distanceText, screenY, drawContext);
         }
         // hovered
         {
@@ -377,7 +376,6 @@ public class UntitledClient implements ClientModInitializer {
                             screenX,
                             name,
                             screenY - size / 2 - TEXT_RENDERER.lineHeight - 2,
-                            size,
                             drawContext);
                 }
                 // coords
@@ -392,7 +390,6 @@ public class UntitledClient implements ClientModInitializer {
                             screenX,
                             coordinates,
                             screenY - size / 2 - TEXT_RENDERER.lineHeight * 2 - 4,
-                            size,
                             drawContext
                     );
                 }
@@ -449,10 +446,10 @@ public class UntitledClient implements ClientModInitializer {
             int screenX,
             String text,
             int screenY,
-            int size,
             GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
-        int textY = screenY + size / 2 + 2;
+        int textY = screenY - TEXT_RENDERER.lineHeight / 2;
+        ;
         drawContext.text(
                 TEXT_RENDERER,
                 text,
