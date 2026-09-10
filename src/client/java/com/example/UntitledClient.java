@@ -271,9 +271,9 @@ public class UntitledClient implements ClientModInitializer {
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-                                continue;
-                            }
+//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+//                                continue;
+//                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
@@ -458,7 +458,7 @@ public class UntitledClient implements ClientModInitializer {
                 text,
                 textX,
                 textY,
-                0xFFFFFF
+                0xFFFFFFFF
         );
     }
 }
