@@ -1,4 +1,5 @@
 >make debug cheat message that tells me when margin bypass is getting cheat hits
+>maybe rage cheats operate off of the base level
 
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
