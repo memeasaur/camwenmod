@@ -248,10 +248,12 @@ public class UntitledClient implements ClientModInitializer {
                     VanillaHudElements.CHAT,
                     EXAMPLE_LAYER,
                     (context, _) -> {
+                        for (var each : tempWaypoints) {
+                            drawAbstractWaypoint(new Vec3(each.x, each.y, each.z), context, );
+                        }
                         if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
                             return;
                         }
-
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
                             if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
@@ -261,9 +263,6 @@ public class UntitledClient implements ClientModInitializer {
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
                                     player);
-                        }
-                        for (var each : tempWaypoints) {
-                            drawAbstractWaypoint(new Vec3(each.x, each.y, each.z), context, );
                         }
                     });
         }
