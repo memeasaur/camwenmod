@@ -1,6 +1,7 @@
 >fix waypoints (gl)
 >implement rally waypoints
 >make depth strider fix work on MineZ
+>rename to ironmansuit.jar
 
 >parkour macro recorder
 >freeCam
