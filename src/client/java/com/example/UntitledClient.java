@@ -113,6 +113,12 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
+    enum RAGE_CHEAT_LEVEL {
+        ONE,
+        TWO,
+        THREE,
+    }
+
     public static CameraRenderState cameraRenderState;
 
     record TempWaypoint(String title, int x, int y, int z) {
