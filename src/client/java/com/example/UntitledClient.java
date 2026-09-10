@@ -130,7 +130,7 @@ public class UntitledClient implements ClientModInitializer {
 
     public static CameraRenderState cameraRenderState;
 
-    record TempWaypoint(String title, Vector3i coordinate) {
+    record TempWaypoint(String title, Vec3 coordinate) {
     }
 
     private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
@@ -250,7 +250,7 @@ public class UntitledClient implements ClientModInitializer {
                     EXAMPLE_LAYER,
                     (context, _) -> {
                         for (var each : tempWaypoints) {
-                            Vector2i screenCoords = calculateScreenCoords(new Vec3(each.x, each.y, each.z));
+                            Vector2i screenCoords = calculateScreenCoords(each.coordinate);
                             int x = screenCoords.x;
                             int y = screenCoords.y;
                             int size = 16;
@@ -412,6 +412,7 @@ public class UntitledClient implements ClientModInitializer {
             }
 
 //            TODO; // support x, y, z differently
+            // TODO -> support decimals
             if (!coordinateBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
                 locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
                 coordinateBuilder.setLength(0);
@@ -419,7 +420,7 @@ public class UntitledClient implements ClientModInitializer {
                     TODO; // timestamp
                     tempWaypoints.add(new TempWaypoint(
                             prefixBuilder.toString(),
-                            new Vector3i(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));
+                            new Vec3(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));
                     prefixBuilder.setLength(0);
                     locationBuilder.clear();
                 }
