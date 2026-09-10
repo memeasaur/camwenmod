@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 public class EnchantmentMixin {
     @Inject(method = "matchingSlot", at = @At("HEAD"), cancellable = true)
     void onSlotMatches(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
-//        TODO; // gl
+        TODO; // gl
         if (true && slot == EquipmentSlot.LEGS) { // TODO config.isDepthStriderReverted
             cir.setReturnValue(true);
         }
