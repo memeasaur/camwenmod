@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -125,6 +126,7 @@ public class UntitledClient implements ClientModInitializer {
             TargetingMarginBypass = targetingMarginBypass;
         }
     }
+
     public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
 
     public static CameraRenderState cameraRenderState;
@@ -249,7 +251,17 @@ public class UntitledClient implements ClientModInitializer {
                     EXAMPLE_LAYER,
                     (context, _) -> {
                         for (var each : tempWaypoints) {
-                            drawAbstractWaypoint(new Vec3(each.x, each.y, each.z), context, );
+                            Vector2f screenCoords = calculateScreenCoords(new Vec3(each.x, each.y, each.z));
+                            float x = screenCoords.x;
+                            float y = screenCoords.y;
+                            float size = 6.0f;
+
+                            context.fill(
+                                    (int) x,
+                                    (int) (y - size),
+                                    (int) (x + size),
+                                    (int) y,
+                                    0xFFFFFFFF);
                         }
                         if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
                             return;
@@ -277,14 +289,8 @@ public class UntitledClient implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
     }
 
-    private void drawAbstractWaypoint() {
-        TODO;
-    }
-
-    private void drawPlayerWaypoint(
-            Vec3 worldPos,
-            GuiGraphicsExtractor drawContext,
-            AbstractClientPlayer player) {
+    private Vector2f calculateScreenCoords(Vec3 worldPos) {
+        // TODO -> apparently JOML provides helpers that can simplify all this
         Vec3 cameraPos = cameraRenderState.pos;
         // world space -> camera-relative world space
         Vec3 cameraRelativeWorldPos = worldPos.subtract(cameraPos);
@@ -294,7 +300,6 @@ public class UntitledClient implements ClientModInitializer {
                 (float) cameraRelativeWorldPos.z,
                 1.0f // ?
         );
-//        Quaternionf cameraRotation = new Quaternionf(cameraRenderState.orientation);
         // camera-relative -> camera space
         cameraRenderState.orientation.conjugate().transform(result); // TODO -> val
         // camera space -> clip space
@@ -314,74 +319,79 @@ public class UntitledClient implements ClientModInitializer {
         }
         ndcX = Math.clamp(ndcX, -1.0f, 1.0f);
         ndcY = Math.clamp(ndcY, -1.0f, 1.0f);
+        return new Vector2f(ndcX, ndcY);
+    }
 
-        // player head
+    private void drawPlayerWaypoint(
+            Vec3 worldPos, GuiGraphicsExtractor drawContext, AbstractClientPlayer player) {
+
+        Vector2f screenCoords = calculateScreenCoords(worldPos);
+        float ndcX = screenCoords.x;
+        float ndcY = screenCoords.y;
+
+        int size = 12;
+        Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
+        int screenX = (int) ((ndcX + 1) / 2 * window.getGuiScaledWidth());
+        int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
+        int backgroundSize = size + 4;
+        drawContext.fill(
+                screenX - backgroundSize / 2,
+                screenY - backgroundSize / 2,
+                screenX + (backgroundSize + 1) / 2,
+                screenY + (backgroundSize + 1) / 2,
+                config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team
+                        ? 0xFF000000 | team.color.getValue()
+                        : 0xAFFF0000
+        );
+//            TODO; // config enum option for only doing teammates etc.
+        PlayerFaceExtractor.extractRenderState(
+                drawContext,
+                player.getSkin(),
+                screenX - size / 2,
+                screenY - size / 2,
+                size);
+
+        // distance
+        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
+            double distance = clientPlayerEntity.position().distanceTo(worldPos);
+            String distanceText = String.format("%.1fm", distance);
+
+            drawText(screenX, distanceText, screenY, size, drawContext);
+        }
+        // hovered
         {
-
-            int size = 12;
-            Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-            int screenX = (int) ((ndcX + 1) / 2 * window.getGuiScaledWidth());
-            int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
-            int backgroundSize = size + 4;
-            drawContext.fill(
-                    screenX - backgroundSize / 2,
-                    screenY - backgroundSize / 2,
-                    screenX + (backgroundSize + 1) / 2,
-                    screenY + (backgroundSize + 1) / 2,
-                    config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team
-                            ? 0xFF000000 | team.color.getValue()
-                            : 0xAFFF0000
-            );
-//            TODO; // config option for only doing teammates
-            PlayerFaceExtractor.extractRenderState(
-                    drawContext,
-                    player.getSkin(),
-                    screenX - size / 2,
-                    screenY - size / 2,
-                    size);
-
-            // distance
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
-                double distance = clientPlayerEntity.position().distanceTo(worldPos);
-                String distanceText = String.format("%.1fm", distance);
-
-                drawText(screenX, distanceText, screenY, size, drawContext);
-            }
-            // hovered
-            {
-                Vector3f forward = new Vector3f(0, 0, -1);
-                cameraRenderState.orientation.transform(forward);
-                Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
-                Vec3 toMarker = worldPos.subtract(cameraPos).normalize();
-                if (look.dot(toMarker) > 0.995) {
-                    // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
-                    // TODO -> extra info should also appear when MOUSED over
-                    // name
-                    {
-                        String name = player.getScoreboardName();
-                        drawText(
-                                screenX,
-                                name,
-                                screenY - size / 2 - TEXT_RENDERER.lineHeight - 2,
-                                size,
-                                drawContext);
-                    }
-                    // coords
-                    {
-                        String coordinates = String.format(
-                                "%.0f, %.0f, %.0f",
-                                worldPos.x,
-                                worldPos.y,
-                                worldPos.z
-                        );
-                        drawText(
-                                screenX,
-                                coordinates,
-                                screenY - size / 2 - TEXT_RENDERER.lineHeight * 2 - 4,
-                                size,
-                                drawContext
-                        );
-                    }
+            Vector3f forward = new Vector3f(0, 0, -1);
+            cameraRenderState.orientation.transform(forward);
+            Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
+            Vec3 toMarker = worldPos.subtract(cameraRenderState.pos).normalize();
+            if (look.dot(toMarker) > 0.995) {
+                // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
+                // TODO -> extra info should also appear when MOUSED over
+                // name
+                {
+                    String name = player.getScoreboardName();
+                    drawText(
+                            screenX,
+                            name,
+                            screenY - size / 2 - TEXT_RENDERER.lineHeight - 2,
+                            size,
+                            drawContext);
+                }
+                // coords
+                {
+                    String coordinates = String.format(
+                            "%.0f, %.0f, %.0f",
+                            worldPos.x,
+                            worldPos.y,
+                            worldPos.z
+                    );
+                    drawText(
+                            screenX,
+                            coordinates,
+                            screenY - size / 2 - TEXT_RENDERER.lineHeight * 2 - 4,
+                            size,
+                            drawContext
+                    );
                 }
             }
         }
