@@ -130,10 +130,10 @@ public class UntitledClient implements ClientModInitializer {
 
     public static CameraRenderState cameraRenderState;
 
-    record TempWaypoint(String title, int x, int y, int z) {
+    record TempWaypoint(String title, Vector3i coordinate) {
     }
 
-    private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>(Collections.singleton(new TempWaypoint("hey", 0, 64, 0)));
+    private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
 
     @Override
     public void onInitializeClient() {
@@ -271,9 +271,9 @@ public class UntitledClient implements ClientModInitializer {
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
-//                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
-//                                continue;
-//                            }
+                            if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+                                continue;
+                            }
                             drawPlayerWaypoint(
                                     player.position().add(0, player.getBbHeight() / 2, 0),
                                     context,
@@ -358,7 +358,7 @@ public class UntitledClient implements ClientModInitializer {
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
             double distance = clientPlayerEntity.position().distanceTo(worldPos);
             String distanceText = String.format("%.1fm", distance);
-            drawText(screenX, distanceText, screenY, drawContext);
+            drawText(screenX, distanceText, screenY + size / 2 + 2 + TEXT_RENDERER.lineHeight / 2, drawContext);
         }
         // hovered
         {
@@ -375,7 +375,7 @@ public class UntitledClient implements ClientModInitializer {
                     drawText(
                             screenX,
                             name,
-                            screenY - size / 2 - TEXT_RENDERER.lineHeight - 2,
+                            screenY - size / 2 - TEXT_RENDERER.lineHeight / 2 - 2,
                             drawContext);
                 }
                 // coords
@@ -389,7 +389,7 @@ public class UntitledClient implements ClientModInitializer {
                     drawText(
                             screenX,
                             coordinates,
-                            screenY - size / 2 - TEXT_RENDERER.lineHeight * 2 - 4,
+                            screenY - size / 2 - TEXT_RENDERER.lineHeight * 3 / 2 - 4,
                             drawContext
                     );
                 }
@@ -416,11 +416,10 @@ public class UntitledClient implements ClientModInitializer {
                 locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
                 coordinateBuilder.setLength(0);
                 if (coordinateBuilder.length() == 3) {
+                    TODO; // timestamp
                     tempWaypoints.add(new TempWaypoint(
                             prefixBuilder.toString(),
-                            locationBuilder.get(0),
-                            locationBuilder.get(1),
-                            locationBuilder.get(2)));
+                            new Vector3i(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));
                     prefixBuilder.setLength(0);
                     locationBuilder.clear();
                 }
@@ -449,7 +448,6 @@ public class UntitledClient implements ClientModInitializer {
             GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
 //        int textY = screenY + size / 2 + 2;
-        TODO; // make the player waypoints text not centered
         int textY = screenY - TEXT_RENDERER.lineHeight / 2;
 
         drawContext.text(
