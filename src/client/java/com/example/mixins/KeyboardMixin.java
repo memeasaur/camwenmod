@@ -134,11 +134,19 @@ public class KeyboardMixin {
             MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
         }
 
-        while (INCREMENT_CHEATS.consumeClick()) {
-            TODO;
-        }
         while (DECREMENT_CHEATS.consumeClick()) {
-            TODO;
+            if (rageCheatLevel.ordinal() == 0) {
+                continue;
+            }
+            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() - 1];
+            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass;
+        }
+        while (INCREMENT_CHEATS.consumeClick()) {
+            if (rageCheatLevel.ordinal() == RAGE_CHEAT_LEVEL.values().length - 1) {
+                continue;
+            }
+            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() + 1];
+            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
         }
     }
 

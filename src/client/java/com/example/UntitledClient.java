@@ -113,11 +113,19 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
-    enum RAGE_CHEAT_LEVEL {
-        ONE,
-        TWO,
-        THREE,
+    public enum RAGE_CHEAT_LEVEL {
+        ZERO(0.f),
+        ONE(0.f),
+        TWO(0.f),
+        THREE(0.f);
+
+        public final float TargetingMarginBypass;
+
+        RAGE_CHEAT_LEVEL(float targetingMarginBypass) {
+            TargetingMarginBypass = targetingMarginBypass;
+        }
     }
+    public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
 
     public static CameraRenderState cameraRenderState;
 
