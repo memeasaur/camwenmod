@@ -79,6 +79,9 @@ public class UntitledClient implements ClientModInitializer {
             PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)"),
             BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
     public static final KeyMapping
+            DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
+            INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
+    public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
 
     public static boolean isDebugModeEnabled = false;
@@ -262,6 +265,7 @@ public class UntitledClient implements ClientModInitializer {
     private void drawAbstractWaypoint() {
         TODO;
     }
+
     private void drawPlayerWaypoint(
             Vec3 worldPos,
             GuiGraphicsExtractor drawContext,

@@ -27,7 +27,7 @@ import static com.example.Utils.*;
 @Mixin(value = KeyboardHandler.class)
 public class KeyboardMixin {
     @Unique
-    private static boolean
+    private static boolean // TODO -> remove these
             isSneakToggleButtonPressed = false,
             isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
@@ -132,6 +132,13 @@ public class KeyboardMixin {
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
             currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
             MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
+        }
+
+        while (INCREMENT_CHEATS.consumeClick()) {
+            TODO;
+        }
+        while (DECREMENT_CHEATS.consumeClick()) {
+            TODO;
         }
     }
 
