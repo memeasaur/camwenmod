@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -134,7 +135,7 @@ public class UntitledClient implements ClientModInitializer {
     record TempWaypoint(String title, int x, int y, int z) {
     }
 
-    private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
+    private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>(Collections.singleton(new TempWaypoint("hey", 0, 64, 0)));
 
     @Override
     public void onInitializeClient() {
@@ -251,17 +252,19 @@ public class UntitledClient implements ClientModInitializer {
                     EXAMPLE_LAYER,
                     (context, _) -> {
                         for (var each : tempWaypoints) {
-                            Vector2f screenCoords = calculateScreenCoords(new Vec3(each.x, each.y, each.z));
-                            float x = screenCoords.x;
-                            float y = screenCoords.y;
-                            float size = 6.0f;
+                            Vector2i screenCoords = calculateScreenCoords(new Vec3(each.x, each.y, each.z));
+                            int x = screenCoords.x;
+                            int y = screenCoords.y;
+                            int size = 12;
 
+                            // TODO -> diamond
                             context.fill(
-                                    (int) x,
-                                    (int) (y - size),
-                                    (int) (x + size),
-                                    (int) y,
-                                    0xFFFFFFFF);
+                                    x,
+                                    y - size,
+                                    x + size,
+                                    y,
+                                    0xFFFF69B4);
+                            drawText(x, each.title, y, size, context);
                         }
                         if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
                             return;
@@ -289,7 +292,7 @@ public class UntitledClient implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
     }
 
-    private Vector2f calculateScreenCoords(Vec3 worldPos) {
+    private Vector2i calculateScreenCoords(Vec3 worldPos) {
         // TODO -> apparently JOML provides helpers that can simplify all this
         Vec3 cameraPos = cameraRenderState.pos;
         // world space -> camera-relative world space
@@ -319,21 +322,21 @@ public class UntitledClient implements ClientModInitializer {
         }
         ndcX = Math.clamp(ndcX, -1.0f, 1.0f);
         ndcY = Math.clamp(ndcY, -1.0f, 1.0f);
-        return new Vector2f(ndcX, ndcY);
+
+        Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
+        int screenX = (int) ((ndcX + 1) / 2 * window.getGuiScaledWidth());
+        int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
+        return new Vector2i(screenX, screenY);
     }
 
     private void drawPlayerWaypoint(
             Vec3 worldPos, GuiGraphicsExtractor drawContext, AbstractClientPlayer player) {
-
-        Vector2f screenCoords = calculateScreenCoords(worldPos);
-        float ndcX = screenCoords.x;
-        float ndcY = screenCoords.y;
-
+        var screenCoords = calculateScreenCoords(worldPos);
+        int screenX = screenCoords.x;
+        int screenY = screenCoords.y;
         int size = 12;
-        Window window = MINECRAFT_CLIENT_INSTANCE.getWindow();
-        int screenX = (int) ((ndcX + 1) / 2 * window.getGuiScaledWidth());
-        int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
         int backgroundSize = size + 4;
+        // TODO -> diamond? w/ face cropped
         drawContext.fill(
                 screenX - backgroundSize / 2,
                 screenY - backgroundSize / 2,
@@ -443,7 +446,11 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private static void drawText(
-            int screenX, String text, int screenY, int size, GuiGraphicsExtractor drawContext) {
+            int screenX,
+            String text,
+            int screenY,
+            int size,
+            GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
         int textY = screenY + size / 2 + 2;
         drawContext.text(
