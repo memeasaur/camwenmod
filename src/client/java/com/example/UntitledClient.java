@@ -448,8 +448,10 @@ public class UntitledClient implements ClientModInitializer {
             int screenY,
             GuiGraphicsExtractor drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
+//        int textY = screenY + size / 2 + 2;
+        TODO; // make the player waypoints text not centered
         int textY = screenY - TEXT_RENDERER.lineHeight / 2;
-        ;
+
         drawContext.text(
                 TEXT_RENDERER,
                 text,
