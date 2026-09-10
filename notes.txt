@@ -1,6 +1,7 @@
 >make depth strider fix work on MineZ
->implement rage cheating up and down buttons to match the clicker
 
+>TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
+    >TODO -> swap the thing I'm changing it to back to the original thing?
 >parkour macro recorder
 >freeCam
 >implement freelook and do the automatic head-run thing
