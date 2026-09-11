@@ -1,12 +1,10 @@
->maybe rage cheats operate off of the base level as deltas
-    >seems like .0005 can't flag reach
-    >seems like .001 can't flag hitboxes?
-    >.001 didn't flag reach 2x
-    >can probably get away with more reach when both targets are moving
+>seems like .0005 can't flag reach
+>seems like .001 can't flag hitboxes?
+>.001 didn't flag reach 2x
 
+>can probably get away with more reach when both targets are moving
 >make external gui for player waypoints
 >parkour macro recorder
->jump cheat
 >depth strider fix
 >I could probably do velocityBypass just with way smaller values
 >have it still play the suppressed hits on the client without sending the attack rpc

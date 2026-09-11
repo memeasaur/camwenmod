@@ -468,4 +468,32 @@ public class UntitledClient implements ClientModInitializer {
                 0xFFFFFFFF
         );
     }
+
+    TODO; // gl
+    public boolean autoParkourEnabled = true;
+    public boolean autoSprintEnabled = false;
+    public double minDepth = 0.5;
+    public double edgeDistance = 0.001;
+    public boolean jumpWhileSneaking = false;
+    public int minimumJumpCooldown = 10;
+    private void checkAndJump(ClientPlayerEntity player, MinecraftClient client) {
+        Vec3d velocity = player.getVelocity();
+        Vec3d horizontalVec = new Vec3d(velocity.x, 0, velocity.z);
+        if (horizontalVec.lengthSquared() < 0.00001) return;
+
+        Vec3d direction = horizontalVec.normalize();
+        Vec3d offset = direction.multiply(ModConfig.INSTANCE.edgeDistance);
+
+        Vec3d totalOffset = new Vec3d(velocity.x, 0, velocity.z).add(offset);
+
+        Box currentBox = player.getBoundingBox();
+        Box aheadBox = currentBox.offset(totalOffset.x, 0, totalOffset.z);
+        // Check for collisions below the predicted box, stretching down to the minimum depth
+        Box dropBox = aheadBox.offset(0, -0.05, 0).stretch(0, -ModConfig.INSTANCE.minDepth, 0);
+
+        if (client.world != null && !client.world.getBlockCollisions(player, dropBox).iterator().hasNext()) {
+            player.jump();
+            jumpCooldown = ModConfig.INSTANCE.minimumJumpCooldown;
+        }
+    }
 }
