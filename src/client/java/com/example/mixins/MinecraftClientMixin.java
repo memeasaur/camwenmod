@@ -39,14 +39,16 @@ public abstract class MinecraftClientMixin {
             return;
         }
         if (config.isDebugModeEnabled) {
-            player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
+            if (previousAttackCooldown != 0) {
+                player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
+            }
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity &&
                     ((ClientPlayerEntityInvoker) this.player).invokePick(
                             MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                             player.blockInteractionRange() - computeCheatConfig().targetingMarginBypass,
                             player.entityInteractionRange() - computeCheatConfig().targetingMarginBypass,
-                            MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS ) {
+                            MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
                 Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit"));
             }
         }
