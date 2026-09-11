@@ -418,7 +418,7 @@ public class UntitledClient implements ClientModInitializer {
             if (!coordinateBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
                 locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
                 coordinateBuilder.setLength(0);
-                if (coordinateBuilder.length() == 3) {
+                if (locationBuilder.size() == 3) {
                     tempWaypoints.add(new TempWaypoint(
                             prefixBuilder.toString(),
                             new Vec3(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));

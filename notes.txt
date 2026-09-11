@@ -2,7 +2,6 @@
 >maybe rage cheats operate off of the base level as deltas
 >make external gui for player waypoints
 >make rallies work
->test xray
 >parkour macro recorder
 >jump cheat
 
