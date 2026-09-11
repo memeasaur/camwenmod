@@ -10,11 +10,10 @@
 >depth strider fix
 >I could probably do velocityBypass just with way smaller values
 >have it still play the suppressed hits on the client without sending the attack rpc
->ethylene sprint needs to only happen when player was already sprinting, right now its letting me sprint backwards
+>ethylene
     >suppresses hits that would slow?
     >I could try cancelling the slowdown from attacking for ethylene hits, but 98% sure it will just flag the piss out of grim
     >make ethylene change the fov still
-    >make ethylene hits not sprint
 
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
@@ -34,6 +33,7 @@
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
 
+>make ethylene hits not sprint (blatant)
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >automatic w tap? (blatant?)
 >lightning strike waypoints

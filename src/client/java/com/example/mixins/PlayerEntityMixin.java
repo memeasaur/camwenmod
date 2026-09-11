@@ -9,8 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
+import static com.example.DelayedClientState.SPRINT_VANILLA;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.computeCheatConfig;
+import static com.example.Utils.getIsKeyBindingPressed;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +21,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -34,10 +39,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(at = @At(value = "RETURN"), method = "attack")
     private void onAttack(Entity target, CallbackInfo ci) {
-        // TODO -> check if I was sprinting originally
         if (config.isCheatsEnabled &&
                 computeCheatConfig().isEthylene &&
-                target instanceof Player) {
+                target instanceof Player &&
+                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).input.hasForwardImpulse() &&
+                getIsKeyBindingPressed(SPRINT_VANILLA)) {
             this.setSprinting(true);
         }
     }
