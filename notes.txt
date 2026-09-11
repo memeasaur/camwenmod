@@ -12,6 +12,7 @@
     >suppresses hits that would slow?
     >I could try cancelling the slowdown from attacking for ethylene hits, but 98% sure it will just flag the piss out of grim
     >make ethylene change the fov still
+>fix hit suppression so I can try double clicking with it etc.
 
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
