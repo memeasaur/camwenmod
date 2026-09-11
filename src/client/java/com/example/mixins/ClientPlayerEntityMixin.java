@@ -35,11 +35,6 @@ import java.util.Objects;
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
     @Shadow
-    public float portalEffectIntensity;
-    @Shadow
-    public float oPortalEffectIntensity;
-
-    @Shadow
     public abstract boolean isUsingItem();
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -88,10 +83,10 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "handlePortalTransitionEffect", at = @At("RETURN"))
     void onTickNausea(CallbackInfo ci) {
-        if (config.isDarknessDisabled) {
-            this.oPortalEffectIntensity = 0.f;
-            this.portalEffectIntensity = 0.f;
-        }
+//        if (config.isDarknessDisabled) {
+//            this.oPortalEffectIntensity = 0.f;
+//            this.portalEffectIntensity = 0.f;
+//        }
     }
 
 //    @Inject(method = "updateHealth", at = @At("RETURN"))

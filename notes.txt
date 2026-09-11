@@ -7,6 +7,7 @@
 >parkour macro recorder
 >jump cheat
 >depth strider fix
+>I could probably do velocityBypass just with way smaller values
 
 >put something on the enemy players to show where I should be aiming at for most reach
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
@@ -23,7 +24,6 @@
     >play sound when new player waypoint is seen
 >ethylene sprint needs to only happen when player was already sprinting, right now its letting me sprint backwards
     >suppresses hits that would slow?
->automatic parkour jump
 
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both

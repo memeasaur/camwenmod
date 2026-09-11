@@ -36,7 +36,7 @@ public class Config {
     public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
     public boolean isGuiCheatsPvpDisabling = false;
-    public boolean isDarknessDisabled = false;
+//    public boolean isDarknessDisabled = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
     public enum PlayerWaypointCategory {

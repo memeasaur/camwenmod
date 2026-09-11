@@ -9,13 +9,14 @@ import static com.example.UntitledClient.config;
 
 import net.minecraft.world.entity.LivingEntity;
 
-@Mixin(targets = "net/minecraft/client/renderer/fog/FogRenderer$StatusEffectFogModifier")
-public interface StatusEffectFogModifierMixin {
-    @Inject(method = "shouldApply", at = @At("HEAD"), cancellable = true)
-    default void onShouldApply(
-            LivingEntity entity, float tickDelta, CallbackInfoReturnable<Boolean> cir) {
-        if (config.isDarknessDisabled) {
-            cir.setReturnValue(false);
-        }
-    }
-}
+// TODO -> update
+//@Mixin(targets = "net/minecraft/client/renderer/fog/FogRenderer$StatusEffectFogModifier")
+//public interface StatusEffectFogModifierMixin {
+//    @Inject(method = "shouldApply", at = @At("HEAD"), cancellable = true)
+//    default void onShouldApply(
+//            LivingEntity entity, float tickDelta, CallbackInfoReturnable<Boolean> cir) {
+//        if (config.isDarknessDisabled) {
+//            cir.setReturnValue(false);
+//        }
+//    }
+//}

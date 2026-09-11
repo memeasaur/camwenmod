@@ -95,11 +95,11 @@ public class Constants {
                         "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_WIDTH_BYPASS_RECORDER),
                         "current: " + computeCheatConfig().targetingMarginWidthBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
-                getConfigCheckboxWidget(
-                        "blindness disable",
-                        config.isDarknessDisabled,
-                        is -> config.isDarknessDisabled = is,
-                        "darkness + blindness + nausea"),
+//                getConfigCheckboxWidget(
+//                        "blindness disable",
+//                        config.isDarknessDisabled,
+//                        is -> config.isDarknessDisabled = is,
+//                        "darkness + blindness + nausea"),
                 getConfigCheckboxWidget(
                         "player waypoints",
                         config.isPlayerWaypointsEnabled,
