@@ -33,14 +33,12 @@ public abstract class MinecraftClientMixin {
 
     @Inject(at = @At(value = "HEAD"), method = "startAttack", cancellable = true)
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
-        int previousAttackCooldown = isDebugModeEnabled
-                ? MINECRAFT_CLIENT_INSTANCE.missTime
-                : 0;
+        int previousAttackCooldown = MINECRAFT_CLIENT_INSTANCE.missTime; // TODO ?
         MINECRAFT_CLIENT_INSTANCE.missTime = 0;
         if (player == null) {
             return;
         }
-        if (isDebugModeEnabled) {
+        if (config.isDebugModeEnabled) {
             player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity &&
