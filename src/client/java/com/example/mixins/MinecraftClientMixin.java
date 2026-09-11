@@ -1,8 +1,8 @@
 package com.example.mixins;
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,19 +11,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.example.Constants.*;
 import static com.example.UntitledClient.*;
+import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.onPvpDamage;
 
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 
 import java.util.Objects;
 import java.util.Random;
@@ -34,28 +30,6 @@ public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public LocalPlayer player;
-
-    @Shadow
-    @Nullable
-    public HitResult hitResult;
-
-    @Shadow
-    @Final
-    public GameRenderer gameRenderer;
-
-//    @Shadow
-//    @Nullable
-//    public Entity cameraEntity;
-
-    @Shadow
-    public abstract DeltaTracker getDeltaTracker();
-
-    @Shadow
-    @Nullable
-    public MultiPlayerGameMode gameMode;
-
-    @Shadow
-    public abstract @org.jspecify.annotations.Nullable Entity getCameraEntity();
 
     @Inject(at = @At(value = "HEAD"), method = "startAttack", cancellable = true)
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
@@ -68,6 +42,15 @@ public abstract class MinecraftClientMixin {
         }
         if (isDebugModeEnabled) {
             player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
+            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
+                    entityHitResult.getEntity() instanceof LivingEntity &&
+                    ((ClientPlayerEntityInvoker) this.player).invokePick(
+                            MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
+                            player.blockInteractionRange() - computeCheatConfig().targetingMarginBypass,
+                            player.entityInteractionRange() - computeCheatConfig().targetingMarginBypass,
+                            MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS ) {
+                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit"));
+            }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
             if (entityHitResult.getEntity() instanceof Player) {

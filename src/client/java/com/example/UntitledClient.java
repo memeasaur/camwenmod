@@ -404,26 +404,32 @@ public class UntitledClient implements ClientModInitializer {
         // TODO -> handle two coordinates. which would require a beacon or something
         // TODO -> handle dimensions?
         // TODO -> support decimals
+        // TODO -> handle x, y, z differently
         // TODO -> once I find one, iterate until I reach the beginning of the message
         // which could contain other ones, which turns this into a leetCode problem
         ArrayList<Integer> numbers = new ArrayList<>();
         StringBuilder numberBuilder = new StringBuilder();
         for (int i = message.length() - 1; i >= 0; --i) {
             char c = message.charAt(i);
-            if (!numberBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
-                // TODO -> handle x, y, z differently
-//                while (c == 'x' && !numbers.isEmpty()) {
-//                    numbers.removeFirst();
-//                }
-//                while (c == 'y' && numbers.size() > 1) {
-//                    numbers.removeFirst();
-//                }
-//                while (c == 'z' && numbers.size() > 2) {
-//                    numbers.removeFirst();
-//                }
-                numbers.add(Integer.parseInt(numberBuilder.toString()));
+            if (Character.isDigit(c)) {
+                numberBuilder.insert(0, c);
+                continue;
+            }
+            if (!Set.of(' ', '.', ',', 'x', 'y', 'z', ':', '-').contains(Character.toLowerCase(c))) {
+                numbers.clear();
+                numberBuilder.setLength(0);
+                continue;
+            }
+            if (!numberBuilder.isEmpty()) {
+                if (c == '-') {
+                    numberBuilder.insert(0, c);
+                }
+                numbers.addFirst(Integer.parseInt(numberBuilder.toString()));
                 numberBuilder.setLength(0);
                 if (numbers.size() == 3) {
+//                    while (Set.of(' ', '.', ',', 'x', 'y', 'z', ':', '-').contains(Character.toLowerCase(message.charAt(i)))) {
+//                        --i; // TODO -> make constant for this set
+//                    } TODO
                     tempWaypoints.add(new TempWaypoint(
                             message.subSequence(0, i).toString(),
                             new Vec3(numbers.get(0), numbers.get(1), numbers.get(2))));
@@ -431,9 +437,7 @@ public class UntitledClient implements ClientModInitializer {
                             () -> Minecraft.getInstance().execute(tempWaypoints::removeFirst), // TODO -> this bad
                             15,
                             TimeUnit.SECONDS);
-//                    MINECRAFT_CLIENT_INSTANCE.player.sendSystemMessage(Component.literal(prefixBuilder.toString()));
-//                    MINECRAFT_CLIENT_INSTANCE.player.sendSystemMessage(Component.literal(numbers.toString()));
-                    return; // TODO
+                    return; // TODO -> multiple rallies in one message
                 }
             }
         }
