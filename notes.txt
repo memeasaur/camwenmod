@@ -3,28 +3,28 @@
     >seems like .001 can't flag hitboxes?
     >.001 didn't flag reach 2x
     >can probably get away with more reach when both targets are moving
+
 >make external gui for player waypoints
 >parkour macro recorder
 >jump cheat
 >depth strider fix
 >I could probably do velocityBypass just with way smaller values
-
->put something on the enemy players to show where I should be aiming at for most reach
->TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
-    >TODO -> swap the thing I'm changing it to back to the original thing?
->freeCam
->implement freelook and do the automatic head-run thing
->w tapper: button that lets go of sprint, but only if it needs to be reset
-    >make s tap just cancel sprint instead of stopping all movement
->I think blindness disable is causing render command on wrong thread crashes
 >have it still play the suppressed hits on the client without sending the attack rpc
-    >these hits aren't accounting for sneaky reach etc.
->make ethylene hits not sprint
->on-screen indicator for player waypoints being on
-    >play sound when new player waypoint is seen
 >ethylene sprint needs to only happen when player was already sprinting, right now its letting me sprint backwards
     >suppresses hits that would slow?
+    >I could try cancelling the slowdown from attacking for ethylene hits, but 98% sure it will just flag the piss out of grim
+    >make ethylene change the fov still
+    >make ethylene hits not sprint
 
+>w tapper: button that lets go of sprint, but only if it needs to be reset
+    >make s tap just cancel sprint instead of stopping all movement
+>on-screen indicator for player waypoints being on
+    >play sound when new player waypoint is seen
+>freeCam
+>implement freelook and do the automatic head-run thing
+>TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
+    >TODO -> swap the thing I'm changing it to back to the original thing?
+>put something on the enemy players to show where I should be aiming at for most reach
 >use glow instead of waypoints on nearby players?
 >use glow instead of leather armor? config both
 >don't show waypoints unless they're clamped
@@ -33,8 +33,6 @@
 >impl sliders +or text fields
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
->finish ethylene (keepsprint)
-    >make ethylene change the fov still
 
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >automatic w tap? (blatant?)
