@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 import java.util.UUID;
+
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -126,12 +127,10 @@ public class KeyboardMixin {
         }
 
         while (BLOCK_XRAY_TOGGLE.consumeClick()) {
-            currentXrayType = Objects.equals(currentXrayType, "block") ? "" : "block";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
+            onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");
         }
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
-            currentXrayType = Objects.equals(currentXrayType, "player") ? "" : "player";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData();
+            onXrayChange(Objects.equals(currentXrayType, "player") ? "" : "player");
         }
 
         while (DECREMENT_CHEATS.consumeClick()) {

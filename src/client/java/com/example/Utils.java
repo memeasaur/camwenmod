@@ -60,6 +60,16 @@ public class Utils {
         isBackwardEnabled = false;
     }
 
+    // TODO -> enum
+    public static void onXrayChange(String value) {
+        currentXrayType = value;
+        MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
+                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
+                MINECRAFT_CLIENT_INSTANCE.options,
+                MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera(),
+                MINECRAFT_CLIENT_INSTANCE.getBlockColors());
+    }
+
     public static void onPvpDamage() {
         if (config.isMovementTogglePvpDisabling) {
             doMovementToggleDisable();
@@ -67,8 +77,7 @@ public class Utils {
 
         // Cheats start
         if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
-            currentXrayType = "";
-            MINECRAFT_CLIENT_INSTANCE.levelRenderer.resetLevelRenderData(); // TODO -> method-ize
+            onXrayChange("");
         }
         // Cheats end
     }

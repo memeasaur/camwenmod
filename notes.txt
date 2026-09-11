@@ -1,9 +1,13 @@
 >make debug cheat message that tells me when margin bypass is getting cheat hits
->maybe rage cheats operate off of the base level
+>maybe rage cheats operate off of the base level as deltas
+>make external gui for player waypoints
+>make rallies work
+>test xray
+>parkour macro recorder
+>jump cheat
 
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
->parkour macro recorder
 >freeCam
 >implement freelook and do the automatic head-run thing
 >w tapper: button that lets go of sprint, but only if it needs to be reset
