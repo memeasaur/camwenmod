@@ -2,6 +2,7 @@
 >make external gui for player waypoints
 >parkour macro recorder
 >jump cheat
+>TODO -> need the debug message to work for all hitbox hits, rather than just reach ones
 
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
