@@ -44,8 +44,10 @@ public abstract class MinecraftClientMixin {
             }
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity) {
-                float value = computeCheatConfig().targetingMarginBypass;
-                computeCheatConfig().targetingMarginBypass = 0.f;
+                float targetingMarginBypass = computeCheatConfig().getTargetingMarginBypass();
+                RAGE_CHEAT_LEVEL rageCheatLevel1 = rageCheatLevel;
+                computeCheatConfig().setTargetingMarginBypass(0.f);
+                rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
                 if (((ClientPlayerEntityInvoker) this.player).invokePick(
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
@@ -53,7 +55,8 @@ public abstract class MinecraftClientMixin {
                         MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
                     Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit"));
                 }
-                computeCheatConfig().targetingMarginBypass = value;
+                computeCheatConfig().setTargetingMarginBypass(targetingMarginBypass);
+                rageCheatLevel = rageCheatLevel1;
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
