@@ -43,13 +43,17 @@ public abstract class MinecraftClientMixin {
                 player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             }
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-                    entityHitResult.getEntity() instanceof LivingEntity &&
-                    ((ClientPlayerEntityInvoker) this.player).invokePick(
-                            MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
-                            player.blockInteractionRange() - computeCheatConfig().targetingMarginBypass,
-                            player.entityInteractionRange() - computeCheatConfig().targetingMarginBypass,
-                            MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
-                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit"));
+                    entityHitResult.getEntity() instanceof LivingEntity) {
+                float value = computeCheatConfig().targetingMarginBypass;
+                computeCheatConfig().targetingMarginBypass = 0.f;
+                if (((ClientPlayerEntityInvoker) this.player).invokePick(
+                        MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
+                        player.blockInteractionRange(),
+                        player.entityInteractionRange(),
+                        MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit"));
+                }
+                computeCheatConfig().targetingMarginBypass = value;
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {

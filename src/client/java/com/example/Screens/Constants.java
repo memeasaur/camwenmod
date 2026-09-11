@@ -57,7 +57,7 @@ public class Constants {
                 .build();
     }
 
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().targetingMarginBypass = number.floatValue());
+    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().setTargetingMarginBypass(number.floatValue()));
     private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
 //    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
     private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
@@ -88,9 +88,9 @@ public class Constants {
                         is -> computeCheatConfig().isEthylene = is,
                         "shotbow lol"),
                 getConfigButtonWidget(
-                        "current: " + computeCheatConfig().targetingMarginBypass + ".change targeting margin",
+                        "current: " + computeCheatConfig().getTargetingMarginBypass() + ".change targeting margin",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_RECORDER),
-                        "current: " + computeCheatConfig().targetingMarginBypass + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+                        "current: " + computeCheatConfig().getTargetingMarginBypass() + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_WIDTH_BYPASS_RECORDER),

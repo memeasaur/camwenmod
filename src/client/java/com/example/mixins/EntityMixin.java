@@ -17,7 +17,7 @@ public class EntityMixin {
     private void onGetTargetingMargin(final CallbackInfoReturnable<Float> cir) {
         if ((Object) this instanceof Player && config.isCheatsEnabled) {
             var foo = computeCheatConfig();
-            cir.setReturnValue(foo.targetingMarginBypass + foo.targetingMarginWidthBypass);
+            cir.setReturnValue(foo.getTargetingMarginBypass() + foo.targetingMarginWidthBypass);
         }
     }
 

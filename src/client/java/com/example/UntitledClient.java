@@ -115,14 +115,13 @@ public class UntitledClient implements ClientModInitializer {
 
     public enum RAGE_CHEAT_LEVEL {
         ZERO(0.f),
-        ONE(0.f),
-        TWO(0.f),
-        THREE(0.f);
+        ONE(0.0005f),
+        TWO(0.001f);
 
-        public final float TargetingMarginBypass;
+        public final float TargetingMarginBypassDelta;
 
         RAGE_CHEAT_LEVEL(float targetingMarginBypass) {
-            TargetingMarginBypass = targetingMarginBypass;
+            TargetingMarginBypassDelta = targetingMarginBypass;
         }
     }
 

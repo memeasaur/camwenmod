@@ -138,14 +138,14 @@ public class KeyboardMixin {
                 continue;
             }
             rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() - 1];
-            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass;
+//            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass;
         }
         while (INCREMENT_CHEATS.consumeClick()) {
             if (rageCheatLevel.ordinal() == RAGE_CHEAT_LEVEL.values().length - 1) {
                 continue;
             }
             rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() + 1];
-            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
+//            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
         }
     }
 

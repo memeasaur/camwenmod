@@ -1,9 +1,14 @@
 >maybe rage cheats operate off of the base level as deltas
+    >seems like .0005 can't flag reach
+    >seems like .001 can't flag hitboxes?
+    >.001 didn't flag reach 2x
+    >can probably get away with more reach when both targets are moving
 >make external gui for player waypoints
 >parkour macro recorder
 >jump cheat
->TODO -> need the debug message to work for all hitbox hits, rather than just reach ones
+>depth strider fix
 
+>put something on the enemy players to show where I should be aiming at for most reach
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
 >freeCam
