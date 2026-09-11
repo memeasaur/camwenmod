@@ -85,8 +85,6 @@ public class UntitledClient implements ClientModInitializer {
             INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
-
-    public static boolean isDebugModeEnabled = false;
     public static boolean
             isJumpEnabled,
             isForwardEnabled,

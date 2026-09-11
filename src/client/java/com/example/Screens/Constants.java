@@ -180,7 +180,12 @@ public class Constants {
                 getConfigButtonWidget(
                         "change cobweb range bypass delta",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(COBWEB_BYPASS_DELTA_RECORDER),
-                        "current: " + computeCheatConfig().cobwebRangeBypassDelta + ". default: 0. opens float recording screen")
+                        "current: " + computeCheatConfig().cobwebRangeBypassDelta + ". default: 0. opens float recording screen"),
+                getConfigCheckboxWidget(
+                        "debug mode",
+                        config.isDebugModeEnabled,
+                        is -> config.isDebugModeEnabled = is,
+                        "")
         ));
     }
 

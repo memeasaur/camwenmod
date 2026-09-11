@@ -1,4 +1,3 @@
->make debug cheat message that tells me when margin bypass is getting cheat hits
 >maybe rage cheats operate off of the base level as deltas
 >make external gui for player waypoints
 >parkour macro recorder

@@ -49,6 +49,8 @@ public class Config {
 
     public boolean isAttackSuppressionEnabled = false;
 
+    public boolean isDebugModeEnabled = false;
+
     public void saveConfig() {
         serializeJsonBlocking("config", this);
     }
