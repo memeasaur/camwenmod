@@ -403,36 +403,39 @@ public class UntitledClient implements ClientModInitializer {
         // TODO -> async?
         // TODO -> handle two coordinates. which would require a beacon or something
         // TODO -> handle dimensions?
-//        TODO; // I need to handle the prefix containing numbers
-        StringBuilder prefixBuilder = new StringBuilder();
-        ArrayList<Integer> locationBuilder = new ArrayList<>();
-        StringBuilder coordinateBuilder = new StringBuilder();
-        for (char c : message.toCharArray()) {
-            if (Character.isDigit(c)) {
-                coordinateBuilder.append(c);
-                continue;
-            }
-
-//            TODO; // support x, y, z differently
-            // TODO -> support decimals
-            if (!coordinateBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
-                locationBuilder.add(Integer.parseInt(coordinateBuilder.toString()));
-                coordinateBuilder.setLength(0);
-                if (locationBuilder.size() == 3) {
+        // TODO -> support decimals
+        // TODO -> once I find one, iterate until I reach the beginning of the message
+        // which could contain other ones, which turns this into a leetCode problem
+        ArrayList<Integer> numbers = new ArrayList<>();
+        StringBuilder numberBuilder = new StringBuilder();
+        for (int i = message.length() - 1; i >= 0; --i) {
+            char c = message.charAt(i);
+            if (!numberBuilder.isEmpty() && Set.of(' ', '.', ',', 'x', 'y', 'z', ':').contains(c)) {
+                // TODO -> handle x, y, z differently
+//                while (c == 'x' && !numbers.isEmpty()) {
+//                    numbers.removeFirst();
+//                }
+//                while (c == 'y' && numbers.size() > 1) {
+//                    numbers.removeFirst();
+//                }
+//                while (c == 'z' && numbers.size() > 2) {
+//                    numbers.removeFirst();
+//                }
+                numbers.add(Integer.parseInt(numberBuilder.toString()));
+                numberBuilder.setLength(0);
+                if (numbers.size() == 3) {
                     tempWaypoints.add(new TempWaypoint(
-                            prefixBuilder.toString(),
-                            new Vec3(locationBuilder.get(0), locationBuilder.get(1), locationBuilder.get(2))));
+                            message.subSequence(0, i).toString(),
+                            new Vec3(numbers.get(0), numbers.get(1), numbers.get(2))));
                     SCHEDULED_EXECUTOR_SERVICE.schedule(
                             () -> Minecraft.getInstance().execute(tempWaypoints::removeFirst), // TODO -> this bad
                             15,
                             TimeUnit.SECONDS);
-                    prefixBuilder.setLength(0);
-                    locationBuilder.clear();
+//                    MINECRAFT_CLIENT_INSTANCE.player.sendSystemMessage(Component.literal(prefixBuilder.toString()));
+//                    MINECRAFT_CLIENT_INSTANCE.player.sendSystemMessage(Component.literal(numbers.toString()));
+                    return; // TODO
                 }
-                continue;
             }
-
-            prefixBuilder.append(c);
         }
     }
 
