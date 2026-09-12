@@ -15,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "hasEffect", cancellable = true)
     private void onHasStatusEffect(
             Holder<MobEffect> effect, CallbackInfoReturnable<Boolean> cir) {
@@ -24,4 +24,10 @@ public class LivingEntityMixin {
             cir.cancel();
         }
     }
+//    @Shadow
+//    public abstract void swing(InteractionHand hand);
+//    @Unique
+//    public void swingWithoutPacket(InteractionHand hand) {
+//        this.swing(hand);
+//    }
 }
