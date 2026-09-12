@@ -71,6 +71,7 @@ public abstract class MinecraftClientMixin {
                         !(entityHitResult.getEntity() instanceof Player enemy) ||
                         enemy.hurtTime > 0)) {
             cir.setReturnValue(false);
+            TODO; // use livingEntity's swing instead
             Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).swing(InteractionHand.MAIN_HAND);
             // TODO -> this isn't running side effects
 //            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&

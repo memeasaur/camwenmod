@@ -54,9 +54,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     double onCauseExtraKnockbackConstant(double value, Entity entity) {
         // TODO -> check if ethylene is enabled and if I'm taking bad knockback, and return 1.0 for this if I'm not to ethylene harder
         // also, this being raised would technically slow down my ethylene if I don't address this
-//        if (config.isCheatsEnabled && entity instanceof Player) {
-//            return computeCheatConfig().attackVelocityBypass;
-//        }
+        if (config.isCheatsEnabled && entity instanceof Player) {
+            return computeCheatConfig().attackVelocityBypass;
+        }
         return value;
     }
 

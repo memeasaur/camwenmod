@@ -59,7 +59,7 @@ public class Constants {
 
     private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().setTargetingMarginBypass(number.floatValue()));
     private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
-//    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
+    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
     private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
 
     // TODO -> let mod keybinds be changed here, too
@@ -110,10 +110,10 @@ public class Constants {
 //                        computeCheatConfig().isSneakyReachEnabled,
 //                        is -> computeCheatConfig().isSneakyReachEnabled = is,
 //                        ""),
-//                getConfigButtonWidget(
-//                        "change attack self velocity multiplier",
-//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
-//                        "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+                getConfigButtonWidget(
+                        "change attack self velocity multiplier",
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
+                        "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
                 getConfigCheckboxWidget(
                         "nameplate iron colored leather swap",
                         config.isNameplateIronLeatherSwapped,
