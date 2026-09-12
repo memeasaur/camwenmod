@@ -6,6 +6,7 @@
 >parkour macro recorder
 >depth strider fix
 
+>ability to automatically party create and invite all teammates
 >ethylene
     >I could try cancelling the slowdown from attacking for ethylene hits, but 98% sure it will just flag the piss out of grim
     >make ethylene change the fov still
