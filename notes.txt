@@ -5,11 +5,11 @@
 >make external gui for player waypoints
 >parkour macro recorder
 >depth strider fix
+
 >ethylene
     >I could try cancelling the slowdown from attacking for ethylene hits, but 98% sure it will just flag the piss out of grim
     >make ethylene change the fov still
-
->(ethylen) suppresses hits that would slow?
+    >suppress hits that would slow?
 >can probably get away with more reach when both targets are moving
 >w tapper: button that lets go of sprint, but only if it needs to be reset
     >make s tap just cancel sprint instead of stopping all movement
