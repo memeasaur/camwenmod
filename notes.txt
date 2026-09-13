@@ -7,6 +7,9 @@
 >depth strider fix
 >reach value that only works when I'm moving
     >maybe one that only works when both parties are moving?
+>slinky:
+    >fast accel
+    >no jump delay
 
 >ability to automatically party create and invite all teammates
 >ethylene
