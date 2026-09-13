@@ -13,6 +13,8 @@ public class CheatConfig {
     public double cobwebRangeBypassDelta = .5f;
 
     public float computeTargetingMarginBypass(boolean isMoving) {
-        return (isMoving ? Math.max(movingTargetMarginBypass, staticTargetingMarginBypass) : staticTargetingMarginBypass) + rageCheatLevel.TargetingMarginBypassDelta;
+        float one = isTargetingMarginReverted ? .1f : 0.f;
+        float two = isMoving ? Math.max(movingTargetMarginBypass, staticTargetingMarginBypass) : staticTargetingMarginBypass;
+        return one + two + rageCheatLevel.TargetingMarginBypassDelta;
     }
 }
