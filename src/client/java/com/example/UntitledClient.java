@@ -5,6 +5,7 @@ import com.example.Configs.Config;
 import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -12,6 +13,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -19,10 +21,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.*;
 
+import javax.swing.*;
 import java.lang.Math;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -289,6 +293,12 @@ public class UntitledClient implements ClientModInitializer {
                 _,
                 _) -> onIncomingMessage(message.getString()));
         ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
+
+        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+            if (client.player instanceof LocalPlayer player) {
+                checkAndJump(player, client);
+            }
+        });
     }
 
     private Vector2i calculateScreenCoords(Vec3 worldPos) {
@@ -469,31 +479,29 @@ public class UntitledClient implements ClientModInitializer {
         );
     }
 
-    TODO; // gl
-    public boolean autoParkourEnabled = true;
-    public boolean autoSprintEnabled = false;
+    // TODO -> this should simulate where the player is gonna be in the next tick so it can be at the last possible moment
     public double minDepth = 0.5;
     public double edgeDistance = 0.001;
-    public boolean jumpWhileSneaking = false;
-    public int minimumJumpCooldown = 10;
-    private void checkAndJump(ClientPlayerEntity player, MinecraftClient client) {
-        Vec3d velocity = player.getVelocity();
-        Vec3d horizontalVec = new Vec3d(velocity.x, 0, velocity.z);
-        if (horizontalVec.lengthSquared() < 0.00001) return;
 
-        Vec3d direction = horizontalVec.normalize();
-        Vec3d offset = direction.multiply(ModConfig.INSTANCE.edgeDistance);
+    private void checkAndJump(LocalPlayer player, Minecraft client) {
+        Vec3 velocity = player.getDeltaMovement();
+        Vec3 horizontalVec = new Vec3(velocity.x, 0, velocity.z);
+        if (horizontalVec.lengthSqr() < 0.00001) {
+            return;
+        }
 
-        Vec3d totalOffset = new Vec3d(velocity.x, 0, velocity.z).add(offset);
+        Vec3 direction = horizontalVec.normalize();
+        Vec3 offset = direction.multiply(edgeDistance, edgeDistance, edgeDistance);
+        Vec3 totalOffset = new Vec3(velocity.x, 0, velocity.z).add(offset);
 
-        Box currentBox = player.getBoundingBox();
-        Box aheadBox = currentBox.offset(totalOffset.x, 0, totalOffset.z);
-        // Check for collisions below the predicted box, stretching down to the minimum depth
-        Box dropBox = aheadBox.offset(0, -0.05, 0).stretch(0, -ModConfig.INSTANCE.minDepth, 0);
+        AABB currentBox = player.getBoundingBox();
+        AABB aheadBox = currentBox.move(totalOffset.x, 0, totalOffset.z);
+        AABB dropBox = aheadBox.move(0, -0.05, 0)
+                .expandTowards(0, -minDepth, 0);
 
-        if (client.world != null && !client.world.getBlockCollisions(player, dropBox).iterator().hasNext()) {
-            player.jump();
-            jumpCooldown = ModConfig.INSTANCE.minimumJumpCooldown;
+        if (client.level instanceof ClientLevel level &&
+                !level.getBlockCollisions(player, dropBox).iterator().hasNext()) {
+            player.jumpFromGround();
         }
     }
 }
