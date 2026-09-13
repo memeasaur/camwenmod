@@ -3,19 +3,18 @@ package com.example.Configs;
 import static com.example.UntitledClient.rageCheatLevel;
 
 public class CheatConfig {
-//    public boolean isAutomaticWTapping = true; // TODO -> impl?
     public boolean isEthylene = false;
-    private float targetingMarginBypass = .0f;
-    public float targetingMarginWidthBypass = 0.f;
-//    public boolean isSneakyReachEnabled = false;
+    private float staticTargetingMarginBypass = .0f;
+    public float movingTargetMarginBypass = 0.f;
+//    public float targetingMarginWidthBypass = 0.f;
     public double attackVelocityBypass = 0.6;
     public boolean isAutoCobweb = false; // TODO -> struct?
     public double cobwebRangeBypassDelta = .5f;
 
-    public void setTargetingMarginBypass(float value) {
-        this.targetingMarginBypass = value;
+    public void setStaticTargetingMarginBypass(float value) {
+        this.staticTargetingMarginBypass = value;
     }
-    public float getTargetingMarginBypass() {
-        return this.targetingMarginBypass + rageCheatLevel.TargetingMarginBypassDelta;
+    public float getStaticTargetingMarginBypass() {
+        return this.staticTargetingMarginBypass + rageCheatLevel.TargetingMarginBypassDelta;
     }
 }

@@ -60,15 +60,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return value;
     }
 
-    @Inject(
-            at = @At(value = "RETURN"),
-            method = "entityInteractionRange",
-            cancellable = true)
-    void onEntityInteractionRange(CallbackInfoReturnable<Double> cir) {
-        if (config.isCheatsEnabled) {
-            cir.setReturnValue(cir.getReturnValue() - computeCheatConfig().targetingMarginWidthBypass);
-        }
-    }
+//    @Inject(
+//            at = @At(value = "RETURN"),
+//            method = "entityInteractionRange",
+//            cancellable = true)
+//    void onEntityInteractionRange(CallbackInfoReturnable<Double> cir) {
+//        if (config.isCheatsEnabled) {
+//            cir.setReturnValue(cir.getReturnValue());
+//        }
+//    }
 
     @Inject(
             at = @At(value = "RETURN"),
