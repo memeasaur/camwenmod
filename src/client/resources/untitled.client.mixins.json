@@ -13,7 +13,6 @@
     "MinecraftClientMixin",
     "PlayerEntityRendererMixin",
     "SoundManagerMixin",
-    "StatusEffectFogModifierMixin"
   ],
   "injectors": {
     "defaultRequire": 1

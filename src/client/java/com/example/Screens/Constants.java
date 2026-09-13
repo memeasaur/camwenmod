@@ -185,6 +185,11 @@ public class Constants {
                         "debug mode",
                         config.isDebugModeEnabled,
                         is -> config.isDebugModeEnabled = is,
+                        ""),
+                getConfigCheckboxWidget(
+                        "parkour cheat",
+                        config.isParkourCheatEnabled,
+                        is -> config.isParkourCheatEnabled = is,
                         "")
         ));
     }

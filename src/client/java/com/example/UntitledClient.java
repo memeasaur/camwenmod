@@ -87,6 +87,7 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping
             DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
             INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
+//    public static final KeyMapping JUMP_CHEAT_HOLD = getAbstractPvpUtilsKeybind("Jump cheat (Hold)");
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
     public static boolean
@@ -484,6 +485,12 @@ public class UntitledClient implements ClientModInitializer {
     public double edgeDistance = 0.001;
 
     private void checkAndJump(LocalPlayer player, Minecraft client) {
+        if (!config.isParkourCheatEnabled) {
+            return;
+        }
+        if (!player.onGround()) {
+            return;
+        }
         Vec3 velocity = player.getDeltaMovement();
         Vec3 horizontalVec = new Vec3(velocity.x, 0, velocity.z);
         if (horizontalVec.lengthSqr() < 0.00001) {
@@ -499,8 +506,7 @@ public class UntitledClient implements ClientModInitializer {
         AABB dropBox = aheadBox.move(0, -0.05, 0)
                 .expandTowards(0, -minDepth, 0);
 
-        if (client.level instanceof ClientLevel level &&
-                !level.getBlockCollisions(player, dropBox).iterator().hasNext()) {
+        if (client.level instanceof ClientLevel level && !level.getBlockCollisions(player, dropBox).iterator().hasNext()) {
             player.jumpFromGround();
         }
     }
