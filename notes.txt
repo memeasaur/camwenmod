@@ -4,7 +4,6 @@
 
 >make external gui for player waypoints
 >parkour macro recorder
->depth strider fix
 >reach value that only works when I'm moving
     >maybe one that only works when both parties are moving?
 >slinky:
