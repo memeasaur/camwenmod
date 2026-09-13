@@ -35,8 +35,7 @@ import java.util.function.BiFunction;
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
-import static com.example.Utils.getAbstractPvpUtilsKeybind;
-import static com.example.Utils.getDeserializedJsonBlocking;
+import static com.example.Utils.*;
 
 public class UntitledClient implements ClientModInitializer {
     static public Config config = getDeserializedJsonBlocking("config", Config.class) instanceof Config foo
@@ -299,6 +298,13 @@ public class UntitledClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
             if (client.player instanceof LocalPlayer player) {
                 checkAndJump(player, client);
+            }
+        });
+        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+            if (client.player instanceof LocalPlayer player) {
+                if (getIsKeyBindingPressed(JUMP_VANILLA) && player.onGround()) {
+                    player.jumpFromGround();
+                }
             }
         });
     }
