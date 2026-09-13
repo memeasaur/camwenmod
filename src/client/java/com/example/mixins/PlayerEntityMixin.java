@@ -4,9 +4,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
@@ -50,15 +48,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     // TODO -> this is fickle, but every solution seems like it's gonna be fickle
     // requiring this to be signed off on when updating would be nice
-    @ModifyConstant(method = "causeExtraKnockback", constant = @Constant(doubleValue = 0.6))
-    double onCauseExtraKnockbackConstant(double value, Entity entity) {
-        // TODO -> check if ethylene is enabled and if I'm taking bad knockback, and return 1.0 for this if I'm not to ethylene harder
-        // also, this being raised would technically slow down my ethylene if I don't address this
-        if (config.isCheatsEnabled && entity instanceof Player) {
-            return computeCheatConfig().attackVelocityBypass;
-        }
-        return value;
-    }
+//    @ModifyConstant(method = "causeExtraKnockback", constant = @Constant(doubleValue = 0.6))
+//    double onCauseExtraKnockbackConstant(double value, Entity entity) {
+//        // TODO -> check if ethylene is enabled and if I'm taking bad knockback, and return 1.0 for this if I'm not to ethylene harder
+//        // also, this being raised would technically slow down my ethylene if I don't address this
+//        if (config.isCheatsEnabled && entity instanceof Player) {
+//            return computeCheatConfig().attackVelocityBypass;
+//        }
+//        return value;
+//    }
 
 //    @Inject(
 //            at = @At(value = "RETURN"),
