@@ -57,9 +57,10 @@ public class Constants {
                 .build();
     }
 
-    private static final Screen TARGETING_MARGIN_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().setStaticTargetingMarginBypass(number.floatValue()));
-//    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
-    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
+    private static final Screen TARGETING_MARGIN_BYPASS_STATIC_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().staticTargetingMarginBypass = number.floatValue());
+    private static final Screen TARGETING_MARGIN_BYPASS_MOVING_RECORDER = getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
+    //    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
+//    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
     private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
 
     // TODO -> let mod keybinds be changed here, too
@@ -87,10 +88,19 @@ public class Constants {
                         computeCheatConfig().isEthylene,
                         is -> computeCheatConfig().isEthylene = is,
                         "shotbow lol"),
+                getConfigCheckboxWidget(
+                        "targeting margin revert",
+                        computeCheatConfig().isTargetingMarginReverted,
+                        is -> computeCheatConfig().isTargetingMarginReverted = is,
+                        "will flag hard on pre-1.12 or whatever it is that made the hitboxes smaller"),
                 getConfigButtonWidget(
-                        "current: " + computeCheatConfig().getStaticTargetingMarginBypass() + ".change targeting margin",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_RECORDER),
-                        "current: " + computeCheatConfig().getStaticTargetingMarginBypass() + ". opens float recording screen. default mc is 0, pre-1.14 or whatever is .1. anything higher is just safe aura, gl"),
+                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_STATIC_RECORDER),
+                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
+                getConfigButtonWidget(
+                        "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_MOVING_RECORDER),
+                        "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
 //                getConfigButtonWidget(
 //                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_WIDTH_BYPASS_RECORDER),
@@ -110,10 +120,10 @@ public class Constants {
 //                        computeCheatConfig().isSneakyReachEnabled,
 //                        is -> computeCheatConfig().isSneakyReachEnabled = is,
 //                        ""),
-                getConfigButtonWidget(
-                        "change attack self velocity multiplier",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
-                        "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
+//                getConfigButtonWidget(
+//                        "change attack self velocity multiplier",
+//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
+//                        "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
                 getConfigCheckboxWidget(
                         "nameplate iron colored leather swap",
                         config.isNameplateIronLeatherSwapped,
@@ -201,8 +211,7 @@ public class Constants {
         for (Player each : nearbyPlayers) {
             if (each == MINECRAFT_CLIENT_INSTANCE.player) {
                 nearbyTeammates++;
-            }
-            else if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
+            } else if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
                     (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
                 nearbyTeammates++;
             }
