@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.computeCheatConfig;
 
@@ -16,7 +17,8 @@ public class EntityMixin {
     @Inject(method = "getPickRadius", at = @At("HEAD"), cancellable = true)
     private void onGetTargetingMargin(final CallbackInfoReturnable<Float> cir) {
         if ((Object) this instanceof Player && config.isCheatsEnabled) {
-            cir.setReturnValue(computeCheatConfig().getStaticTargetingMarginBypass());
+            boolean isMoving = MINECRAFT_CLIENT_INSTANCE.player.input.getMoveVector().lengthSquared() > 0.f;
+            cir.setReturnValue(computeCheatConfig().computeTargetingMarginBypass(isMoving));
         }
     }
 
