@@ -172,11 +172,11 @@ public class Constants {
                         config.isAttackSuppressionEnabled,
                         is -> config.isAttackSuppressionEnabled = is,
                         ""),
-                getConfigCheckboxWidget(
-                        "auto cobweb",
-                        computeCheatConfig().isAutoCobweb,
-                        is -> computeCheatConfig().isAutoCobweb = is,
-                        "automatically places a web if you're holding right-click. Works more/less consistently depending on cobweb reach setting"),
+//                getConfigCheckboxWidget(
+//                        "auto cobweb",
+//                        computeCheatConfig().isAutoCobweb,
+//                        is -> computeCheatConfig().isAutoCobweb = is,
+//                        "automatically places a web if you're holding right-click. Works more/less consistently depending on cobweb reach setting"),
                 getConfigButtonWidget(
                         "change cobweb range bypass delta",
                         () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(COBWEB_BYPASS_DELTA_RECORDER),

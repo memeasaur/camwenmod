@@ -44,6 +44,7 @@ public abstract class MinecraftClientMixin {
             }
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity) {
+                TODO; // wrong
                 float targetingMarginBypass = computeCheatConfig().getStaticTargetingMarginBypass();
                 RAGE_CHEAT_LEVEL rageCheatLevel1 = rageCheatLevel;
                 computeCheatConfig().setStaticTargetingMarginBypass(0.f);

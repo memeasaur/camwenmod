@@ -8,7 +8,7 @@ public class CheatConfig {
     public float movingTargetMarginBypass = 0.f;
 //    public float targetingMarginWidthBypass = 0.f;
     public double attackVelocityBypass = 0.6;
-    public boolean isAutoCobweb = false; // TODO -> struct?
+//    public boolean isAutoCobweb = false; // TODO -> struct?
     public double cobwebRangeBypassDelta = .5f;
 
     public void setStaticTargetingMarginBypass(float value) {
