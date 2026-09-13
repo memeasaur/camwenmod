@@ -8,13 +8,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-@Mixin(Enchantment.class)
-public class EnchantmentMixin {
-    @Inject(method = "matchingSlot", at = @At("HEAD"), cancellable = true)
-    void onSlotMatches(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
-//        TODO; // gl
-        if (true && slot == EquipmentSlot.LEGS) { // TODO config.isDepthStriderReverted
-            cir.setReturnValue(true);
-        }
-    }
-}
+//@Mixin(Enchantment.class)
+//public class EnchantmentMixin {
+//    @Inject(method = "matchingSlot", at = @At("HEAD"), cancellable = true)
+//    void onSlotMatches(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir) {
+////        TODO; // gl
+//        if (true && slot == EquipmentSlot.LEGS) { // TODO config.isDepthStriderReverted
+//            cir.setReturnValue(true);
+//        }
+//    }
+//}

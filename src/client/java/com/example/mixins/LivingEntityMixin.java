@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
 import static com.example.UntitledClient.*;
 
 import net.minecraft.core.Holder;
@@ -24,10 +23,34 @@ public abstract class LivingEntityMixin {
             cir.cancel();
         }
     }
-//    @Shadow
-//    public abstract void swing(InteractionHand hand);
-//    @Unique
-//    public void swingWithoutPacket(InteractionHand hand) {
-//        this.swing(hand);
+
+    // TODO
+//    @Inject(at = @At(value = "HEAD"), method = "getAttributeValue", cancellable = true)
+//    private void onGetAttributeValue(
+//            Holder<Attribute> attribute, CallbackInfoReturnable<Double> cir) {
+//        if (attribute.value() != Attributes.WATER_MOVEMENT_EFFICIENCY) {
+//            return;
+//        }
+//        if (!(MINECRAFT_CLIENT_INSTANCE.level instanceof ClientLevel level)) {
+//            return;
+//        }
+//        if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)) {
+//            return;
+//        }
+//
+//        Holder<Enchantment> depthStrider = level.registryAccess()
+//                .lookupOrThrow(Registries.ENCHANTMENT)
+//                .getOrThrow(Enchantments.DEPTH_STRIDER);
+//        int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(
+//                depthStrider,
+//                player);
+//        var foo = Objects.requireNonNull(depthStrider.value().effects().get(EnchantmentEffectComponents.ATTRIBUTES))
+//                .stream()
+//                .filter(each -> each.attribute().value() == Attributes.WATER_MOVEMENT_EFFICIENCY)
+//                .mapToDouble(effect -> effect.amount().calculate(depthStriderLevel))
+//                .findFirst()
+//                .orElse(0.0);
+//        cir.setReturnValue(foo);
 //    }
+
 }

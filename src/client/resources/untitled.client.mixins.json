@@ -12,7 +12,7 @@
     "KeyboardMixin",
     "MinecraftClientMixin",
     "PlayerEntityRendererMixin",
-    "SoundManagerMixin",
+    "SoundManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -21,7 +21,6 @@
     "AbstractBlockRenderContextMixin",
     "ClientPacketListenerMixin",
     "ClientPlayerEntityInvoker",
-    "EnchantmentMixin",
     "EntityInvoker",
     "EntityMixin",
     "LevelRendererMixin",
