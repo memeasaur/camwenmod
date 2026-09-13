@@ -15,6 +15,7 @@ public class CheatConfig {
     public float computeTargetingMarginBypass(boolean isMoving) {
         float one = isTargetingMarginReverted ? .1f : 0.f;
         float two = isMoving ? Math.max(movingTargetMarginBypass, staticTargetingMarginBypass) : staticTargetingMarginBypass;
-        return one + two + rageCheatLevel.TargetingMarginBypassDelta;
+        float three = isMoving ? Math.max(rageCheatLevel.movingTargetingMarginBypass, rageCheatLevel.staticTargetingMarginBypass) : rageCheatLevel.staticTargetingMarginBypass;
+        return one + two + three;
     }
 }

@@ -26,7 +26,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.*;
 
-import javax.swing.*;
 import java.lang.Math;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -118,15 +117,18 @@ public class UntitledClient implements ClientModInitializer {
             });
 
     public enum RAGE_CHEAT_LEVEL {
-        ZERO(0.f),
-        ONE(0.0005f),
-        TWO(0.001f),
-        THREE(.0015f);
+        ZERO(0.f, 0.f),
+        ONE(0.0005f, .005f),
+        TWO(0.001f, .005f),
+        THREE(.0015f, .005f);
 
-        public final float TargetingMarginBypassDelta;
+        public final float staticTargetingMarginBypass;
+        public final float movingTargetingMarginBypass;
 
-        RAGE_CHEAT_LEVEL(float targetingMarginBypass) {
-            TargetingMarginBypassDelta = targetingMarginBypass;
+        RAGE_CHEAT_LEVEL(
+                float staticTargetingMarginBypass, float movingTargetingMarginBypass) {
+            this.staticTargetingMarginBypass = staticTargetingMarginBypass;
+            this.movingTargetingMarginBypass = movingTargetingMarginBypass;
         }
     }
 

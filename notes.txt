@@ -1,6 +1,4 @@
 >I've never had flags while moving w/ .005
->super safe should be a multiplier on increments of .0005 from 0 to .0015
->should separate the .1 multiplier to just being a checkbox for revert
 
 >make external gui for player waypointsj
 >parkour macro recorder
