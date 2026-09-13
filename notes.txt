@@ -1,6 +1,7 @@
 >seems like .0005 can't flag reach
 >seems like .001 can't flag hitboxes?
 >.001 didn't flag reach 2x
+>.002 seems to flag rarely
 
 >make external gui for player waypoints
 >parkour macro recorder
