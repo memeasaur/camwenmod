@@ -300,13 +300,14 @@ public class UntitledClient implements ClientModInitializer {
                 checkAndJump(player, client);
             }
         });
-        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            if (client.player instanceof LocalPlayer player) {
-                if (getIsKeyBindingPressed(JUMP_VANILLA) && player.onGround()) {
-                    player.jumpFromGround();
-                }
-            }
-        });
+        // TODO -> there's probably no use for this that won't flag speed
+//        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+//            if (client.player instanceof LocalPlayer player) {
+//                if (getIsKeyBindingPressed(JUMP_VANILLA) && player.onGround()) {
+//                    player.jumpFromGround();
+//                }
+//            }
+//        });
     }
 
     private Vector2i calculateScreenCoords(Vec3 worldPos) {

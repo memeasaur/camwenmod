@@ -4,9 +4,8 @@
 
 >make external gui for player waypointsj
 >parkour macro recorder
->slinky:
-    >fast accel
 
+>slinky: >fast accel (this probably flags speed)
 >margin bypass: maybe one that only works when both parties are moving?
 >ability to automatically party create and invite all teammates
 >ethylene
