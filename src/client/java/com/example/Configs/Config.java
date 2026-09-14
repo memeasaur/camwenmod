@@ -52,6 +52,8 @@ public class Config {
     public boolean isDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
 
+    public boolean isTeammatesSwingSuppressionEnabled = false;
+
     public void saveConfig() {
         serializeJsonBlocking("config", this);
     }

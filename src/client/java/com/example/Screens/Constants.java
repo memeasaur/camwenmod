@@ -200,6 +200,11 @@ public class Constants {
                         "parkour cheat",
                         config.isParkourCheatEnabled,
                         is -> config.isParkourCheatEnabled = is,
+                        ""),
+                getConfigCheckboxWidget(
+                        "suppress teammate swings",
+                        config.isTeammatesSwingSuppressionEnabled,
+                        is -> config.isTeammatesSwingSuppressionEnabled = is,
                         "")
         ));
     }

@@ -1,6 +1,6 @@
 package com.example.mixins;
 
-import net.minecraft.world.InteractionHand;
+import com.example.Configs.Config;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,8 +22,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
 
 import java.util.Objects;
-import java.util.Random;
-
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
@@ -63,9 +61,15 @@ public abstract class MinecraftClientMixin {
                 rageCheatLevel = rageCheatLevel1;
             }
         }
-        if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity target) {
-            if (entityHitResult.getEntity() instanceof Player) {
-                onPvpDamage();
+        if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
+                entityHitResult.getEntity() instanceof LivingEntity target &&
+                target instanceof Player playerTarget) {
+            onPvpDamage();
+            if (config.isTeammatesSwingSuppressionEnabled &&
+                    config.nameplateUuids.get(playerTarget.getUUID()) instanceof Config.NameplateTeam team &&
+                    team == Config.NameplateTeam.FRIENDLY) {
+                cir.setReturnValue(false);
+                return;
             }
         }
         // TODO -> I could keep a counter for the random boolean passes that get bypass by the hurtTime being 0
