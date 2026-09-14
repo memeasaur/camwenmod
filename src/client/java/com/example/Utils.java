@@ -74,12 +74,11 @@ public class Utils {
         if (config.isMovementTogglePvpDisabling) {
             doMovementToggleDisable();
         }
+        config.isPlayerWaypointsEnabled = false;
 
-        // Cheats start
         if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
             onXrayChange("");
         }
-        // Cheats end
     }
 
     public static <T> void serializeJsonBlocking(String fileNamePrefix, T jsonCompliantObject) {
