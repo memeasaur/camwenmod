@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.example.UntitledClient.FULLBRIGHT_HOLD;
 import static com.example.UntitledClient.config;
 
 import net.minecraft.client.renderer.GameRenderer;
@@ -19,7 +18,7 @@ public class GameRendererMixin {
             cancellable = true)
     private static void onGetNightVisionStrength(
             LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
-        if (config.isFullbrightEnabled || FULLBRIGHT_HOLD.isDown()) {
+        if (config.isFullbrightEnabled) {
             cir.setReturnValue(1.0f);
             cir.cancel();
         }

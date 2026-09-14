@@ -18,7 +18,7 @@ public abstract class LivingEntityMixin {
     @Inject(at = @At(value = "HEAD"), method = "hasEffect", cancellable = true)
     private void onHasStatusEffect(
             Holder<MobEffect> effect, CallbackInfoReturnable<Boolean> cir) {
-        if (effect == MobEffects.NIGHT_VISION && (config.isFullbrightEnabled || FULLBRIGHT_HOLD.isDown())) {
+        if (effect == MobEffects.NIGHT_VISION && config.isFullbrightEnabled) {
             cir.setReturnValue(true);
             cir.cancel();
         }

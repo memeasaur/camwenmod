@@ -50,39 +50,39 @@ public class UntitledClient implements ClientModInitializer {
     // java has a websocket I can use for this apparently
     //        TODO; // task for sending the http payloads of all the shared info
     //        TODO; // register task for drawing waypoints of far away players
-    public static final KeyMapping // TODO -> idk why it crashes when I move these
-            SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
-            SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
-            SNEAK_DISABLE = getAbstractPvpUtilsKeybind("Sneak (Disable)");
-    public static final KeyMapping
-            SPRINT_TOGGLE = getAbstractPvpUtilsKeybind("Sprint (Toggle)"),
-            SPRINT_ENABLE = getAbstractPvpUtilsKeybind("Sprint (Enable)"),
-            SPRINT_DISABLE = getAbstractPvpUtilsKeybind("Sprint (Disable)");
+//    public static final KeyMapping // TODO -> idk why it crashes when I move these
+//            SNEAK_TOGGLE = getAbstractPvpUtilsKeybind("Sneak (Toggle)"),
+//            SNEAK_ENABLE = getAbstractPvpUtilsKeybind("Sneak (Enable)"),
+//            SNEAK_DISABLE = getAbstractPvpUtilsKeybind("Sneak (Disable)");
+//    public static final KeyMapping
+//            SPRINT_TOGGLE = getAbstractPvpUtilsKeybind("Sprint (Toggle)"),
+//            SPRINT_ENABLE = getAbstractPvpUtilsKeybind("Sprint (Enable)"),
+//            SPRINT_DISABLE = getAbstractPvpUtilsKeybind("Sprint (Disable)");
     public static final KeyMapping
             MOVEMENT_TOGGLE = getAbstractPvpUtilsKeybind("Movement (Toggle)"),
             MOVEMENT_ENABLE = getAbstractPvpUtilsKeybind("Movement (Enable)"),
             MOVEMENT_DISABLE = getAbstractPvpUtilsKeybind("Movement (Disable)");
-    public static final KeyMapping
-            FULLBRIGHT_TOGGLE = getAbstractPvpUtilsKeybind("Fullbright (Toggle)"),
-            FULLBRIGHT_ENABLE = getAbstractPvpUtilsKeybind("Fullbright (Enable)"),
-            FULLBRIGHT_DISABLE = getAbstractPvpUtilsKeybind("Fullbright (Disable)");
-    public static final KeyMapping
-            FULLBRIGHT_HOLD = getAbstractPvpUtilsKeybind("Fullbright (Hold)");
+//    public static final KeyMapping
+//            FULLBRIGHT_TOGGLE = getAbstractPvpUtilsKeybind("Fullbright (Toggle)"),
+//            FULLBRIGHT_ENABLE = getAbstractPvpUtilsKeybind("Fullbright (Enable)"),
+//            FULLBRIGHT_DISABLE = getAbstractPvpUtilsKeybind("Fullbright (Disable)");
+//    public static final KeyMapping
+//            FULLBRIGHT_HOLD = getAbstractPvpUtilsKeybind("Fullbright (Hold)");
     public static final KeyMapping
             ALLY_TOGGLE = getAbstractPvpUtilsKeybind("Ally (Toggle)"),
             FRIENDLY_TOGGLE = getAbstractPvpUtilsKeybind("Friendly (Toggle)");
     //            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
 //            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
+//    public static final KeyMapping
+//            HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
+//            HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
     public static final KeyMapping
-            HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
-            HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
-    public static final KeyMapping
-            PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
-            PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)"),
+//            PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
+//            PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)"),
             PLAYER_WAYPOINTS_DISABLE = getAbstractPvpUtilsKeybind("Player waypoints (Disable)");
     public static final KeyMapping
-            PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)"),
-            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
+            PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
+//            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
     public static final KeyMapping
             DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
             INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
@@ -273,7 +273,7 @@ public class UntitledClient implements ClientModInitializer {
                             // TODO -> make it centered on the waypoint
                             drawText(x, each.title, y, context);
                         }
-                        if (!config.isPlayerWaypointsEnabled && !PLAYER_WAYPOINTS_HOLD.isDown()) {
+                        if (!config.isPlayerWaypointsEnabled) {
                             return;
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {

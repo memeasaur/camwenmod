@@ -29,8 +29,8 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean // TODO -> remove these
-            isSneakToggleButtonPressed = false,
-            isFullbrightToggleButtonPressed = false,
+//            isSneakToggleButtonPressed = false,
+//            isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
 
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
@@ -68,48 +68,48 @@ public class KeyboardMixin {
             doMovementToggleDisable();
 
 
-        if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
-            if (!isSneakToggleButtonPressed)
-                config.isSneakEnabled = !config.isSneakEnabled;
-            while (SNEAK_TOGGLE.consumeClick()) {
-            }
-        } else
-            isSneakToggleButtonPressed = false;
-        if (getIsKeyBindingPressed(SNEAK_ENABLE)) { // TODO these could benefit from the handling above too, but they aren't toggled so w/e
-            config.isSneakEnabled = true;
-            while (SNEAK_ENABLE.consumeClick()) {
-            }
-        }
-        if (getIsKeyBindingPressed(SNEAK_DISABLE)) {
-            config.isSneakEnabled = false;
-            while (SNEAK_DISABLE.consumeClick()) {
-            }
-        }
+//        if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
+//            if (!isSneakToggleButtonPressed)
+//                config.isSneakEnabled = !config.isSneakEnabled;
+//            while (SNEAK_TOGGLE.consumeClick()) {
+//            }
+//        } else
+//            isSneakToggleButtonPressed = false;
+//        if (getIsKeyBindingPressed(SNEAK_ENABLE)) { // TODO these could benefit from the handling above too, but they aren't toggled so w/e
+//            config.isSneakEnabled = true;
+//            while (SNEAK_ENABLE.consumeClick()) {
+//            }
+//        }
+//        if (getIsKeyBindingPressed(SNEAK_DISABLE)) {
+//            config.isSneakEnabled = false;
+//            while (SNEAK_DISABLE.consumeClick()) {
+//            }
+//        }
 
-        while (SPRINT_TOGGLE.consumeClick())
-            config.isSprintEnabled = !config.isSprintEnabled;
-        while (SPRINT_ENABLE.consumeClick())
-            config.isSprintEnabled = true;
-        while (SPRINT_DISABLE.consumeClick())
-            config.isSprintEnabled = false;
-
-        if (getIsKeyBindingPressed(FULLBRIGHT_TOGGLE)) {
-            if (!isFullbrightToggleButtonPressed)
-                config.isFullbrightEnabled = !config.isFullbrightEnabled;
-            while (FULLBRIGHT_TOGGLE.consumeClick()) {
-            }
-        } else
-            isFullbrightToggleButtonPressed = false;
-        if (getIsKeyBindingPressed(FULLBRIGHT_ENABLE)) { // TODO: see -> sneak handling meme
-            config.isFullbrightEnabled = true;
-            while (FULLBRIGHT_ENABLE.consumeClick()) {
-            }
-        }
-        if (getIsKeyBindingPressed(FULLBRIGHT_DISABLE)) {
-            config.isFullbrightEnabled = false;
-            while (FULLBRIGHT_DISABLE.consumeClick()) {
-            }
-        }
+//        while (SPRINT_TOGGLE.consumeClick())
+//            config.isSprintEnabled = !config.isSprintEnabled;
+//        while (SPRINT_ENABLE.consumeClick())
+//            config.isSprintEnabled = true;
+//        while (SPRINT_DISABLE.consumeClick())
+//            config.isSprintEnabled = false;
+//
+//        if (getIsKeyBindingPressed(FULLBRIGHT_TOGGLE)) {
+//            if (!isFullbrightToggleButtonPressed)
+//                config.isFullbrightEnabled = !config.isFullbrightEnabled;
+//            while (FULLBRIGHT_TOGGLE.consumeClick()) {
+//            }
+//        } else
+//            isFullbrightToggleButtonPressed = false;
+//        if (getIsKeyBindingPressed(FULLBRIGHT_ENABLE)) { // TODO: see -> sneak handling meme
+//            config.isFullbrightEnabled = true;
+//            while (FULLBRIGHT_ENABLE.consumeClick()) {
+//            }
+//        }
+//        if (getIsKeyBindingPressed(FULLBRIGHT_DISABLE)) {
+//            config.isFullbrightEnabled = false;
+//            while (FULLBRIGHT_DISABLE.consumeClick()) {
+//            }
+//        }
 
         while (FRIENDLY_TOGGLE.consumeClick()) {
             onAbstractNameplateToggle(Config.NameplateTeam.FRIENDLY);
@@ -122,16 +122,16 @@ public class KeyboardMixin {
             MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
         }
 
-        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
-            config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
-        }
+//        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
+//            config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
+//        }
         while (PLAYER_WAYPOINTS_DISABLE.consumeClick()) {
             config.isPlayerWaypointsEnabled = false;
         }
 
-        while (BLOCK_XRAY_TOGGLE.consumeClick()) {
-            onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");
-        }
+//        while (BLOCK_XRAY_TOGGLE.consumeClick()) {
+//            onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");
+//        }
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
             onXrayChange(Objects.equals(currentXrayType, "player") ? "" : "player");
         }

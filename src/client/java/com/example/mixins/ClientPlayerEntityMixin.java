@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.Constants.FLY_BOOST_MULTIPLIER;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.DelayedClientState.*;
 import static com.example.DelayedClientState.BACKWARD_VANILLA;
@@ -15,7 +14,6 @@ import static com.example.DelayedClientState.FORWARD_VANILLA;
 import static com.example.DelayedClientState.JUMP_VANILLA;
 import static com.example.DelayedClientState.LEFT_VANILLA;
 import static com.example.DelayedClientState.RIGHT_VANILLA;
-import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.getIsKeyBindingPressed;
 
@@ -23,8 +21,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -51,27 +47,21 @@ public abstract class ClientPlayerEntityMixin {
             BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
         }
         if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
-            if (config.isFlyBoostEnabled && player.isCreative()) {
-                Abilities abilities = player.getAbilities();
-                if (abilities.flying &&
-                        (SPRINT_VANILLA.isDown() || SPRINT_TOGGLE.isDown() || SPRINT_ENABLE.isDown())) {
-                    abilities.setFlyingSpeed(BASE_FLY_SPEED * FLY_BOOST_MULTIPLIER);
-                    {
-                        if (SNEAK_VANILLA.isDown() || SNEAK_TOGGLE.isDown() || SNEAK_ENABLE.isDown())
-                            player.setOnGroundWithMovement(player.onGround(), player.getKnownMovement().subtract(0, 0.15D * FLY_BOOST_MULTIPLIER, 0));
-                        if (JUMP_VANILLA.isDown())
-                            player.setOnGroundWithMovement(player.onGround(), player.getKnownMovement().add(0, 0.15D * FLY_BOOST_MULTIPLIER, 0));
-                    }
-                } else
-                    abilities.setFlyingSpeed(BASE_FLY_SPEED);
-            } else
-                player.getAbilities().setFlyingSpeed(BASE_FLY_SPEED);
-
-            if (getIsKeyBindingPressed(HEAD_RUN_CAMERA_OFFSET_HOLD)) {
-                Entity camera = MINECRAFT_CLIENT_INSTANCE.getCameraEntity();
-                // TODO -> I think I have to implement my own freelook for this
-                Objects.requireNonNull((EntityInvoker) camera).invokeSetRotation(player.getYRot() - 45.0f, camera.getXRot());
-            }
+//            if (config.isFlyBoostEnabled && player.isCreative()) {
+//                Abilities abilities = player.getAbilities();
+//                if (abilities.flying &&
+//                        (SPRINT_VANILLA.isDown() || SPRINT_TOGGLE.isDown() || SPRINT_ENABLE.isDown())) {
+//                    abilities.setFlyingSpeed(BASE_FLY_SPEED * FLY_BOOST_MULTIPLIER);
+//                    {
+//                        if (SNEAK_VANILLA.isDown() || SNEAK_TOGGLE.isDown() || SNEAK_ENABLE.isDown())
+//                            player.setOnGroundWithMovement(player.onGround(), player.getKnownMovement().subtract(0, 0.15D * FLY_BOOST_MULTIPLIER, 0));
+//                        if (JUMP_VANILLA.isDown())
+//                            player.setOnGroundWithMovement(player.onGround(), player.getKnownMovement().add(0, 0.15D * FLY_BOOST_MULTIPLIER, 0));
+//                    }
+//                } else
+//                    abilities.setFlyingSpeed(BASE_FLY_SPEED);
+//            } else
+//                player.getAbilities().setFlyingSpeed(BASE_FLY_SPEED);
 
 
 //            if (computeCheatConfig().isAutoCobweb) {
