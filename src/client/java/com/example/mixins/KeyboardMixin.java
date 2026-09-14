@@ -125,6 +125,9 @@ public class KeyboardMixin {
         while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
             config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
         }
+        while (PLAYER_WAYPOINTS_DISABLE.consumeClick()) {
+            config.isPlayerWaypointsEnabled = false;
+        }
 
         while (BLOCK_XRAY_TOGGLE.consumeClick()) {
             onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");

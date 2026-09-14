@@ -124,11 +124,11 @@ public class Constants {
 //                        "change attack self velocity multiplier",
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(ATTACK_VELOCITY_BYPASS_RECORDER),
 //                        "current: " + computeCheatConfig().attackVelocityBypass + ". opens float recording screen. default mc is 0.6. beware of this setting if the mod has been updated and I haven't re-checked it's mixin"),
-                getConfigCheckboxWidget(
-                        "nameplate iron colored leather swap",
-                        config.isNameplateIronLeatherSwapped,
-                        is -> config.isNameplateIronLeatherSwapped = is,
-                        ""),
+//                getConfigCheckboxWidget(
+//                        "nameplate iron colored leather swap",
+//                        config.isNameplateIronLeatherSwapped,
+//                        is -> config.isNameplateIronLeatherSwapped = is,
+//                        ""),
                 getConfigButtonWidget(
                         "reset ally nameplates",
                         () -> {
@@ -177,11 +177,11 @@ public class Constants {
                             config.saveConfig();
                         },
                         ""),
-                getConfigCheckboxWidget(
-                        "missed attack suppression",
-                        config.isAttackSuppressionEnabled,
-                        is -> config.isAttackSuppressionEnabled = is,
-                        ""),
+//                getConfigCheckboxWidget(
+//                        "missed attack suppression",
+//                        config.isAttackSuppressionEnabled,
+//                        is -> config.isAttackSuppressionEnabled = is,
+//                        ""),
 //                getConfigCheckboxWidget(
 //                        "auto cobweb",
 //                        computeCheatConfig().isAutoCobweb,

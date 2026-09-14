@@ -25,13 +25,13 @@ public class Config {
     public boolean isSprintEnabled = false;
     public boolean isFullbrightEnabled = false;
     public boolean isFlyBoostEnabled = false;
-    public String currentPotionEnchantmentGlintType = "";
+//    public String currentPotionEnchantmentGlintType = "";
     //    public boolean isSharpnessParticleReverted = false;
 //    public boolean isCritParticleReverted = false;
     public boolean isWeakAttackSoundDisabled = false;
     public boolean isDamageTakenValueNotificationEnabled = false;
-    public boolean isDepthStriderReverted = true; // TODO ?
-    public boolean isNameplateIronLeatherSwapped = true;
+//    public boolean isDepthStriderReverted = true; // TODO ?
+//    public boolean isNameplateIronLeatherSwapped = true;
 
     public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
@@ -47,7 +47,7 @@ public class Config {
     public boolean isPlayerLoginMessagingEnabled = false;
     public boolean isCheatsEnabled = true;
 
-    public boolean isAttackSuppressionEnabled = false;
+//    public boolean isAttackSuppressionEnabled = false;
 
     public boolean isDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
