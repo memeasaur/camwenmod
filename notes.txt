@@ -1,7 +1,9 @@
 >I've never had flags while moving w/ .005
 
->make external gui for player waypointsj
+>make external gui for player waypoints and config
 >parkour macro recorder
+>make player waypoints go away on pvp
+    >make player waypoints disable keybind
 
 >slinky: >fast accel (this probably flags speed)
 >margin bypass: maybe one that only works when both parties are moving?
