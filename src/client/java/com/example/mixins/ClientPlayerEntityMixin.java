@@ -46,7 +46,7 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
             BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
         }
-        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
+//        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
 //                Abilities abilities = player.getAbilities();
 //                if (abilities.flying &&
@@ -67,7 +67,7 @@ public abstract class ClientPlayerEntityMixin {
 //            if (computeCheatConfig().isAutoCobweb) {
 //                onAutoCobwebTick(player);
 //            }
-        }
+//        }
     }
 
     @Inject(method = "handlePortalTransitionEffect", at = @At("RETURN"))

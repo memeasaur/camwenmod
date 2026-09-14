@@ -44,11 +44,12 @@ public class KeyboardMixin {
                     && getIsKeyBindingPressed(LEFT_VANILLA) == isLeftEnabled
                     && getIsKeyBindingPressed(RIGHT_VANILLA) == isRightEnabled
                     && getIsKeyBindingPressed(BACKWARD_VANILLA) == isBackwardEnabled) {
-                if (!isMovementToggleMirrorSequencePressed)
+                if (!isMovementToggleMirrorSequencePressed) {
                     doMovementToggleDisable();
-            } else
+                }
+            } else {
                 isMovementToggleMirrorSequencePressed = false;
-
+            }
         }
         while (MOVEMENT_TOGGLE.consumeClick()) { // TODO -> I should probably just use if if possible
             if (isJumpEnabled
