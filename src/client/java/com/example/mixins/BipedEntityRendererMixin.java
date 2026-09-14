@@ -17,36 +17,36 @@ import static com.example.Utils.buildReplacementTeamLeatherItemStack;
 
 @Mixin(HumanoidMobRenderer.class)
 public class BipedEntityRendererMixin {
-    @Inject(at = @At(value = "RETURN"), method = "extractHumanoidRenderState")
-    private static void onUpdateBipedRenderState(
-            LivingEntity entity,
-            HumanoidRenderState state,
-            float tickDelta,
-            ItemModelResolver itemModelResolver,
-            CallbackInfo ci) {
-        if (!config.isNameplateIronLeatherSwapped) {
-            return;
-        }
-
-        if (config.nameplateUuids.get(entity.getUUID()) instanceof Config.NameplateTeam team) {
-            // TODO -> only do this if it's a default iron piece
-            int color = team.color.getValue();
-            if (state.headEquipment.is(Items.IRON_HELMET)) {
-                state.headEquipment = buildReplacementTeamLeatherItemStack(
-                        state.headEquipment, Items.LEATHER_HELMET, color);
-            }
-            if (state.chestEquipment.is(Items.IRON_CHESTPLATE)) {
-                state.chestEquipment = buildReplacementTeamLeatherItemStack(
-                        state.chestEquipment, Items.LEATHER_CHESTPLATE, color);
-            }
-            if (state.legsEquipment.is(Items.IRON_LEGGINGS)) {
-                state.legsEquipment = buildReplacementTeamLeatherItemStack(
-                        state.legsEquipment, Items.LEATHER_LEGGINGS, color);
-            }
-            if (state.feetEquipment.is(Items.IRON_BOOTS)) {
-                state.feetEquipment = buildReplacementTeamLeatherItemStack(
-                        state.feetEquipment, Items.LEATHER_BOOTS, color);
-            }
-        }
-    }
+//    @Inject(at = @At(value = "RETURN"), method = "extractHumanoidRenderState")
+//    private static void onUpdateBipedRenderState(
+//            LivingEntity entity,
+//            HumanoidRenderState state,
+//            float tickDelta,
+//            ItemModelResolver itemModelResolver,
+//            CallbackInfo ci) {
+//        if (!config.isNameplateIronLeatherSwapped) {
+//            return;
+//        }
+//
+//        if (config.nameplateUuids.get(entity.getUUID()) instanceof Config.NameplateTeam team) {
+//            // TODO -> only do this if it's a default iron piece
+//            int color = team.color.getValue();
+//            if (state.headEquipment.is(Items.IRON_HELMET)) {
+//                state.headEquipment = buildReplacementTeamLeatherItemStack(
+//                        state.headEquipment, Items.LEATHER_HELMET, color);
+//            }
+//            if (state.chestEquipment.is(Items.IRON_CHESTPLATE)) {
+//                state.chestEquipment = buildReplacementTeamLeatherItemStack(
+//                        state.chestEquipment, Items.LEATHER_CHESTPLATE, color);
+//            }
+//            if (state.legsEquipment.is(Items.IRON_LEGGINGS)) {
+//                state.legsEquipment = buildReplacementTeamLeatherItemStack(
+//                        state.legsEquipment, Items.LEATHER_LEGGINGS, color);
+//            }
+//            if (state.feetEquipment.is(Items.IRON_BOOTS)) {
+//                state.feetEquipment = buildReplacementTeamLeatherItemStack(
+//                        state.feetEquipment, Items.LEATHER_BOOTS, color);
+//            }
+//        }
+//    }
 }

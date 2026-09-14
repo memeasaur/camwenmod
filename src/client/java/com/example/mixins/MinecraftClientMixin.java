@@ -69,20 +69,20 @@ public abstract class MinecraftClientMixin {
             }
         }
         // TODO -> I could keep a counter for the random boolean passes that get bypass by the hurtTime being 0
-        if (config.isAttackSuppressionEnabled &&
-                new Random().nextBoolean() && // TODO ?
-                (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult) ||
-                        !(entityHitResult.getEntity() instanceof Player enemy) ||
-                        enemy.hurtTime > 0)) {
-            cir.setReturnValue(false);
-            Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).swing(InteractionHand.MAIN_HAND, false);
-            // TODO -> this isn't running side effects?
-//            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-//                    entityHitResult.getEntity() instanceof LivingEntity entity) {
-//                MINECRAFT_CLIENT_INSTANCE.player.magicCrit(entity);
-//            }
-            return;
-        }
+//        if (config.isAttackSuppressionEnabled &&
+//                new Random().nextBoolean() && // TODO ?
+//                (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult) ||
+//                        !(entityHitResult.getEntity() instanceof Player enemy) ||
+//                        enemy.hurtTime > 0)) {
+//            cir.setReturnValue(false);
+//            Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).swing(InteractionHand.MAIN_HAND, false);
+//            // TODO -> this isn't running side effects?
+////            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
+////                    entityHitResult.getEntity() instanceof LivingEntity entity) {
+////                MINECRAFT_CLIENT_INSTANCE.player.magicCrit(entity);
+////            }
+//            return;
+//        }
     }
 
 //    @Inject(at = @At(value = "RETURN"), method = "startAttack")
