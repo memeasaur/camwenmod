@@ -90,6 +90,8 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
     public static boolean
+            isSprintEnabled,
+            isSneakEnabled,
             isJumpEnabled,
             isForwardEnabled,
             isLeftEnabled,

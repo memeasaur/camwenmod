@@ -26,6 +26,5 @@
     "LevelRendererMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "PotionItemMixin"
   ]
 }
