@@ -8,6 +8,10 @@
 >parkour macro recorder
 
 >slinky: >fast accel (this probably flags speed)
+    >knockback displace?
+    >no item release?
+    >no use delay?
+    >timer?
 >margin bypass: maybe one that only works when both parties are moving?
 >ability to automatically party create and invite all teammates
 >ethylene
