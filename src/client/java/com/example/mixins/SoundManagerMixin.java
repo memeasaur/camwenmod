@@ -19,6 +19,9 @@ public class SoundManagerMixin {
         if (config.isWeakAttackSoundDisabled && instance.getIdentifier().equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.location())) {
             cir.cancel();
         }
+        if (config.isWeakAttackSoundDisabled && instance.getIdentifier().equals(SoundEvents.PLAYER_ATTACK_WEAK.location())) {
+            cir.cancel();
+        }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof ClientPlayerEntity player &&
 //                player.fishHook != null &&
 //                player.getMainHandStack().isOf(Items.FISHING_ROD) &&
