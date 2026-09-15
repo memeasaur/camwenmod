@@ -7,38 +7,18 @@
     >and it only does it if my sprint needs to be reset
 >parkour macro recorder
 >disable view bobbing screen shake option, but only do it in first person (26.2)
+>put something on the enemy players to show where I should be aiming at for most reach
+>put the teammate armor changer type thing on the external gui
 
+>make xray get rid of grass, too
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
     >no item release?
     >no use delay?
-    >timer?
+    >timer? faster client tick rate?
 >margin bypass: maybe one that only works when both parties are moving?
->ability to automatically party create and invite all teammates
->can probably get away with more reach when both targets are moving
->on-screen indicator for player waypoints being on
-    >play sound when new player waypoint is seen
->TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
-    >TODO -> swap the thing I'm changing it to back to the original thing?
->put something on the enemy players to show where I should be aiming at for most reach
->use glow instead of waypoints on nearby players?
->use glow instead of leather armor? config both
->don't show waypoints unless they're clamped
->hold right click and it maxes dps with the bow (blatant)
-    >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
->impl sliders +or text fields
->360 degree fov keybind?
->add option for hitting ground in adventure mode
+>add ground hitting in adventure mode
 
->make ethylene hits not sprint (blatant)
->I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
->automatic w tap? (blatant?)
->lightning strike waypoints
->make toggle keybind for disabling xray and waypoints
->faster tick-rate (blatant)
->public anonymous supabase account that sends locations but doesn't receive them
->rally that places an on-screen waypoint
-    >should work for drops, too
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health
@@ -57,42 +37,11 @@
         >uses your healing data for the values
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
-
+    >league style pings
 >impl last-seen waypoints w/ timers
-
->automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
->always move at head-run speed? (blatant)
-    >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
->option for ignoring attacks that would hit teammates
->player waypoints detect mineZ particles?
-    >just do waypoints on particles?
+>always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
     >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
->sneaky reach
-    >just gonna do this lazily at first, and just check the neutral angle on misses
-    >every hit within 3 blocks being valid vs actually finding a valid hit, as in cases where a neutral angle isn't possible
->make the auto cobweb work without me holding right click so I can try it on my own as well
 >fake inventory that you can view while running
->swings go through friends (blatant, "piercing")
-
->speech to text chat typer?
->league style pings
->keybind for disabling players blocking your view
-
->sound indicator for crossbow and bow fully charged
 >xray turns blocks into glass instead of cancelling their render (?) toggle
-
 >enable -> chat collects all strings -> disable -> see all the valid names
-
->figure out the message matching thing. or just make it a click like it probably always should've been
-    >these custom particles and sounds should apply for other players on your screen too -> it should be configurable whether the sound plays for just you or for just enemies or both (soft cheating ?), + if server allows it
-    >make miss and weak attack sounds configurable
-    >ability to toggle all nameplate on this page, rather than just the entire collection
-    >off-hand automatically becomes main hand meme. if allowed (?). -> tools without right-click can be used in off-hand by right-clicking, and weapons can be used in off-hand if enabled
-        >do this for swords too, since it isn't cheating the cooldown
-        >serialize nameplate changes/state locally + in-server + save sodium settings etc. in server
-        >recommended mods
-    >can see other mod users' nameplate changes; probably only their allies/enemies
-    >1.7 enchantment glint
-    >1.7 potion enchantment glint option
-	>v-clipping
