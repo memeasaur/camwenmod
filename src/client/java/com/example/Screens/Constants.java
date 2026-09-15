@@ -55,7 +55,7 @@ public class Constants {
     private static final Screen TARGETING_MARGIN_BYPASS_MOVING_RECORDER = getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
     //    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
 //    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
-    private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
+//    private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
 
     // TODO -> let mod keybinds be changed here, too
     // TODO -> do the other movement toggles here, too
@@ -181,10 +181,10 @@ public class Constants {
 //                        computeCheatConfig().isAutoCobweb,
 //                        is -> computeCheatConfig().isAutoCobweb = is,
 //                        "automatically places a web if you're holding right-click. Works more/less consistently depending on cobweb reach setting"),
-                getConfigButtonWidget(
-                        "change cobweb range bypass delta",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(COBWEB_BYPASS_DELTA_RECORDER),
-                        "current: " + computeCheatConfig().cobwebRangeBypassDelta + ". default: 0. opens float recording screen"),
+//                getConfigButtonWidget(
+//                        "change cobweb range bypass delta",
+//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(COBWEB_BYPASS_DELTA_RECORDER),
+//                        "current: " + computeCheatConfig().cobwebRangeBypassDelta + ". default: 0. opens float recording screen"),
                 getConfigCheckboxWidget(
                         "debug mode",
                         config.isDebugModeEnabled,
