@@ -158,11 +158,11 @@ public class Constants {
 //                            player.connection.sendChat("I have " + potionCount + " health potions");
 //                        },
 //                        ""),
-                getConfigButtonWidget(
-                        "nearby allies/enemies: " + calculateNearbyPlayerCountString(),
-                        () -> {
-                        },
-                        ""),
+//                getConfigButtonWidget(
+//                        "nearby allies/enemies: " + calculateNearbyPlayerCountString(),
+//                        () -> {
+//                        },
+//                        ""),
                 getConfigButtonWidget(
                         "current player waypoint category: " + config.playerWaypointCategory.name(),
                         () -> {
@@ -203,18 +203,18 @@ public class Constants {
         ));
     }
 
-    // TODO -> inline?
-    private static String calculateNearbyPlayerCountString() {
-        int nearbyTeammates = 0;
-        List<AbstractClientPlayer> nearbyPlayers = Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players();
-        for (Player each : nearbyPlayers) {
-            if (each == MINECRAFT_CLIENT_INSTANCE.player) {
-                nearbyTeammates++;
-            } else if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
-                    (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
-                nearbyTeammates++;
-            }
-        }
-        return nearbyTeammates + "/" + (nearbyPlayers.size() - nearbyTeammates);
-    }
+//    // TODO -> inline?
+//    private static String calculateNearbyPlayerCountString() {
+//        int nearbyTeammates = 0;
+//        List<AbstractClientPlayer> nearbyPlayers = Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players();
+//        for (Player each : nearbyPlayers) {
+//            if (each == MINECRAFT_CLIENT_INSTANCE.player) {
+//                nearbyTeammates++;
+//            } else if (config.nameplateUuids.get(each.getUUID()) instanceof Config.NameplateTeam team &&
+//                    (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
+//                nearbyTeammates++;
+//            }
+//        }
+//        return nearbyTeammates + "/" + (nearbyPlayers.size() - nearbyTeammates);
+//    }
 }
