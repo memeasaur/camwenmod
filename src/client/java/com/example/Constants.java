@@ -8,5 +8,4 @@ public class Constants {
     public static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
     public static final Gson GSON = new Gson();
     public static final Minecraft MINECRAFT_CLIENT_INSTANCE = Minecraft.getInstance();
-    public static final byte FLY_BOOST_MULTIPLIER = 4;
 }

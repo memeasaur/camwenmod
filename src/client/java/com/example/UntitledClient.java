@@ -33,7 +33,6 @@ import java.util.function.BiFunction;
 
 import static com.example.Constants.*;
 import static com.example.DelayedClientState.*;
-import static com.example.DelayedPlayerState.BASE_FLY_SPEED;
 import static com.example.Utils.*;
 
 public class UntitledClient implements ClientModInitializer {
@@ -224,12 +223,13 @@ public class UntitledClient implements ClientModInitializer {
                                         flyingBuilder.append("Descending");
                                         flyingFlag = true;
                                     }
-                                    if (!flyingFlag)
+                                    if (!flyingFlag) {
                                         flyingBuilder.append("Flying");
-                                    if (player.getAbilities().getFlyingSpeed() != BASE_FLY_SPEED)
-                                        flyingBuilder.append(" (")
-                                                .append(player.getAbilities().getFlyingSpeed() / BASE_FLY_SPEED)
-                                                .append("x boost)");
+                                    }
+//                                    if (player.getAbilities().getFlyingSpeed() != BASE_FLY_SPEED)
+//                                        flyingBuilder.append(" (")
+//                                                .append(player.getAbilities().getFlyingSpeed() / BASE_FLY_SPEED)
+//                                                .append("x boost)");
                                     stringBuilder.append(flyingBuilder);
 
                                     flag = true;
