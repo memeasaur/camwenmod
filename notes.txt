@@ -1,11 +1,12 @@
 >make external gui for player waypoints and config
 >re-add double tap to 26.2?
+>make autorun it's own mod
+>make xray it's own mod
 
 >make s tap just cancel sprint instead of stopping all movement
     >and it only does it if my sprint needs to be reset
 >parkour macro recorder
->make autorun it's own mod
->make xray it's own mod
+>disable view bobbing screen shake option, but only do it in first person
 
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
@@ -21,7 +22,6 @@
 >can probably get away with more reach when both targets are moving
 >on-screen indicator for player waypoints being on
     >play sound when new player waypoint is seen
->freeCam
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
 >put something on the enemy players to show where I should be aiming at for most reach
@@ -34,8 +34,6 @@
 >360 degree fov keybind?
 >add option for hitting ground in adventure mode
 
->disable view bobbing screen shake
-    >but only in first person
 >make ethylene hits not sprint (blatant)
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >automatic w tap? (blatant?)
@@ -64,7 +62,6 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
 
->could give depth strider 3 without actually having it (blatant)
 >impl last-seen waypoints w/ timers
 
 >automatic mz kill w/ toggle keybind (mzkilling might not get rid of effigy)
@@ -78,88 +75,28 @@
 >sneaky reach
     >just gonna do this lazily at first, and just check the neutral angle on misses
     >every hit within 3 blocks being valid vs actually finding a valid hit, as in cases where a neutral angle isn't possible
->remove cursor shake from view bobbing if present?
->automatic grapple? (blatant)
-    >instead do this with the autoclicker and checking for each click
->hit delta tracker
 >make the auto cobweb work without me holding right click so I can try it on my own as well
->let me sprint while blind? (blatant)
->allow to place cobwebs through player hitbox (blatant)
 >fake inventory that you can view while running
->trajectories/enderPearl aimbot bow aimbot etc
->swings go through friends (blatant)
->automatic head run (blatant, hold a button and it head runs for you while it's held)
+>swings go through friends (blatant, "piercing")
 
 >speech to text chat typer?
 >league style pings
 >keybind for disabling players blocking your view
 
->different keybind for opening and closing door
->pretty sure it's currently spawning double particles on server hit
->safe w tap release button/block etc.
 >sound indicator for crossbow and bow fully charged
->something along the lines of a.) only playing player hit sounds that you get on other players b.) a different hit sound etc.
->make block breaking progress continue while using item
->sprinting removes toggle sneak option + double tap w removes toggle sneak option
->ability to block hit without letting go of right click? type meme
 >xray turns blocks into glass instead of cancelling their render (?) toggle
->don't cull spawners ever (? or, make all whitelisted xray blocks never cull)
->make ores show up in xray
->cave mode xray
 
 >enable -> chat collects all strings -> disable -> see all the valid names
->repeated chat message nameplate changer uses don't work, it needs another message (?)
->make search any player functionality in nameplate changer gui
->make search bar in nameplate changer gui
->rally chat listener, this being abstract enough to catch everything would be sick
->(?), revert potion particles just being the last potion you consumed
 
 >figure out the message matching thing. or just make it a click like it probably always should've been
-    >gui option for showing when you have a sprint hit queued up
     >these custom particles and sounds should apply for other players on your screen too -> it should be configurable whether the sound plays for just you or for just enemies or both (soft cheating ?), + if server allows it
     >make miss and weak attack sounds configurable
     >ability to toggle all nameplate on this page, rather than just the entire collection
-    >option for showing all key-presses in toggleSneak gui
     >off-hand automatically becomes main hand meme. if allowed (?). -> tools without right-click can be used in off-hand by right-clicking, and weapons can be used in off-hand if enabled
         >do this for swords too, since it isn't cheating the cooldown
         >serialize nameplate changes/state locally + in-server + save sodium settings etc. in server
         >recommended mods
-    >console screen for all system messages/logs
-    >fall damage calculator
     >can see other mod users' nameplate changes; probably only their allies/enemies
-    >allow raw 1.7 packs to be used in current version
     >1.7 enchantment glint
     >1.7 potion enchantment glint option
-
->Private version
-    >xray creative or op meme
->Base version
-    >clear lava, toggleable + if allowed meme
-    >cheat console in external window
-    >esp/tracers in external window
-    >radar in external window, + if allowed meme
->soft cheat version
-    >make 1.9 hits cancel when you're hitting someone with immunity
-    >allow sneaking and swimming upwards in water
-    >allow toggleSprint to stop your sprint without letting go of W
-    >togglable ability to spam click and have it not go through unless attack cooldown high enough
-	>hit tracker/potion tracker in external gui
->hard cheat version
-    >option for chase hits to never be kb hits, only if it's undetectable though
-    >elytra helper -> perfect angles etc.
-    >swing while eating etc. + if allowed meme
-    >dropping food eats faster revert
-    >swimming hitbox revert + if allowed meme
-    >follow + if allowed meme
-    >crawl button (?)
-    >autorun inventory check removal
-    >ability to have misses be ignored if attack cooldown
-    >remove client-side cooldown thing
-	>splash simulation warning
-	>blink
-	>snowshoe
-	>bhop-ing (?)
 	>v-clipping
-
-    >sneaking is always sprint-sneaking
-    >splash potions on interactable items automatic crouch

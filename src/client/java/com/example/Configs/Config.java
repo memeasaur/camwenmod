@@ -24,7 +24,6 @@ public class Config {
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
     public boolean isFullbrightEnabled = false;
-    public boolean isFlyBoostEnabled = false;
 //    public String currentPotionEnchantmentGlintType = "";
     //    public boolean isSharpnessParticleReverted = false;
 //    public boolean isCritParticleReverted = false;
@@ -36,7 +35,6 @@ public class Config {
     public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
     public boolean isGuiCheatsPvpDisabling = false;
-//    public boolean isDarknessDisabled = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
     public enum PlayerWaypointCategory {
@@ -47,11 +45,10 @@ public class Config {
     public boolean isPlayerLoginMessagingEnabled = false;
     public boolean isCheatsEnabled = true;
 
-//    public boolean isAttackSuppressionEnabled = false;
-
     public boolean isDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
 
+    // TODO -> make this a percentage so that logs aren't so blatant
     public boolean isTeammatesSwingSuppressionEnabled = false;
 
     public void saveConfig() {
