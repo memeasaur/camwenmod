@@ -42,7 +42,7 @@ public class Config {
         ENEMIES
     }
     public PlayerWaypointCategory playerWaypointCategory = PlayerWaypointCategory.ALL;
-    public boolean isPlayerLoginMessagingEnabled = false;
+//    public boolean isPlayerLoginMessagingEnabled = false;
     public boolean isCheatsEnabled = true;
 
     public boolean isDebugModeEnabled = false;
