@@ -35,7 +35,7 @@
 
 >make autorun it's own mod
 >disable view bobbing screen shake
-    >but only in first person?
+    >but only in first person
 >make ethylene hits not sprint (blatant)
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >automatic w tap? (blatant?)
