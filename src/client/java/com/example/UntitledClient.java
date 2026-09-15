@@ -62,7 +62,7 @@ public class UntitledClient implements ClientModInitializer {
             MOVEMENT_TOGGLE = getAbstractPvpUtilsKeybind("Movement (Toggle)"),
             MOVEMENT_ENABLE = getAbstractPvpUtilsKeybind("Movement (Enable)"),
             MOVEMENT_DISABLE = getAbstractPvpUtilsKeybind("Movement (Disable)");
-//    public static final KeyMapping
+    //    public static final KeyMapping
 //            FULLBRIGHT_TOGGLE = getAbstractPvpUtilsKeybind("Fullbright (Toggle)"),
 //            FULLBRIGHT_ENABLE = getAbstractPvpUtilsKeybind("Fullbright (Enable)"),
 //            FULLBRIGHT_DISABLE = getAbstractPvpUtilsKeybind("Fullbright (Disable)");
@@ -82,7 +82,7 @@ public class UntitledClient implements ClientModInitializer {
             PLAYER_WAYPOINTS_DISABLE = getAbstractPvpUtilsKeybind("Player waypoints (Disable)");
     public static final KeyMapping
             PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
-//            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
+    //            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
 //    public static final KeyMapping
 //            DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
 //            INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
@@ -280,6 +280,11 @@ public class UntitledClient implements ClientModInitializer {
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {
                             // TODO -> I think I'd have to raycast each of these if I wanted the visible players to not have them
                             if (player == MINECRAFT_CLIENT_INSTANCE.player) { // !(player instanceof AbstractClientPlayer clientPlayerEntity) ||
+                                continue;
+                            }
+                            if (config.playerWaypointCategory == Config.PlayerWaypointCategory.ENEMIES &&
+                                    config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team &&
+                                    (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) {
                                 continue;
                             }
                             drawPlayerWaypoint(
