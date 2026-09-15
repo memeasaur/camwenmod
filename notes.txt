@@ -4,6 +4,8 @@
 >make s tap just cancel sprint instead of stopping all movement
     >and it only does it if my sprint needs to be reset
 >parkour macro recorder
+>make autorun it's own mod
+>make xray it's own mod
 
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
@@ -20,7 +22,6 @@
 >on-screen indicator for player waypoints being on
     >play sound when new player waypoint is seen
 >freeCam
->implement freelook and do the automatic head-run thing
 >TODO -> make the armor piece texture change thing switchable for diamond vs iron etc.
     >TODO -> swap the thing I'm changing it to back to the original thing?
 >put something on the enemy players to show where I should be aiming at for most reach
@@ -30,10 +31,9 @@
 >hold right click and it maxes dps with the bow (blatant)
     >I could do this and have it not be detectible by having the bow shoot and release each be right click press, and just locking it out from being shot when it isn't red
 >impl sliders +or text fields
->360 degree fov keybind
+>360 degree fov keybind?
 >add option for hitting ground in adventure mode
 
->make autorun it's own mod
 >disable view bobbing screen shake
     >but only in first person
 >make ethylene hits not sprint (blatant)
