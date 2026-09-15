@@ -32,9 +32,9 @@ public class Config {
 //    public boolean isDepthStriderReverted = true; // TODO ?
 //    public boolean isNameplateIronLeatherSwapped = true;
 
-    public boolean isMovementTogglePvpDisabling = false;
+//    public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
-    public boolean isGuiCheatsPvpDisabling = false;
+//    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public boolean isPlayerWaypointsEnabled = false;
     public enum PlayerWaypointCategory {

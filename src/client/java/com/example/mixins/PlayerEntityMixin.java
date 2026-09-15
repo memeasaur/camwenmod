@@ -1,13 +1,8 @@
 package com.example.mixins;
 
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-
-import static com.example.UntitledClient.config;
-import static com.example.Utils.computeCheatConfig;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,8 +61,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             method = "blockInteractionRange",
             cancellable = true)
     void onBlockInteractionRange(CallbackInfoReturnable<Double> cir) {
-        if (config.isCheatsEnabled && (Object) this instanceof LocalPlayer player && player.getMainHandItem().is(Items.COBWEB)) {
-            cir.setReturnValue(cir.getReturnValue() + computeCheatConfig().cobwebRangeBypassDelta);
-        }
+//        if (config.isCheatsEnabled && (Object) this instanceof LocalPlayer player && player.getMainHandItem().is(Items.COBWEB)) {
+//            cir.setReturnValue(cir.getReturnValue() + computeCheatConfig().cobwebRangeBypassDelta);
+//        }
     }
 }

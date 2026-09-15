@@ -71,14 +71,14 @@ public class Utils {
     }
 
     public static void onPvpDamage() {
-        if (config.isMovementTogglePvpDisabling) {
-            doMovementToggleDisable();
-        }
+//        if (config.isMovementTogglePvpDisabling) {
+//            doMovementToggleDisable();
+//        }
         config.isPlayerWaypointsEnabled = false;
 
-        if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
-            onXrayChange("");
-        }
+//        if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
+//            onXrayChange("");
+//        }
     }
 
     public static <T> void serializeJsonBlocking(String fileNamePrefix, T jsonCompliantObject) {
