@@ -9,16 +9,16 @@
 >disable view bobbing screen shake option, but only do it in first person (26.2)
 >put something on the enemy players to show where I should be aiming at for most reach
 >put the teammate armor changer type thing on the external gui
-
 >make xray get rid of grass, too
+>add ground hitting in adventure mode
+>impl last-seen waypoints w/ timers
+
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
     >no item release?
     >no use delay?
     >timer? faster client tick rate?
 >margin bypass: maybe one that only works when both parties are moving?
->add ground hitting in adventure mode
-
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health
@@ -38,10 +38,6 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
     >league style pings
->impl last-seen waypoints w/ timers
 >always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
->I could ethylene harder if I modified this 60% velocity in specific cases where I'm okay with increased kb
-    >maybe I only bypass the setVelocity thing if I'm not currently taking kb or something
 >fake inventory that you can view while running
 >xray turns blocks into glass instead of cancelling their render (?) toggle
->enable -> chat collects all strings -> disable -> see all the valid names
