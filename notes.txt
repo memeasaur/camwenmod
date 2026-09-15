@@ -1,7 +1,6 @@
 >make external gui for player waypoints and config
 >make autorun it's own mod (use chatgpt?)
 >re-add double tap to 26.2?
->disable view bobbing screen shake
 
 >make s tap just cancel sprint instead of stopping all movement
     >and it only does it if my sprint needs to be reset
@@ -35,6 +34,8 @@
 >360 degree fov keybind
 >add option for hitting ground in adventure mode
 
+>disable view bobbing screen shake
+    >but only in first person?
 >make ethylene hits not sprint (blatant)
 >I wonder if holding down sprint-jump space bar can be optimized at all, is it done on the same tick?
 >automatic w tap? (blatant?)
