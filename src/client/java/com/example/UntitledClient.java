@@ -83,9 +83,9 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping
             PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
 //            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
-    public static final KeyMapping
-            DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
-            INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
+//    public static final KeyMapping
+//            DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
+//            INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
     //    public static final KeyMapping JUMP_CHEAT_HOLD = getAbstractPvpUtilsKeybind("Jump cheat (Hold)");
     public static final KeyMapping
             KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
@@ -119,23 +119,22 @@ public class UntitledClient implements ClientModInitializer {
                 // TODO -> put outline around the block edges (?)
             });
 
-    public enum RAGE_CHEAT_LEVEL {
-        ZERO(0.f, 0.f),
-        ONE(0.0005f, .005f),
-        TWO(0.001f, .005f),
-        THREE(.0015f, .005f);
-
-        public final float staticTargetingMarginBypass;
-        public final float movingTargetingMarginBypass;
-
-        RAGE_CHEAT_LEVEL(
-                float staticTargetingMarginBypass, float movingTargetingMarginBypass) {
-            this.staticTargetingMarginBypass = staticTargetingMarginBypass;
-            this.movingTargetingMarginBypass = movingTargetingMarginBypass;
-        }
-    }
-
-    public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
+//    public enum RAGE_CHEAT_LEVEL {
+//        ZERO(0.f, 0.f),
+//        ONE(0.0005f, .005f),
+//        TWO(0.001f, .005f),
+//        THREE(.0015f, .005f);
+//
+//        public final float staticTargetingMarginBypass;
+//        public final float movingTargetingMarginBypass;
+//
+//        RAGE_CHEAT_LEVEL(
+//                float staticTargetingMarginBypass, float movingTargetingMarginBypass) {
+//            this.staticTargetingMarginBypass = staticTargetingMarginBypass;
+//            this.movingTargetingMarginBypass = movingTargetingMarginBypass;
+//        }
+//    }
+//    public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
 
     public static CameraRenderState cameraRenderState;
 

@@ -1,7 +1,5 @@
 package com.example.Configs;
 
-import static com.example.UntitledClient.rageCheatLevel;
-
 public class CheatConfig {
     public boolean isEthylene = false;
     public boolean isTargetingMarginReverted = false; // TODO -> struct
@@ -15,7 +13,6 @@ public class CheatConfig {
     public float computeTargetingMarginBypass(boolean isMoving) {
         float one = isTargetingMarginReverted ? .1f : 0.f;
         float two = isMoving ? Math.max(movingTargetMarginBypass, staticTargetingMarginBypass) : staticTargetingMarginBypass;
-        float three = isMoving ? Math.max(rageCheatLevel.movingTargetingMarginBypass, rageCheatLevel.staticTargetingMarginBypass) : rageCheatLevel.staticTargetingMarginBypass;
-        return one + two + three;
+        return one + two;
     }
 }

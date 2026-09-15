@@ -137,20 +137,20 @@ public class KeyboardMixin {
             onXrayChange(Objects.equals(currentXrayType, "player") ? "" : "player");
         }
 
-        while (DECREMENT_CHEATS.consumeClick()) {
-            if (rageCheatLevel.ordinal() == 0) {
-                continue;
-            }
-            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() - 1];
-//            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass;
-        }
-        while (INCREMENT_CHEATS.consumeClick()) {
-            if (rageCheatLevel.ordinal() == RAGE_CHEAT_LEVEL.values().length - 1) {
-                continue;
-            }
-            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() + 1];
-//            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
-        }
+//        while (DECREMENT_CHEATS.consumeClick()) {
+//            if (rageCheatLevel.ordinal() == 0) {
+//                continue;
+//            }
+//            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() - 1];
+////            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass;
+//        }
+//        while (INCREMENT_CHEATS.consumeClick()) {
+//            if (rageCheatLevel.ordinal() == RAGE_CHEAT_LEVEL.values().length - 1) {
+//                continue;
+//            }
+//            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() + 1];
+////            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
+//        }
     }
 
     @Unique
