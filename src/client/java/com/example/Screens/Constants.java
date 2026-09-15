@@ -83,11 +83,11 @@ public class Constants {
                         config.isWeakAttackSoundDisabled,
                         is -> config.isWeakAttackSoundDisabled = is,
                         ""),
-                getConfigCheckboxWidget(
-                        "keep sprint",
-                        computeCheatConfig().isEthylene,
-                        is -> computeCheatConfig().isEthylene = is,
-                        "shotbow lol"),
+//                getConfigCheckboxWidget(
+//                        "keep sprint",
+//                        computeCheatConfig().isEthylene,
+//                        is -> computeCheatConfig().isEthylene = is,
+//                        "shotbow lol"),
                 getConfigCheckboxWidget(
                         "targeting margin revert",
                         computeCheatConfig().isTargetingMarginReverted,
