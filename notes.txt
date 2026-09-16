@@ -13,6 +13,7 @@
 >add ground hitting in adventure mode
 >impl last-seen waypoints w/ timers
 
+>always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
     >no item release?
@@ -38,6 +39,5 @@
         >fall damage
     >shows plo when you aren't in the shotbow party (party waypoints)
     >league style pings
->always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >fake inventory that you can view while running
 >xray turns blocks into glass instead of cancelling their render (?) toggle
