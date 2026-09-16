@@ -2,8 +2,6 @@ package com.example;
 
 import com.example.Configs.CheatConfig;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.FileNotFoundException;
