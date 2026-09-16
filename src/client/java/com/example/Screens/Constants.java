@@ -87,11 +87,11 @@ public class Constants {
                         "will flag hard on pre-1.12 or whatever it is that made the hitboxes smaller"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_STATIC_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_STATIC_RECORDER),
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_MOVING_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(TARGETING_MARGIN_BYPASS_MOVING_RECORDER),
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
 //                getConfigButtonWidget(
 //                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",

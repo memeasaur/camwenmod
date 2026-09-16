@@ -26,7 +26,7 @@ public class Utils {
                     Minecraft threadClientInstance = Minecraft.getInstance();
                     synchronousRunnable.accept(threadClientInstance);
                     threadClientInstance
-                            .execute(() -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(returnScreen));
+                            .execute(() -> MINECRAFT_CLIENT_INSTANCE.setScreen(returnScreen));
                 }).start();
             }
         };
@@ -35,11 +35,13 @@ public class Utils {
     static int getGlfwInputBlocking(Minecraft threadClientInstance, Component title) {
         try {
             int[] resultKey = new int[]{0};
-            while (resultKey[0] == 0 && threadClientInstance.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+            while (resultKey[0] == 0 &&
+                    threadClientInstance.screen instanceof Screen screen &&
+                    screen.getTitle().equals(title)) {
                 CountDownLatch latch = new CountDownLatch(1);
                 threadClientInstance.execute(() -> {
                     for (int key = GLFW.GLFW_KEY_SPACE; key <= GLFW.GLFW_KEY_LAST; key++)
-                        if (GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key) == GLFW.GLFW_PRESS) {
+                        if (GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), key) == GLFW.GLFW_PRESS) {
                             resultKey[0] = key;
                             break;
                         }
@@ -52,8 +54,9 @@ public class Utils {
                     : GLFW.GLFW_KEY_UNKNOWN;
         } catch (Exception e) {
             threadClientInstance.execute(() -> {
-                if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                    player.sendSystemMessage(Component.literal("getglfwinputblocking " + e.getMessage()));
+                if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
+                    player.displayClientMessage(Component.literal("getglfwinputblocking " + e.getMessage()), false);
+                }
             });
             throw new RuntimeException(e);
         }
@@ -64,7 +67,7 @@ public class Utils {
             try {
                 StringBuilder floatBuilder = new StringBuilder();
                 HashSet<Integer> pressedKeys = new HashSet<>();
-                while (client.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+                while (client.screen instanceof Screen screen && screen.getTitle().equals(title)) {
                     CountDownLatch latch = new CountDownLatch(1);
                     int glfwKey = getGlfwInputBlocking(client, title);
                     client.execute(() -> {
@@ -82,7 +85,7 @@ public class Utils {
             } catch (Exception e) {
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                        player.sendSystemMessage(Component.literal("getabstractkeyboardsequencescreen " + e.getMessage()));
+                        player.displayClientMessage(Component.literal("getabstractkeyboardsequencescreen " + e.getMessage()), false);
                 });
             }
         }, returnScreen);
@@ -104,7 +107,7 @@ public class Utils {
         }, (finalFloatString, client) -> {
             if (!finalFloatString.isEmpty() && !finalFloatString.equals(".")) {
                 consumer.accept(Double.parseDouble(finalFloatString));
-                client.execute(() -> client.setScreenAndShow(buildConfig()));
+                client.execute(() -> client.setScreen(buildConfig()));
                 // TODO -> going back to config twice seems odd here
             } else
                 client.execute(() -> {

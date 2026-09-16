@@ -32,7 +32,7 @@ import static com.example.UntitledClient.isBackwardEnabled;
 
 public class Utils {
     public static boolean getIsKeyPressed(int glfwKeybind) {
-        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;
+        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), glfwKeybind) == GLFW.GLFW_PRESS;
     }
 
     public static boolean getIsKeyBindingPressed(KeyMapping keyBinding) {
@@ -40,7 +40,7 @@ public class Utils {
         if (key.getType() == InputConstants.Type.KEYSYM) {
             return getIsKeyPressed(InputConstants.getKey(keyBinding.saveString()).getValue());
         } else if (key.getType() == InputConstants.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), key.getValue()) == GLFW.GLFW_PRESS;
         } else {
             Objects.requireNonNull(null);
             return false;
@@ -86,7 +86,7 @@ public class Utils {
         } catch (IOException e) {
             Minecraft minecraftClient = Minecraft.getInstance();
             if (minecraftClient.player instanceof LocalPlayer player)
-                minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("serialization failed")));
+                minecraftClient.execute(() -> player.displayClientMessage(Component.literal("serialization failed"), false));
         }
     }
 
@@ -97,7 +97,7 @@ public class Utils {
             if (!(e instanceof FileNotFoundException)) {
                 Minecraft minecraftClient = Minecraft.getInstance();
                 if (minecraftClient.player instanceof LocalPlayer player)
-                    minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("deserialization failed: " + e.getMessage())));
+                    minecraftClient.execute(() -> player.displayClientMessage(Component.literal("deserialization failed: " + e.getMessage()), false));
                 // TODO -> console this
             }
             return null;
@@ -170,7 +170,7 @@ public class Utils {
 //        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
                 DataComponents.DYED_COLOR,
-                new DyedItemColor(color)
+                new DyedItemColor(color, false)
         );
         replacementStack.set(
                 DataComponents.ENCHANTMENTS,
