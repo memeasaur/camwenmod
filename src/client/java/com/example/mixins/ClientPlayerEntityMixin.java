@@ -70,14 +70,6 @@ public abstract class ClientPlayerEntityMixin {
 //        }
     }
 
-    @Inject(method = "handlePortalTransitionEffect", at = @At("RETURN"))
-    void onTickNausea(CallbackInfo ci) {
-//        if (config.isDarknessDisabled) {
-//            this.oPortalEffectIntensity = 0.f;
-//            this.portalEffectIntensity = 0.f;
-//        }
-    }
-
 //    @Inject(method = "updateHealth", at = @At("RETURN"))
 //    void onUpdateHealth(float health, CallbackInfo ci) {
 //    }

@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class GameRendererMixin {
     @Inject(
             at = @At(value = "HEAD"),
-            method = "nightVisionScale",
+            method = "getNightVisionScale",
             cancellable = true)
     private static void onGetNightVisionStrength(
             LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {

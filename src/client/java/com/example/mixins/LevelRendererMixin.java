@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "renderLevel", at = @At("HEAD"))
     private void onRender(
             GraphicsResourceAllocator resourceAllocator,
             DeltaTracker deltaTracker,

@@ -61,11 +61,12 @@ public class Utils {
     // TODO -> enum
     public static void onXrayChange(String value) {
         currentXrayType = value;
-        MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
-                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
-                MINECRAFT_CLIENT_INSTANCE.options,
-                MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera(),
-                MINECRAFT_CLIENT_INSTANCE.getBlockColors());
+        MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
+//        MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
+//                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
+//                MINECRAFT_CLIENT_INSTANCE.options,
+//                MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera(),
+//                MINECRAFT_CLIENT_INSTANCE.getBlockColors());
     }
 
     public static void onPvpDamage() {
