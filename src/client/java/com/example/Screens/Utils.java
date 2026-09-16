@@ -109,7 +109,7 @@ public class Utils {
             } else
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                        player.sendOverlayMessage(Component.literal("invalid float")); // TODO -> console
+                        player.displayClientMessage(Component.literal("invalid float"), false); // TODO -> console
                 });
         }, buildConfig());
     }
