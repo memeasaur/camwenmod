@@ -23,7 +23,6 @@ public abstract class CameraMixin {
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
         if (isLeftCameraOffsetActive && this.entity instanceof LocalPlayer player) {
-            //            TODO; // handle jumping
             float leftCameraOffset = -45.0f;
             float rightCameraOffset = 45.0f;
             if (player.input.keyPresses.left()) {

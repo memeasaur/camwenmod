@@ -4,6 +4,7 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>handle jumping in the camera offset thing somehow
 >make s tap just cancel sprint instead of stopping all movement
     >and it only does it if my sprint needs to be reset
 >parkour macro recorder
