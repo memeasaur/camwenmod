@@ -33,6 +33,7 @@ public class KeyboardMixin {
 //            isFullbrightToggleButtonPressed = false,
             isMovementToggleMirrorSequencePressed = false;
 
+    // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
             long handle, int action, KeyEvent event, CallbackInfo ci) {
@@ -138,7 +139,24 @@ public class KeyboardMixin {
         }
 
         while (HEAD_RUN_CAMERA_OFFSET_ENABLE.consumeClick()) {
-            isLeftCameraOffsetActive = true;
+            if (!(MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)) {
+                continue;
+            }
+            if (!player.input.keyPresses.forward()) {
+                continue;
+            }
+            boolean left = player.input.keyPresses.left();
+            if (left == player.input.keyPresses.right()) {
+                continue;
+            }
+            headRunCameraOffset = left ? HEAD_RUN_OFFSET_TYPE.LEFT : HEAD_RUN_OFFSET_TYPE.RIGHT;
+        }
+
+        if (headRunCameraOffset == HEAD_RUN_OFFSET_TYPE.LEFT && !LEFT_VANILLA.isDown()) {
+            headRunCameraOffset = HEAD_RUN_OFFSET_TYPE.NONE;
+        }
+        if (headRunCameraOffset == HEAD_RUN_OFFSET_TYPE.RIGHT && !RIGHT_VANILLA.isDown()) {
+            headRunCameraOffset = HEAD_RUN_OFFSET_TYPE.NONE;
         }
 
 //        while (DECREMENT_CHEATS.consumeClick()) {

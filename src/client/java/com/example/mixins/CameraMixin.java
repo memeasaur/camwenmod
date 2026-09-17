@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.UntitledClient.isLeftCameraOffsetActive;
+import static com.example.UntitledClient.headRunCameraOffset;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
@@ -22,15 +22,9 @@ public abstract class CameraMixin {
 
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
-        if (isLeftCameraOffsetActive && this.entity instanceof LocalPlayer player) {
-            float leftCameraOffset = -45.0f;
-            float rightCameraOffset = 45.0f;
-            if (player.input.keyPresses.left()) {
-                this.setRotation(player.getYRot() + leftCameraOffset, player.getXRot());
-            }
-            if (player.input.keyPresses.right()) {
-                this.setRotation(player.getYRot() + rightCameraOffset, player.getXRot());
-            }
+        if (!(this.entity instanceof LocalPlayer player)) {
+            return;
         }
+        this.setRotation(player.getYRot() + headRunCameraOffset.delta, player.getXRot());
     }
 }

@@ -138,7 +138,18 @@ public class UntitledClient implements ClientModInitializer {
 
     private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
 
-    public static boolean isLeftCameraOffsetActive = false;
+    public enum HEAD_RUN_OFFSET_TYPE {
+        NONE(0.f),
+        LEFT(-45.f),
+        RIGHT(45.f);
+
+        public final float delta;
+
+        HEAD_RUN_OFFSET_TYPE(float delta) {
+            this.delta = delta;
+        }
+    }
+    public static HEAD_RUN_OFFSET_TYPE headRunCameraOffset = HEAD_RUN_OFFSET_TYPE.NONE;
 
     @Override
     public void onInitializeClient() {
