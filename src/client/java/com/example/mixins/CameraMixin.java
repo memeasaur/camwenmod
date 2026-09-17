@@ -1,5 +1,6 @@
 package com.example.mixins;
 
+import com.example.UntitledClient;
 import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +24,9 @@ public abstract class CameraMixin {
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
         if (!(this.entity instanceof LocalPlayer player)) {
+            return;
+        }
+        if (headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.NONE) { // TODO ?
             return;
         }
         this.setRotation(player.getYRot() + headRunCameraOffset.delta, player.getXRot());
