@@ -137,6 +137,10 @@ public class KeyboardMixin {
             onXrayChange(Objects.equals(currentXrayType, "player") ? "" : "player");
         }
 
+        while (HEAD_RUN_CAMERA_OFFSET_ENABLE.consumeClick()) {
+            isLeftCameraOffsetActive = true;
+        }
+
 //        while (DECREMENT_CHEATS.consumeClick()) {
 //            if (rageCheatLevel.ordinal() == 0) {
 //                continue;

@@ -19,12 +19,13 @@
   },
   "mixins": [
     "AbstractBlockRenderContextMixin",
+    "CameraMixin",
     "ClientPacketListenerMixin",
     "ClientPlayerEntityInvoker",
     "EntityInvoker",
     "EntityMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin",
+    "PlayerEntityMixin"
   ]
 }

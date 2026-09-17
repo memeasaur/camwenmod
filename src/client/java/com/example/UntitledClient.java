@@ -72,22 +72,18 @@ public class UntitledClient implements ClientModInitializer {
             FRIENDLY_TOGGLE = getAbstractPvpUtilsKeybind("Friendly (Toggle)");
     //            ENEMY_TOGGLE = getAbstractPvpUtilsKeybind("Enemy (Toggle)"),
 //            FOCUS_TOGGLE = getAbstractPvpUtilsKeybind("Focus (Toggle)"),
-//    public static final KeyMapping
-//            HEAD_RUN_CAMERA_OFFSET_TOGGLE = getAbstractPvpUtilsKeybind("Head-run camera offset (Toggle)"),
-//            HEAD_RUN_CAMERA_OFFSET_HOLD = getAbstractPvpUtilsKeybind("Head-run camera offset (Hold)");
+    public static final KeyMapping HEAD_RUN_CAMERA_OFFSET_ENABLE = getAbstractPvpUtilsKeybind("Head-run camera offset enable");
     public static final KeyMapping
 //            PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
 //            PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)"),
             PLAYER_WAYPOINTS_DISABLE = getAbstractPvpUtilsKeybind("Player waypoints (Disable)");
-    public static final KeyMapping
-            PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
+    public static final KeyMapping PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
     //            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
 //    public static final KeyMapping
 //            DECREMENT_CHEATS = getAbstractPvpUtilsKeybind("Decrement cheats"),
 //            INCREMENT_CHEATS = getAbstractPvpUtilsKeybind("Increment cheats");
     //    public static final KeyMapping JUMP_CHEAT_HOLD = getAbstractPvpUtilsKeybind("Jump cheat (Hold)");
-    public static final KeyMapping
-            KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
+    public static final KeyMapping KEYBIND_CONFIG = getAbstractPvpUtilsKeybind("Config");
     public static boolean
             isSprintEnabled,
             isSneakEnabled,
@@ -141,6 +137,8 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private static final ArrayList<TempWaypoint> tempWaypoints = new ArrayList<>();
+
+    public static boolean isLeftCameraOffsetActive = false;
 
     @Override
     public void onInitializeClient() {
