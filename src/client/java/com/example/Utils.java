@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.Configs.CheatConfig;
 import com.mojang.blaze3d.platform.InputConstants;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.FileNotFoundException;
@@ -20,6 +21,7 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
@@ -179,14 +181,14 @@ public class Utils {
         return replacementStack;
     }
 
-    private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
+    private static final String PVP_UTILS = "category.pvputils.pvp_utils";
 
     public static KeyMapping getAbstractPvpUtilsKeybind(String name) {
-        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
+        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 name,
 //                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
-                Objects.requireNonNull(PVP_UTILS)
+                PVP_UTILS
         ));
     }
 }
