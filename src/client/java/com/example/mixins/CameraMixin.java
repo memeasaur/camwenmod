@@ -4,6 +4,7 @@ import com.example.UntitledClient;
 import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.example.DelayedClientState.JUMP_VANILLA;
 import static com.example.UntitledClient.headRunCameraOffset;
 
 @Mixin(Camera.class)
@@ -29,6 +31,13 @@ public abstract class CameraMixin {
         if (headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.NONE) { // TODO ?
             return;
         }
-        this.setRotation(player.getYRot() + headRunCameraOffset.delta, player.getXRot());
+        float modifier = JUMP_VANILLA.isDown()
+                ? headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.LEFT
+                ? 12.f
+                : -12.f
+                : 0.f;
+        this.setRotation(
+                player.getYRot() + headRunCameraOffset.delta + modifier,
+                player.getXRot());
     }
 }
