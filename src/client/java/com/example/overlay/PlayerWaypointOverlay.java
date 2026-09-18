@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 import static com.example.UntitledClient.*;
 
-/** Draws only player waypoints; no player pixels are submitted to Minecraft's framebuffer. */
+// TODO -> AI made this
 public final class PlayerWaypointOverlay {
     private WindowsWaypointWindow window;
     private boolean failed;

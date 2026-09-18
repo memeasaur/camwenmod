@@ -9,7 +9,7 @@ import com.sun.jna.win32.W32APIOptions;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-/** A non-activating, click-through, owned window. All calls belong to the client thread. */
+// TODO -> AI made this
 final class WindowsWaypointWindow implements AutoCloseable {
     public interface CaptureApi extends com.sun.jna.win32.StdCallLibrary {
         CaptureApi INSTANCE = Native.load("user32", CaptureApi.class, W32APIOptions.DEFAULT_OPTIONS);
