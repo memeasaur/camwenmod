@@ -30,7 +30,6 @@ import net.minecraft.world.item.component.DyedItemColor;
 import static com.example.Constants.GSON;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.*;
-import static com.example.UntitledClient.isBackwardEnabled;
 
 
 public class Utils {
@@ -50,20 +49,9 @@ public class Utils {
         }
     }
 
-    public static void doMovementToggleDisable() {
-        config.isSneakEnabled = false;
-        config.isSprintEnabled = false;
-
-        isJumpEnabled = false;
-        isForwardEnabled = false;
-        isLeftEnabled = false;
-        isRightEnabled = false;
-        isBackwardEnabled = false;
-    }
-
     // TODO -> enum
-    public static void onXrayChange(String value) {
-        currentXrayType = value;
+    public static void onXrayChange() {
+        isPlayerXrayEnabled = !isPlayerXrayEnabled;
         MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
                 Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
                 MINECRAFT_CLIENT_INSTANCE.options,

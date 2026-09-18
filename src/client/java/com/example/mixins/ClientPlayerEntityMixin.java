@@ -7,13 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
-import static com.example.DelayedClientState.*;
-import static com.example.DelayedClientState.BACKWARD_VANILLA;
-import static com.example.DelayedClientState.FORWARD_VANILLA;
-import static com.example.DelayedClientState.JUMP_VANILLA;
-import static com.example.DelayedClientState.LEFT_VANILLA;
-import static com.example.DelayedClientState.RIGHT_VANILLA;
+import static com.example.Constants.*;
+import static com.example.DelayedConstantsTodo.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.getIsKeyBindingPressed;
 
@@ -29,22 +24,42 @@ import java.util.Objects;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
+    @Unique
+    private boolean isBackwardSprintResetActive = false;
     @Shadow
     public abstract boolean isUsingItem();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
+        // TODO -> if (false) return; test this for starting sprint w/ s
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
+        // TODO -> wtf?
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
-        SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
+        SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || toggleMovementState.shift());
+        if (!getIsKeyBindingPressed(BACKWARD_VANILLA) && sprintResetBackwardsKeyState == SprintResetState.HELD) {
+            sprintResetBackwardsKeyState = SprintResetState.INVALID;
+        }
         if (!isCurrentHandledScreen) {
-            SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
-            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
-            FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
-            LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
-            RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
-            BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
+            SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || toggleMovementState.sprint());
+            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (toggleMovementState.jump() && !this.isUsingItem())); // TODO -> config this?
+            FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || toggleMovementState.forward());
+            LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || toggleMovementState.left());
+            RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || toggleMovementState.right());
+            BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || toggleMovementState.backward());
+
+            if (config.isBackwardSprintResetSuppressionEnabled &&
+                    FORWARD_VANILLA.isDown() &&
+                    BACKWARD_VANILLA.isDown()) {
+                BACKWARD_VANILLA.setDown(false);
+                if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
+                    SPRINT_VANILLA.setDown(false);
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                    if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
+                        sprintResetBackwardsKeyState = SprintResetState.HELD;
+                    }
+                }
+            }
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {

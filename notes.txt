@@ -1,16 +1,13 @@
->re-add double tap to 26.2?
->make core library? or use something like clothconfig?:
+>re-add double tap s to 26.2?
+>make core library? or something like clothConfig?:
     >make autorun it's own mod
     >make xray it's own mod
 
 >put the teammate armor changer type thing on the external gui
->make s tap just cancel sprint instead of stopping all movement
-    >and it only does it if my sprint needs to be reset
 >put target on the enemy players to show where I should be aiming at for most reach
     >maybe start with only showing it in the easiest case
->make xray get rid of grass etc. too
->disable view bobbing screen shake option, but only do it in first person (26.2)
-    >either by forking the other mod or by doing it here
+>maybe I should treat w taps differently? to match the s tap thing
+    >+ maybe I should have shift-tapping as well
 
 >impl last-seen waypoints w/ timers
 >parkour macro recorder

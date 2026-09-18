@@ -58,6 +58,9 @@ public abstract class MinecraftClientMixin {
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
             }
         }
+        if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity) {
+            sprintResetBackwardsKeyState = SprintResetState.VALID;
+        }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                 entityHitResult.getEntity() instanceof LivingEntity target &&
                 target instanceof Player playerTarget) {

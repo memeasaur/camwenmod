@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import static com.example.Constants.*;
-import static com.example.DelayedClientState.TEXT_RENDERER;
+import static com.example.DelayedConstantsTodo.TEXT_RENDERER;
 import static com.example.Screens.Utils.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
@@ -49,8 +49,12 @@ public class Constants {
                 .build();
     }
 
-    private static final Screen TARGETING_MARGIN_BYPASS_STATIC_RECORDER = getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().staticTargetingMarginBypass = number.floatValue());
-    private static final Screen TARGETING_MARGIN_BYPASS_MOVING_RECORDER = getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
+    private static Screen getTargetingMarginBypassStaticRecorder() {
+        return getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().staticTargetingMarginBypass = number.floatValue());
+    }
+    private static Screen getTargetingMarginBypassMovingRecorder() {
+        return getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
+    }
     //    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
 //    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
 //    private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
@@ -63,12 +67,26 @@ public class Constants {
 //                getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
                 getConfigCheckboxWidget("movement toggle mirror press cancel", config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"),
                 getConfigCheckboxWidget(
+                        "ignore backward after sprint reset",
+                        config.isBackwardSprintResetSuppressionEnabled,
+                        is -> config.isBackwardSprintResetSuppressionEnabled = is,
+                        "allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit"),
+                getConfigCheckboxWidget(
+                        "disable view bobbing camera shake",
+                        config.isViewBobbingCameraShakeDisabled,
+                        is -> config.isViewBobbingCameraShakeDisabled = is,
+                        "keeps view bobbing enabled while removing only the camera shake"),
+                getConfigCheckboxWidget(
                         "damage taken value notification",
                         config.isDamageTakenValueNotificationEnabled,
                         is -> config.isDamageTakenValueNotificationEnabled = is,
                         ""),
-                getConfigCheckboxWidget("sneak", config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"),
-                getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
+//                getConfigCheckboxWidget(
+//                        "sneak",
+//                        config.isSneakEnabled,
+//                        is -> config.isSneakEnabled = is,
+//                        "toggles sneak"),
+//                getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
 //                getConfigCheckboxWidget("fake night vision", config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"),
 //                getConfigCheckboxWidget(
 //                        "weak attack disabled",
@@ -87,11 +105,11 @@ public class Constants {
                         "will flag hard on pre-1.12 or whatever it is that made the hitboxes smaller"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_STATIC_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassStaticRecorder()),
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_BYPASS_MOVING_RECORDER),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassMovingRecorder()),
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
 //                getConfigButtonWidget(
 //                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",

@@ -21,8 +21,8 @@ public class Config {
 
     public HashMap<UUID, NameplateTeam> nameplateUuids = new HashMap<>();
     public boolean isToggleSneakGuiEnabled = false;
-    public boolean isSneakEnabled = false;
-    public boolean isSprintEnabled = false;
+//    public boolean isSneakEnabled = false;
+//    public boolean isSprintEnabled = false;
 //    public boolean isFullbrightEnabled = false;
 //    public String currentPotionEnchantmentGlintType = "";
     //    public boolean isSharpnessParticleReverted = false;
@@ -31,9 +31,10 @@ public class Config {
     public boolean isDamageTakenValueNotificationEnabled = false;
 //    public boolean isDepthStriderReverted = true; // TODO ?
 //    public boolean isNameplateIronLeatherSwapped = true;
-
 //    public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
+    public boolean isBackwardSprintResetSuppressionEnabled = false;
+    public boolean isViewBobbingCameraShakeDisabled = false;
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public enum PlayerWaypointCategory {
