@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.Constants.*;
+import static com.example.DelayedConstantsTodo.TEXT_RENDERER;
 import static com.example.Utils.*;
 
 public class UntitledClient implements ClientModInitializer {
@@ -88,7 +89,12 @@ public class UntitledClient implements ClientModInitializer {
 //            isRightEnabled,
 //            isBackwardEnabled;
     public static Input toggleMovementState = new Input(false, false, false, false, false, false, false); // TODO -> constant
-    public static boolean hasResetSprintSinceLastHit;
+    public enum SprintResetState {
+        INVALID,
+        HELD,
+        VALID
+    }
+    public static SprintResetState sprintResetBackwardsKeyState = SprintResetState.INVALID;
 
     public static boolean isPlayerXrayEnabled = false;
 //    public static String currentXrayType = "";
