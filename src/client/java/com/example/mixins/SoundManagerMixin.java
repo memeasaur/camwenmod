@@ -20,8 +20,8 @@ public class SoundManagerMixin {
     // codex (old code) @Inject(method = "play*", at = @At("HEAD"), cancellable = true)
     // codex (old code) void onPlay(SoundInstance instance, CallbackInfoReturnable<SoundEngine.PlayResult> cir) {
     // codex (old code) //        if (config.isWeakAttackSoundDisabled && instance.getIdentifier().equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.location())) {
-    @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-    void onPlay(SoundInstance instance, CallbackInfo cir) {
+//    @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
+//    void onPlay(SoundInstance instance, CallbackInfo cir) {
 //        if (config.isWeakAttackSoundDisabled && instance.getResourceLocation().equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.location())) {
     // codex end
 //            cir.cancel();
@@ -35,5 +35,5 @@ public class SoundManagerMixin {
 //                soundInstance.getId().equals(SoundEvents.BLOCK_IRON_DOOR_CLOSE.id())) {
 //            isGrappleReady = true;
 //        }
-    }
+//    }
 }
