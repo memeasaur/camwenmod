@@ -27,12 +27,19 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.10",
-		"minecraft": "~26.2",
+		"minecraft": "~1.21.4",
 		"java": ">=21",
 		"fabric-api": "*",
 
 		"sodium": "*",
 		"fabric-language-kotlin": ">=1.13.13+kotlin.2.4.10"
+	},
+	"custom": {
+		"codex:downport": {
+			"// codex start": "Minecraft 1.21.4 compatibility",
+			"// codex (old code)": "\"minecraft\": \"~26.2\"",
+			"// codex end": "depends.minecraft is now ~1.21.4; JSON uses metadata because comments are not permitted"
+		}
 	},
 	"suggests": {}
 }

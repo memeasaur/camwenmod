@@ -5,7 +5,10 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.sun.jna.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.resources.Identifier;
+// codex start
+// codex (old code) import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
+// codex end
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -26,11 +29,18 @@ public final class PlayerWaypointOverlay {
     private WindowsWaypointWindow window;
     private boolean failed;
     private long lastFrame;
-    private final Map<Identifier, BufferedImage> faces = new HashMap<>();
+    // codex start
+    // codex (old code) private final Map<Identifier, BufferedImage> faces = new HashMap<>();
+    private final Map<ResourceLocation, BufferedImage> faces = new HashMap<>();
+    // codex end
 
     private boolean visible(Minecraft client) {
-        return client.level != null && client.player != null && cameraRenderState != null
-                && client.gui.screen() == null && client.gui.overlay() == null && !client.gui.hud.isHidden() && client.isWindowActive()
+        // codex start
+        // codex (old code) return client.level != null && client.player != null && cameraRenderState != null
+        // codex (old code) && client.gui.screen() == null && client.gui.overlay() == null && !client.gui.hud.isHidden() && client.isWindowActive()
+        return client.level != null && client.player != null && camera != null
+                && client.screen == null && client.getOverlay() == null && !client.options.hideGui && client.isWindowActive()
+        // codex end
                 && config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE;
     }
 
@@ -47,11 +57,17 @@ public final class PlayerWaypointOverlay {
         lastFrame = now;
         try {
             if (!Platform.isWindows()) throw new UnsupportedOperationException("Player waypoint overlay requires Windows");
-            if (window == null) window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle()));
+            // codex start
+            // codex (old code) if (window == null) window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle()));
+            if (window == null) window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().getWindow()));
+            // codex end
             BufferedImage frame = window.beginFrame();
             if (frame == null) return;
             Graphics2D graphics = frame.createGraphics();
-            HashSet<Identifier> usedSkins = new HashSet<>();
+            // codex start
+            // codex (old code) HashSet<Identifier> usedSkins = new HashSet<>();
+            HashSet<ResourceLocation> usedSkins = new HashSet<>();
+            // codex end
             try {
                 graphics.setComposite(AlphaComposite.Clear);
                 graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
@@ -60,7 +76,10 @@ public final class PlayerWaypointOverlay {
                         (double) frame.getHeight() / client.getWindow().getGuiScaledHeight());
                 graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 9));
                 graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                Vector3f forward = cameraRenderState.orientation.transform(new Vector3f(0, 0, -1));
+                // codex start
+                // codex (old code) Vector3f forward = cameraRenderState.orientation.transform(new Vector3f(0, 0, -1));
+                Vector3f forward = camera.rotation().transform(new Vector3f(0, 0, -1));
+                // codex end
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
                 for (var player : client.level.players()) {
                     if (player == client.player) continue;
@@ -72,12 +91,18 @@ public final class PlayerWaypointOverlay {
                     int x = point.x, y = point.y;
                     graphics.setColor(new Color(team == null ? 0xAFFF0000 : 0xFF000000 | team.color.getValue(), true));
                     graphics.fillRect(x - 8, y - 8, 16, 16);
-                    Identifier skin = player.getSkin().body().texturePath();
+                    // codex start
+                    // codex (old code) Identifier skin = player.getSkin().body().texturePath();
+                    ResourceLocation skin = player.getSkin().texture();
+                    // codex end
                     usedSkins.add(skin);
                     BufferedImage face = faces.computeIfAbsent(skin, id -> loadFace(client, id));
                     if (face != null) graphics.drawImage(face, x - 6, y - 6, 12, 12, null);
                     text(graphics, String.format("%.1fm", client.player.position().distanceTo(world)), x, y + 13);
-                    if (look.dot(world.subtract(cameraRenderState.pos).normalize()) > 0.995) {
+                    // codex start
+                    // codex (old code) if (look.dot(world.subtract(cameraRenderState.pos).normalize()) > 0.995) {
+                    if (look.dot(world.subtract(camera.getPosition()).normalize()) > 0.995) {
+                    // codex end
                         text(graphics, player.getScoreboardName(), x, y - 13);
                         text(graphics, String.format("%.0f, %.0f, %.0f", world.x, world.y, world.z), x, y - 24);
                     }
@@ -92,10 +117,21 @@ public final class PlayerWaypointOverlay {
         }
     }
 
-    private static BufferedImage loadFace(Minecraft client, Identifier id) {
+    // codex start
+    // codex (old code) private static BufferedImage loadFace(Minecraft client, Identifier id) {
+    private static BufferedImage loadFace(Minecraft client, ResourceLocation id) {
+    // codex end
         var texture = client.getTextureManager().getTexture(id);
-        if (texture instanceof DynamicTexture dynamic && dynamic.getPixels() != null && !dynamic.getPixels().isClosed()) {
-            return face(dynamic.getPixels());
+        // codex start
+        // codex (old code) if (texture instanceof DynamicTexture dynamic && dynamic.getPixels() != null && !dynamic.getPixels().isClosed()) {
+        // codex (old code) return face(dynamic.getPixels());
+        if (texture instanceof DynamicTexture dynamic && dynamic.getPixels() != null) {
+            try {
+                return face(dynamic.getPixels());
+            } catch (IllegalStateException ignored) {
+                // Minecraft 1.21.4 has no isClosed(); closed images fail their allocation check.
+            }
+        // codex end
         }
         // Built-in/default skins come from resources rather than downloaded DynamicTextures.
         try (var stream = client.getResourceManager().open(id); var image = NativeImage.read(stream)) {

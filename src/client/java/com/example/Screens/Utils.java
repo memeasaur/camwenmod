@@ -26,7 +26,10 @@ public class Utils {
                     Minecraft threadClientInstance = Minecraft.getInstance();
                     synchronousRunnable.accept(threadClientInstance);
                     threadClientInstance
-                            .execute(() -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(returnScreen));
+                            // codex start
+                            // codex (old code) .execute(() -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(returnScreen));
+                            .execute(() -> MINECRAFT_CLIENT_INSTANCE.setScreen(returnScreen));
+                            // codex end
                 }).start();
             }
         };
@@ -35,11 +38,17 @@ public class Utils {
     static int getGlfwInputBlocking(Minecraft threadClientInstance, Component title) {
         try {
             int[] resultKey = new int[]{0};
-            while (resultKey[0] == 0 && threadClientInstance.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+            // codex start
+            // codex (old code) while (resultKey[0] == 0 && threadClientInstance.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+            while (resultKey[0] == 0 && threadClientInstance.screen instanceof Screen screen && screen.getTitle().equals(title)) {
+            // codex end
                 CountDownLatch latch = new CountDownLatch(1);
                 threadClientInstance.execute(() -> {
                     for (int key = GLFW.GLFW_KEY_SPACE; key <= GLFW.GLFW_KEY_LAST; key++)
-                        if (GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key) == GLFW.GLFW_PRESS) {
+                        // codex start
+                        // codex (old code) if (GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key) == GLFW.GLFW_PRESS) {
+                        if (GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), key) == GLFW.GLFW_PRESS) {
+                        // codex end
                             resultKey[0] = key;
                             break;
                         }
@@ -53,7 +62,10 @@ public class Utils {
         } catch (Exception e) {
             threadClientInstance.execute(() -> {
                 if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                    player.sendSystemMessage(Component.literal("getglfwinputblocking " + e.getMessage()));
+                    // codex start
+                    // codex (old code) player.sendSystemMessage(Component.literal("getglfwinputblocking " + e.getMessage()));
+                    player.displayClientMessage(Component.literal("getglfwinputblocking " + e.getMessage()), false);
+                    // codex end
             });
             throw new RuntimeException(e);
         }
@@ -64,7 +76,10 @@ public class Utils {
             try {
                 StringBuilder floatBuilder = new StringBuilder();
                 HashSet<Integer> pressedKeys = new HashSet<>();
-                while (client.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+                // codex start
+                // codex (old code) while (client.gui.screen() instanceof Screen screen && screen.getTitle().equals(title)) {
+                while (client.screen instanceof Screen screen && screen.getTitle().equals(title)) {
+                // codex end
                     CountDownLatch latch = new CountDownLatch(1);
                     int glfwKey = getGlfwInputBlocking(client, title);
                     client.execute(() -> {
@@ -82,7 +97,10 @@ public class Utils {
             } catch (Exception e) {
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                        player.sendSystemMessage(Component.literal("getabstractkeyboardsequencescreen " + e.getMessage()));
+                        // codex start
+                        // codex (old code) player.sendSystemMessage(Component.literal("getabstractkeyboardsequencescreen " + e.getMessage()));
+                        player.displayClientMessage(Component.literal("getabstractkeyboardsequencescreen " + e.getMessage()), false);
+                        // codex end
                 });
             }
         }, returnScreen);
@@ -104,12 +122,18 @@ public class Utils {
         }, (finalFloatString, client) -> {
             if (!finalFloatString.isEmpty() && !finalFloatString.equals(".")) {
                 consumer.accept(Double.parseDouble(finalFloatString));
-                client.execute(() -> client.setScreenAndShow(buildConfig()));
+                // codex start
+                // codex (old code) client.execute(() -> client.setScreenAndShow(buildConfig()));
+                client.execute(() -> client.setScreen(buildConfig()));
+                // codex end
                 // TODO -> going back to config twice seems odd here
             } else
                 client.execute(() -> {
                     if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                        player.sendOverlayMessage(Component.literal("invalid float")); // TODO -> console
+                        // codex start
+                        // codex (old code) player.sendOverlayMessage(Component.literal("invalid float")); // TODO -> console
+                        player.displayClientMessage(Component.literal("invalid float"), true); // TODO -> console
+                        // codex end
                 });
         }, buildConfig());
     }

@@ -7,17 +7,28 @@ import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+// codex start
+// codex (old code) import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+// codex (old code) import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+// codex end
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+// codex start
+// codex (old code) import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
+// codex end
 import com.example.overlayTodoAi.PlayerWaypointOverlay;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.resources.Identifier;
+// codex start
+// codex (old code) import net.minecraft.client.renderer.state.level.CameraRenderState;
+// codex (old code) import net.minecraft.resources.Identifier;
+import net.minecraft.client.Camera;
+import net.minecraft.resources.ResourceLocation;
+// codex end
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -132,7 +143,11 @@ public class UntitledClient implements ClientModInitializer {
 //    }
 //    public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
 
-    public static CameraRenderState cameraRenderState;
+    // codex start
+    // codex (old code) public static CameraRenderState cameraRenderState;
+    public static Camera camera;
+    public static Matrix4f projectionMatrix;
+    // codex end
 
     record TempWaypoint(String title, Vec3 coordinate) {
     }
@@ -264,11 +279,19 @@ public class UntitledClient implements ClientModInitializer {
 
         // exampleLayer
         {
-            final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
-            HudElementRegistry.attachElementBefore(
-                    VanillaHudElements.CHAT,
+            // codex start
+            // codex (old code) final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
+            // codex (old code) HudElementRegistry.attachElementBefore(
+            // codex (old code) VanillaHudElements.CHAT,
+            final ResourceLocation EXAMPLE_LAYER = ResourceLocation.fromNamespaceAndPath("pvputils2", "hud-example-layer");
+            HudLayerRegistrationCallback.EVENT.register(layers -> layers.attachLayerBefore(
+                    IdentifiedLayer.CHAT,
+            // codex end
                     EXAMPLE_LAYER,
-                    (context, _) -> {
+                    // codex start
+                    // codex (old code) (context, _) -> {
+                    (context, unused1) -> {
+                    // codex end
                         for (var each : tempWaypoints) {
                             Vector2i screenCoords = calculateScreenCoords(each.coordinate);
                             int x = screenCoords.x;
@@ -287,7 +310,10 @@ public class UntitledClient implements ClientModInitializer {
                             drawText(x, each.title, y, context);
                         }
                         playerOverlay.render(MINECRAFT_CLIENT_INSTANCE, this::calculateScreenCoords);
-                    });
+                    // codex start
+                    // codex (old code) });
+                    }));
+                    // codex end
         }
 
         // ai start
@@ -298,11 +324,18 @@ public class UntitledClient implements ClientModInitializer {
         // messageCoordsListener
         ClientReceiveMessageEvents.CHAT.register((
                 message,
-                _,
-                _,
-                _,
-                _) -> onIncomingMessage(message.getString()));
-        ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
+                // codex start
+                // codex (old code) _,
+                // codex (old code) _,
+                // codex (old code) _,
+                // codex (old code) _) -> onIncomingMessage(message.getString()));
+                // codex (old code) ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
+                unused2,
+                unused3,
+                unused4,
+                unused5) -> onIncomingMessage(message.getString()));
+        ClientReceiveMessageEvents.GAME.register((message, unused6) -> onIncomingMessage(message.getString()));
+                // codex end
 
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
             if (client.player instanceof LocalPlayer player) {
@@ -321,7 +354,10 @@ public class UntitledClient implements ClientModInitializer {
 
     private Vector2i calculateScreenCoords(Vec3 worldPos) {
         // TODO -> apparently JOML provides helpers that can simplify all this
-        Vec3 cameraPos = cameraRenderState.pos;
+        // codex start
+        // codex (old code) Vec3 cameraPos = cameraRenderState.pos;
+        Vec3 cameraPos = camera.getPosition();
+        // codex end
         // world space -> camera-relative world space
         Vec3 cameraRelativeWorldPos = worldPos.subtract(cameraPos);
         Vector4f result = new Vector4f(
@@ -331,9 +367,15 @@ public class UntitledClient implements ClientModInitializer {
                 1.0f // ?
         );
         // camera-relative -> camera space
-        new Quaternionf(cameraRenderState.orientation).conjugate().transform(result); // TODO -> val
+        // codex start
+        // codex (old code) new Quaternionf(cameraRenderState.orientation).conjugate().transform(result); // TODO -> val
+        new Quaternionf(camera.rotation()).conjugate().transform(result); // TODO -> val
+        // codex end
         // camera space -> clip space
-        cameraRenderState.projectionMatrix.transform(result);
+        // codex start
+        // codex (old code) cameraRenderState.projectionMatrix.transform(result);
+        projectionMatrix.transform(result);
+        // codex end
 
         if (Math.abs(result.w()) < 0.00001f) result.w = Math.copySign(0.00001f, result.w()); // TODO ?F
         float ndcX = result.x() / result.w();
@@ -484,12 +526,18 @@ public class UntitledClient implements ClientModInitializer {
             int screenX,
             String text,
             int screenY,
-            GuiGraphicsExtractor drawContext) {
+            // codex start
+            // codex (old code) GuiGraphicsExtractor drawContext) {
+            GuiGraphics drawContext) {
+            // codex end
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
 //        int textY = screenY + size / 2 + 2;
         int textY = screenY - TEXT_RENDERER.lineHeight / 2;
 
-        drawContext.text(
+        // codex start
+        // codex (old code) drawContext.text(
+        drawContext.drawString(
+        // codex end
                 TEXT_RENDERER,
                 text,
                 textX,

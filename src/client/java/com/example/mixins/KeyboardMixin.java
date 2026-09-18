@@ -1,7 +1,9 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
-import net.minecraft.client.input.KeyEvent;
+// codex start
+// codex (old code) import net.minecraft.client.input.KeyEvent;
+// codex end
 import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,7 +36,10 @@ public class KeyboardMixin {
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
-            long handle, int action, KeyEvent event, CallbackInfo ci) {
+            // codex start
+            // codex (old code) long handle, int action, KeyEvent event, CallbackInfo ci) {
+            long handle, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
+            // codex end
         if (config.isMovementToggleMirrorPressDisabling) {
             if (!(getIsKeyBindingPressed(SNEAK_VANILLA) == toggleMovementState.shift()
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == toggleMovementState.sprint()
@@ -127,7 +132,10 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.consumeClick()) {
-            MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
+            // codex start
+            // codex (old code) MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
+            MINECRAFT_CLIENT_INSTANCE.setScreen(buildConfig());
+            // codex end
         }
 
 //        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {

@@ -8,12 +8,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+// codex start
+// codex (old code) import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+// codex end
 import net.minecraft.network.chat.Component;
 
 import static com.example.UntitledClient.config;
 
-@Mixin(AvatarRenderer.class)
+// codex start
+// codex (old code) @Mixin(AvatarRenderer.class)
+@Mixin(PlayerRenderer.class)
+// codex end
 public class PlayerEntityRendererMixin {
 //    @Inject(at = @At(value = "RETURN"), method = "getArmPose(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/util/Arm;)Lnet/minecraft/client/render/entity/model/BipedEntityModel$ArmPose;", cancellable = true)
 //    private static void onGetArmPose(AbstractClientPlayerEntity player, Arm arm, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {

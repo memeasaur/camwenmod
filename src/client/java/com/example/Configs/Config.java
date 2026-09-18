@@ -8,8 +8,12 @@ import static com.example.Utils.serializeJsonBlocking;
 
 public class Config {
     public enum NameplateTeam {
-        FRIENDLY(TextColor.GREEN),
-        ALLY(TextColor.AQUA);
+        // codex start
+        // codex (old code) FRIENDLY(TextColor.GREEN),
+        // codex (old code) ALLY(TextColor.AQUA);
+        FRIENDLY(TextColor.fromRgb(0x55FF55)),
+        ALLY(TextColor.fromRgb(0x55FFFF));
+        // codex end
         //        ENEMY,
 //        FOCUS,
         public final TextColor color;
