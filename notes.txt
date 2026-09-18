@@ -7,12 +7,14 @@
     >put the teammate armor changer type thing on the external gui
 >make s tap just cancel sprint instead of stopping all movement
     >and it only does it if my sprint needs to be reset
->parkour macro recorder
+>put target on the enemy players to show where I should be aiming at for most reach
+    >maybe start with only showing it in the easiest case
+>make xray get rid of grass etc. too
 >disable view bobbing screen shake option, but only do it in first person (26.2)
->put something on the enemy players to show where I should be aiming at for most reach
->make xray get rid of grass, too
->impl last-seen waypoints w/ timers
+    >either by forking the other mod or by doing it here
 
+>impl last-seen waypoints w/ timers
+>parkour macro recorder
 >fake inventory that you can view while running
 >add ground hitting in adventure mode
 >always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
