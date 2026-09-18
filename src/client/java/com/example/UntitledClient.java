@@ -88,7 +88,7 @@ public class UntitledClient implements ClientModInitializer {
 //            isLeftEnabled,
 //            isRightEnabled,
 //            isBackwardEnabled;
-    public static Input toggleMovementState;
+    public static Input toggleMovementState = new Input(false, false, false, false, false, false, false); // TODO -> constant
     public static boolean hasResetSprintSinceLastHit;
 
     public static boolean isPlayerXrayEnabled = false;

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.example.Constants.*;
+import static com.example.DelayedConstantsTodo.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.getIsKeyBindingPressed;
 
