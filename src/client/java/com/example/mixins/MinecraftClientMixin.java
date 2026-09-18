@@ -61,6 +61,7 @@ public abstract class MinecraftClientMixin {
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                 entityHitResult.getEntity() instanceof LivingEntity target &&
                 target instanceof Player playerTarget) {
+            hasResetSprintSinceLastHit = false;
             onPvpDamage();
             if (config.isTeammatesSwingSuppressionEnabled &&
                     config.nameplateUuids.get(playerTarget.getUUID()) instanceof Config.NameplateTeam team &&

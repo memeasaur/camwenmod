@@ -93,6 +93,7 @@ public class UntitledClient implements ClientModInitializer {
             isLeftEnabled,
             isRightEnabled,
             isBackwardEnabled;
+    public static boolean hasResetSprintSinceLastHit;
 
     // TODO -> enum this
     public static String currentXrayType = "";

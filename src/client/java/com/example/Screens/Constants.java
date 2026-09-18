@@ -63,6 +63,11 @@ public class Constants {
 //                getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
                 getConfigCheckboxWidget("movement toggle mirror press cancel", config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"),
                 getConfigCheckboxWidget(
+                        "ignore backward after sprint reset",
+                        config.isBackwardSprintResetSuppressionEnabled,
+                        is -> config.isBackwardSprintResetSuppressionEnabled = is,
+                        "allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit"),
+                getConfigCheckboxWidget(
                         "damage taken value notification",
                         config.isDamageTakenValueNotificationEnabled,
                         is -> config.isDamageTakenValueNotificationEnabled = is,
