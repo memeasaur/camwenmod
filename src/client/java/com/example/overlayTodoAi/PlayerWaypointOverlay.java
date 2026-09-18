@@ -58,7 +58,7 @@ public final class PlayerWaypointOverlay {
                 graphics.setComposite(AlphaComposite.SrcOver);
                 graphics.scale((double) frame.getWidth() / client.getWindow().getGuiScaledWidth(),
                         (double) frame.getHeight() / client.getWindow().getGuiScaledHeight());
-                graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 9));
+                graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 16));
                 graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 Vector3f forward = cameraRenderState.orientation.transform(new Vector3f(0, 0, -1));
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();

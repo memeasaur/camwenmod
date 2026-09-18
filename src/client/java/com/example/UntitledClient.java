@@ -150,6 +150,7 @@ public class UntitledClient implements ClientModInitializer {
             this.delta = delta;
         }
     }
+
     public static HEAD_RUN_OFFSET_TYPE headRunCameraOffset = HEAD_RUN_OFFSET_TYPE.NONE;
 
     @Override
@@ -288,8 +289,10 @@ public class UntitledClient implements ClientModInitializer {
                     });
         }
 
+        // ai start
         ClientTickEvents.END_CLIENT_TICK.register(playerOverlay::tick);
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> playerOverlay.close());
+        // ai end
 
         // messageCoordsListener
         ClientReceiveMessageEvents.CHAT.register((
@@ -331,7 +334,7 @@ public class UntitledClient implements ClientModInitializer {
         // camera space -> clip space
         cameraRenderState.projectionMatrix.transform(result);
 
-        if (Math.abs(result.w()) < 0.00001f) result.w = Math.copySign(0.00001f, result.w());
+        if (Math.abs(result.w()) < 0.00001f) result.w = Math.copySign(0.00001f, result.w()); // TODO ?F
         float ndcX = result.x() / result.w();
         float ndcY = result.y() / result.w();
 
@@ -352,6 +355,74 @@ public class UntitledClient implements ClientModInitializer {
         int screenY = (int) ((1 - ndcY) / 2 * window.getGuiScaledHeight());
         return new Vector2i(screenX, screenY);
     }
+
+//    private void drawPlayerWaypoint(
+//            Vec3 worldPos, GuiGraphicsExtractor drawContext, AbstractClientPlayer player) {
+//        var screenCoords = calculateScreenCoords(worldPos);
+//        int screenX = screenCoords.x;
+//        int screenY = screenCoords.y;
+//        int size = 12;
+//        int backgroundSize = size + 4;
+//        // TODO -> diamond? w/ face cropped
+//        drawContext.fill(
+//                screenX - backgroundSize / 2,
+//                screenY - backgroundSize / 2,
+//                screenX + (backgroundSize + 1) / 2,
+//                screenY + (backgroundSize + 1) / 2,
+//                config.nameplateUuids.get(player.getUUID()) instanceof Config.NameplateTeam team
+//                        ? 0xFF000000 | team.color.getValue()
+//                        : 0xAFFF0000
+//        );
+////            TODO; // config enum option for only doing teammates etc.
+//        PlayerFaceExtractor.extractRenderState(
+//                drawContext,
+//                player.getSkin(),
+//                screenX - size / 2,
+//                screenY - size / 2,
+//                size);
+//
+//        // distance
+//        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer clientPlayerEntity) {
+//            double distance = clientPlayerEntity.position().distanceTo(worldPos);
+//            String distanceText = String.format("%.1fm", distance);
+//            drawText(screenX, distanceText, screenY + size / 2 + 2 + TEXT_RENDERER.lineHeight / 2, drawContext);
+//        }
+//        // hovered
+//        {
+//            Vector3f forward = new Vector3f(0, 0, -1);
+//            cameraRenderState.orientation.transform(forward);
+//            Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
+//            Vec3 toMarker = worldPos.subtract(cameraRenderState.pos).normalize();
+//            if (look.dot(toMarker) > 0.995) {
+//                // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
+//                // TODO -> extra info should also appear when MOUSED over
+//                // name
+//                {
+//                    String name = player.getScoreboardName();
+//                    drawText(
+//                            screenX,
+//                            name,
+//                            screenY - size / 2 - TEXT_RENDERER.lineHeight / 2 - 2,
+//                            drawContext);
+//                }
+//                // coords
+//                {
+//                    String coordinates = String.format(
+//                            "%.0f, %.0f, %.0f",
+//                            worldPos.x,
+//                            worldPos.y,
+//                            worldPos.z
+//                    );
+//                    drawText(
+//                            screenX,
+//                            coordinates,
+//                            screenY - size / 2 - TEXT_RENDERER.lineHeight * 3 / 2 - 4,
+//                            drawContext
+//                    );
+//                }
+//            }
+//        }
+//    }
 
     private void onIncomingMessage(String message) {
         // TODO -> async?
