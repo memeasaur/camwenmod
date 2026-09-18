@@ -44,7 +44,7 @@ public class KeyboardMixin {
                     && getIsKeyBindingPressed(BACKWARD_VANILLA) == toggleMovementState.backward())) {
                 isMovementToggleMirrorSequencePressed = false;
             } else if (!isMovementToggleMirrorSequencePressed) {
-                doMovementToggleDisable();
+                toggleMovementState = new Input(false, false, false, false, false, false, false);
             }
         }
         // TODO -> I should probably just use if if possible

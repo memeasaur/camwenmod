@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import static com.example.Constants.*;
-import static com.example.DelayedClientState.TEXT_RENDERER;
 import static com.example.Screens.Utils.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
@@ -72,8 +71,12 @@ public class Constants {
                         config.isDamageTakenValueNotificationEnabled,
                         is -> config.isDamageTakenValueNotificationEnabled = is,
                         ""),
-                getConfigCheckboxWidget("sneak", config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"),
-                getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
+//                getConfigCheckboxWidget(
+//                        "sneak",
+//                        config.isSneakEnabled,
+//                        is -> config.isSneakEnabled = is,
+//                        "toggles sneak"),
+//                getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
 //                getConfigCheckboxWidget("fake night vision", config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"),
 //                getConfigCheckboxWidget(
 //                        "weak attack disabled",
