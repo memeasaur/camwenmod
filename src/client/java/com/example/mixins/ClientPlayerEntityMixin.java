@@ -24,6 +24,8 @@ import java.util.Objects;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
+    @Unique
+    private boolean isBackwardSprintResetActive = false;
     @Shadow
     public abstract boolean isUsingItem();
 
@@ -35,6 +37,9 @@ public abstract class ClientPlayerEntityMixin {
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
         SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || toggleMovementState.shift());
+        if (!getIsKeyBindingPressed(BACKWARD_VANILLA) && sprintResetBackwardsKeyState == SprintResetState.HELD) {
+            sprintResetBackwardsKeyState = SprintResetState.INVALID;
+        }
         if (!isCurrentHandledScreen) {
             SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || toggleMovementState.sprint());
             JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (toggleMovementState.jump() && !this.isUsingItem())); // TODO -> config this?
@@ -46,11 +51,13 @@ public abstract class ClientPlayerEntityMixin {
             if (config.isBackwardSprintResetSuppressionEnabled &&
                     FORWARD_VANILLA.isDown() &&
                     BACKWARD_VANILLA.isDown()) {
-                if (hasResetSprintSinceLastHit) {
-                    BACKWARD_VANILLA.setDown(false);
-                } else {
+                BACKWARD_VANILLA.setDown(false);
+                if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
+                    SPRINT_VANILLA.setDown(false);
                     Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
-                    hasResetSprintSinceLastHit = true;
+                    if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
+                        sprintResetBackwardsKeyState = SprintResetState.HELD;
+                    }
                 }
             }
         }

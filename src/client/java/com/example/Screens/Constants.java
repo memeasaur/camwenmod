@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import static com.example.Constants.*;
+import static com.example.DelayedConstantsTodo.TEXT_RENDERER;
 import static com.example.Screens.Utils.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
