@@ -29,20 +29,21 @@ public abstract class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
-        TODO;
+        // TODO -> wtf?
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
-        SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
+        SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || toggleMovementState.shift());
         if (!isCurrentHandledScreen) {
+            SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || toggleMovementState.sprint());
+            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (toggleMovementState.jump() && !this.isUsingItem())); // TODO -> config this?
+            FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || toggleMovementState.forward());
+            LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || toggleMovementState.left());
+            RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || toggleMovementState.right());
+            BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || toggleMovementState.backward());
+
             TODO;
-            SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
-            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this?
-            FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
-            LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
-            RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
             boolean isForwardPressed = getIsKeyBindingPressed(FORWARD_VANILLA);
-            boolean isBackwardPressed = getIsKeyBindingPressed(BACKWARD_VANILLA);
-            TODO;
+            boolean isBackwardPressed = ;
             boolean shouldConsumeBackward = config.isBackwardSprintResetSuppressionEnabled
                     && hasResetSprintSinceLastHit
                     && isForwardPressed
@@ -53,8 +54,8 @@ public abstract class ClientPlayerEntityMixin {
                     && isBackwardPressed) {
                 hasResetSprintSinceLastHit = true;
             }
-            TODO; // just stop sprinting instead of causing a stop here
             BACKWARD_VANILLA.setDown((isBackwardPressed && isMovementValid && !shouldConsumeBackward) || isBackwardEnabled);
+            TODO; // just stop sprinting instead of causing a stop here
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
