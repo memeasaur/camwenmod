@@ -1,5 +1,5 @@
 >re-add double tap to 26.2?
->make core library:
+>make core library? or use something like clothconfig?:
     >make autorun it's own mod
     >make xray it's own mod
 
@@ -13,7 +13,6 @@
 >make xray get rid of grass, too
 >impl last-seen waypoints w/ timers
 
->handle jumping in the camera offset thing somehow
 >fake inventory that you can view while running
 >add ground hitting in adventure mode
 >always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
