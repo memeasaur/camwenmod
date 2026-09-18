@@ -11,7 +11,13 @@ import static com.example.UntitledClient.isPlayerXrayEnabled;
 
 @Mixin(AbstractBlockRenderContext.class)
 public class AbstractBlockRenderContextMixin {
-    TODO;
+    @Inject(method = "isFaceCulled", at = @At("HEAD"), cancellable = true)
+    void onIsFaceCulled(Direction face, CallbackInfoReturnable<Boolean> cir) {
+        if (isPlayerXrayEnabled) {
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
+    }
     @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
     private void shouldDrawSide(
             Direction facing, CallbackInfoReturnable<Boolean> cir) {
