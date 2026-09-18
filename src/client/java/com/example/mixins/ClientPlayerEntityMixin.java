@@ -44,7 +44,19 @@ public abstract class ClientPlayerEntityMixin {
             FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
             LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
-            BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || isBackwardEnabled);
+            boolean isForwardPressed = getIsKeyBindingPressed(FORWARD_VANILLA);
+            boolean isBackwardPressed = getIsKeyBindingPressed(BACKWARD_VANILLA);
+            boolean shouldConsumeBackward = config.isBackwardSprintResetSuppressionEnabled
+                    && hasResetSprintSinceLastHit
+                    && isForwardPressed
+                    && isBackwardPressed;
+            if (config.isBackwardSprintResetSuppressionEnabled
+                    && !hasResetSprintSinceLastHit
+                    && isForwardPressed
+                    && isBackwardPressed) {
+                hasResetSprintSinceLastHit = true;
+            }
+            BACKWARD_VANILLA.setDown((isBackwardPressed && isMovementValid && !shouldConsumeBackward) || isBackwardEnabled);
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
