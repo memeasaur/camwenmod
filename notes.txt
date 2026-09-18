@@ -4,7 +4,6 @@
     >make xray it's own mod
 
 >put the teammate armor changer type thing on the external gui
->make s tap just cancel sprint instead of stopping all movement
 >put target on the enemy players to show where I should be aiming at for most reach
     >maybe start with only showing it in the easiest case
 >disable view bobbing screen shake option, but only do it in first person (26.2)
