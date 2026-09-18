@@ -28,6 +28,7 @@ public abstract class ClientPlayerEntityMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
+        // TODO -> if (false) return; test this for starting sprint w/ s
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
         // TODO -> wtf?
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
@@ -41,21 +42,16 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || toggleMovementState.right());
             BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || toggleMovementState.backward());
 
-            TODO;
-            boolean isForwardPressed = getIsKeyBindingPressed(FORWARD_VANILLA);
-            boolean isBackwardPressed = ;
-            boolean shouldConsumeBackward = config.isBackwardSprintResetSuppressionEnabled
-                    && hasResetSprintSinceLastHit
-                    && isForwardPressed
-                    && isBackwardPressed;
-            if (config.isBackwardSprintResetSuppressionEnabled
-                    && !hasResetSprintSinceLastHit
-                    && isForwardPressed
-                    && isBackwardPressed) {
-                hasResetSprintSinceLastHit = true;
+            if (config.isBackwardSprintResetSuppressionEnabled &&
+                    FORWARD_VANILLA.isDown() &&
+                    BACKWARD_VANILLA.isDown()) {
+                if (hasResetSprintSinceLastHit) {
+                    BACKWARD_VANILLA.setDown(false);
+                } else {
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                    hasResetSprintSinceLastHit = true;
+                }
             }
-            BACKWARD_VANILLA.setDown((isBackwardPressed && isMovementValid && !shouldConsumeBackward) || isBackwardEnabled);
-            TODO; // just stop sprinting instead of causing a stop here
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
