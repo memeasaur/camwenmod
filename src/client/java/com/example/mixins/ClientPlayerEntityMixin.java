@@ -29,6 +29,7 @@ public abstract class ClientPlayerEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
+        TODO;
         boolean isCurrentHandledScreen = currentScreen instanceof AbstractContainerScreen<?>;
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
         SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
