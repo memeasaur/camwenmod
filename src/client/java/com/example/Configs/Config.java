@@ -34,6 +34,7 @@ public class Config {
 //    public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
     public boolean isBackwardSprintResetSuppressionEnabled = false;
+    public boolean isViewBobbingCameraShakeDisabled = false;
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public enum PlayerWaypointCategory {
