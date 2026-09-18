@@ -1,5 +1,5 @@
 >re-add double tap to 26.2?
->make core library? or use something like clothconfig?:
+>make core library? or something like clothconfig?:
     >make autorun it's own mod
     >make xray it's own mod
 
@@ -9,6 +9,7 @@
 >disable view bobbing screen shake option, but only do it in first person (26.2)
     >either by forking the other mod or by doing it here
 >maybe I should treat w taps differently? to match the s tap thing
+    >+ maybe I should be shift-tapping as well
 
 >impl last-seen waypoints w/ timers
 >parkour macro recorder
