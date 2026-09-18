@@ -11,6 +11,7 @@ import static com.example.UntitledClient.isPlayerXrayEnabled;
 
 @Mixin(AbstractBlockRenderContext.class)
 public class AbstractBlockRenderContextMixin {
+    TODO;
     @Inject(method = "shouldDrawSide", at = @At("HEAD"), cancellable = true)
     private void shouldDrawSide(
             Direction facing, CallbackInfoReturnable<Boolean> cir) {
