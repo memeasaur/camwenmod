@@ -72,6 +72,11 @@ public class Constants {
                         is -> config.isBackwardSprintResetSuppressionEnabled = is,
                         "allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit"),
                 getConfigCheckboxWidget(
+                        "disable view bobbing camera shake",
+                        config.isViewBobbingCameraShakeDisabled,
+                        is -> config.isViewBobbingCameraShakeDisabled = is,
+                        "keeps view bobbing enabled while removing only the camera shake"),
+                getConfigCheckboxWidget(
                         "damage taken value notification",
                         config.isDamageTakenValueNotificationEnabled,
                         is -> config.isDamageTakenValueNotificationEnabled = is,
