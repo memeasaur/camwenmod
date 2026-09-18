@@ -31,7 +31,6 @@ public class Config {
     public boolean isDamageTakenValueNotificationEnabled = false;
 //    public boolean isDepthStriderReverted = true; // TODO ?
 //    public boolean isNameplateIronLeatherSwapped = true;
-
 //    public boolean isMovementTogglePvpDisabling = false;
     public boolean isMovementToggleMirrorPressDisabling = false;
     public boolean isBackwardSprintResetSuppressionEnabled = false;
