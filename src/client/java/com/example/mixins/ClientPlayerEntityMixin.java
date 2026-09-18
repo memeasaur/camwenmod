@@ -39,6 +39,7 @@ public abstract class ClientPlayerEntityMixin {
         boolean isMovementValid = currentScreen == null || isCurrentHandledScreen;
         SNEAK_VANILLA.setDown((getIsKeyBindingPressed(SNEAK_VANILLA) && isMovementValid) || config.isSneakEnabled);
         if (!isCurrentHandledScreen) {
+            TODO;
             SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
             JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
             FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
@@ -46,6 +47,7 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
             boolean isForwardPressed = getIsKeyBindingPressed(FORWARD_VANILLA);
             boolean isBackwardPressed = getIsKeyBindingPressed(BACKWARD_VANILLA);
+            TODO;
             boolean shouldConsumeBackward = config.isBackwardSprintResetSuppressionEnabled
                     && hasResetSprintSinceLastHit
                     && isForwardPressed
@@ -56,6 +58,7 @@ public abstract class ClientPlayerEntityMixin {
                     && isBackwardPressed) {
                 hasResetSprintSinceLastHit = true;
             }
+            TODO; // just stop sprinting instead of causing a stop here
             BACKWARD_VANILLA.setDown((isBackwardPressed && isMovementValid && !shouldConsumeBackward) || isBackwardEnabled);
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {

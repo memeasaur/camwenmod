@@ -7,6 +7,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 
 public class DelayedClientState {
+    TODO; // move this ish
     public static final Font TEXT_RENDERER = MINECRAFT_CLIENT_INSTANCE.font;
     public static final Options OPTIONS = MINECRAFT_CLIENT_INSTANCE.options;
     public static final KeyMapping
