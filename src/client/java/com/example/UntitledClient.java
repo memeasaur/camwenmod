@@ -283,7 +283,7 @@ public class UntitledClient implements ClientModInitializer {
                             // TODO -> make it centered on the waypoint
                             drawText(x, each.title, y, context);
                         }
-                        if (!config.isPlayerWaypointsEnabled) {
+                        if (config.playerWaypointCategory == Config.PlayerWaypointCategory.NONE) {
                             return;
                         }
                         for (AbstractClientPlayer player : Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level).players()) {

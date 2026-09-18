@@ -23,11 +23,11 @@ public class Config {
     public boolean isToggleSneakGuiEnabled = false;
     public boolean isSneakEnabled = false;
     public boolean isSprintEnabled = false;
-    public boolean isFullbrightEnabled = false;
+//    public boolean isFullbrightEnabled = false;
 //    public String currentPotionEnchantmentGlintType = "";
     //    public boolean isSharpnessParticleReverted = false;
 //    public boolean isCritParticleReverted = false;
-    public boolean isWeakAttackSoundDisabled = false;
+//    public boolean isWeakAttackSoundDisabled = false;
     public boolean isDamageTakenValueNotificationEnabled = false;
 //    public boolean isDepthStriderReverted = true; // TODO ?
 //    public boolean isNameplateIronLeatherSwapped = true;
@@ -36,8 +36,8 @@ public class Config {
     public boolean isMovementToggleMirrorPressDisabling = false;
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
-    public boolean isPlayerWaypointsEnabled = false;
     public enum PlayerWaypointCategory {
+        NONE,
         ALL,
         ENEMIES
     }

@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.Configs.CheatConfig;
+import com.example.Configs.Config;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.resources.Identifier;
@@ -74,7 +75,7 @@ public class Utils {
 //        if (config.isMovementTogglePvpDisabling) {
 //            doMovementToggleDisable();
 //        }
-        config.isPlayerWaypointsEnabled = false;
+        config.playerWaypointCategory = Config.PlayerWaypointCategory.NONE;
 
 //        if (config.isGuiCheatsPvpDisabling && !Objects.equals(currentXrayType, "")) {
 //            onXrayChange("");

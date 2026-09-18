@@ -12,15 +12,15 @@ import net.minecraft.world.entity.LivingEntity;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Inject(
-            at = @At(value = "HEAD"),
-            method = "nightVisionScale",
-            cancellable = true)
-    private static void onGetNightVisionStrength(
-            LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
-        if (config.isFullbrightEnabled) {
-            cir.setReturnValue(1.0f);
-            cir.cancel();
-        }
-    }
+//    @Inject(
+//            at = @At(value = "HEAD"),
+//            method = "nightVisionScale",
+//            cancellable = true)
+//    private static void onGetNightVisionStrength(
+//            LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> cir) {
+//        if (config.isFullbrightEnabled) {
+//            cir.setReturnValue(1.0f);
+//            cir.cancel();
+//        }
+//    }
 }

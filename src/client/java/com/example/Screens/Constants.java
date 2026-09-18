@@ -69,12 +69,12 @@ public class Constants {
                         ""),
                 getConfigCheckboxWidget("sneak", config.isSneakEnabled, is -> config.isSneakEnabled = is, "toggles sneak"),
                 getConfigCheckboxWidget("sprint", config.isSprintEnabled, is -> config.isSprintEnabled = is, "toggles sprint"),
-                getConfigCheckboxWidget("fake night vision", config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"),
-                getConfigCheckboxWidget(
-                        "weak attack disabled",
-                        config.isWeakAttackSoundDisabled,
-                        is -> config.isWeakAttackSoundDisabled = is,
-                        ""),
+//                getConfigCheckboxWidget("fake night vision", config.isFullbrightEnabled, is -> config.isFullbrightEnabled = is, "gives the same fullbright that night vision gives you"),
+//                getConfigCheckboxWidget(
+//                        "weak attack disabled",
+//                        config.isWeakAttackSoundDisabled,
+//                        is -> config.isWeakAttackSoundDisabled = is,
+//                        ""),
 //                getConfigCheckboxWidget(
 //                        "keep sprint",
 //                        computeCheatConfig().isEthylene,
@@ -102,11 +102,11 @@ public class Constants {
 //                        config.isDarknessDisabled,
 //                        is -> config.isDarknessDisabled = is,
 //                        "darkness + blindness + nausea"),
-                getConfigCheckboxWidget(
-                        "player waypoints",
-                        config.isPlayerWaypointsEnabled,
-                        is -> config.isPlayerWaypointsEnabled = is,
-                        ""),
+//                getConfigCheckboxWidget(
+//                        "player waypoints",
+//                        config.isPlayerWaypointsEnabled,
+//                        is -> config.isPlayerWaypointsEnabled = is,
+//                        ""),
 //                getConfigCheckboxWidget(
 //                        "sneaky reach (beware)",
 //                        computeCheatConfig().isSneakyReachEnabled,

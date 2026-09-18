@@ -128,7 +128,7 @@ public class KeyboardMixin {
 //            config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
 //        }
         while (PLAYER_WAYPOINTS_DISABLE.consumeClick()) {
-            config.isPlayerWaypointsEnabled = false;
+            config.playerWaypointCategory = Config.PlayerWaypointCategory.NONE;
         }
 
 //        while (BLOCK_XRAY_TOGGLE.consumeClick()) {
