@@ -1,12 +1,12 @@
 package com.example.mixins;
 
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(LocalPlayer.class)
+@Mixin(GameRenderer.class)
 public interface ClientPlayerEntityInvoker {
     @Invoker("pick")
     HitResult invokePick(

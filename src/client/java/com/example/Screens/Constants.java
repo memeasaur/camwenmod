@@ -23,7 +23,7 @@ public class Constants {
         return Checkbox.builder(Component.literal(text), TEXT_RENDERER)
 //                .pos(x, y)
                 .selected(isChecked)
-                .onValueChange((_, is) -> {
+                .onValueChange((slider, is) -> {
                     consumer.accept(is);
                     config.saveConfig();
 
@@ -37,7 +37,7 @@ public class Constants {
 
     private static Button getConfigButtonWidget(
             String title, Runnable onPress, String tooltip) {
-        return Button.builder(Component.literal(title), _ -> {
+        return Button.builder(Component.literal(title), button -> {
                     onPress.run();
                     config.saveConfig();
                     // Cheats start
@@ -105,11 +105,11 @@ public class Constants {
                         "will flag hard on pre-1.12 or whatever it is that made the hitboxes smaller"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassStaticRecorder()),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(getTargetingMarginBypassStaticRecorder()),
                         "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
                 getConfigButtonWidget(
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassMovingRecorder()),
+                        () -> MINECRAFT_CLIENT_INSTANCE.setScreen(getTargetingMarginBypassMovingRecorder()),
                         "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
 //                getConfigButtonWidget(
 //                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",

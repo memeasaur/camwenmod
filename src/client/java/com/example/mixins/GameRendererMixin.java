@@ -1,7 +1,8 @@
 package com.example.mixins;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import org.joml.Matrix4f;
+import net.minecraft.client.Camera;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,18 +19,18 @@ public class GameRendererMixin {
     private boolean isRenderingHandBobbing;
 
     @Inject(method = "renderItemInHand", at = @At("HEAD"))
-    private void beginHandBobbing(CallbackInfo ci) {
+    private void beginHandBobbing(Camera camera, float partialTick, Matrix4f projectionMatrix, CallbackInfo ci) {
         isRenderingHandBobbing = true;
     }
 
     @Inject(method = "renderItemInHand", at = @At("TAIL"))
-    private void endHandBobbing(CallbackInfo ci) {
+    private void endHandBobbing(Camera camera, float partialTick, Matrix4f projectionMatrix, CallbackInfo ci) {
         isRenderingHandBobbing = false;
     }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
     private void onBobView(
-            CameraRenderState cameraState, PoseStack poseStack, CallbackInfo ci) {
+            PoseStack poseStack, float partialTick, CallbackInfo ci) {
         if (config.isViewBobbingCameraShakeDisabled && !isRenderingHandBobbing) {
             ci.cancel();
         }

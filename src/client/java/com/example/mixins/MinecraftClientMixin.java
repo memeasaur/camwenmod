@@ -38,7 +38,7 @@ public abstract class MinecraftClientMixin {
         }
         if (config.isDebugModeEnabled) {
             if (previousAttackCooldown != 0) {
-                player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
+                player.displayClientMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime), false);
             }
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity) {
@@ -47,12 +47,12 @@ public abstract class MinecraftClientMixin {
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = 0.f;
-                if (((ClientPlayerEntityInvoker) this.player).invokePick(
+                if (((ClientPlayerEntityInvoker) MINECRAFT_CLIENT_INSTANCE.gameRenderer).invokePick(
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
                         player.entityInteractionRange(),
                         MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
-                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).displayClientMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"), false);
                 }
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;

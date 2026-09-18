@@ -7,17 +7,15 @@ import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.PlayerFaceExtractor;
+import net.minecraft.client.Camera;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -131,7 +129,8 @@ public class UntitledClient implements ClientModInitializer {
 //    }
 //    public static RAGE_CHEAT_LEVEL rageCheatLevel = RAGE_CHEAT_LEVEL.ZERO;
 
-    public static CameraRenderState cameraRenderState;
+    public static Camera camera;
+    public static Matrix4f projectionMatrix;
 
     record TempWaypoint(String title, Vec3 coordinate) {
     }
@@ -262,11 +261,7 @@ public class UntitledClient implements ClientModInitializer {
 
         // exampleLayer
         {
-            final Identifier EXAMPLE_LAYER = Identifier.fromNamespaceAndPath("pvputils2", "hud-example-layer");
-            HudElementRegistry.attachElementBefore(
-                    VanillaHudElements.CHAT,
-                    EXAMPLE_LAYER,
-                    (context, _) -> {
+            HudRenderCallback.EVENT.register((context, ignored) -> {
                         for (var each : tempWaypoints) {
                             Vector2i screenCoords = calculateScreenCoords(each.coordinate);
                             int x = screenCoords.x;
@@ -308,11 +303,11 @@ public class UntitledClient implements ClientModInitializer {
         // messageCoordsListener
         ClientReceiveMessageEvents.CHAT.register((
                 message,
-                _,
-                _,
-                _,
-                _) -> onIncomingMessage(message.getString()));
-        ClientReceiveMessageEvents.GAME.register((message, _) -> onIncomingMessage(message.getString()));
+                signature,
+                messageType,
+                sender,
+                parameters) -> onIncomingMessage(message.getString()));
+        ClientReceiveMessageEvents.GAME.register((message, overlay) -> onIncomingMessage(message.getString()));
 
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
             if (client.player instanceof LocalPlayer player) {
@@ -331,7 +326,7 @@ public class UntitledClient implements ClientModInitializer {
 
     private Vector2i calculateScreenCoords(Vec3 worldPos) {
         // TODO -> apparently JOML provides helpers that can simplify all this
-        Vec3 cameraPos = cameraRenderState.pos;
+        Vec3 cameraPos = camera.getPosition();
         // world space -> camera-relative world space
         Vec3 cameraRelativeWorldPos = worldPos.subtract(cameraPos);
         Vector4f result = new Vector4f(
@@ -341,9 +336,9 @@ public class UntitledClient implements ClientModInitializer {
                 1.0f // ?
         );
         // camera-relative -> camera space
-        new Quaternionf(cameraRenderState.orientation).conjugate().transform(result); // TODO -> val
+        new Quaternionf(camera.rotation()).conjugate().transform(result); // TODO -> val
         // camera space -> clip space
-        cameraRenderState.projectionMatrix.transform(result);
+        projectionMatrix.transform(result);
 
         float ndcX = result.x() / result.w();
         float ndcY = result.y() / result.w();
@@ -367,7 +362,7 @@ public class UntitledClient implements ClientModInitializer {
     }
 
     private void drawPlayerWaypoint(
-            Vec3 worldPos, GuiGraphicsExtractor drawContext, AbstractClientPlayer player) {
+            Vec3 worldPos, GuiGraphics drawContext, AbstractClientPlayer player) {
         var screenCoords = calculateScreenCoords(worldPos);
         int screenX = screenCoords.x;
         int screenY = screenCoords.y;
@@ -384,7 +379,7 @@ public class UntitledClient implements ClientModInitializer {
                         : 0xAFFF0000
         );
 //            TODO; // config enum option for only doing teammates etc.
-        PlayerFaceExtractor.extractRenderState(
+        PlayerFaceRenderer.draw(
                 drawContext,
                 player.getSkin(),
                 screenX - size / 2,
@@ -400,9 +395,9 @@ public class UntitledClient implements ClientModInitializer {
         // hovered
         {
             Vector3f forward = new Vector3f(0, 0, -1);
-            cameraRenderState.orientation.transform(forward);
+            camera.rotation().transform(forward);
             Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
-            Vec3 toMarker = worldPos.subtract(cameraRenderState.pos).normalize();
+            Vec3 toMarker = worldPos.subtract(camera.getPosition()).normalize();
             if (look.dot(toMarker) > 0.995) {
                 // TODO -> this could use the supabase username for mod users? + accounts could have nicknames set
                 // TODO -> extra info should also appear when MOUSED over
@@ -493,12 +488,12 @@ public class UntitledClient implements ClientModInitializer {
             int screenX,
             String text,
             int screenY,
-            GuiGraphicsExtractor drawContext) {
+            GuiGraphics drawContext) {
         int textX = screenX - TEXT_RENDERER.width(text) / 2;
 //        int textY = screenY + size / 2 + 2;
         int textY = screenY - TEXT_RENDERER.lineHeight / 2;
 
-        drawContext.text(
+        drawContext.drawString(
                 TEXT_RENDERER,
                 text,
                 textX,

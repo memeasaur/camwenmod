@@ -1,18 +1,17 @@
 package com.example.mixins;
 
-import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SoundManager.class)
 public class SoundManagerMixin {
     @Inject(method = "play*", at = @At("HEAD"), cancellable = true)
-    void onPlay(SoundInstance instance, CallbackInfoReturnable<SoundEngine.PlayResult> cir) {
+    void onPlay(SoundInstance instance, CallbackInfo ci) {
 //        if (config.isWeakAttackSoundDisabled && instance.getIdentifier().equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.location())) {
 //            cir.cancel();
 //        }
