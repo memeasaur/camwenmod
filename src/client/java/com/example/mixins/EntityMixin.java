@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 @Mixin(Entity.class)
 public class EntityMixin {
     @Inject(method = "getPickRadius", at = @At("HEAD"), cancellable = true)
-    private void onGetTargetingMargin(final CallbackInfoReturnable<Float> cir) {
+    private void onGetTargetingMargin(CallbackInfoReturnable<Float> cir) {
         if ((Object) this instanceof Player && config.isCheatsEnabled) {
             boolean isMoving = MINECRAFT_CLIENT_INSTANCE.player.input.getMoveVector().lengthSquared() > 0.f;
             cir.setReturnValue(computeCheatConfig().computeTargetingMarginBypass(isMoving));
