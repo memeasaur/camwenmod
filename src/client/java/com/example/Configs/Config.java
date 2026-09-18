@@ -21,8 +21,8 @@ public class Config {
 
     public HashMap<UUID, NameplateTeam> nameplateUuids = new HashMap<>();
     public boolean isToggleSneakGuiEnabled = false;
-    public boolean isSneakEnabled = false;
-    public boolean isSprintEnabled = false;
+//    public boolean isSneakEnabled = false;
+//    public boolean isSprintEnabled = false;
 //    public boolean isFullbrightEnabled = false;
 //    public String currentPotionEnchantmentGlintType = "";
     //    public boolean isSharpnessParticleReverted = false;

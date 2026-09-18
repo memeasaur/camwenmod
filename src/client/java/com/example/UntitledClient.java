@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.Constants.*;
-import static com.example.DelayedClientState.*;
 import static com.example.Utils.*;
 
 public class UntitledClient implements ClientModInitializer {

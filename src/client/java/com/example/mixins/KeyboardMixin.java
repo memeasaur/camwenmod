@@ -2,6 +2,7 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,46 +28,51 @@ import static com.example.Utils.*;
 @Mixin(value = KeyboardHandler.class)
 public class KeyboardMixin {
     @Unique
-    private static boolean // TODO -> remove these
-//            isSneakToggleButtonPressed = false,
-//            isFullbrightToggleButtonPressed = false,
-            isMovementToggleMirrorSequencePressed = false;
+    private static boolean isMovementToggleMirrorSequencePressed = false;
 
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
             long handle, int action, KeyEvent event, CallbackInfo ci) {
         if (config.isMovementToggleMirrorPressDisabling) {
-            if (getIsKeyBindingPressed(SNEAK_VANILLA) == config.isSneakEnabled
-                    && getIsKeyBindingPressed(SPRINT_VANILLA) == config.isSprintEnabled
-                    && getIsKeyBindingPressed(JUMP_VANILLA) == isJumpEnabled
-                    && getIsKeyBindingPressed(FORWARD_VANILLA) == isForwardEnabled
-                    && getIsKeyBindingPressed(LEFT_VANILLA) == isLeftEnabled
-                    && getIsKeyBindingPressed(RIGHT_VANILLA) == isRightEnabled
-                    && getIsKeyBindingPressed(BACKWARD_VANILLA) == isBackwardEnabled) {
-                if (!isMovementToggleMirrorSequencePressed) {
-                    doMovementToggleDisable();
-                }
-            } else {
+            if (!(getIsKeyBindingPressed(SNEAK_VANILLA) == toggleMovementState.shift()
+                    && getIsKeyBindingPressed(SPRINT_VANILLA) == toggleMovementState.sprint()
+                    && getIsKeyBindingPressed(JUMP_VANILLA) == toggleMovementState.jump()
+                    && getIsKeyBindingPressed(FORWARD_VANILLA) == toggleMovementState.forward()
+                    && getIsKeyBindingPressed(LEFT_VANILLA) == toggleMovementState.left()
+                    && getIsKeyBindingPressed(RIGHT_VANILLA) == toggleMovementState.right()
+                    && getIsKeyBindingPressed(BACKWARD_VANILLA) == toggleMovementState.backward())) {
                 isMovementToggleMirrorSequencePressed = false;
+            } else if (!isMovementToggleMirrorSequencePressed) {
+                doMovementToggleDisable();
             }
         }
-        while (MOVEMENT_TOGGLE.consumeClick()) { // TODO -> I should probably just use if if possible
-            if (isJumpEnabled
-                    || isForwardEnabled
-                    || isLeftEnabled
-                    || isRightEnabled
-                    || isBackwardEnabled)
-                doMovementToggleDisable();
-            else
-                doMovementToggleEnable();
-        }
+        // TODO -> I should probably just use if if possible
+//        while (MOVEMENT_TOGGLE.consumeClick()) {
+//            if (isJumpEnabled
+//                    || isForwardEnabled
+//                    || isLeftEnabled
+//                    || isRightEnabled
+//                    || isBackwardEnabled)
+//                doMovementToggleDisable();
+//            else
+//                doMovementToggleEnable();
+//        }
         while (MOVEMENT_ENABLE.consumeClick()) {
-            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer)
-                doMovementToggleEnable();
+            if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer) {
+                toggleMovementState = new Input(
+                        getIsKeyBindingPressed(FORWARD_VANILLA),
+                        getIsKeyBindingPressed(BACKWARD_VANILLA),
+                        getIsKeyBindingPressed(LEFT_VANILLA),
+                        getIsKeyBindingPressed(RIGHT_VANILLA),
+                        getIsKeyBindingPressed(JUMP_VANILLA),
+                        getIsKeyBindingPressed(SNEAK_VANILLA),
+                        getIsKeyBindingPressed(SPRINT_VANILLA));
+                isMovementToggleMirrorSequencePressed = true;
+            }
         }
-        while (MOVEMENT_DISABLE.consumeClick())
-            doMovementToggleDisable();
+//        while (MOVEMENT_DISABLE.consumeClick())
+//            doMovementToggleDisable();
 
 
 //        if (getIsKeyBindingPressed(SNEAK_TOGGLE)) {
@@ -134,7 +140,7 @@ public class KeyboardMixin {
 //            onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");
 //        }
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
-            onXrayChange(Objects.equals(currentXrayType, "player") ? "" : "player");
+            isPlayerXrayEnabled = !isPlayerXrayEnabled;
         }
 
         while (HEAD_RUN_CAMERA_OFFSET_ENABLE.consumeClick()) {
@@ -172,20 +178,6 @@ public class KeyboardMixin {
 //            rageCheatLevel = RAGE_CHEAT_LEVEL.values()[rageCheatLevel.ordinal() + 1];
 ////            computeCheatConfig().targetingMarginBypass = rageCheatLevel.TargetingMarginBypass; // TODO -> method-ize
 //        }
-    }
-
-    @Unique
-    private void doMovementToggleEnable() {
-        config.isSneakEnabled = getIsKeyBindingPressed(SNEAK_VANILLA);
-        config.isSprintEnabled = getIsKeyBindingPressed(SPRINT_VANILLA);
-
-        isJumpEnabled = getIsKeyBindingPressed(JUMP_VANILLA);
-        isForwardEnabled = getIsKeyBindingPressed(FORWARD_VANILLA);
-        isLeftEnabled = getIsKeyBindingPressed(LEFT_VANILLA);
-        isRightEnabled = getIsKeyBindingPressed(RIGHT_VANILLA);
-        isBackwardEnabled = getIsKeyBindingPressed(BACKWARD_VANILLA);
-
-        isMovementToggleMirrorSequencePressed = true;
     }
 
     @Unique
