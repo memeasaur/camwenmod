@@ -20,7 +20,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import static com.example.Constants.*;
-import static com.example.DelayedClientState.*;
 import static com.example.Screens.Constants.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;

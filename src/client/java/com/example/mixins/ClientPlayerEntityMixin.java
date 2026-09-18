@@ -7,13 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
-import static com.example.DelayedClientState.*;
-import static com.example.DelayedClientState.BACKWARD_VANILLA;
-import static com.example.DelayedClientState.FORWARD_VANILLA;
-import static com.example.DelayedClientState.JUMP_VANILLA;
-import static com.example.DelayedClientState.LEFT_VANILLA;
-import static com.example.DelayedClientState.RIGHT_VANILLA;
+import static com.example.Constants.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.getIsKeyBindingPressed;
 
@@ -41,7 +35,7 @@ public abstract class ClientPlayerEntityMixin {
         if (!isCurrentHandledScreen) {
             TODO;
             SPRINT_VANILLA.setDown((getIsKeyBindingPressed(SPRINT_VANILLA) && isMovementValid) || config.isSprintEnabled);
-            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this
+            JUMP_VANILLA.setDown((getIsKeyBindingPressed(JUMP_VANILLA) && isMovementValid) || (isJumpEnabled && !this.isUsingItem())); // TODO -> config this?
             FORWARD_VANILLA.setDown((getIsKeyBindingPressed(FORWARD_VANILLA) && isMovementValid) || isForwardEnabled);
             LEFT_VANILLA.setDown((getIsKeyBindingPressed(LEFT_VANILLA) && isMovementValid) || isLeftEnabled);
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || isRightEnabled);
