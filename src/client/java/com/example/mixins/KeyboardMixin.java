@@ -127,6 +127,7 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.consumeClick()) {
+            TODO; // wtf
             MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
         }
 
@@ -141,7 +142,7 @@ public class KeyboardMixin {
 //            onXrayChange(Objects.equals(currentXrayType, "block") ? "" : "block");
 //        }
         while (PLAYER_XRAY_TOGGLE.consumeClick()) {
-            isPlayerXrayEnabled = !isPlayerXrayEnabled;
+            onXrayChange();
         }
 
         while (HEAD_RUN_CAMERA_OFFSET_ENABLE.consumeClick()) {
