@@ -1,4 +1,4 @@
-package com.example.overlay;
+package com.example.overlayTodoAi;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

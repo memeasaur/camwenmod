@@ -1,4 +1,4 @@
-package com.example.overlay;
+package com.example.overlayTodoAi;
 
 import com.example.Configs.Config;
 import com.mojang.blaze3d.platform.NativeImage;
