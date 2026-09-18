@@ -8,6 +8,7 @@
     >maybe start with only showing it in the easiest case
 >disable view bobbing screen shake option, but only do it in first person (26.2)
     >either by forking the other mod or by doing it here
+>maybe I should treat w taps differently? to match the s tap thing
 
 >impl last-seen waypoints w/ timers
 >parkour macro recorder

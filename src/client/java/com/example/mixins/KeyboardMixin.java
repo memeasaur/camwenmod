@@ -127,7 +127,7 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.consumeClick()) {
-            TODO; // wtf
+            TODO; // wtf + test the s tap thing
             MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
         }
 
