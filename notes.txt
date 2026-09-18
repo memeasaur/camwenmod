@@ -1,5 +1,5 @@
->re-add double tap to 26.2?
->make core library? or something like clothconfig?:
+>re-add double tap s to 26.2?
+>make core library? or something like clothConfig?:
     >make autorun it's own mod
     >make xray it's own mod
 
