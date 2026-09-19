@@ -26,7 +26,10 @@ public class Constants {
         return Checkbox.builder(Component.literal(text), TEXT_RENDERER)
 //                .pos(x, y)
                 .selected(isChecked)
-                .onValueChange((_, is) -> {
+                // codex start
+                // codex (old code) .onValueChange((_, is) -> {
+                .onValueChange((cycleButton, is) -> {
+                // codex end
                     consumer.accept(is);
                     config.saveConfig();
 
@@ -40,7 +43,10 @@ public class Constants {
 
     private static Button getConfigButtonWidget(
             String title, Runnable onPress, String tooltip) {
-        return Button.builder(Component.literal(title), _ -> {
+        // codex start
+        // codex (old code) return Button.builder(Component.literal(title), _ -> {
+        return Button.builder(Component.literal(title), button -> {
+        // codex end
                     onPress.run();
                     config.saveConfig();
                     // Cheats start

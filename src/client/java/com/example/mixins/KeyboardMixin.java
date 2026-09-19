@@ -2,7 +2,6 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.ExternalConfigWindow;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,7 +33,10 @@ public class KeyboardMixin {
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
-            long handle, int action, KeyEvent event, CallbackInfo ci) {
+            // codex start
+            // codex (old code) long handle, int action, KeyEvent event, CallbackInfo ci) {
+            long handle, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
+            // codex end
         if (config.isMovementToggleMirrorPressDisabling) {
             if (!(getIsKeyBindingPressed(SNEAK_VANILLA) == toggleMovementState.shift()
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == toggleMovementState.sprint()

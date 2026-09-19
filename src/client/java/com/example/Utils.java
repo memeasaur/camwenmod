@@ -3,8 +3,12 @@ package com.example;
 import com.example.Configs.CheatConfig;
 import com.example.Configs.Config;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-import net.minecraft.resources.Identifier;
+// codex start
+// codex (old code) import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+// codex (old code) import net.minecraft.resources.Identifier;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.resources.ResourceLocation;
+// codex end
 import org.lwjgl.glfw.GLFW;
 
 import java.io.FileNotFoundException;
@@ -34,7 +38,10 @@ import static com.example.UntitledClient.*;
 
 public class Utils {
     public static boolean getIsKeyPressed(int glfwKeybind) {
-        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;
+        // codex start
+        // codex (old code) return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;
+        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), glfwKeybind) == GLFW.GLFW_PRESS;
+        // codex end
     }
 
     public static boolean getIsKeyBindingPressed(KeyMapping keyBinding) {
@@ -42,7 +49,10 @@ public class Utils {
         if (key.getType() == InputConstants.Type.KEYSYM) {
             return getIsKeyPressed(InputConstants.getKey(keyBinding.saveString()).getValue());
         } else if (key.getType() == InputConstants.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            // codex start
+            // codex (old code) return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().getWindow(), key.getValue()) == GLFW.GLFW_PRESS;
+            // codex end
         } else {
             Objects.requireNonNull(null);
             return false;
@@ -52,11 +62,14 @@ public class Utils {
     // TODO -> enum
     public static void onXrayChange() {
         isPlayerXrayEnabled = !isPlayerXrayEnabled;
-        MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
-                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
-                MINECRAFT_CLIENT_INSTANCE.options,
-                MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera(),
-                MINECRAFT_CLIENT_INSTANCE.getBlockColors());
+        // codex start
+        // codex (old code) MINECRAFT_CLIENT_INSTANCE.levelRenderer.invalidateCompiledGeometry(
+        // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.level),
+        // codex (old code) MINECRAFT_CLIENT_INSTANCE.options,
+        // codex (old code) MINECRAFT_CLIENT_INSTANCE.gameRenderer.mainCamera(),
+        // codex (old code) MINECRAFT_CLIENT_INSTANCE.getBlockColors());
+        MINECRAFT_CLIENT_INSTANCE.levelRenderer.allChanged();
+        // codex end
     }
 
     public static void onPvpDamage() {
@@ -76,7 +89,10 @@ public class Utils {
         } catch (IOException e) {
             Minecraft minecraftClient = Minecraft.getInstance();
             if (minecraftClient.player instanceof LocalPlayer player)
-                minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("serialization failed")));
+                // codex start
+                // codex (old code) minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("serialization failed")));
+                minecraftClient.execute(() -> player.displayClientMessage(Component.literal("serialization failed"), false));
+                // codex end
         }
     }
 
@@ -87,7 +103,10 @@ public class Utils {
             if (!(e instanceof FileNotFoundException)) {
                 Minecraft minecraftClient = Minecraft.getInstance();
                 if (minecraftClient.player instanceof LocalPlayer player)
-                    minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("deserialization failed: " + e.getMessage())));
+                    // codex start
+                    // codex (old code) minecraftClient.execute(() -> player.sendSystemMessage(Component.literal("deserialization failed: " + e.getMessage())));
+                    minecraftClient.execute(() -> player.displayClientMessage(Component.literal("deserialization failed: " + e.getMessage()), false));
+                    // codex end
                 // TODO -> console this
             }
             return null;
@@ -151,7 +170,10 @@ public class Utils {
     }
 
     public static CheatConfig computeCheatConfig() {
-        return cheatConfigs.computeIfAbsent(computeServerName(), _ -> new CheatConfig());
+        // codex start
+        // codex (old code) return cheatConfigs.computeIfAbsent(computeServerName(), _ -> new CheatConfig());
+        return cheatConfigs.computeIfAbsent(computeServerName(), unused0 -> new CheatConfig());
+        // codex end
     }
 
     public static ItemStack buildReplacementTeamLeatherItemStack(
@@ -160,7 +182,10 @@ public class Utils {
 //        replacementStack.applyComponentsFrom(original.getComponents());
         replacementStack.set(
                 DataComponents.DYED_COLOR,
-                new DyedItemColor(color)
+                // codex start
+                // codex (old code) new DyedItemColor(color)
+                new DyedItemColor(color, true)
+                // codex end
         );
         replacementStack.set(
                 DataComponents.ENCHANTMENTS,
@@ -169,10 +194,16 @@ public class Utils {
         return replacementStack;
     }
 
-    private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
+    // codex start
+    // codex (old code) private static final KeyMapping.Category PVP_UTILS = Objects.requireNonNull(KeyMapping.Category.register(Identifier.fromNamespaceAndPath("pvputils", "pvp_utils")));
+    private static final String PVP_UTILS = "pvputils.pvp_utils";
+    // codex end
 
     public static KeyMapping getAbstractPvpUtilsKeybind(String name) {
-        return KeyMappingHelper.registerKeyMapping(new KeyMapping(
+        // codex start
+        // codex (old code) return KeyMappingHelper.registerKeyMapping(new KeyMapping(
+        return KeyBindingHelper.registerKeyBinding(new KeyMapping(
+        // codex end
                 name,
 //                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_UNKNOWN,
