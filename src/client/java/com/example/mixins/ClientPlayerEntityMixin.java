@@ -85,25 +85,6 @@ public abstract class ClientPlayerEntityMixin {
 //        }
     }
 
-    // codex start
-    @Unique
-    private final com.example.ShiftReleaseSprintReset shiftReleaseSprintReset = new com.example.ShiftReleaseSprintReset();
-
-    @Inject(method = "aiStep", at = @At("RETURN"))
-    private void resetSprintOnShiftRelease(CallbackInfo ci) {
-        // Run after vanilla sprint handling, before tick sends the sprint state to the server.
-        if (shiftReleaseSprintReset.update(
-                config.isBackwardSprintResetSuppressionEnabled,
-                MINECRAFT_CLIENT_INSTANCE.gui.screen() == null && MINECRAFT_CLIENT_INSTANCE.isWindowActive(),
-                getIsKeyBindingPressed(SNEAK_VANILLA),
-                sprintResetBackwardsKeyState == SprintResetState.VALID)) {
-            SPRINT_VANILLA.setDown(false);
-            ((LocalPlayer) (Object) this).setSprinting(false);
-            sprintResetBackwardsKeyState = SprintResetState.INVALID;
-        }
-    }
-    // codex end
-
     @Inject(method = "handlePortalTransitionEffect", at = @At("RETURN"))
     void onTickNausea(CallbackInfo ci) {
 //        if (config.isDarknessDisabled) {

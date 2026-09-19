@@ -8,6 +8,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(LocalPlayer.class)
 public interface ClientPlayerEntityInvoker {
+    // codex start
+    @Invoker("sendIsSprintingIfNeeded")
+    void invokeSendIsSprintingIfNeeded();
+    // codex end
     @Invoker("pick")
     HitResult invokePick(
             Entity camera,
