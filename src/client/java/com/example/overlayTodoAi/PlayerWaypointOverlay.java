@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static com.example.UntitledClient.*;
@@ -32,8 +33,8 @@ public final class PlayerWaypointOverlay {
 
     private boolean visible(Minecraft client) {
         return client.level != null && client.player != null && cameraRenderState != null
-                && client.gui.screen() == null && client.gui.overlay() == null && !client.gui.hud.isHidden() && client.isWindowActive()
-                && config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE;
+                && client.gui.screen() == null && client.gui.overlay() == null && !client.gui.hud.isHidden() && client.isWindowActive();
+//                && config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE;
     }
 
     public void tick(Minecraft client) {
@@ -42,14 +43,19 @@ public final class PlayerWaypointOverlay {
     }
 
     public void render(Minecraft client, Function<Vec3, Vector2i> project) {
-        if (!visible(client) || failed) { hide(); return; }
+        if (!visible(client) || failed) {
+            hide();
+            return;
+        }
         long now = System.nanoTime();
         // Desktop bitmap composition need not run at an uncapped Minecraft frame rate.
         if (now - lastFrame < 16_666_667L) return;
         lastFrame = now;
         try {
-            if (!Platform.isWindows()) throw new UnsupportedOperationException("Player waypoint overlay requires Windows");
-            if (window == null) window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle()));
+            if (!Platform.isWindows())
+                throw new UnsupportedOperationException("Player waypoint overlay requires Windows");
+            if (window == null)
+                window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle()));
             BufferedImage frame = window.beginFrame();
             if (frame == null) return;
             Graphics2D graphics = frame.createGraphics();
@@ -67,37 +73,39 @@ public final class PlayerWaypointOverlay {
                 graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 Vector3f forward = cameraRenderState.orientation.transform(new Vector3f(0, 0, -1));
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
-                for (var player : client.level.players()) {
-                    if (player == client.player) continue;
-                    var team = config.nameplateUuids.get(player.getUUID());
-                    if (config.playerWaypointCategory == Config.PlayerWaypointCategory.ENEMIES
-                            && (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY)) continue;
-                    Vec3 world = player.position().add(0, player.getBbHeight() / 2, 0);
-                    Vector2i point = project.apply(world);
-                    int x = point.x, y = point.y;
-                    // codex start
-                    boolean isClamped = x <= 0 || x >= client.getWindow().getGuiScaledWidth()
-                            || y <= 0 || y >= client.getWindow().getGuiScaledHeight();
-                    if (config.isUnclampedPlayerWaypointsDisabled && !isClamped) continue;
-                    hasOverlayContent = true;
-                    // codex end
-                    graphics.setColor(new Color(team == null ? 0xAFFF0000 : 0xFF000000 | team.color.getValue(), true));
-                    graphics.fillRect(x - 8, y - 8, 16, 16);
-                    Identifier skin = player.getSkin().body().texturePath();
-                    usedSkins.add(skin);
-                    BufferedImage face = faces.computeIfAbsent(skin, id -> loadFace(client, id));
-                    if (face != null) graphics.drawImage(face, x - 6, y - 6, 12, 12, null);
-                    text(graphics, String.format("%.1fm", client.player.position().distanceTo(world)), x, y + 13);
-                    if (look.dot(world.subtract(cameraRenderState.pos).normalize()) > 0.995) {
-                        text(graphics, player.getScoreboardName(), x, y - 13);
-                        text(graphics, String.format("%.0f, %.0f, %.0f", world.x, world.y, world.z), x, y - 24);
+                if (config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE) {
+                    for (var player : Objects.requireNonNull(client.level).players()) {
+                        if (player == client.player) continue;
+                        var team = config.nameplateUuids.get(player.getUUID());
+                        if (config.playerWaypointCategory == Config.PlayerWaypointCategory.ENEMIES
+                                && (team == Config.NameplateTeam.ALLY || team == Config.NameplateTeam.FRIENDLY))
+                            continue;
+                        Vec3 world = player.position().add(0, player.getBbHeight() / 2, 0);
+                        Vector2i point = project.apply(world);
+                        int x = point.x, y = point.y;
+                        // codex start
+                        boolean isClamped = x <= 0 || x >= client.getWindow().getGuiScaledWidth()
+                                || y <= 0 || y >= client.getWindow().getGuiScaledHeight();
+                        if (config.isUnclampedPlayerWaypointsDisabled && !isClamped) continue;
+                        hasOverlayContent = true;
+                        // codex end
+                        graphics.setColor(new Color(team == null ? 0xAFFF0000 : 0xFF000000 | team.color.getValue(), true));
+                        graphics.fillRect(x - 8, y - 8, 16, 16);
+                        Identifier skin = player.getSkin().body().texturePath();
+                        usedSkins.add(skin);
+                        BufferedImage face = faces.computeIfAbsent(skin, id -> loadFace(client, id));
+                        if (face != null) graphics.drawImage(face, x - 6, y - 6, 12, 12, null);
+                        text(graphics, String.format("%.1fm", client.player.position().distanceTo(world)), x, y + 13);
+                        if (look.dot(world.subtract(cameraRenderState.pos).normalize()) > 0.995) {
+                            text(graphics, player.getScoreboardName(), x, y - 13);
+                            text(graphics, String.format("%.0f, %.0f, %.0f", world.x, world.y, world.z), x, y - 24);
+                        }
                     }
                 }
                 if (config.isTeammateTargetCrosshairMarkerEnabled
                         && client.hitResult instanceof EntityHitResult hit
                         && hit.getEntity() instanceof Player target
-                        && (config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.ALLY
-                        || config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.FRIENDLY)) {
+                        && (config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.ALLY || config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.FRIENDLY)) {
                     // codex start
                     hasOverlayContent = true;
                     // codex end
@@ -106,11 +114,14 @@ public final class PlayerWaypointOverlay {
                             client.getWindow().getGuiScaledWidth() / 2,
                             client.getWindow().getGuiScaledHeight() / 2);
                 }
-            } finally { graphics.dispose(); }
+            } finally {
+                graphics.dispose();
+            }
             faces.keySet().retainAll(usedSkins);
             // codex start
 //            if (usedSkins.isEmpty()) hide(); else window.present();
-            if (!hasOverlayContent) hide(); else window.present();
+            if (!hasOverlayContent) hide();
+            else window.present();
             // codex end
         } catch (Exception | LinkageError error) {
             failed = true;
@@ -127,7 +138,9 @@ public final class PlayerWaypointOverlay {
         // Built-in/default skins come from resources rather than downloaded DynamicTextures.
         try (var stream = client.getResourceManager().open(id); var image = NativeImage.read(stream)) {
             return face(image);
-        } catch (Exception ignored) { return null; }
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     private static void drawTargetedTeammateMarker(Graphics2D graphics, int x, int y) {
@@ -141,12 +154,17 @@ public final class PlayerWaypointOverlay {
     private static BufferedImage face(NativeImage skin) {
         BufferedImage result = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
         BufferedImage hat = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < 8; y++) for (int x = 0; x < 8; x++) {
-            result.setRGB(x, y, skin.getPixel(x + 8, y + 8));
-            hat.setRGB(x, y, skin.getPixel(x + 40, y + 8));
-        }
+        for (int y = 0; y < 8; y++)
+            for (int x = 0; x < 8; x++) {
+                result.setRGB(x, y, skin.getPixel(x + 8, y + 8));
+                hat.setRGB(x, y, skin.getPixel(x + 40, y + 8));
+            }
         Graphics2D graphics = result.createGraphics();
-        try { graphics.drawImage(hat, 0, 0, null); } finally { graphics.dispose(); }
+        try {
+            graphics.drawImage(hat, 0, 0, null);
+        } finally {
+            graphics.dispose();
+        }
         return result;
     }
 
@@ -160,9 +178,15 @@ public final class PlayerWaypointOverlay {
         graphics.drawString(text, left, baseline);
     }
 
-    private void hide() { if (window != null) window.hide(); }
+    private void hide() {
+        if (window != null) window.hide();
+    }
+
     public void close() {
-        if (window != null) { window.close(); window = null; }
+        if (window != null) {
+            window.close();
+            window = null;
+        }
         faces.clear();
     }
 }

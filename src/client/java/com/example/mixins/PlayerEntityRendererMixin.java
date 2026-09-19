@@ -26,8 +26,11 @@ public class PlayerEntityRendererMixin {
 
     @Inject(at = @At(value = "RETURN"), method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V")
     private void onExtractRenderState(
-            LivingEntity livingEntity, LivingEntityRenderState renderState, float par3, CallbackInfo ci) {
-
+            LivingEntity livingEntity,
+            LivingEntityRenderState renderState,
+            float par3,
+            CallbackInfo ci) {
+        TODO; // test if this actually runs
         if (renderState.nameTag instanceof Component text &&
                 config.nameplateUuids.get(livingEntity.getUUID()) instanceof Config.NameplateTeam team) {
             renderState.nameTag = text.copy().setStyle(text.getStyle().withColor(team.color.getValue()));
