@@ -118,8 +118,9 @@ public final class PlayerWaypointOverlay {
     private static void drawTargetedTeammateMarker(Graphics2D graphics, int x, int y) {
         graphics.setColor(Color.RED);
         graphics.setStroke(new BasicStroke(2.0f));
-        graphics.drawLine(x - 7, y - 7, x + 7, y + 7);
-        graphics.drawLine(x - 7, y + 7, x + 7, y - 7);
+        int size = 3;
+        graphics.drawLine(x - size, y - size, x + size, y + size);
+        graphics.drawLine(x - size, y + size, x + size, y - size);
     }
 
     private static BufferedImage face(NativeImage skin) {
