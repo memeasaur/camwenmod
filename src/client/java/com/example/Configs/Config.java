@@ -20,6 +20,9 @@ public class Config {
     }
 
     public HashMap<UUID, NameplateTeam> nameplateUuids = new HashMap<>();
+    // codex start
+    public boolean isLastHitTargetEnabled = false;
+    // codex end
     public boolean isToggleSneakGuiEnabled = false;
 //    public boolean isSneakEnabled = false;
 //    public boolean isSprintEnabled = false;

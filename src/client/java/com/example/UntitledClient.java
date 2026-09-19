@@ -155,6 +155,12 @@ public class UntitledClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // codex start
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT,
+                Identifier.fromNamespaceAndPath("pvputils", "last_hit_target"),
+                (graphics, delta) -> LastHitTarget.render(graphics, delta.getGameTimeDeltaPartialTick(true)));
+        ClientTickEvents.END_CLIENT_TICK.register(LastHitTarget::tick);
+        // codex end
         // exampleLayer
         {
             // TODO -> fix?

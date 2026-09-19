@@ -63,6 +63,12 @@ public class Constants {
     // TODO -> do the other movement toggles here, too
     public static Screen buildConfig() {
         return buildConfigScreen("pvputils config", List.of(
+                // codex start
+                getConfigCheckboxWidget("last hit enemy target", config.isLastHitTargetEnabled, is -> {
+                    config.isLastHitTargetEnabled = is;
+                    com.example.LastHitTarget.clear();
+                }, "marks the closest hitbox point of the last enemy you attack in Minecraft; allies/friendlies are excluded"),
+                // codex end
                 getConfigCheckboxWidget("togglesneak gui", config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"),
 //                getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
                 getConfigCheckboxWidget("movement toggle mirror press cancel", config.isMovementToggleMirrorPressDisabling, (is) -> config.isMovementToggleMirrorPressDisabling = is, "disables movement toggle when autorun movement keys are re-pressed"),
