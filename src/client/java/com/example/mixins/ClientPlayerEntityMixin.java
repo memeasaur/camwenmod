@@ -24,22 +24,11 @@ import java.util.Objects;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
-    // codex start
-    @Unique
-    private boolean wasSneakPressed;
-    // codex end
-
     @Shadow
     public abstract boolean isUsingItem();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        // codex start
-        boolean isSneakPressed = getIsKeyBindingPressed(SNEAK_VANILLA);
-        boolean wasSneakReleased = wasSneakPressed && !isSneakPressed;
-        wasSneakPressed = isSneakPressed;
-        // codex end
-
         // TODO -> if (false) return; test this for starting sprint w/ s
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
         // TODO -> wtf?
@@ -57,10 +46,6 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || toggleMovementState.right());
             BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || toggleMovementState.backward());
 
-            if (config.isBackwardSprintResetSuppressionEnabled &&
-                    FORWARD_VANILLA.isDown() &&
-                    BACKWARD_VANILLA.isDown()) {
-            }
             if (config.isBackwardSprintResetSuppressionEnabled) {
                 // s tap
                 if (FORWARD_VANILLA.isDown() && BACKWARD_VANILLA.isDown()) {
@@ -74,14 +59,9 @@ public abstract class ClientPlayerEntityMixin {
                     }
                 }
 
-                if (wasSneakReleased && isMovementValid &&) {
-                    if (config.isBackwardSprintResetSuppressionEnabled && wasSneakReleased
-                            && isMovementValid && MINECRAFT_CLIENT_INSTANCE.isWindowActive()
-                            && sprintResetBackwardsKeyState == SprintResetState.VALID) { // codex ("TODO; // do it here")
-                        Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
-                        sprintResetBackwardsKeyState = SprintResetState.INVALID;
-                    }
-                    TODO; // gl
+                if (!SPRINT_VANILLA.isDown() && ((LocalPlayer) (Object)this).isSprinting() &&
+                        sprintResetBackwardsKeyState == ) {
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
                 }
             }
         }
