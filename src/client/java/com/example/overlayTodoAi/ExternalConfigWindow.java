@@ -1,6 +1,5 @@
 package com.example.overlayTodoAi;
 
-// codex start
 import com.example.Configs.Config;
 import com.example.Configs.CheatConfig;
 import com.sun.jna.Native;
@@ -29,6 +28,7 @@ import static com.example.UntitledClient.config;
 import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.serializeJsonBlocking;
 
+// codex start
 /** Interactive configuration in a capture-excluded native window outside Minecraft's framebuffer. */
 public final class ExternalConfigWindow {
     private static final int WDA_EXCLUDEFROMCAPTURE = 0x11;
@@ -39,6 +39,10 @@ public final class ExternalConfigWindow {
     }
 
     public static void show() {
+        toggle();
+    }
+
+    public static void toggle() {
         Minecraft client = Minecraft.getInstance();
         if (!Platform.isWindows()) {
             reportFailure(client, new UnsupportedOperationException("external config requires Windows"));
@@ -53,9 +57,10 @@ public final class ExternalConfigWindow {
         CheatConfig activeCheatConfig = computeCheatConfig();
         SwingUtilities.invokeLater(() -> {
             if (frame != null && frame.isDisplayable()) {
-                frame.setVisible(true);
-                frame.toFront();
-                frame.requestFocus();
+//                frame.setVisible(true);
+//                frame.toFront();
+//                frame.requestFocus();
+                closeOnEventThread();
                 return;
             }
             try {
