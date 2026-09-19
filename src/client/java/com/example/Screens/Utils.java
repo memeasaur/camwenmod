@@ -21,7 +21,9 @@ public class Utils {
         return new Screen(title) {
             @Override
             protected void init() {
-                getFloatInputScreenFlag[0] = false;
+                // codex start
+//                getFloatInputScreenFlag[0] = false;
+                // codex end
                 new Thread(() -> {
                     Minecraft threadClientInstance = Minecraft.getInstance();
                     synchronousRunnable.accept(threadClientInstance);
@@ -88,29 +90,31 @@ public class Utils {
         }, returnScreen);
     }
 
-    // TODO -> use text input for this
-    private static final boolean[] getFloatInputScreenFlag = new boolean[]{false};
-    static Screen getDoubleInputScreen(
-            Component title, Consumer<Double> consumer) {
-        return getAbstractKeyboardSequenceScreen(title, (string) -> {
-            if (Character.isDigit(string.charAt(0))) {
-                return true;
-                }
-            else if (string.charAt(0) == '.' && !getFloatInputScreenFlag[0]) {
-                getFloatInputScreenFlag[0] = true;
-                return true;
-            } else
-                return false;
-        }, (finalFloatString, client) -> {
-            if (!finalFloatString.isEmpty() && !finalFloatString.equals(".")) {
-                consumer.accept(Double.parseDouble(finalFloatString));
-                client.execute(() -> client.setScreenAndShow(buildConfig()));
-                // TODO -> going back to config twice seems odd here
-            } else
-                client.execute(() -> {
-                    if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
-                        player.sendOverlayMessage(Component.literal("invalid float")); // TODO -> console
-                });
-        }, buildConfig());
-    }
+    // codex start
+//    // TODO -> use text input for this
+//    private static final boolean[] getFloatInputScreenFlag = new boolean[]{false};
+//    static Screen getDoubleInputScreen(
+//            Component title, Consumer<Double> consumer) {
+//        return getAbstractKeyboardSequenceScreen(title, (string) -> {
+//            if (Character.isDigit(string.charAt(0))) {
+//                return true;
+//                }
+//            else if (string.charAt(0) == '.' && !getFloatInputScreenFlag[0]) {
+//                getFloatInputScreenFlag[0] = true;
+//                return true;
+//            } else
+//                return false;
+//        }, (finalFloatString, client) -> {
+//            if (!finalFloatString.isEmpty() && !finalFloatString.equals(".")) {
+//                consumer.accept(Double.parseDouble(finalFloatString));
+//                client.execute(() -> client.setScreenAndShow(buildConfig()));
+//                // TODO -> going back to config twice seems odd here
+//            } else
+//                client.execute(() -> {
+//                    if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player)
+//                        player.sendOverlayMessage(Component.literal("invalid float")); // TODO -> console
+//                });
+//        }, buildConfig());
+//    }
+    // codex end
 }
