@@ -23,7 +23,6 @@ import net.minecraft.world.phys.Vec3;
 
 import static com.example.Constants.*;
 import static com.example.DelayedConstantsTodo.*;
-import static com.example.Screens.Constants.*;
 import static com.example.UntitledClient.*;
 import static com.example.Utils.*;
 
@@ -138,6 +137,10 @@ public class KeyboardMixin {
 //        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {
 //            config.isPlayerWaypointsEnabled = !config.isPlayerWaypointsEnabled;
 //        }
+        while (PLAYER_WAYPOINTS_CYCLE.consumeClick()) {
+            Config.PlayerWaypointCategory[] values = Config.PlayerWaypointCategory.values();
+            config.playerWaypointCategory = values[(config.playerWaypointCategory.ordinal() + 1) % values.length];
+        }
         while (PLAYER_WAYPOINTS_DISABLE.consumeClick()) {
             config.playerWaypointCategory = Config.PlayerWaypointCategory.NONE;
         }

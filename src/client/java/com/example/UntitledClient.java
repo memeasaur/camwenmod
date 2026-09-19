@@ -73,7 +73,7 @@ public class UntitledClient implements ClientModInitializer {
     public static final KeyMapping HEAD_RUN_CAMERA_OFFSET_ENABLE = getAbstractPvpUtilsKeybind("Head-run camera offset enable");
     public static final KeyMapping
 //            PLAYER_WAYPOINTS_TOGGLE = getAbstractPvpUtilsKeybind("Player waypoints (Toggle)"),
-//            PLAYER_WAYPOINTS_HOLD = getAbstractPvpUtilsKeybind("Player waypoints (Hold)"),
+            PLAYER_WAYPOINTS_CYCLE = getAbstractPvpUtilsKeybind("Player waypoints (Cycle)"),
             PLAYER_WAYPOINTS_DISABLE = getAbstractPvpUtilsKeybind("Player waypoints (Disable)");
     public static final KeyMapping PLAYER_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Player xray (Toggle)");
     //            BLOCK_XRAY_TOGGLE = getAbstractPvpUtilsKeybind("Block xray (Toggle)");
