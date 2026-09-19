@@ -3,6 +3,9 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>add ground hitting in adventure mode
+>parkour macro recorder
+>impl last-seen waypoints w/ timers
 >only show clamped player waypoints
 >move the config to off-screen
 >enable player waypoints keybind
@@ -14,10 +17,7 @@
 >maybe I should treat w taps differently? to match the s tap thing
     >+ maybe I should have shift-tapping as well
 
->impl last-seen waypoints w/ timers
->parkour macro recorder
 >fake inventory that you can view while running
->add ground hitting in adventure mode
 >always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >slinky: >fast accel (this probably flags speed)
     >knockback displace?
