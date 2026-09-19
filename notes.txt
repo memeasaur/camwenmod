@@ -4,6 +4,7 @@
     >make xray it's own mod
 
 
+>move the config to off-screen
 >enable player waypoints keybind
 >fix the debug message
 >switch the float thing to a text field
