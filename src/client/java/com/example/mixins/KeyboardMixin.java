@@ -1,6 +1,9 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+// codex start
+import com.example.overlayTodoAi.ExternalConfigWindow;
+// codex end
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
@@ -127,7 +130,10 @@ public class KeyboardMixin {
         }
 
         while (KEYBIND_CONFIG.consumeClick()) {
-            MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
+            // codex start
+//            MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(buildConfig());
+            ExternalConfigWindow.show();
+            // codex end
         }
 
 //        while (PLAYER_WAYPOINTS_TOGGLE.consumeClick()) {

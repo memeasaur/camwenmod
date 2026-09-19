@@ -13,6 +13,9 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import com.example.overlayTodoAi.PlayerWaypointOverlay;
+// codex start
+import com.example.overlayTodoAi.ExternalConfigWindow;
+// codex end
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -292,7 +295,13 @@ public class UntitledClient implements ClientModInitializer {
 
         // ai start
         ClientTickEvents.END_CLIENT_TICK.register(playerOverlay::tick);
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> playerOverlay.close());
+        // codex start
+//        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> playerOverlay.close());
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
+            playerOverlay.close();
+            ExternalConfigWindow.close();
+        });
+        // codex end
         // ai end
 
         // messageCoordsListener
