@@ -35,6 +35,9 @@ public class Config {
     public boolean isMovementToggleMirrorPressDisabling = false;
     public boolean isBackwardSprintResetSuppressionEnabled = false;
     public boolean isViewBobbingCameraShakeDisabled = false;
+    // codex start
+    public boolean isTeammateTargetCrosshairMarkerEnabled = false;
+    // codex end
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public enum PlayerWaypointCategory {
