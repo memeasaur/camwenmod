@@ -3,9 +3,6 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->only show clamped player waypoints
->update downport
-
 >make sure that config window gets destroyed when I press escape to close it
 >fix the hitbox debug message?
 >destroy external window if it isn't being used by anything?
