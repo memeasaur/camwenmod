@@ -10,6 +10,7 @@
 >move the config to off-screen
 >enable player waypoints keybind
 >fix the debug message
+>update downport
 
 >impl last-seen waypoints w/ timers
 >put target on the enemy players to show where I should be aiming at for most reach
