@@ -26,11 +26,22 @@ import java.util.Objects;
 public abstract class ClientPlayerEntityMixin {
     @Unique
     private boolean isBackwardSprintResetActive = false;
+    // codex start
+    @Unique
+    private boolean wasSneakPressed;
+    // codex end
+
     @Shadow
     public abstract boolean isUsingItem();
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
+        // codex start
+        boolean isSneakPressed = getIsKeyBindingPressed(SNEAK_VANILLA);
+        boolean wasSneakReleased = wasSneakPressed && !isSneakPressed;
+        wasSneakPressed = isSneakPressed;
+        // codex end
+
         // TODO -> if (false) return; test this for starting sprint w/ s
         Screen currentScreen = MINECRAFT_CLIENT_INSTANCE.gui.screen();
         // TODO -> wtf?
@@ -60,7 +71,14 @@ public abstract class ClientPlayerEntityMixin {
                     }
                 }
             }
-            TODO; // do it here
+            // codex start
+            if (config.isBackwardSprintResetSuppressionEnabled && wasSneakReleased
+                    && isMovementValid && MINECRAFT_CLIENT_INSTANCE.isWindowActive()
+                    && sprintResetBackwardsKeyState == SprintResetState.VALID) { // codex ("TODO; // do it here")
+                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                sprintResetBackwardsKeyState = SprintResetState.INVALID;
+            }
+            // codex end
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
