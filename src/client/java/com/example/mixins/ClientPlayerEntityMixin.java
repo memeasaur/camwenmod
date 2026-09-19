@@ -62,23 +62,30 @@ public abstract class ClientPlayerEntityMixin {
             if (config.isBackwardSprintResetSuppressionEnabled &&
                     FORWARD_VANILLA.isDown() &&
                     BACKWARD_VANILLA.isDown()) {
-                BACKWARD_VANILLA.setDown(false);
-                if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
-                    SPRINT_VANILLA.setDown(false);
-                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
-                    if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
-                        sprintResetBackwardsKeyState = SprintResetState.HELD;
+            }
+            if (config.isBackwardSprintResetSuppressionEnabled) {
+                // s tap
+                if (FORWARD_VANILLA.isDown() && BACKWARD_VANILLA.isDown()) {
+                    BACKWARD_VANILLA.setDown(false);
+                    if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
+                        SPRINT_VANILLA.setDown(false);
+                        Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                        if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
+                            sprintResetBackwardsKeyState = SprintResetState.HELD;
+                        }
                     }
                 }
+
+                if (wasSneakReleased && isMovementValid &&) {
+                    if (config.isBackwardSprintResetSuppressionEnabled && wasSneakReleased
+                            && isMovementValid && MINECRAFT_CLIENT_INSTANCE.isWindowActive()
+                            && sprintResetBackwardsKeyState == SprintResetState.VALID) { // codex ("TODO; // do it here")
+                        Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                        sprintResetBackwardsKeyState = SprintResetState.INVALID;
+                    }
+                    TODO; // gl
+                }
             }
-            // codex start
-            if (config.isBackwardSprintResetSuppressionEnabled && wasSneakReleased
-                    && isMovementValid && MINECRAFT_CLIENT_INSTANCE.isWindowActive()
-                    && sprintResetBackwardsKeyState == SprintResetState.VALID) { // codex ("TODO; // do it here")
-                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
-                sprintResetBackwardsKeyState = SprintResetState.INVALID;
-            }
-            // codex end
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
