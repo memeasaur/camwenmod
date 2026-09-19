@@ -14,7 +14,7 @@ import org.joml.Vector4f;
 import static com.example.UntitledClient.cameraRenderState;
 import static com.example.UntitledClient.config;
 
-/** In-game aim marker for the most recently attacked enemy; never changes aim or attacks. */
+/** In-game aim marker for the most recently attacked player; never changes aim or attacks. */
 public final class LastHitTarget {
     private static Player target;
     private static ClientLevel targetLevel;
@@ -24,15 +24,11 @@ public final class LastHitTarget {
     public static void onAttack(Player attacker, Entity attacked) {
         Minecraft client = Minecraft.getInstance();
         if (config.isLastHitTargetEnabled && attacker == client.player && !attacker.isSpectator()
-                && attacked instanceof Player enemy && enemy != attacker && isEnemy(enemy)
-                && enemy.isAlive() && !enemy.isSpectator()) {
-            target = enemy;
+                && attacked instanceof Player hitPlayer && hitPlayer != attacker
+                && hitPlayer.isAlive() && !hitPlayer.isSpectator()) {
+            target = hitPlayer;
             targetLevel = client.level;
         }
-    }
-
-    private static boolean isEnemy(Player player) {
-        return !config.nameplateUuids.containsKey(player.getUUID());
     }
 
     public static void clear() {
@@ -44,7 +40,7 @@ public final class LastHitTarget {
         if (!config.isLastHitTargetEnabled || client.player == null || !client.player.isAlive()
                 || client.player.isSpectator() || client.level != targetLevel
                 || (target != null && (target.isRemoved() || !target.isAlive()
-                || target.isSpectator() || !isEnemy(target)))) {
+                || target.isSpectator()))) {
             clear();
         }
     }

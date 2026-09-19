@@ -64,10 +64,10 @@ public class Constants {
     public static Screen buildConfig() {
         return buildConfigScreen("pvputils config", List.of(
                 // codex start
-                getConfigCheckboxWidget("last hit enemy target", config.isLastHitTargetEnabled, is -> {
+                getConfigCheckboxWidget("last hit player target", config.isLastHitTargetEnabled, is -> {
                     config.isLastHitTargetEnabled = is;
                     com.example.LastHitTarget.clear();
-                }, "marks the closest hitbox point of the last enemy you attack in Minecraft; allies/friendlies are excluded"),
+                }, "marks the closest hitbox point of the last player you attack in Minecraft, including allies and friendlies"),
                 // codex end
                 getConfigCheckboxWidget("togglesneak gui", config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"),
 //                getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
