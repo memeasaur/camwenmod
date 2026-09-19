@@ -225,7 +225,7 @@ public final class ExternalConfigWindow {
 
     private static void addWaypointCategoryButton(JPanel panel) {
         JButton button = new JButton(waypointCategoryLabel());
-        configure(button, "cycles which player waypoints appear");
+        configure(button, "current: " + config.playerWaypointCategory.name() + ". cycles which player waypoints appear");
         button.addActionListener(_ -> onClientThread(() -> {
             Config.PlayerWaypointCategory[] values = Config.PlayerWaypointCategory.values();
             config.playerWaypointCategory = values[
