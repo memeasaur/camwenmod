@@ -3,6 +3,7 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>fix the debug message
 >switch the float thing to a text field
 >put the teammate armor changer type thing on the external gui
 >put target on the enemy players to show where I should be aiming at for most reach
