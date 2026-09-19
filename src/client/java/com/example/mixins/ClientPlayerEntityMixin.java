@@ -24,8 +24,6 @@ import java.util.Objects;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
-    @Unique
-    private boolean isBackwardSprintResetActive = false;
     @Shadow
     public abstract boolean isUsingItem();
 
@@ -48,16 +46,24 @@ public abstract class ClientPlayerEntityMixin {
             RIGHT_VANILLA.setDown((getIsKeyBindingPressed(RIGHT_VANILLA) && isMovementValid) || toggleMovementState.right());
             BACKWARD_VANILLA.setDown((getIsKeyBindingPressed(BACKWARD_VANILLA) && isMovementValid) || toggleMovementState.backward());
 
-            if (config.isBackwardSprintResetSuppressionEnabled &&
-                    FORWARD_VANILLA.isDown() &&
-                    BACKWARD_VANILLA.isDown()) {
-                BACKWARD_VANILLA.setDown(false);
-                if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
-                    SPRINT_VANILLA.setDown(false);
-                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
-                    if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
-                        sprintResetBackwardsKeyState = SprintResetState.HELD;
+            if (config.isBackwardSprintResetSuppressionEnabled) {
+                // s tap
+                if (FORWARD_VANILLA.isDown() && BACKWARD_VANILLA.isDown()) {
+                    BACKWARD_VANILLA.setDown(false);
+                    if (sprintResetBackwardsKeyState != SprintResetState.INVALID) {
+                        SPRINT_VANILLA.setDown(false);
+                        Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                        if (sprintResetBackwardsKeyState == SprintResetState.VALID) {
+                            sprintResetBackwardsKeyState = SprintResetState.HELD;
+                        }
                     }
+                }
+
+                if (!SPRINT_VANILLA.isDown() &&
+                        ((LocalPlayer) (Object)this).isSprinting() &&
+                        sprintResetBackwardsKeyState != SprintResetState.INVALID) {
+                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                    sprintResetBackwardsKeyState = SprintResetState.INVALID;
                 }
             }
         }

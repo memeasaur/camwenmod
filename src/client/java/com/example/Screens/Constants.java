@@ -105,7 +105,7 @@ public class Constants {
                         "ignore backward after sprint reset",
                         config.isBackwardSprintResetSuppressionEnabled,
                         is -> config.isBackwardSprintResetSuppressionEnabled = is,
-                        "allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit"),
+                        "allows one W+S or Shift-release sprint reset after each hit, then ignores Back while W is held until the next hit"), // codex ("\"allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit\"),")
                 getConfigCheckboxWidget(
                         "disable view bobbing camera shake",
                         config.isViewBobbingCameraShakeDisabled,
