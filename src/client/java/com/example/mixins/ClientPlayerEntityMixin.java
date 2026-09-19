@@ -60,6 +60,7 @@ public abstract class ClientPlayerEntityMixin {
                     }
                 }
             }
+            TODO; // do it here
         }
 //        if (MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
 //            if (config.isFlyBoostEnabled && player.isCreative()) {
