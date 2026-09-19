@@ -44,10 +44,7 @@ public class KeyboardMixin {
                 && MINECRAFT_CLIENT_INSTANCE.gui.screen() == null
                 && MINECRAFT_CLIENT_INSTANCE.isWindowActive()
                 && MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer player) {
-            SPRINT_VANILLA.setDown(false);
             player.setSprinting(false);
-            // Send the stop now, before held sprint can restart on the next tick.
-            ((ClientPlayerEntityInvoker) player).invokeSendIsSprintingIfNeeded();
             sprintResetBackwardsKeyState = SprintResetState.INVALID;
         }
         // codex end
