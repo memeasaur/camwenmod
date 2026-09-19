@@ -38,6 +38,9 @@ public class Config {
     // codex start
     public boolean isTeammateTargetCrosshairMarkerEnabled = false;
     // codex end
+    // codex start
+    public boolean isUnclampedPlayerWaypointsDisabled = false;
+    // codex end
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
     public enum PlayerWaypointCategory {

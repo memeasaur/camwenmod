@@ -54,6 +54,9 @@ public final class PlayerWaypointOverlay {
             if (frame == null) return;
             Graphics2D graphics = frame.createGraphics();
             HashSet<Identifier> usedSkins = new HashSet<>();
+            // codex start
+            boolean hasOverlayContent = false;
+            // codex end
             try {
                 graphics.setComposite(AlphaComposite.Clear);
                 graphics.fillRect(0, 0, frame.getWidth(), frame.getHeight());
@@ -72,6 +75,12 @@ public final class PlayerWaypointOverlay {
                     Vec3 world = player.position().add(0, player.getBbHeight() / 2, 0);
                     Vector2i point = project.apply(world);
                     int x = point.x, y = point.y;
+                    // codex start
+                    boolean isClamped = x <= 0 || x >= client.getWindow().getGuiScaledWidth()
+                            || y <= 0 || y >= client.getWindow().getGuiScaledHeight();
+                    if (config.isUnclampedPlayerWaypointsDisabled && !isClamped) continue;
+                    hasOverlayContent = true;
+                    // codex end
                     graphics.setColor(new Color(team == null ? 0xAFFF0000 : 0xFF000000 | team.color.getValue(), true));
                     graphics.fillRect(x - 8, y - 8, 16, 16);
                     Identifier skin = player.getSkin().body().texturePath();
@@ -89,6 +98,9 @@ public final class PlayerWaypointOverlay {
                         && hit.getEntity() instanceof Player target
                         && (config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.ALLY
                         || config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.FRIENDLY)) {
+                    // codex start
+                    hasOverlayContent = true;
+                    // codex end
                     drawTargetedTeammateMarker(
                             graphics,
                             client.getWindow().getGuiScaledWidth() / 2,
@@ -96,7 +108,10 @@ public final class PlayerWaypointOverlay {
                 }
             } finally { graphics.dispose(); }
             faces.keySet().retainAll(usedSkins);
-            if (usedSkins.isEmpty()) hide(); else window.present();
+            // codex start
+//            if (usedSkins.isEmpty()) hide(); else window.present();
+            if (!hasOverlayContent) hide(); else window.present();
+            // codex end
         } catch (Exception | LinkageError error) {
             failed = true;
             close();

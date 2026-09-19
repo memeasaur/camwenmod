@@ -139,6 +139,11 @@ public final class ExternalConfigWindow {
         addCheckBox(grid, "mark targeted teammates on external overlay", () -> config.isTeammateTargetCrosshairMarkerEnabled,
                 value -> config.isTeammateTargetCrosshairMarkerEnabled = value,
                 "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate");
+        // codex start
+        addCheckBox(grid, "only show edge-clamped player waypoints", () -> config.isUnclampedPlayerWaypointsDisabled,
+                value -> config.isUnclampedPlayerWaypointsDisabled = value,
+                "hides player waypoints that are inside the window and keeps waypoints clamped to an edge");
+        // codex end
         addCheckBox(grid, "damage taken value notification", () -> config.isDamageTakenValueNotificationEnabled,
                 value -> config.isDamageTakenValueNotificationEnabled = value, "");
         addCheckBox(grid, "targeting margin revert", () -> activeCheatConfig.isTargetingMarginReverted,
