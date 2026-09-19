@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
+// codex start
+import net.minecraft.client.gui.components.EditBox;
+// codex end
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -49,12 +52,44 @@ public class Constants {
                 .build();
     }
 
-    private static Screen getTargetingMarginBypassStaticRecorder() {
-        return getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().staticTargetingMarginBypass = number.floatValue());
+    // codex start
+    private static EditBox getConfigFloatInputWidget(
+            String label, float value, Consumer<Float> consumer, String tooltip) {
+        EditBox input = new EditBox(
+                TEXT_RENDERER,
+                Button.DEFAULT_WIDTH,
+                Button.DEFAULT_HEIGHT,
+                Component.literal(label));
+        input.setMaxLength(16);
+        input.setValue(Float.toString(value));
+        input.setHint(Component.literal(label));
+        input.setTooltip(Tooltip.create(Component.literal(tooltip)));
+        input.setResponder(text -> {
+            try {
+                float parsed = Float.parseFloat(text);
+                if (!Float.isFinite(parsed)) {
+                    throw new NumberFormatException("non-finite float");
+                }
+                input.setTextColor(EditBox.DEFAULT_TEXT_COLOR);
+                consumer.accept(parsed);
+                config.saveConfig();
+                serializeJsonBlocking("cheat-configs", cheatConfigs);
+            } catch (NumberFormatException ignored) {
+                input.setTextColor(0xFF5555);
+            }
+        });
+        return input;
     }
-    private static Screen getTargetingMarginBypassMovingRecorder() {
-        return getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
-    }
+    // codex end
+
+    // codex start
+//    private static Screen getTargetingMarginBypassStaticRecorder() {
+//        return getDoubleInputScreen(Component.literal("fing"), number -> computeCheatConfig().staticTargetingMarginBypass = number.floatValue());
+//    }
+//    private static Screen getTargetingMarginBypassMovingRecorder() {
+//        return getDoubleInputScreen(Component.literal("fing=4"), number -> computeCheatConfig().movingTargetMarginBypass = number.floatValue());
+//    }
+    // codex end
     //    private static final Screen TARGETING_MARGIN_WIDTH_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fpng"), number -> computeCheatConfig().targetingMarginWidthBypass = number.floatValue());
 //    private static final Screen ATTACK_VELOCITY_BYPASS_RECORDER = getDoubleInputScreen(Component.literal("fing1"), number -> computeCheatConfig().attackVelocityBypass = number);
 //    private static final Screen COBWEB_BYPASS_DELTA_RECORDER = getDoubleInputScreen(Component.literal("fing2"), number -> computeCheatConfig().cobwebRangeBypassDelta = number);
@@ -110,14 +145,26 @@ public class Constants {
                         computeCheatConfig().isTargetingMarginReverted,
                         is -> computeCheatConfig().isTargetingMarginReverted = is,
                         "will flag hard on pre-1.12 or whatever it is that made the hitboxes smaller"),
-                getConfigButtonWidget(
-                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassStaticRecorder()),
-                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
-                getConfigButtonWidget(
-                        "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
-                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassMovingRecorder()),
-                        "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
+                // codex start
+//                getConfigButtonWidget(
+//                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ".change targeting margin (static)",
+//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassStaticRecorder()),
+//                        "current: " + computeCheatConfig().staticTargetingMarginBypass + ". opens float recording screen. safe aura, gl"),
+//                getConfigButtonWidget(
+//                        "current: " + computeCheatConfig().movingTargetMarginBypass + ".change targeting margin (moving)",
+//                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(getTargetingMarginBypassMovingRecorder()),
+//                        "current: " + computeCheatConfig().movingTargetMarginBypass + ". opens float recording screen. safe aura, gl"),
+                getConfigFloatInputWidget(
+                        "targeting margin (static)",
+                        computeCheatConfig().staticTargetingMarginBypass,
+                        value -> computeCheatConfig().staticTargetingMarginBypass = value,
+                        "targeting margin bypass while standing still; invalid input is shown in red"),
+                getConfigFloatInputWidget(
+                        "targeting margin (moving)",
+                        computeCheatConfig().movingTargetMarginBypass,
+                        value -> computeCheatConfig().movingTargetMarginBypass = value,
+                        "targeting margin bypass while moving; invalid input is shown in red"),
+                // codex end
 //                getConfigButtonWidget(
 //                        "current: " + computeCheatConfig().targetingMarginWidthBypass + ".change targeting margin width",
 //                        () -> MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(TARGETING_MARGIN_WIDTH_BYPASS_RECORDER),
