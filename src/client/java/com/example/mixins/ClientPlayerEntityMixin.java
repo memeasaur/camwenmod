@@ -59,9 +59,11 @@ public abstract class ClientPlayerEntityMixin {
                     }
                 }
 
-                if (!SPRINT_VANILLA.isDown() && ((LocalPlayer) (Object)this).isSprinting() &&
-                        sprintResetBackwardsKeyState == ) {
+                if (!SPRINT_VANILLA.isDown() &&
+                        ((LocalPlayer) (Object)this).isSprinting() &&
+                        sprintResetBackwardsKeyState != SprintResetState.INVALID) {
                     Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).setSprinting(false);
+                    sprintResetBackwardsKeyState = SprintResetState.INVALID;
                 }
             }
         }
