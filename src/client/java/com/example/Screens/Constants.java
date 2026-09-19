@@ -67,7 +67,7 @@ public class Constants {
                 getConfigCheckboxWidget("last hit player target", config.isLastHitTargetEnabled, is -> {
                     config.isLastHitTargetEnabled = is;
                     com.example.LastHitTarget.clear();
-                }, "marks the closest hitbox point of the last player you attack in Minecraft, including allies and friendlies"),
+                }, "marks the closest hitbox point of the last player you attack"),
                 // codex end
                 getConfigCheckboxWidget("togglesneak gui", config.isToggleSneakGuiEnabled, (is) -> config.isToggleSneakGuiEnabled = is, "modified version of the classic hcf togglesneak's gui"),
 //                getConfigCheckboxWidget("autorun pvp disable", config.isMovementTogglePvpDisabling, (is) -> config.isMovementTogglePvpDisabling = is, "disables movement toggle when taking/dealing player damage"),
