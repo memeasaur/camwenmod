@@ -3,7 +3,7 @@
     >make autorun it's own mod
     >make xray it's own mod
 
-
+>only show clamped player waypoints
 >move the config to off-screen
 >enable player waypoints keybind
 >fix the debug message
