@@ -24,8 +24,6 @@ import java.util.Objects;
 
 @Mixin(LocalPlayer.class)
 public abstract class ClientPlayerEntityMixin {
-    @Unique
-    private boolean isBackwardSprintResetActive = false;
     // codex start
     @Unique
     private boolean wasSneakPressed;
