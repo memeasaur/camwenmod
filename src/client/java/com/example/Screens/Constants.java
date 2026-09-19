@@ -76,6 +76,13 @@ public class Constants {
                         config.isViewBobbingCameraShakeDisabled,
                         is -> config.isViewBobbingCameraShakeDisabled = is,
                         "keeps view bobbing enabled while removing only the camera shake"),
+                // codex start
+                getConfigCheckboxWidget(
+                        "mark targeted teammates on external overlay",
+                        config.isTeammateTargetCrosshairMarkerEnabled,
+                        is -> config.isTeammateTargetCrosshairMarkerEnabled = is,
+                        "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate"),
+                // codex end
                 getConfigCheckboxWidget(
                         "damage taken value notification",
                         config.isDamageTakenValueNotificationEnabled,

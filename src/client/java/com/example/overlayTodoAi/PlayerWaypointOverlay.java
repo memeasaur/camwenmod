@@ -6,6 +6,8 @@ import com.sun.jna.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -82,6 +84,16 @@ public final class PlayerWaypointOverlay {
                         text(graphics, String.format("%.0f, %.0f, %.0f", world.x, world.y, world.z), x, y - 24);
                     }
                 }
+                if (config.isTeammateTargetCrosshairMarkerEnabled
+                        && client.hitResult instanceof EntityHitResult hit
+                        && hit.getEntity() instanceof Player target
+                        && (config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.ALLY
+                        || config.nameplateUuids.get(target.getUUID()) == Config.NameplateTeam.FRIENDLY)) {
+                    drawTargetedTeammateMarker(
+                            graphics,
+                            client.getWindow().getGuiScaledWidth() / 2,
+                            client.getWindow().getGuiScaledHeight() / 2);
+                }
             } finally { graphics.dispose(); }
             faces.keySet().retainAll(usedSkins);
             if (usedSkins.isEmpty()) hide(); else window.present();
@@ -101,6 +113,14 @@ public final class PlayerWaypointOverlay {
         try (var stream = client.getResourceManager().open(id); var image = NativeImage.read(stream)) {
             return face(image);
         } catch (Exception ignored) { return null; }
+    }
+
+    private static void drawTargetedTeammateMarker(Graphics2D graphics, int x, int y) {
+        graphics.setColor(Color.RED);
+        graphics.setStroke(new BasicStroke(2.0f));
+        int size = 3;
+        graphics.drawLine(x - size, y - size, x + size, y + size);
+        graphics.drawLine(x - size, y + size, x + size, y - size);
     }
 
     private static BufferedImage face(NativeImage skin) {
