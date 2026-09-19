@@ -38,11 +38,17 @@ public final class ExternalConfigWindow {
     private ExternalConfigWindow() {
     }
 
+    public static void prepareDesktopWindowing() {
+        // Minecraft requests headless AWT, but this client feature intentionally owns a desktop window.
+        System.setProperty("java.awt.headless", "false");
+    }
+
     public static void show() {
         toggle();
     }
 
     public static void toggle() {
+        prepareDesktopWindowing();
         Minecraft client = Minecraft.getInstance();
         if (!Platform.isWindows()) {
             reportFailure(client, new UnsupportedOperationException("external config requires Windows"));

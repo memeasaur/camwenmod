@@ -156,6 +156,9 @@ public class UntitledClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // codex start
+        ExternalConfigWindow.prepareDesktopWindowing();
+        // codex end
         // exampleLayer
         {
             // TODO -> fix?
