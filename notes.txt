@@ -3,20 +3,21 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->add ground hitting in adventure mode
->parkour macro recorder
+>+ maybe I should have shift-tapping as well
+>switch the float thing to a text field
+>put the teammate armor changer type thing on the external gui
+>put target on the enemy players to show where I should be aiming at for most reach
+    >maybe start with only showing it in the easiest case
+
 >impl last-seen waypoints w/ timers
 >only show clamped player waypoints
 >move the config to off-screen
 >enable player waypoints keybind
 >fix the debug message
->switch the float thing to a text field
->put the teammate armor changer type thing on the external gui
->put target on the enemy players to show where I should be aiming at for most reach
-    >maybe start with only showing it in the easiest case
->maybe I should treat w taps differently? to match the s tap thing
-    >+ maybe I should have shift-tapping as well
 
+>maybe I should treat w taps differently? to match the s tap thing
+>parkour macro recorder
+>add ground hitting in adventure mode (scared of this doing 20cps and getting autobanned)
 >fake inventory that you can view while running
 >always move at head-run speed? (blatant) >might be tough because I have to make sure actually head-running doesn't make me go faster than possible
 >slinky: >fast accel (this probably flags speed)
