@@ -8,7 +8,6 @@
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "GameRendererMixin",
-    "HeldItemRendererMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
     "PlayerEntityRendererMixin",
