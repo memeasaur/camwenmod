@@ -1,7 +1,10 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.network.chat.Component;
 
+import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
 
 @Mixin(AvatarRenderer.class)
@@ -24,13 +28,13 @@ public class PlayerEntityRendererMixin {
 //        // TODO -> disable other player's being left-handed
 //    }
 
-    @Inject(at = @At(value = "RETURN"), method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V")
+    // the livingEntity one DOES NOT get called!
+    @Inject(at = @At(value = "RETURN"), method = "extractRenderState(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/client/renderer/entity/state/EntityRenderState;F)V")
     private void onExtractRenderState(
-            LivingEntity livingEntity,
-            LivingEntityRenderState renderState,
+            Entity livingEntity,
+            EntityRenderState renderState,
             float par3,
             CallbackInfo ci) {
-        TODO; // test if this actually runs
         if (renderState.nameTag instanceof Component text &&
                 config.nameplateUuids.get(livingEntity.getUUID()) instanceof Config.NameplateTeam team) {
             renderState.nameTag = text.copy().setStyle(text.getStyle().withColor(team.color.getValue()));
