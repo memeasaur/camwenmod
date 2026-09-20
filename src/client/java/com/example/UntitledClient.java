@@ -502,7 +502,13 @@ public class UntitledClient implements ClientModInitializer {
                 if (c == '-') {
                     numberBuilder.insert(0, c);
                 }
-                numbers.addFirst(Integer.parseInt(numberBuilder.toString()));
+                int foo;
+                try {
+                    foo = Integer.parseInt(numberBuilder.toString());
+                } catch (NumberFormatException e) {
+                    return;
+                }
+                numbers.addFirst(foo);
                 numberBuilder.setLength(0);
                 if (numbers.size() == 3) {
 //                    while (Set.of(' ', '.', ',', 'x', 'y', 'z', ':', '-').contains(Character.toLowerCase(message.charAt(i)))) {
