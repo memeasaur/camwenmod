@@ -11,7 +11,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFWNativeWin32;
+import org.lwjgl.sdl.SDLProperties;
+import org.lwjgl.sdl.SDLVideo;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -55,7 +56,7 @@ public final class PlayerWaypointOverlay {
             if (!Platform.isWindows())
                 throw new UnsupportedOperationException("Player waypoint overlay requires Windows");
             if (window == null)
-                window = new WindowsWaypointWindow(GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle()));
+                window = new WindowsWaypointWindow(SDLProperties.SDL_GetPointerProperty(SDLVideo.SDL_GetWindowProperties(client.getWindow().handle()), SDLVideo.SDL_PROP_WINDOW_WIN32_HWND_POINTER, 0L));
             BufferedImage frame = window.beginFrame();
             if (frame == null) return;
             Graphics2D graphics = frame.createGraphics();

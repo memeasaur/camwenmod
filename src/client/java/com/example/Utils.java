@@ -32,16 +32,16 @@ import static com.example.UntitledClient.*;
 
 
 public class Utils {
-    public static boolean getIsKeyPressed(int glfwKeybind) {
-        return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;
+    public static boolean getIsKeyPressed(int scanCode) { // codex ("public static boolean getIsKeyPressed(int glfwKeybind) {")
+        return scanCode > InputConstants.UNKNOWN.getValue() && InputConstants.isKeyDown(scanCode); // codex ("return glfwKeybind != -1 && GLFW.glfwGetKey(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), glfwKeybind) == GLFW.GLFW_PRESS;")
     }
 
     public static boolean getIsKeyBindingPressed(KeyMapping keyBinding) {
         InputConstants.Key key = InputConstants.getKey(keyBinding.saveString());
-        if (key.getType() == InputConstants.Type.KEYSYM) {
+        if (key.getType() == InputConstants.Type.KEYBOARD) { // codex ("if (key.getType() == InputConstants.Type.KEYSYM) {")
             return getIsKeyPressed(InputConstants.getKey(keyBinding.saveString()).getValue());
         } else if (key.getType() == InputConstants.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            return (org.lwjgl.sdl.SDLMouse.SDL_GetMouseState(null, null) & (1 << (key.getValue() - 1))) != 0; // codex ("return GLFW.glfwGetMouseButton(MINECRAFT_CLIENT_INSTANCE.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;")
         } else {
             Objects.requireNonNull(null);
             return false;
@@ -174,7 +174,7 @@ public class Utils {
         return KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 name,
 //                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.UNKNOWN.getValue(), // codex ("GLFW.GLFW_KEY_UNKNOWN,")
                 Objects.requireNonNull(PVP_UTILS)
         ));
     }

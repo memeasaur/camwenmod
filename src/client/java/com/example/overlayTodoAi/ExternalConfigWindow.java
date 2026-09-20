@@ -11,7 +11,8 @@ import com.sun.jna.platform.win32.WinUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFWNativeWin32;
+import org.lwjgl.sdl.SDLProperties;
+import org.lwjgl.sdl.SDLVideo;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
@@ -55,7 +56,7 @@ public final class ExternalConfigWindow {
             return;
         }
 
-        long minecraftHandle = GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle());
+        long minecraftHandle = SDLProperties.SDL_GetPointerProperty(SDLVideo.SDL_GetWindowProperties(client.getWindow().handle()), SDLVideo.SDL_PROP_WINDOW_WIN32_HWND_POINTER, 0L);
         int minecraftX = client.getWindow().getX();
         int minecraftY = client.getWindow().getY();
         int minecraftWidth = client.getWindow().getWidth();
