@@ -3,6 +3,8 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>make config boolean for inventory down opening it and inventory up closing it
+    >probably gonna have to deal with minecraft's autoclick thing here though
 >make sure that render thing is only called when it's needed?
     >maybe each feature should just have it's own screen?
 >make sure that config window gets destroyed when I press escape to close it
