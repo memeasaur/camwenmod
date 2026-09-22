@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
+import static com.example.UntitledClient.headRunCameraOffset;
+import static com.example.UntitledClient.HEAD_RUN_OFFSET_TYPE;
 
 import net.minecraft.client.renderer.GameRenderer;
 
@@ -19,8 +21,13 @@ public class GameRendererMixin {
     @Unique
     private boolean isRenderingHandBobbing;
 
-    @Inject(method = "renderItemInHand", at = @At("HEAD"))
+    // codex start
+    @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void beginHandBobbing(CallbackInfo ci) {
+        if (headRunCameraOffset != HEAD_RUN_OFFSET_TYPE.NONE) {
+            ci.cancel();
+            return;
+        }
         isRenderingHandBobbing = true;
     }
 
@@ -28,6 +35,7 @@ public class GameRendererMixin {
     private void endHandBobbing(CallbackInfo ci) {
         isRenderingHandBobbing = false;
     }
+    // codex end
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
     private void onBobView(
