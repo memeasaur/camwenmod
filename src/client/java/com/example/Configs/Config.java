@@ -36,6 +36,9 @@ public class Config {
     public boolean isBackwardSprintResetSuppressionEnabled = false;
     public boolean isViewBobbingCameraShakeDisabled = false;
     // codex start
+    public boolean isInventoryKeyHoldEnabled = false;
+    // codex end
+    // codex start
     public boolean isTeammateTargetCrosshairMarkerEnabled = false;
     // codex end
     // codex start

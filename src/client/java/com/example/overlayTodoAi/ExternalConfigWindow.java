@@ -136,6 +136,11 @@ public final class ExternalConfigWindow {
         addCheckBox(grid, "disable view bobbing camera shake", () -> config.isViewBobbingCameraShakeDisabled,
                 value -> config.isViewBobbingCameraShakeDisabled = value,
                 "keeps view bobbing enabled while removing only the camera shake");
+        // codex start
+        addCheckBox(grid, "hold inventory key to keep inventory open", () -> config.isInventoryKeyHoldEnabled,
+                value -> config.isInventoryKeyHoldEnabled = value,
+                "opens the player inventory when pressed and closes it when released");
+        // codex end
         addCheckBox(grid, "mark targeted teammates on external overlay", () -> config.isTeammateTargetCrosshairMarkerEnabled,
                 value -> config.isTeammateTargetCrosshairMarkerEnabled = value,
                 "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate");
