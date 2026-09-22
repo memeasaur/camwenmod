@@ -55,8 +55,10 @@ public class Config {
     public boolean isDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
 
-    // TODO -> make this a percentage so that logs aren't so blatant
-    public boolean isTeammatesSwingSuppressionEnabled = false;
+    // codex start
+    /** Percentage chance (0-100) that an attack targeting a friendly teammate is suppressed. */
+    public float teammateSwingSuppressionChance = 0.0F;
+    // codex end
 
     public void saveConfig() {
         serializeJsonBlocking("config", this);

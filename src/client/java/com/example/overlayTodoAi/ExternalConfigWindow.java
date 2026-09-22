@@ -166,8 +166,11 @@ public final class ExternalConfigWindow {
                 value -> config.isDebugModeEnabled = value, "");
         addCheckBox(grid, "parkour cheat", () -> config.isParkourCheatEnabled,
                 value -> config.isParkourCheatEnabled = value, "");
-        addCheckBox(grid, "suppress teammate swings", () -> config.isTeammatesSwingSuppressionEnabled,
-                value -> config.isTeammatesSwingSuppressionEnabled = value, "");
+        // codex start
+        addFloatField(grid, "teammate swing suppression (%)", config.teammateSwingSuppressionChance,
+                value -> config.teammateSwingSuppressionChance = Math.clamp(value, 0.0F, 100.0F),
+                "percentage chance (0-100) that an attack targeting a friendly teammate is suppressed");
+        // codex end
         result.setContentPane(grid);
         return result;
     }
