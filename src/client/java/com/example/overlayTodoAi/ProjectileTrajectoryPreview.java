@@ -21,7 +21,7 @@ import java.util.function.Function;
 /** Predicts vanilla projectile motion locally and marks its impact in the capture-excluded click-through overlay. */
 final class ProjectileTrajectoryPreview {
     private static final int MAX_STEPS = 100;
-    private static final Color TRAJECTORY_COLOR = new Color(0xFF55FFFF, true);
+    private static final Color TRAJECTORY_COLOR = new Color(0xFFFF0000, true);
 
     private ProjectileTrajectoryPreview() {
     }
@@ -36,7 +36,9 @@ final class ProjectileTrajectoryPreview {
 
         Vector2i impact = project.apply(points.getLast());
         graphics.setColor(TRAJECTORY_COLOR);
-        graphics.fillOval(impact.x - 3, impact.y - 3, 7, 7);
+        int size = 2;
+        int radius = size / 2;
+        graphics.fillOval(impact.x - radius, impact.y - radius, size, size);
         return true;
     }
 
@@ -54,10 +56,10 @@ final class ProjectileTrajectoryPreview {
         if (held.is(Items.CROSSBOW) && CrossbowItem.isCharged(held)) {
             return new TrajectoryProperties(3.15, 0.05, 0.99);
         }
-        if (held.is(Items.SPLASH_POTION) || held.is(Items.LINGERING_POTION)
-                || held.is(Items.EXPERIENCE_BOTTLE)) {
-            return new TrajectoryProperties(0.5, 0.05, 0.99);
-        }
+//        if (held.is(Items.SPLASH_POTION) || held.is(Items.LINGERING_POTION)
+//                || held.is(Items.EXPERIENCE_BOTTLE)) {
+//            return new TrajectoryProperties(0.5, 0.05, 0.99);
+//        }
         if (held.is(Items.SNOWBALL) || held.is(Items.EGG) || held.is(Items.ENDER_PEARL)) {
             return new TrajectoryProperties(1.5, 0.03, 0.99);
         }
