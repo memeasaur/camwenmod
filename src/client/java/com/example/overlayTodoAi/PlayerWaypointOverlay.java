@@ -73,6 +73,11 @@ public final class PlayerWaypointOverlay {
                 graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 Vector3f forward = cameraRenderState.orientation.transform(new Vector3f(0, 0, -1));
                 Vec3 look = new Vec3(forward.x, forward.y, forward.z).normalize();
+                // codex start
+                if (config.isProjectileTrajectoryPreviewEnabled) {
+                    hasOverlayContent |= ProjectileTrajectoryPreview.draw(graphics, client, project);
+                }
+                // codex end
                 if (config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE) {
                     for (var player : Objects.requireNonNull(client.level).players()) {
                         if (player == client.player) continue;

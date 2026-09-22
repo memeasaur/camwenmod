@@ -144,6 +144,11 @@ public final class ExternalConfigWindow {
                 value -> config.isUnclampedPlayerWaypointsDisabled = value,
                 "hides player waypoints that are inside the window and keeps waypoints clamped to an edge");
         // codex end
+        // codex start
+        addCheckBox(grid, "projectile trajectory preview", () -> config.isProjectileTrajectoryPreviewEnabled,
+                value -> config.isProjectileTrajectoryPreviewEnabled = value,
+                "draws the held projectile's predicted flight path on the protected click-through overlay");
+        // codex end
         addCheckBox(grid, "damage taken value notification", () -> config.isDamageTakenValueNotificationEnabled,
                 value -> config.isDamageTakenValueNotificationEnabled = value, "");
         addCheckBox(grid, "targeting margin revert", () -> activeCheatConfig.isTargetingMarginReverted,
