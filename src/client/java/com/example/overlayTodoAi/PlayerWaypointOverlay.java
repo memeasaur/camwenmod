@@ -168,10 +168,11 @@ public final class PlayerWaypointOverlay {
     private static void drawCameraAngleIndicator(Graphics2D graphics, int x, int y, float pitch) {
         graphics.setColor(Color.GREEN);
         graphics.setStroke(new BasicStroke(2.0f));
-        int size = 4;
+        int size = 2;
+        int offset = 9;
         int direction = pitch < 0.0f ? 1 : -1;
-        int baseY = y + direction * size;
-        int tipY = y + direction * size * 2;
+        int baseY = y + direction * offset;
+        int tipY = y + direction * (offset + size);
         graphics.drawLine(x - size, baseY, x, tipY);
         graphics.drawLine(x, tipY, x + size, baseY);
     }
