@@ -64,7 +64,7 @@ public class KeyboardMixin {
 //                MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
 //                shouldCloseInventoryOnKeyRelease = false;
 //            }
-            if (action == GLFW.GLFW_RELEASE && MINECRAFT_CLIENT_INSTANCE.gui.screen() instanceof InventoryScreen) {
+            if (config.isInventoryKeyHoldEnabled && action == GLFW.GLFW_RELEASE && MINECRAFT_CLIENT_INSTANCE.gui.screen() instanceof InventoryScreen) {
                 MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
             }
         }
