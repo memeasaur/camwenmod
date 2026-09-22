@@ -20,6 +20,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.glfw.GLFW;
 
 import static com.example.Constants.*;
 import static com.example.DelayedConstantsTodo.*;
@@ -30,11 +31,28 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean isMovementToggleMirrorSequencePressed = false;
+    // codex start
+    @Unique
+    private static boolean shouldCloseInventoryOnKeyRelease = false;
+    // codex end
 
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
             long handle, int action, KeyEvent event, CallbackInfo ci) {
+        // codex start
+        if (MINECRAFT_CLIENT_INSTANCE.options.keyInventory.matches(event)) {
+            if (action == GLFW.GLFW_PRESS && MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer) {
+                if (config.isInventoryKeyHoldEnabled) {
+                    // Vanilla has opened the player inventory by this RETURN injection point.
+                    shouldCloseInventoryOnKeyRelease = true;
+                }
+            } else if (action == GLFW.GLFW_RELEASE && shouldCloseInventoryOnKeyRelease) {
+                MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
+                shouldCloseInventoryOnKeyRelease = false;
+            }
+        }
+        // codex end
         if (config.isMovementToggleMirrorPressDisabling) {
             if (!(getIsKeyBindingPressed(SNEAK_VANILLA) == toggleMovementState.shift()
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == toggleMovementState.sprint()
