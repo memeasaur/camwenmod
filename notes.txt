@@ -3,12 +3,8 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->make bow trajectory indicator
->put an indicator pointing towards 0 degrees
->turn teammate hit suppression into a percentage
+>only make the camera bobbing cancel if it's first person
 >make f5 work with headrun offset, also make it more obvious that im head-running
->make config boolean for inventory down opening it and inventory up closing it
-    >probably gonna have to deal with minecraft's autoclick thing here though
 
 >make sure that render thing is only called when it's needed?
     >maybe each feature should just have it's own screen?
