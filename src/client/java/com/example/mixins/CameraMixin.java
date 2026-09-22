@@ -4,7 +4,6 @@ import com.example.UntitledClient;
 import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,18 +25,10 @@ public abstract class CameraMixin {
     protected abstract void setRotation(float yRot, float xRot);
 
     @Shadow
-    private Vec3 position;
-
-    // codex start
-    @Shadow
-    private float yRot;
+    public abstract float yRot();
 
     @Shadow
-    private float xRot;
-    // codex end
-
-    @Shadow
-    protected abstract void setPosition(Vec3 position);
+    public abstract float xRot();
 
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
@@ -54,7 +45,8 @@ public abstract class CameraMixin {
                         player.getYRot() + yawOffset,
                         player.getXRot());
             }
-            case THIRD_PERSON_BACK, THIRD_PERSON_FRONT -> { }
+            case THIRD_PERSON_BACK, THIRD_PERSON_FRONT -> {
+            }
         }
     }
 
@@ -74,7 +66,7 @@ public abstract class CameraMixin {
         }
 
         // At this point vanilla has already mirrored front view, so preserving xRot handles both views.
-        this.setRotation(this.yRot + getHeadRunYawOffset(), this.xRot);
+        this.setRotation(this.yRot() + getHeadRunYawOffset(), this.xRot());
     }
 
     @Unique
