@@ -25,6 +25,7 @@ public abstract class CameraMixin {
     @Shadow
     protected abstract void setRotation(float yRot, float xRot);
 
+    // codex start TODO -> ?
     @Shadow
     public abstract float yRot();
 
@@ -32,10 +33,11 @@ public abstract class CameraMixin {
     public abstract float xRot();
 
     @Shadow
-    protected abstract void setPosition(Vec3 position);
+    private Vec3 position;
+    // codex end
 
     @Shadow
-    private Vec3 position;
+    protected abstract void setPosition(Vec3 position);
 
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {

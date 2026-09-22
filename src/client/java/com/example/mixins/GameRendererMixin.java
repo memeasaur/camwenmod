@@ -21,7 +21,6 @@ public class GameRendererMixin {
     @Unique
     private boolean isRenderingHandBobbing;
 
-    // codex start
     @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void beginHandBobbing(CallbackInfo ci) {
         if (headRunCameraOffset != HEAD_RUN_OFFSET_TYPE.NONE) {
@@ -35,7 +34,6 @@ public class GameRendererMixin {
     private void endHandBobbing(CallbackInfo ci) {
         isRenderingHandBobbing = false;
     }
-    // codex end
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
     private void onBobView(
