@@ -3,7 +3,6 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->only make the camera bobbing cancel if it's first person
 >make f5 work with headrun offset, also make it more obvious that im head-running
     >this means handling the offset differently in both third person modes
 
