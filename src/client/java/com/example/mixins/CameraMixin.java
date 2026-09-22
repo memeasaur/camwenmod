@@ -8,6 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,8 +25,16 @@ public abstract class CameraMixin {
     @Shadow
     protected abstract void setRotation(float yRot, float xRot);
 
+    // codex start TODO -> ?
+    @Shadow
+    public abstract float yRot();
+
+    @Shadow
+    public abstract float xRot();
+
     @Shadow
     private Vec3 position;
+    // codex end
 
     @Shadow
     protected abstract void setPosition(Vec3 position);
@@ -38,29 +47,42 @@ public abstract class CameraMixin {
         if (headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.NONE) { // TODO ?
             return;
         }
-        float modifier = JUMP_VANILLA.isDown()
-                ? headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.LEFT
-                ? 12.f
-                : -12.f
-                : 0.f;
+        float yawOffset = getHeadRunYawOffset();
         switch (MINECRAFT_CLIENT_INSTANCE.options.getCameraType()) {
             case FIRST_PERSON -> {
                 this.setRotation(
-                        player.getYRot() + headRunCameraOffset.delta + modifier,
+                        player.getYRot() + yawOffset,
                         player.getXRot());
             }
-            case THIRD_PERSON_BACK -> {
-                // TODO gl
-//                this.setRotation(
-//                        player.getYRot() + headRunCameraOffset.delta + modifier,
-//                        player.getXRot());
-            }
-            case THIRD_PERSON_FRONT -> {
-                // TODO gl
-//                this.setRotation(
-//                        player.getYRot() + 180.0F - modifier,
-//                        -player.getXRot());
+            case THIRD_PERSON_BACK, THIRD_PERSON_FRONT -> {
             }
         }
     }
+
+    // codex start
+    @Inject(method = "alignWithEntity", at = @At("TAIL"))
+    private void offsetThirdPersonOrbit(float partialTick, CallbackInfo ci) {
+        if (!(this.entity instanceof LocalPlayer)
+                || headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.NONE
+                || MINECRAFT_CLIENT_INSTANCE.options.getCameraType().isFirstPerson()) {
+            return;
+        }
+
+        float yawOffset = getHeadRunYawOffset();
+        // Vanilla has completed either orbit here, including the mirrored front-camera transform.
+        this.setRotation(this.yRot() + yawOffset, this.xRot());
+        Vec3 eyePosition = ((LocalPlayer) this.entity).getEyePosition(partialTick);
+        Vec3 rotatedOrbit = this.position.subtract(eyePosition)
+                .yRot((float) Math.toRadians(-yawOffset));
+        this.setPosition(eyePosition.add(rotatedOrbit));
+    }
+
+    @Unique
+    private static float getHeadRunYawOffset() {
+        float jumpModifier = JUMP_VANILLA.isDown()
+                ? headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.LEFT ? 12.0F : -12.0F
+                : 0.0F;
+        return headRunCameraOffset.delta + jumpModifier;
+    }
+    // codex end
 }
