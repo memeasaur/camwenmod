@@ -6,6 +6,7 @@
 >only make the camera bobbing cancel if it's first person
 >make f5 work with headrun offset, also make it more obvious that im head-running
 
+>make config work in fullscreen
 >make sure that render thing is only called when it's needed?
     >maybe each feature should just have it's own screen?
 >make sure that config window gets destroyed when I press escape to close it
