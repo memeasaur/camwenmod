@@ -147,7 +147,7 @@ public final class ExternalConfigWindow {
         // codex start
         addCheckBox(grid, "projectile trajectory preview", () -> config.isProjectileTrajectoryPreviewEnabled,
                 value -> config.isProjectileTrajectoryPreviewEnabled = value,
-                "draws the held projectile's predicted flight path on the protected click-through overlay");
+                "marks the held projectile's predicted impact point on the protected click-through overlay");
         // codex end
         addCheckBox(grid, "damage taken value notification", () -> config.isDamageTakenValueNotificationEnabled,
                 value -> config.isDamageTakenValueNotificationEnabled = value, "");

@@ -11,7 +11,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.function.Function;
 
 // codex start
-/** Predicts vanilla projectile motion locally and draws it in the capture-excluded click-through overlay. */
+/** Predicts vanilla projectile motion locally and marks its impact in the capture-excluded click-through overlay. */
 final class ProjectileTrajectoryPreview {
     private static final int MAX_STEPS = 100;
     private static final Color TRAJECTORY_COLOR = new Color(0xFF55FFFF, true);
@@ -35,15 +34,9 @@ final class ProjectileTrajectoryPreview {
         List<Vec3> points = simulate(client, player, properties);
         if (points.size() < 2) return false;
 
+        Vector2i impact = project.apply(points.getLast());
         graphics.setColor(TRAJECTORY_COLOR);
-        graphics.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        Vector2i previous = project.apply(points.getFirst());
-        for (int index = 1; index < points.size(); index++) {
-            Vector2i current = project.apply(points.get(index));
-            graphics.drawLine(previous.x, previous.y, current.x, current.y);
-            previous = current;
-        }
-        graphics.fillOval(previous.x - 2, previous.y - 2, 5, 5);
+        graphics.fillOval(impact.x - 3, impact.y - 3, 7, 7);
         return true;
     }
 
