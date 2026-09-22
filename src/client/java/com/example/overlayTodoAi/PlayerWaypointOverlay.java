@@ -166,7 +166,7 @@ public final class PlayerWaypointOverlay {
 
     // codex start
     private static void drawCameraAngleIndicator(Graphics2D graphics, int x, int y, float pitch) {
-        graphics.setColor(Color.GREEN);
+        graphics.setColor(new Color(0x8000FF00, true));
         graphics.setStroke(new BasicStroke(2.0f));
         int size = 2;
         int offset = 9;
