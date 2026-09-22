@@ -4,6 +4,7 @@ import com.example.UntitledClient;
 import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,6 +31,12 @@ public abstract class CameraMixin {
     @Shadow
     public abstract float xRot();
 
+    @Shadow
+    protected abstract void setPosition(Vec3 position);
+
+    @Shadow
+    private Vec3 position;
+
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
         if (!(this.entity instanceof LocalPlayer player)) {
@@ -51,13 +58,7 @@ public abstract class CameraMixin {
     }
 
     // codex start
-    @Inject(
-            method = "alignWithEntity",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/Camera;move(FFF)V",
-                    ordinal = 0,
-                    shift = At.Shift.BEFORE))
+    @Inject(method = "alignWithEntity", at = @At("TAIL"))
     private void offsetThirdPersonOrbit(float partialTick, CallbackInfo ci) {
         if (!(this.entity instanceof LocalPlayer)
                 || headRunCameraOffset == UntitledClient.HEAD_RUN_OFFSET_TYPE.NONE
@@ -65,8 +66,13 @@ public abstract class CameraMixin {
             return;
         }
 
-        // At this point vanilla has already mirrored front view, so preserving xRot handles both views.
-        this.setRotation(this.yRot() + getHeadRunYawOffset(), this.xRot());
+        float yawOffset = getHeadRunYawOffset();
+        // Vanilla has completed either orbit here, including the mirrored front-camera transform.
+        this.setRotation(this.yRot() + yawOffset, this.xRot());
+        Vec3 eyePosition = ((LocalPlayer) this.entity).getEyePosition(partialTick);
+        Vec3 rotatedOrbit = this.position.subtract(eyePosition)
+                .yRot((float) Math.toRadians(-yawOffset));
+        this.setPosition(eyePosition.add(rotatedOrbit));
     }
 
     @Unique
