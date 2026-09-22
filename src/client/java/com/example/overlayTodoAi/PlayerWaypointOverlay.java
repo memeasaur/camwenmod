@@ -43,6 +43,12 @@ public final class PlayerWaypointOverlay {
     }
 
     public void render(Minecraft client, Function<Vec3, Vector2i> project) {
+        //codex start
+        if (client.getWindow().isFullscreen()) {
+            hide();
+            return;
+        }
+        //codex end
         if (!visible(client) || failed) {
             hide();
             return;

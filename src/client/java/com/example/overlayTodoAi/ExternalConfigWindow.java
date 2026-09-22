@@ -34,6 +34,9 @@ public final class ExternalConfigWindow {
     private static final int WDA_EXCLUDEFROMCAPTURE = 0x11;
     private static final int GWLP_HWNDPARENT = -8;
     private static JFrame frame;
+    //codex start
+    private static boolean restoreFullscreenOnClose;
+    //codex end
 
     private ExternalConfigWindow() {
     }
@@ -54,6 +57,9 @@ public final class ExternalConfigWindow {
             reportFailure(client, new UnsupportedOperationException("external config requires Windows"));
             return;
         }
+        //codex start
+        leaveFullscreenForExternalWindow(client);
+        //codex end
 
         long minecraftHandle = GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle());
         int minecraftX = client.getWindow().getX();
@@ -303,6 +309,26 @@ public final class ExternalConfigWindow {
             frame = null;
             closing.dispose();
         }
+        //codex start
+        restoreFullscreenAfterExternalWindow();
+        //codex end
     }
+
+    //codex start
+    private static void leaveFullscreenForExternalWindow(Minecraft client) {
+        if (client.getWindow().isFullscreen()) {
+            restoreFullscreenOnClose = true;
+            client.getWindow().toggleFullScreen();
+        }
+    }
+
+    private static void restoreFullscreenAfterExternalWindow() {
+        if (!restoreFullscreenOnClose) {
+            return;
+        }
+        restoreFullscreenOnClose = false;
+        Minecraft.getInstance().execute(() -> Minecraft.getInstance().getWindow().toggleFullScreen());
+    }
+    //codex end
 }
 // codex end
