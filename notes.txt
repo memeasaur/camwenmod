@@ -3,6 +3,8 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>make bow trajectory indicator
+>put an indicator pointing towards 0 degrees
 >turn teammate hit suppression into a percentage
 >make f5 work with headrun offset, also make it more obvious that im head-running
 >make config boolean for inventory down opening it and inventory up closing it
