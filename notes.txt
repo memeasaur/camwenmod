@@ -5,6 +5,7 @@
 
 >only make the camera bobbing cancel if it's first person
 >make f5 work with headrun offset, also make it more obvious that im head-running
+    >this means handling the offset differently in both third person modes
 
 >make config work in fullscreen
 >make sure that render thing is only called when it's needed?
