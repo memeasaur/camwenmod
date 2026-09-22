@@ -4,6 +4,7 @@ import com.example.UntitledClient;
 import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.DelayedConstantsTodo.JUMP_VANILLA;
 import static com.example.UntitledClient.headRunCameraOffset;
 
@@ -21,6 +23,12 @@ public abstract class CameraMixin {
 
     @Shadow
     protected abstract void setRotation(float yRot, float xRot);
+
+    @Shadow
+    private Vec3 position;
+
+    @Shadow
+    protected abstract void setPosition(Vec3 position);
 
     @Inject(method = "alignWithEntity", at = @At(value = "RETURN"))
     void onAlignWithEntity(CallbackInfo ci) {
@@ -35,8 +43,24 @@ public abstract class CameraMixin {
                 ? 12.f
                 : -12.f
                 : 0.f;
-        this.setRotation(
-                player.getYRot() + headRunCameraOffset.delta + modifier,
-                player.getXRot());
+        switch (MINECRAFT_CLIENT_INSTANCE.options.getCameraType()) {
+            case FIRST_PERSON -> {
+                this.setRotation(
+                        player.getYRot() + headRunCameraOffset.delta + modifier,
+                        player.getXRot());
+            }
+            case THIRD_PERSON_BACK -> {
+                // TODO gl
+//                this.setRotation(
+//                        player.getYRot() + headRunCameraOffset.delta + modifier,
+//                        player.getXRot());
+            }
+            case THIRD_PERSON_FRONT -> {
+                // TODO gl
+//                this.setRotation(
+//                        player.getYRot() + 180.0F - modifier,
+//                        -player.getXRot());
+            }
+        }
     }
 }

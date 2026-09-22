@@ -2,6 +2,7 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.ExternalConfigWindow;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,10 +32,10 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean isMovementToggleMirrorSequencePressed = false;
-    // codex start
-    @Unique
-    private static boolean shouldCloseInventoryOnKeyRelease = false;
-    // codex end
+//    // codex start
+//    @Unique
+//    private static boolean shouldCloseInventoryOnKeyRelease = false;
+//    // codex end
 
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
     // codex start
@@ -54,14 +55,17 @@ public class KeyboardMixin {
             long handle, int action, KeyEvent event, CallbackInfo ci) {
         // codex start
         if (MINECRAFT_CLIENT_INSTANCE.options.keyInventory.matches(event)) {
-            if (action == GLFW.GLFW_PRESS && MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer) {
-                if (config.isInventoryKeyHoldEnabled) {
-                    // Vanilla has opened the player inventory by this RETURN injection point.
-                    shouldCloseInventoryOnKeyRelease = true;
-                }
-            } else if (action == GLFW.GLFW_RELEASE && shouldCloseInventoryOnKeyRelease) {
+//            if (action == GLFW.GLFW_PRESS && MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer) {
+//                if (config.isInventoryKeyHoldEnabled) {
+//                    // Vanilla has opened the player inventory by this RETURN injection point.
+//                    shouldCloseInventoryOnKeyRelease = true;
+//                }
+//            } else if (action == GLFW.GLFW_RELEASE && shouldCloseInventoryOnKeyRelease) {
+//                MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
+//                shouldCloseInventoryOnKeyRelease = false;
+//            }
+            if (action == GLFW.GLFW_RELEASE && MINECRAFT_CLIENT_INSTANCE.gui.screen() instanceof InventoryScreen) {
                 MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
-                shouldCloseInventoryOnKeyRelease = false;
             }
         }
         // codex end
