@@ -34,9 +34,6 @@ public final class ExternalConfigWindow {
     private static final int WDA_EXCLUDEFROMCAPTURE = 0x11;
     private static final int GWLP_HWNDPARENT = -8;
     private static JFrame frame;
-    //codex start
-    private static boolean restoreFullscreenOnClose;
-    //codex end
 
     private ExternalConfigWindow() {
     }
@@ -58,7 +55,7 @@ public final class ExternalConfigWindow {
             return;
         }
         //codex start
-        leaveFullscreenForExternalWindow(client);
+        boolean fullscreen = client.getWindow().isFullscreen();
         //codex end
 
         long minecraftHandle = GLFWNativeWin32.glfwGetWin32Window(client.getWindow().handle());
@@ -85,8 +82,16 @@ public final class ExternalConfigWindow {
                 // Create the native peer while hidden so capture exclusion is set before first display.
                 frame.addNotify();
                 WinDef.HWND configHandle = new WinDef.HWND(Native.getWindowPointer(frame));
-                WinDef.HWND ownerHandle = new WinDef.HWND(Pointer.createConstant(minecraftHandle));
-                User32.INSTANCE.SetWindowLongPtr(configHandle, GWLP_HWNDPARENT, ownerHandle.getPointer());
+                //codex start
+                if (!fullscreen) {
+                //codex end
+                    WinDef.HWND ownerHandle = new WinDef.HWND(Pointer.createConstant(minecraftHandle)); // codex (old code)
+                    User32.INSTANCE.SetWindowLongPtr(configHandle, GWLP_HWNDPARENT, ownerHandle.getPointer()); // codex (old code)
+                //codex start
+                } else {
+                    frame.setAlwaysOnTop(true);
+                }
+                //codex end
                 if (!WindowsWaypointWindow.CaptureApi.INSTANCE.SetWindowDisplayAffinity(
                         configHandle, WDA_EXCLUDEFROMCAPTURE)) {
                     throw new IllegalStateException(
@@ -309,26 +314,6 @@ public final class ExternalConfigWindow {
             frame = null;
             closing.dispose();
         }
-        //codex start
-        restoreFullscreenAfterExternalWindow();
-        //codex end
     }
-
-    //codex start
-    private static void leaveFullscreenForExternalWindow(Minecraft client) {
-        if (client.getWindow().isFullscreen()) {
-            restoreFullscreenOnClose = true;
-            client.getWindow().toggleFullScreen();
-        }
-    }
-
-    private static void restoreFullscreenAfterExternalWindow() {
-        if (!restoreFullscreenOnClose) {
-            return;
-        }
-        restoreFullscreenOnClose = false;
-        Minecraft.getInstance().execute(() -> Minecraft.getInstance().getWindow().toggleFullScreen());
-    }
-    //codex end
 }
 // codex end
