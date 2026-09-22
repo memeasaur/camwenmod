@@ -77,6 +77,14 @@ public final class PlayerWaypointOverlay {
                 if (config.isProjectileTrajectoryPreviewEnabled) {
                     hasOverlayContent |= ProjectileTrajectoryPreview.draw(graphics, client, project);
                 }
+                if (config.isCameraAngleCrosshairIndicatorEnabled && client.player.getXRot() != 0.0f) {
+                    hasOverlayContent = true;
+                    drawCameraAngleIndicator(
+                            graphics,
+                            client.getWindow().getGuiScaledWidth() / 2,
+                            client.getWindow().getGuiScaledHeight() / 2,
+                            client.player.getXRot());
+                }
                 // codex end
                 if (config.playerWaypointCategory != Config.PlayerWaypointCategory.NONE) {
                     for (var player : Objects.requireNonNull(client.level).players()) {
@@ -155,6 +163,16 @@ public final class PlayerWaypointOverlay {
         graphics.drawLine(x - size, y - size, x + size, y + size);
         graphics.drawLine(x - size, y + size, x + size, y - size);
     }
+
+    // codex start
+    private static void drawCameraAngleIndicator(Graphics2D graphics, int x, int y, float pitch) {
+        graphics.setColor(Color.GREEN);
+        graphics.setStroke(new BasicStroke(2.0f));
+        int length = 8;
+        int direction = pitch < 0.0f ? -1 : 1;
+        graphics.drawLine(x, y, x, y + direction * length);
+    }
+    // codex end
 
     private static BufferedImage face(NativeImage skin) {
         BufferedImage result = new BufferedImage(8, 8, BufferedImage.TYPE_INT_ARGB);

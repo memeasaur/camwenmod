@@ -140,6 +140,11 @@ public final class ExternalConfigWindow {
                 value -> config.isTeammateTargetCrosshairMarkerEnabled = value,
                 "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate");
         // codex start
+        addCheckBox(grid, "show camera angle on external overlay", () -> config.isCameraAngleCrosshairIndicatorEnabled,
+                value -> config.isCameraAngleCrosshairIndicatorEnabled = value,
+                "draws a green line from the crosshair toward the direction the camera is tilted");
+        // codex end
+        // codex start
         addCheckBox(grid, "only show edge-clamped player waypoints", () -> config.isUnclampedPlayerWaypointsDisabled,
                 value -> config.isUnclampedPlayerWaypointsDisabled = value,
                 "hides player waypoints that are inside the window and keeps waypoints clamped to an edge");
