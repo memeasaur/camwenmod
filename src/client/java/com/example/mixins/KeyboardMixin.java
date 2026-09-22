@@ -37,6 +37,18 @@ public class KeyboardMixin {
     // codex end
 
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
+    // codex start
+    @Inject(at = @At(value = "HEAD"), method = "keyPress", cancellable = true)
+    private void suppressInventoryKeyRepeats(
+            long handle, int action, KeyEvent event, CallbackInfo ci) {
+        if (config.isInventoryKeyHoldEnabled
+                && action == GLFW.GLFW_REPEAT
+                && MINECRAFT_CLIENT_INSTANCE.options.keyInventory.matches(event)) {
+            ci.cancel();
+        }
+    }
+    // codex end
+
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
             long handle, int action, KeyEvent event, CallbackInfo ci) {
