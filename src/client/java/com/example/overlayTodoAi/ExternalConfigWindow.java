@@ -7,7 +7,6 @@ import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -144,11 +143,11 @@ public final class ExternalConfigWindow {
         addCheckBox(grid, "mark targeted teammates on external overlay", () -> config.isTeammateTargetCrosshairMarkerEnabled,
                 value -> config.isTeammateTargetCrosshairMarkerEnabled = value,
                 "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate");
-        // codex start
-        addCheckBox(grid, "show camera angle on external overlay", () -> config.isCameraAngleCrosshairIndicatorEnabled,
-                value -> config.isCameraAngleCrosshairIndicatorEnabled = value,
-                "draws a green line from the crosshair toward the direction the camera is tilted");
-        // codex end
+//        // codex start
+//        addCheckBox(grid, "show camera angle on external overlay", () -> config.isCameraAngleCrosshairIndicatorEnabled,
+//                value -> config.isCameraAngleCrosshairIndicatorEnabled = value,
+//                "draws a green line from the crosshair toward the direction the camera is tilted");
+//        // codex end
         // codex start
         addCheckBox(grid, "only show edge-clamped player waypoints", () -> config.isUnclampedPlayerWaypointsDisabled,
                 value -> config.isUnclampedPlayerWaypointsDisabled = value,

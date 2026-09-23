@@ -4,7 +4,6 @@
     >make xray it's own mod
 
 >TODO -> either make it so the unclickable screen is always on. or ideally make it able to be created without messing up fullscreen
-
 >make head-run left able to swap to head-run right without re-pressing
 >make config work in fullscreen
 >make sure that render thing is only called when it's needed?
