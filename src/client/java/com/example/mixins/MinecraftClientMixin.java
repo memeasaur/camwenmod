@@ -43,6 +43,7 @@ public abstract class MinecraftClientMixin {
             // TODO -> this don't work exactly
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
                     entityHitResult.getEntity() instanceof LivingEntity) {
+                TODO;
                 float marginBypass = player.getPickRadius();
                 float staticMarginBypass = computeCheatConfig().staticTargetingMarginBypass;
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
