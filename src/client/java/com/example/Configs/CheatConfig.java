@@ -13,9 +13,16 @@ public class CheatConfig {
 
     public float computeTargetingMarginBypass(
             boolean isMoving, boolean isTargetMovingPlayer) {
-        float one = isTargetingMarginReverted ? .1f : 0.f;
-        float two = isMoving ? Math.max(movingTargetMarginBypass, staticTargetingMarginBypass) : staticTargetingMarginBypass;
-        TODO;
-        return one + two;
+        float base = isTargetingMarginReverted
+                ? .1f
+                : 0.f;
+        float one = staticTargetingMarginBypass;
+        float two = isMoving
+                ? movingTargetMarginBypass
+                : 0.f;
+        float three = isMoving && isTargetMovingPlayer
+                ? doubleMovingTargetMarginBypass
+                : 0.f;
+        return base + Math.max(one, Math.max(two, three));
     }
 }
