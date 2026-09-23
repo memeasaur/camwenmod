@@ -7,7 +7,6 @@ import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -142,13 +141,28 @@ public final class ExternalConfigWindow {
         addCheckBox(grid, "disable view bobbing camera shake", () -> config.isViewBobbingCameraShakeDisabled,
                 value -> config.isViewBobbingCameraShakeDisabled = value,
                 "keeps view bobbing enabled while removing only the camera shake");
+        // codex start
+        addCheckBox(grid, "hold inventory key to keep inventory open", () -> config.isInventoryKeyHoldEnabled,
+                value -> config.isInventoryKeyHoldEnabled = value,
+                "opens the player inventory when pressed and closes it when released");
+        // codex end
         addCheckBox(grid, "mark targeted teammates on external overlay", () -> config.isTeammateTargetCrosshairMarkerEnabled,
                 value -> config.isTeammateTargetCrosshairMarkerEnabled = value,
                 "draws a red X over the crosshair on the external player waypoint overlay when targeting a teammate");
+//        // codex start
+//        addCheckBox(grid, "show camera angle on external overlay", () -> config.isCameraAngleCrosshairIndicatorEnabled,
+//                value -> config.isCameraAngleCrosshairIndicatorEnabled = value,
+//                "draws a green line from the crosshair toward the direction the camera is tilted");
+//        // codex end
         // codex start
         addCheckBox(grid, "only show edge-clamped player waypoints", () -> config.isUnclampedPlayerWaypointsDisabled,
                 value -> config.isUnclampedPlayerWaypointsDisabled = value,
                 "hides player waypoints that are inside the window and keeps waypoints clamped to an edge");
+        // codex end
+        // codex start
+        addCheckBox(grid, "projectile trajectory preview", () -> config.isProjectileTrajectoryPreviewEnabled,
+                value -> config.isProjectileTrajectoryPreviewEnabled = value,
+                "marks the held projectile's predicted impact point on the protected click-through overlay");
         // codex end
         addCheckBox(grid, "damage taken value notification", () -> config.isDamageTakenValueNotificationEnabled,
                 value -> config.isDamageTakenValueNotificationEnabled = value, "");
@@ -172,8 +186,11 @@ public final class ExternalConfigWindow {
                 value -> config.isDebugModeEnabled = value, "");
         addCheckBox(grid, "parkour cheat", () -> config.isParkourCheatEnabled,
                 value -> config.isParkourCheatEnabled = value, "");
-        addCheckBox(grid, "suppress teammate swings", () -> config.isTeammatesSwingSuppressionEnabled,
-                value -> config.isTeammatesSwingSuppressionEnabled = value, "");
+        // codex start
+        addFloatField(grid, "teammate swing suppression (%)", config.teammateSwingSuppressionChance,
+                value -> config.teammateSwingSuppressionChance = Math.clamp(value, 0.0F, 100.0F),
+                "percentage chance (0-100) that an attack targeting a friendly teammate is suppressed");
+        // codex end
         result.setContentPane(grid);
         return result;
     }

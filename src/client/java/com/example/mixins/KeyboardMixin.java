@@ -2,6 +2,9 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.ExternalConfigWindow;
+// codex start
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+// codex end
 import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,6 +22,9 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+// codex start
+import org.lwjgl.glfw.GLFW;
+// codex end
 
 import static com.example.Constants.*;
 import static com.example.DelayedConstantsTodo.*;
@@ -29,14 +35,46 @@ import static com.example.Utils.*;
 public class KeyboardMixin {
     @Unique
     private static boolean isMovementToggleMirrorSequencePressed = false;
+//    // codex start
+//    @Unique
+//    private static boolean shouldCloseInventoryOnKeyRelease = false;
+//    // codex end
 
     // TODO -> there has to be a better place for handling this rather than checking all keyMappings
+    // codex start
+    @Inject(at = @At(value = "HEAD"), method = "keyPress", cancellable = true)
+    private void suppressInventoryKeyRepeats(
+            long handle, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
+        if (config.isInventoryKeyHoldEnabled
+                && action == GLFW.GLFW_REPEAT
+                && MINECRAFT_CLIENT_INSTANCE.options.keyInventory.matches(key, scanCode)) {
+            ci.cancel();
+        }
+    }
+    // codex end
+
     @Inject(at = @At(value = "RETURN"), method = "keyPress")
     private void onKeyPress(
             // codex start
             // codex (old code) long handle, int action, KeyEvent event, CallbackInfo ci) {
             long handle, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
             // codex end
+        // codex start
+        if (MINECRAFT_CLIENT_INSTANCE.options.keyInventory.matches(key, scanCode)) {
+//            if (action == GLFW.GLFW_PRESS && MINECRAFT_CLIENT_INSTANCE.player instanceof LocalPlayer) {
+//                if (config.isInventoryKeyHoldEnabled) {
+//                    // Vanilla has opened the player inventory by this RETURN injection point.
+//                    shouldCloseInventoryOnKeyRelease = true;
+//                }
+//            } else if (action == GLFW.GLFW_RELEASE && shouldCloseInventoryOnKeyRelease) {
+//                MINECRAFT_CLIENT_INSTANCE.setScreenAndShow(null);
+//                shouldCloseInventoryOnKeyRelease = false;
+//            }
+            if (config.isInventoryKeyHoldEnabled && action == GLFW.GLFW_RELEASE && MINECRAFT_CLIENT_INSTANCE.screen instanceof InventoryScreen) {
+                MINECRAFT_CLIENT_INSTANCE.setScreen(null);
+            }
+        }
+        // codex end
         if (config.isMovementToggleMirrorPressDisabling) {
             if (!(getIsKeyBindingPressed(SNEAK_VANILLA) == toggleMovementState.shift()
                     && getIsKeyBindingPressed(SPRINT_VANILLA) == toggleMovementState.sprint()

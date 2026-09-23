@@ -271,11 +271,11 @@ public class Constants {
                         config.isParkourCheatEnabled,
                         is -> config.isParkourCheatEnabled = is,
                         ""),
-                getConfigCheckboxWidget(
-                        "suppress teammate swings",
-                        config.isTeammatesSwingSuppressionEnabled,
-                        is -> config.isTeammatesSwingSuppressionEnabled = is,
-                        "")
+                getConfigFloatInputWidget(
+                        "teammate swing suppression (%)",
+                        config.teammateSwingSuppressionChance,
+                        value -> config.teammateSwingSuppressionChance = Math.clamp(value, 0.0F, 100.0F),
+                        "percentage chance (0-100) that an attack targeting a friendly teammate is suppressed")
         ));
     }
 

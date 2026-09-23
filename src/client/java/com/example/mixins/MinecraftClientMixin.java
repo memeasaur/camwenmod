@@ -75,12 +75,15 @@ public abstract class MinecraftClientMixin {
                 entityHitResult.getEntity() instanceof LivingEntity target &&
                 target instanceof Player playerTarget) {
             onPvpDamage();
-            if (config.isTeammatesSwingSuppressionEnabled &&
-                    config.nameplateUuids.get(playerTarget.getUUID()) instanceof Config.NameplateTeam team &&
-                    team == Config.NameplateTeam.FRIENDLY) {
+            // codex start
+            float suppressionChance = Math.clamp(config.teammateSwingSuppressionChance, 0.0F, 100.0F);
+            if (config.nameplateUuids.get(playerTarget.getUUID()) instanceof Config.NameplateTeam team &&
+                    team == Config.NameplateTeam.FRIENDLY &&
+                    Math.random() * 100.0F < suppressionChance) {
                 cir.setReturnValue(false);
                 return;
             }
+            // codex end
         }
         // TODO -> I could keep a counter for the random boolean passes that get bypass by the hurtTime being 0
 //        if (config.isAttackSuppressionEnabled &&

@@ -42,10 +42,16 @@ public class Config {
     public boolean isBackwardSprintResetSuppressionEnabled = false;
     public boolean isViewBobbingCameraShakeDisabled = false;
     // codex start
+    public boolean isInventoryKeyHoldEnabled = false;
+    // codex end
+    // codex start
     public boolean isTeammateTargetCrosshairMarkerEnabled = false;
     // codex end
     // codex start
     public boolean isUnclampedPlayerWaypointsDisabled = false;
+    // codex end
+    // codex start
+    public boolean isProjectileTrajectoryPreviewEnabled = false;
     // codex end
 //    public boolean isGuiCheatsPvpDisabling = false;
     // TODO -> should have an option for it making a noise if a player shows up nearby
@@ -61,8 +67,10 @@ public class Config {
     public boolean isDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
 
-    // TODO -> make this a percentage so that logs aren't so blatant
-    public boolean isTeammatesSwingSuppressionEnabled = false;
+    // codex start
+    /** Percentage chance (0-100) that an attack targeting a friendly teammate is suppressed. */
+    public float teammateSwingSuppressionChance = 0.0F;
+    // codex end
 
     public void saveConfig() {
         serializeJsonBlocking("config", this);
