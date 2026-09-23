@@ -40,10 +40,10 @@ public abstract class MinecraftClientMixin {
             if (previousAttackCooldown != 0) {
                 player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             }
-            // TODO -> this don't work exactly
+            // TODO -> this don't work exactly?
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-                    entityHitResult.getEntity() instanceof LivingEntity) {
-                float marginBypass = player.getPickRadius();
+                    entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
+                float marginBypass = livingEntity.getPickRadius();
                 float staticMarginBypass = computeCheatConfig().staticTargetingMarginBypass;
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
