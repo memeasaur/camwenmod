@@ -3,6 +3,8 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>maybe the movement threshold should be at this speed im testing with?
+    >maybe I should make a mode where only reach hits go through for testing
 >TODO -> either make it so the unclickable screen is always on. or ideally make it able to be created without messing up fullscreen
 >make head-run left able to swap to head-run right without re-pressing
 >make config work in fullscreen
@@ -12,8 +14,6 @@
 >fix the hitbox debug message?
 >destroy external window if it isn't being used by anything?
 >impl last-seen waypoints w/ timers
->put target on the enemy players to show where I should be aiming at for most reach
-    >maybe start with only showing it in the easiest case
 >maybe I should treat w taps differently? to match the s tap thing
 >parkour macro recorder
 >add ground hitting in adventure mode (scared of this doing 20cps and getting autobanned)
@@ -24,7 +24,6 @@
     >no item release?
     >no use delay?
     >timer? faster client tick rate?
->margin bypass: maybe one that only works when both parties are moving?
 >teammate api that lets you see their current location in the world
 	>/focus
 	>health

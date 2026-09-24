@@ -43,18 +43,20 @@ public abstract class MinecraftClientMixin {
                 player.displayClientMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime), false);
                 // codex end
             }
-            // TODO -> this don't work exactly
+            // TODO -> this don't work exactly?
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-                    entityHitResult.getEntity() instanceof LivingEntity) {
-                float marginBypass = player.getPickRadius();
+                    entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
+                float marginBypass = livingEntity.getPickRadius();
                 float staticMarginBypass = computeCheatConfig().staticTargetingMarginBypass;
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = 0.f;
+                float doubleMovingMarginBypass = computeCheatConfig().doubleMovingTargetMarginBypass;
+                computeCheatConfig().doubleMovingTargetMarginBypass = 0.f;
                 // codex start
                 // codex (old code) if (((ClientPlayerEntityInvoker) this.player).invokePick(
                 if (((ClientPlayerEntityInvoker) MINECRAFT_CLIENT_INSTANCE.gameRenderer).invokePick(
-                // codex end
+                        // codex end
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
                         player.entityInteractionRange(),
@@ -66,6 +68,7 @@ public abstract class MinecraftClientMixin {
                 }
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
+                computeCheatConfig().doubleMovingTargetMarginBypass = doubleMovingMarginBypass;
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity) {

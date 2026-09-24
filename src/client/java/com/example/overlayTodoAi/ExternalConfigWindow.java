@@ -175,6 +175,9 @@ public final class ExternalConfigWindow {
         addFloatField(grid, "targeting margin (moving)", activeCheatConfig.movingTargetMarginBypass,
                 value -> activeCheatConfig.movingTargetMarginBypass = value,
                 "targeting margin bypass while moving; invalid input is shown in red");
+        addFloatField(grid, "targeting margin (double moving)", activeCheatConfig.doubleMovingTargetMarginBypass,
+                value -> activeCheatConfig.doubleMovingTargetMarginBypass = value,
+                "targeting margin bypass while double moving; invalid input is shown in red");
         addButton(grid, "reset ally nameplates", () -> {
             config.nameplateUuids.values().removeIf(each -> each == Config.NameplateTeam.ALLY);
             saveAll();
