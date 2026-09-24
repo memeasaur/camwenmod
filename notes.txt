@@ -3,6 +3,10 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>bow tracer:
+    >make entities block the dot and change the color?
+    >make dot go away when it's behind the block I'm looking at
+
 >maybe the movement threshold should be at this speed im testing with?
     >maybe I should make a mode where only reach hits go through for testing
 >TODO -> either make it so the unclickable screen is always on. or ideally make it able to be created without messing up fullscreen
