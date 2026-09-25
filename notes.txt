@@ -4,10 +4,7 @@
     >make xray it's own mod
 
 >more reach if I have speed, less if slowed etc.
-    >more reach if I'm jumping
-
->bow tracer:
-    >make dot go away when it's behind the block I'm looking at
+>more reach if I'm jumping
 
 >make head-run left able to swap to head-run right without re-pressing
 >could try more complex logic on the target's dynamic movement
