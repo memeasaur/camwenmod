@@ -3,10 +3,9 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->more reach if I have speed, less if slowed etc.
-    >doesn't seem to affect it
 >more reach if I'm jumping
 
+>the hitbox debug should show how much of the given reach value is being used
 >make head-run left able to swap to head-run right without re-pressing
 >could try more complex logic on the target's dynamic movement?
 >maybe the movement threshold should be at this speed im testing with?
