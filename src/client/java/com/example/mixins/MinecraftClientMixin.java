@@ -46,8 +46,8 @@ public abstract class MinecraftClientMixin {
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = 0.f;
-                float doubleMovingMarginBypass = computeCheatConfig().doubleMovingTargetMarginBypass;
-                computeCheatConfig().doubleMovingTargetMarginBypass = 0.f;
+                float doubleMovingMarginBypass = computeCheatConfig().doubleWalkingTargetMarginBypass;
+                computeCheatConfig().doubleWalkingTargetMarginBypass = 0.f;
                 if (((ClientPlayerEntityInvoker) this.player).invokePick(
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
@@ -57,7 +57,7 @@ public abstract class MinecraftClientMixin {
                 }
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
-                computeCheatConfig().doubleMovingTargetMarginBypass = doubleMovingMarginBypass;
+                computeCheatConfig().doubleWalkingTargetMarginBypass = doubleMovingMarginBypass;
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity) {
