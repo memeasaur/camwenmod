@@ -2,10 +2,21 @@ package com.example.Configs;
 
 public class CheatConfig {
     //    public boolean isEthylene = false;
-    public boolean isTargetingMarginReverted = false; // TODO -> struct
+    // codex start
+    public boolean isEthylene = false;
+    // codex end
+//    TODO; // slower than walking should use static
+    // TODO -> vs sprinting/jumping/speed etc.
+    public boolean isTargetingMarginReverted = false;
+    //    public record MovementPair() {}
+//    public HashMap<> advanced?dynamic? reach
     public float staticTargetingMarginBypass = .0f;
     public float movingTargetMarginBypass = 0.f;
-    public float doubleMovingTargetMarginBypass = 0.f;
+    public float doubleWalkingTargetMarginBypass = 0.f;
+//    TODO;
+//    public float sprintVsWalkingTargetMarginBypass = 0.f;
+//    public float speedVsWalkingTargetMarginBypass = 0.f;
+//    public float walkJumpVsWalkingTargetMarginBypass = 0.f;
 //    public float targetingMarginWidthBypass = 0.f;
 //    public double attackVelocityBypass = 0.6;
 //    public boolean isAutoCobweb = false; // TODO -> struct?
@@ -21,7 +32,7 @@ public class CheatConfig {
                 ? movingTargetMarginBypass
                 : 0.f;
         float three = isMoving && isTargetMovingPlayer
-                ? doubleMovingTargetMarginBypass
+                ? doubleWalkingTargetMarginBypass
                 : 0.f;
         return base + Math.max(one, Math.max(two, three));
     }

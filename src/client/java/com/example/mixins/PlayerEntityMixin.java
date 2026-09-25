@@ -1,14 +1,24 @@
 package com.example.mixins;
 
+import java.util.Objects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
+import static com.example.DelayedConstantsTodo.SPRINT_VANILLA;
+import static com.example.UntitledClient.config;
+import static com.example.UntitledClient.isEthyleneSprintFovCancelled;
+import static com.example.Utils.computeCheatConfig;
+import static com.example.Utils.getIsKeyBindingPressed;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -33,6 +43,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 //            this.setSprinting(true);
 //        }
 //    }
+
+    // codex start
+    @Inject(at = @At(value = "RETURN"), method = "attack")
+    private void onAttack(Entity target, CallbackInfo ci) {
+        if (config.isCheatsEnabled &&
+                computeCheatConfig().isEthylene &&
+                target instanceof Player &&
+                (Object) this == MINECRAFT_CLIENT_INSTANCE.player &&
+                Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).input.keyPresses.forward() &&
+                getIsKeyBindingPressed(SPRINT_VANILLA)) {
+            this.setSprinting(true);
+            isEthyleneSprintFovCancelled = true;
+        }
+    }
+    // codex end
 
     // TODO -> this is fickle, but every solution seems like it's gonna be fickle
     // requiring this to be signed off on when updating would be nice
