@@ -1,6 +1,7 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+import com.example.overlayTodoAi.PlayerWaypointOverlay;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +17,9 @@ import static com.example.Utils.onPvpDamage;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
-
-import java.util.Objects;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
@@ -40,7 +38,7 @@ public abstract class MinecraftClientMixin {
             if (previousAttackCooldown != 0) {
                 // codex start
                 // codex (old code) player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
-                player.displayClientMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime), false);
+                PlayerWaypointOverlay.appendDebugMessage("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime);
                 // codex end
             }
             // TODO -> this don't work exactly?
@@ -51,8 +49,8 @@ public abstract class MinecraftClientMixin {
                 computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = 0.f;
-                float doubleMovingMarginBypass = computeCheatConfig().doubleMovingTargetMarginBypass;
-                computeCheatConfig().doubleMovingTargetMarginBypass = 0.f;
+                float doubleMovingMarginBypass = computeCheatConfig().doubleWalkingTargetMarginBypass;
+                computeCheatConfig().doubleWalkingTargetMarginBypass = 0.f;
                 // codex start
                 // codex (old code) if (((ClientPlayerEntityInvoker) this.player).invokePick(
                 if (((ClientPlayerEntityInvoker) MINECRAFT_CLIENT_INSTANCE.gameRenderer).invokePick(
@@ -63,12 +61,12 @@ public abstract class MinecraftClientMixin {
                         MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
                     // codex start
                     // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
-                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).displayClientMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"), false);
+                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ")");
                     // codex end
                 }
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
-                computeCheatConfig().doubleMovingTargetMarginBypass = doubleMovingMarginBypass;
+                computeCheatConfig().doubleWalkingTargetMarginBypass = doubleMovingMarginBypass;
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity) {

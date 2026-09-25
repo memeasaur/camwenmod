@@ -1,0 +1,15 @@
+allprojects {
+    afterEvaluate {
+        tasks.register('trajectoryTestTodoAi', JavaExec) {
+            dependsOn 'clientClasses'
+            classpath = sourceSets.client.runtimeClasspath
+            mainClass = 'com.example.overlayTodoAi.ProjectileTrajectoryPreviewTestTodoAi'
+            doFirst {
+                def outputDir = file('build/trajectory-tests')
+                outputDir.mkdirs()
+                ant.javac(srcdir: 'tests', destdir: outputDir, includeantruntime: false, release: '25', classpath: classpath.asPath)
+                classpath += files(outputDir)
+            }
+        }
+    }
+}
