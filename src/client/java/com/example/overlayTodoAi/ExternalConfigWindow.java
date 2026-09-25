@@ -186,6 +186,8 @@ public final class ExternalConfigWindow {
         addWaypointCategoryButton(grid);
         addCheckBox(grid, "debug mode", () -> config.isDebugModeEnabled,
                 value -> config.isDebugModeEnabled = value, "");
+        addCheckBox(grid, "reach debug mode", () -> config.isReachDebugModeEnabled,
+                value -> config.isReachDebugModeEnabled = value, "");
         addCheckBox(grid, "parkour cheat", () -> config.isParkourCheatEnabled,
                 value -> config.isParkourCheatEnabled = value, "");
         // codex start
