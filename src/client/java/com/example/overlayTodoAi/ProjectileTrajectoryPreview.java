@@ -2,10 +2,12 @@ package com.example.overlayTodoAi;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -22,6 +24,9 @@ import java.util.function.Function;
 final class ProjectileTrajectoryPreview {
     private static final int MAX_STEPS = 100;
     private static final Color TRAJECTORY_COLOR = new Color(0xFFFF0000, true);
+    // codex start
+    private static final Color ENTITY_IMPACT_COLOR = new Color(0xFF00FF00, true);
+    //codex end
 
     private ProjectileTrajectoryPreview() {
     }
@@ -31,11 +36,14 @@ final class ProjectileTrajectoryPreview {
         TrajectoryProperties properties = properties(player);
         if (properties == null) return false;
 
-        List<Vec3> points = simulate(client, player, properties);
+        // codex start
+        TrajectoryResult result = simulate(client, player, properties);
+        List<Vec3> points = result.points();
+        //codex end
         if (points.size() < 2) return false;
 
         Vector2i impact = project.apply(points.getLast());
-        graphics.setColor(TRAJECTORY_COLOR);
+        graphics.setColor(result.hitEntity() ? ENTITY_IMPACT_COLOR : TRAJECTORY_COLOR);
         int size = 2;
         int radius = size / 2;
         graphics.fillOval(impact.x - radius, impact.y - radius, size, size);
@@ -66,7 +74,7 @@ final class ProjectileTrajectoryPreview {
         return null;
     }
 
-    private static List<Vec3> simulate(Minecraft client, LocalPlayer player, TrajectoryProperties properties) {
+    private static TrajectoryResult simulate(Minecraft client, LocalPlayer player, TrajectoryProperties properties) {
         List<Vec3> points = new ArrayList<>();
         Vec3 position = player.getEyePosition();
         Vec3 velocity = player.getLookAngle().normalize().scale(properties.speed());
@@ -75,6 +83,18 @@ final class ProjectileTrajectoryPreview {
             Vec3 next = position.add(velocity);
             BlockHitResult hit = client.level.clip(new ClipContext(
                     position, next, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+            // codex start
+            Vec3 segmentEnd = hit.getType() == HitResult.Type.MISS ? next : hit.getLocation();
+            List<AABB> hitboxes = client.level.getEntities(player,
+                            new AABB(position, segmentEnd).inflate(1.0), entity -> !entity.isSpectator() && entity.canBeHitByProjectile())
+                    .stream().map(Entity::getBoundingBox).toList();
+            Vec3 entityImpact = nearestEntityImpact(position, segmentEnd, hitboxes);
+            if (entityImpact != null && (hit.getType() == HitResult.Type.MISS
+                    || position.distanceToSqr(entityImpact) < position.distanceToSqr(segmentEnd))) {
+                points.add(entityImpact);
+                return new TrajectoryResult(points, true);
+            }
+            //codex end
             if (hit.getType() != HitResult.Type.MISS) {
                 points.add(hit.getLocation());
                 break;
@@ -83,8 +103,26 @@ final class ProjectileTrajectoryPreview {
             position = next;
             velocity = velocity.scale(properties.drag()).add(0, -properties.gravity(), 0);
         }
-        return points;
+        return new TrajectoryResult(points, false);
     }
+
+    // codex start
+    static Vec3 nearestEntityImpact(Vec3 start, Vec3 end, Iterable<AABB> hitboxes) {
+        Vec3 nearest = null;
+        double nearestDistance = Double.POSITIVE_INFINITY;
+        for (AABB hitbox : hitboxes) {
+            Vec3 impact = hitbox.contains(start) ? start : hitbox.clip(start, end).orElse(null);
+            if (impact != null && start.distanceToSqr(impact) < nearestDistance) {
+                nearest = impact;
+                nearestDistance = start.distanceToSqr(impact);
+            }
+        }
+        return nearest;
+    }
+
+    private record TrajectoryResult(List<Vec3> points, boolean hitEntity) {
+    }
+    //codex end
 
     private record TrajectoryProperties(double speed, double gravity, double drag) {
     }
