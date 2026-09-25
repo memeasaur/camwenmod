@@ -2,7 +2,9 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.PlayerWaypointOverlay;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,7 +62,13 @@ public abstract class MinecraftClientMixin {
                         player.entityInteractionRange(),
                         MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()) instanceof EntityHitResult secondHit) ||
                         secondHit.getType() == HitResult.Type.MISS) {
-                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ")"); // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
+                    Vec3 point = firstHit.getLocation();
+                    AABB box = firstHit.getEntity().getBoundingBox();
+                    double dx = Math.max(box.minX - point.x, Math.max(0.0, point.x - box.maxX));
+                    double dy = Math.max(box.minY - point.y, Math.max(0.0, point.y - box.maxY));
+                    double dz = Math.max(box.minZ - point.z, Math.max(0.0, point.z - box.maxZ));
+                    double foo = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ", " + foo + "?)"); // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
                     flag = true;
                 }
                 computeCheatConfig().isTargetingMarginReverted = targetingMarginReverted;
