@@ -18,6 +18,7 @@ import static com.example.DelayedConstantsTodo.SPRINT_VANILLA;
 import static com.example.UntitledClient.config;
 import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.getIsKeyBindingPressed;
+import static com.example.mixins.AbstractClientPlayerMixinTodoAi.isEthyleneSprintFovCancelled;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -49,9 +50,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (config.isCheatsEnabled &&
                 computeCheatConfig().isEthylene &&
                 target instanceof Player &&
+                (Object) this == MINECRAFT_CLIENT_INSTANCE.player &&
                 Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).input.keyPresses.forward() &&
                 getIsKeyBindingPressed(SPRINT_VANILLA)) {
             this.setSprinting(true);
+            isEthyleneSprintFovCancelled = true;
         }
     }
     // codex end

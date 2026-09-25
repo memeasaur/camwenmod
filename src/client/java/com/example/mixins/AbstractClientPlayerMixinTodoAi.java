@@ -19,6 +19,7 @@ import static com.example.Utils.computeCheatConfig;
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixinTodoAi {
     private static final Identifier SPRINTING_MODIFIER_ID = Identifier.withDefaultNamespace("sprinting");
+    public static boolean isEthyleneSprintFovCancelled;
 
     @Redirect(
             method = "getFieldOfViewModifier",
@@ -34,6 +35,11 @@ public abstract class AbstractClientPlayerMixinTodoAi {
                 player != MINECRAFT_CLIENT_INSTANCE.player ||
                 !player.isSprinting() ||
                 attribute != Attributes.MOVEMENT_SPEED) {
+            isEthyleneSprintFovCancelled = false;
+            return movementSpeed;
+        }
+
+        if (!isEthyleneSprintFovCancelled) {
             return movementSpeed;
         }
 
