@@ -2,7 +2,9 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.PlayerWaypointOverlay;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,37 +38,47 @@ public abstract class MinecraftClientMixin {
         }
         if (config.isDebugModeEnabled) {
             if (previousAttackCooldown != 0) {
-                // codex start
-                // codex (old code) player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
-                PlayerWaypointOverlay.appendDebugMessage("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime);
-                // codex end
+                PlayerWaypointOverlay.appendDebugMessage("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime); // codex (old code) player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             }
-            // TODO -> this don't work exactly?
-            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-                    entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
-                float marginBypass = livingEntity.getPickRadius();
+            if (((ClientPlayerEntityInvoker) this.player).invokePick(
+                    MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
+                    player.blockInteractionRange(),
+                    player.entityInteractionRange(),
+                    MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()) instanceof EntityHitResult firstHit &&
+                    firstHit.getType() != HitResult.Type.MISS) {
+                float marginBypass = firstHit.getEntity().getPickRadius();
+                boolean targetingMarginReverted = computeCheatConfig().isTargetingMarginReverted;
                 float staticMarginBypass = computeCheatConfig().staticTargetingMarginBypass;
-                computeCheatConfig().staticTargetingMarginBypass = 0.f;
                 float movingMarginBypass = computeCheatConfig().movingTargetMarginBypass;
-                computeCheatConfig().movingTargetMarginBypass = 0.f;
                 float doubleMovingMarginBypass = computeCheatConfig().doubleWalkingTargetMarginBypass;
+                computeCheatConfig().isTargetingMarginReverted = false;
+                computeCheatConfig().staticTargetingMarginBypass = 0.f;
+                computeCheatConfig().movingTargetMarginBypass = 0.f;
                 computeCheatConfig().doubleWalkingTargetMarginBypass = 0.f;
-                // codex start
-                // codex (old code) if (((ClientPlayerEntityInvoker) this.player).invokePick(
-                if (((ClientPlayerEntityInvoker) MINECRAFT_CLIENT_INSTANCE.gameRenderer).invokePick(
-                        // codex end
+                boolean flag = false;
+                if (!(((ClientPlayerEntityInvoker) this.player).invokePick(
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
                         player.entityInteractionRange(),
-                        MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
-                    // codex start
-                    // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
-                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ")");
-                    // codex end
+                        MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()) instanceof EntityHitResult secondHit) ||
+                        secondHit.getType() == HitResult.Type.MISS) {
+                    Vec3 point = firstHit.getLocation();
+                    AABB box = firstHit.getEntity().getBoundingBox();
+                    double dx = Math.max(box.minX - point.x, Math.max(0.0, point.x - box.maxX));
+                    double dy = Math.max(box.minY - point.y, Math.max(0.0, point.y - box.maxY));
+                    double dz = Math.max(box.minZ - point.z, Math.max(0.0, point.z - box.maxZ));
+                    double foo = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ", " + foo + "?)"); // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
+                    flag = true;
                 }
+                computeCheatConfig().isTargetingMarginReverted = targetingMarginReverted;
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
                 computeCheatConfig().doubleWalkingTargetMarginBypass = doubleMovingMarginBypass;
+                if (!flag && config.isReachDebugModeEnabled) {
+                    cir.cancel();
+                    return;
+                }
             }
         }
         if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity) {
@@ -89,14 +101,14 @@ public abstract class MinecraftClientMixin {
         // TODO -> I could keep a counter for the random boolean passes that get bypass by the hurtTime being 0
 //        if (config.isAttackSuppressionEnabled &&
 //                new Random().nextBoolean() && // TODO ?
-//                (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult) ||
-//                        !(entityHitResult.getEntity() instanceof Player enemy) ||
+//                (!(MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult firstHit) ||
+//                        !(firstHit.getEntity() instanceof Player enemy) ||
 //                        enemy.hurtTime > 0)) {
 //            cir.setReturnValue(false);
 //            Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).swing(InteractionHand.MAIN_HAND, false);
 //            // TODO -> this isn't running side effects?
-////            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
-////                    entityHitResult.getEntity() instanceof LivingEntity entity) {
+////            if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult firstHit &&
+////                    firstHit.getEntity() instanceof LivingEntity entity) {
 ////                MINECRAFT_CLIENT_INSTANCE.player.magicCrit(entity);
 ////            }
 //            return;

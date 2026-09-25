@@ -65,6 +65,7 @@ public class Config {
     public boolean isCheatsEnabled = true;
 
     public boolean isDebugModeEnabled = false;
+    public boolean isReachDebugModeEnabled = false;
     public boolean isParkourCheatEnabled = false;
 
     // codex start
