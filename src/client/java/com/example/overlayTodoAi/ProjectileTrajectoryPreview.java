@@ -13,6 +13,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
 
+import static com.example.UntitledClient.cameraRenderState;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -42,7 +44,14 @@ final class ProjectileTrajectoryPreview {
         //codex end
         if (points.size() < 2) return false;
 
-        Vector2i impact = project.apply(points.getLast());
+        // codex start
+        Vec3 impactPosition = points.getLast();
+        if (cameraRenderState == null) return false;
+        BlockHitResult visibilityHit = client.level.clip(new ClipContext(
+                cameraRenderState.pos, impactPosition, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
+        if (!isImpactVisible(visibilityHit, impactPosition)) return false;
+        //codex end
+        Vector2i impact = project.apply(impactPosition);
         graphics.setColor(result.hitEntity() ? ENTITY_IMPACT_COLOR : TRAJECTORY_COLOR);
         int size = 2;
         int radius = size / 2;
@@ -50,6 +59,13 @@ final class ProjectileTrajectoryPreview {
         return true;
     }
 
+    // codex start
+    static boolean isImpactVisible(BlockHitResult visibilityHit, Vec3 impactPosition) {
+        // A hit on the impact surface itself is visible; tolerate sub-millimeter rounding.
+        return visibilityHit.getType() == HitResult.Type.MISS
+                || visibilityHit.getLocation().distanceToSqr(impactPosition) <= 1.0e-6;
+    }
+    //codex end
     private static TrajectoryProperties properties(LocalPlayer player) {
         ItemStack held = player.getMainHandItem();
         if (held.is(Items.BOW)) {
