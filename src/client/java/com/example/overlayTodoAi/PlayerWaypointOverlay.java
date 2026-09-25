@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
 
 import static com.example.UntitledClient.*;
@@ -30,6 +31,10 @@ public final class PlayerWaypointOverlay {
     private boolean failed;
     private long lastFrame;
     private final Map<Identifier, BufferedImage> faces = new HashMap<>();
+    // codex start
+    private static final long DEBUG_MESSAGE_DURATION_NANOS = 5_000_000_000L;
+    private static final ConcurrentLinkedDeque<DebugMessage> debugMessages = new ConcurrentLinkedDeque<>();
+    // codex end
 
     private boolean visible(Minecraft client) {
         return client.level != null && client.player != null && cameraRenderState != null
@@ -77,6 +82,7 @@ public final class PlayerWaypointOverlay {
                 if (config.isProjectileTrajectoryPreviewEnabled) {
                     hasOverlayContent |= ProjectileTrajectoryPreview.draw(graphics, client, project);
                 }
+                hasOverlayContent |= drawDebugMessages(graphics);
 //                if (config.isCameraAngleCrosshairIndicatorEnabled && client.player.getXRot() != 0.0f) {
 //                    hasOverlayContent = true;
 //                    drawCameraAngleIndicator(
@@ -163,6 +169,31 @@ public final class PlayerWaypointOverlay {
         graphics.drawLine(x - size, y - size, x + size, y + size);
         graphics.drawLine(x - size, y + size, x + size, y - size);
     }
+
+    // codex start
+    public static void appendDebugMessage(String message) {
+        debugMessages.addLast(new DebugMessage(message, System.nanoTime()));
+    }
+
+    private static boolean drawDebugMessages(Graphics2D graphics) {
+        long oldestAllowed = System.nanoTime() - DEBUG_MESSAGE_DURATION_NANOS;
+        while (debugMessages.peekFirst() instanceof DebugMessage oldest && oldest.createdNanos < oldestAllowed) {
+            debugMessages.pollFirst();
+        }
+        int y = 14;
+        for (DebugMessage message : debugMessages) {
+            graphics.setColor(Color.BLACK);
+            graphics.drawString(message.text, 9, y + 1);
+            graphics.setColor(Color.WHITE);
+            graphics.drawString(message.text, 8, y);
+            y += graphics.getFontMetrics().getHeight();
+        }
+        return !debugMessages.isEmpty();
+    }
+
+    private record DebugMessage(String text, long createdNanos) {
+    }
+    // codex end
 
 //    // codex start
 //    private static void drawCameraAngleIndicator(Graphics2D graphics, int x, int y, float pitch) {

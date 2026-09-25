@@ -1,6 +1,7 @@
 package com.example.mixins;
 
 import com.example.Configs.Config;
+import com.example.overlayTodoAi.PlayerWaypointOverlay;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +17,9 @@ import static com.example.Utils.onPvpDamage;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.EntityHitResult;
-
-import java.util.Objects;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
@@ -38,7 +36,7 @@ public abstract class MinecraftClientMixin {
         }
         if (config.isDebugModeEnabled) {
             if (previousAttackCooldown != 0) {
-                player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
+                PlayerWaypointOverlay.appendDebugMessage("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime); // codex (old code) player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             }
             // TODO -> this don't work exactly?
             if (MINECRAFT_CLIENT_INSTANCE.hitResult instanceof EntityHitResult entityHitResult &&
@@ -55,7 +53,7 @@ public abstract class MinecraftClientMixin {
                         player.blockInteractionRange(),
                         player.entityInteractionRange(),
                         MINECRAFT_CLIENT_INSTANCE.getDeltaTracker().getGameTimeDeltaTicks()).getType() == HitResult.Type.MISS) {
-                    Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
+                    PlayerWaypointOverlay.appendDebugMessage("targeting margin hit (" + marginBypass + ")"); // codex (old code) Objects.requireNonNull(MINECRAFT_CLIENT_INSTANCE.player).sendSystemMessage(Component.literal("debug mode: targeting margin hit (" + marginBypass + ")"));
                 }
                 computeCheatConfig().staticTargetingMarginBypass = staticMarginBypass;
                 computeCheatConfig().movingTargetMarginBypass = movingMarginBypass;
