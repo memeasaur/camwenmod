@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.DelayedConstantsTodo.SPRINT_VANILLA;
 import static com.example.UntitledClient.config;
+import static com.example.UntitledClient.isEthyleneSprintFovCancelled;
 import static com.example.Utils.computeCheatConfig;
 import static com.example.Utils.getIsKeyBindingPressed;
-import static com.example.mixins.AbstractClientPlayerMixinTodoAi.isEthyleneSprintFovCancelled;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {

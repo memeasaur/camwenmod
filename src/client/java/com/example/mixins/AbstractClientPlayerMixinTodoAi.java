@@ -9,17 +9,19 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static com.example.Constants.MINECRAFT_CLIENT_INSTANCE;
 import static com.example.UntitledClient.config;
+import static com.example.UntitledClient.isEthyleneSprintFovCancelled;
 import static com.example.Utils.computeCheatConfig;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixinTodoAi {
+    @Unique
     private static final Identifier SPRINTING_MODIFIER_ID = Identifier.withDefaultNamespace("sprinting");
-    public static boolean isEthyleneSprintFovCancelled;
 
     @Redirect(
             method = "getFieldOfViewModifier",

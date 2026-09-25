@@ -154,6 +154,10 @@ public class UntitledClient implements ClientModInitializer {
 
     public static HEAD_RUN_OFFSET_TYPE headRunCameraOffset = HEAD_RUN_OFFSET_TYPE.NONE;
 
+    // codex start
+    public static boolean isEthyleneSprintFovCancelled;
+    // codex end
+
     @Override
     public void onInitializeClient() {
         // codex start
