@@ -132,6 +132,11 @@ public final class ExternalConfigWindow {
         addCheckBox(grid, "ignore backward after sprint reset", () -> config.isBackwardSprintResetSuppressionEnabled,
                 value -> config.isBackwardSprintResetSuppressionEnabled = value,
                 "allows one W+S sprint reset after each hit, then ignores Back while W is held until the next hit");
+        // codex start
+        addCheckBox(grid, "ethylene", () -> computeCheatConfig().isEthylene,
+                value -> computeCheatConfig().isEthylene = value,
+                "keeps sprint active after a player attack and removes the sprint FOV increase");
+        // codex end
         addCheckBox(grid, "disable view bobbing camera shake", () -> config.isViewBobbingCameraShakeDisabled,
                 value -> config.isViewBobbingCameraShakeDisabled = value,
                 "keeps view bobbing enabled while removing only the camera shake");
