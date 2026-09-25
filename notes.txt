@@ -3,6 +3,7 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>move debug message to offscreen
 >more reach if I have speed, less if slowed etc.
     >more reach if I'm jumping
 >bow tracer:
