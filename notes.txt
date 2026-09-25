@@ -3,14 +3,18 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>more reach if I have speed, less if slowed etc.
+    >more reach if I'm jumping
 >bow tracer:
     >make entities block the dot and change the color?
     >make dot go away when it's behind the block I'm looking at
+>make head-run left able to swap to head-run right without re-pressing
+>do ethylene but only if I can fake the fov
 
+>could try more complex logic on the target's dynamic movement
 >maybe the movement threshold should be at this speed im testing with?
     >maybe I should make a mode where only reach hits go through for testing
 >TODO -> either make it so the unclickable screen is always on. or ideally make it able to be created without messing up fullscreen
->make head-run left able to swap to head-run right without re-pressing
 >make config work in fullscreen
 >make sure that render thing is only called when it's needed?
     >maybe each feature should just have it's own screen?
