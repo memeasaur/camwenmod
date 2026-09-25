@@ -2,10 +2,12 @@ package com.example.mixins;
 
 import com.example.Configs.Config;
 import com.example.overlayTodoAi.PlayerWaypointOverlay;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +31,10 @@ public abstract class MinecraftClientMixin {
     @Nullable
     public LocalPlayer player;
 
+    @Shadow
+    @Final
+    public GameRenderer gameRenderer;
+
     @Inject(at = @At(value = "HEAD"), method = "startAttack", cancellable = true)
     private void onDoAttackHead(CallbackInfoReturnable<Boolean> cir) {
         int previousAttackCooldown = MINECRAFT_CLIENT_INSTANCE.missTime; // TODO ?
@@ -40,7 +46,7 @@ public abstract class MinecraftClientMixin {
             if (previousAttackCooldown != 0) {
                 PlayerWaypointOverlay.appendDebugMessage("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime); // codex (old code) player.sendSystemMessage(Component.literal("miss penalty: " + previousAttackCooldown + " -> " + MINECRAFT_CLIENT_INSTANCE.missTime));
             }
-            if (((ClientPlayerEntityInvoker) this.player).invokePick(
+            if (((ClientPlayerEntityInvoker) this.gameRenderer).invokePick( // downport -> this.player
                     MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                     player.blockInteractionRange(),
                     player.entityInteractionRange(),
@@ -56,7 +62,7 @@ public abstract class MinecraftClientMixin {
                 computeCheatConfig().movingTargetMarginBypass = 0.f;
                 computeCheatConfig().doubleWalkingTargetMarginBypass = 0.f;
                 boolean flag = false;
-                if (!(((ClientPlayerEntityInvoker) this.player).invokePick(
+                if (!(((ClientPlayerEntityInvoker) this.gameRenderer).invokePick( // downport -> this.player
                         MINECRAFT_CLIENT_INSTANCE.getCameraEntity(),
                         player.blockInteractionRange(),
                         player.entityInteractionRange(),
