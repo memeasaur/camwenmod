@@ -7,6 +7,7 @@ public class CheatConfig {
     // codex end
 //    TODO; // slower than walking should use static
     // TODO -> vs sprinting/jumping/speed etc.
+    // TODO -> I'd like to do this by just setting pairs of movement speeds with values
     public boolean isTargetingMarginReverted = false;
     //    public record MovementPair() {}
 //    public HashMap<> advanced?dynamic? reach
