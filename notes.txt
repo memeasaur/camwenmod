@@ -3,15 +3,13 @@
     >make autorun it's own mod
     >make xray it's own mod
 
->move debug message to offscreen
 >more reach if I have speed, less if slowed etc.
     >more reach if I'm jumping
->bow tracer:
-    >make entities block the dot and change the color?
-    >make dot go away when it's behind the block I'm looking at
->make head-run left able to swap to head-run right without re-pressing
->do ethylene but only if I can fake the fov
 
+>bow tracer:
+    >make dot go away when it's behind the block I'm looking at
+
+>make head-run left able to swap to head-run right without re-pressing
 >could try more complex logic on the target's dynamic movement
 >maybe the movement threshold should be at this speed im testing with?
     >maybe I should make a mode where only reach hits go through for testing
