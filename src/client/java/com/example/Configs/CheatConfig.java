@@ -2,6 +2,9 @@ package com.example.Configs;
 
 public class CheatConfig {
     //    public boolean isEthylene = false;
+    // codex start
+    public boolean isEthylene = false;
+    // codex end
     public boolean isTargetingMarginReverted = false; // TODO -> struct
     public float staticTargetingMarginBypass = .0f;
     public float movingTargetMarginBypass = 0.f;

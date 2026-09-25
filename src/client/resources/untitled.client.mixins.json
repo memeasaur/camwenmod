@@ -3,6 +3,7 @@
   "package": "com.example.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "AbstractClientPlayerMixinTodoAi",
     "BipedEntityRendererMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
