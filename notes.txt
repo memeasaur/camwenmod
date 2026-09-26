@@ -3,9 +3,10 @@
     >make autorun it's own mod
     >make xray it's own mod
 
+>turn reach debug mode thing into a min range
 >ignore target margin revert when doing the debug message thing
->more reach if I'm jumping
 
+>more reach if I'm jumping?
 >make head-run left able to swap to head-run right without re-pressing
 >could try more complex logic on the target's dynamic movement?
 >maybe the movement threshold should be at this speed im testing with?
